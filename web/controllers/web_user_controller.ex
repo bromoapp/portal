@@ -3,15 +3,12 @@ defmodule Portal.WebUserController do
 
     alias Portal.User
 
+    def new(conn, _params) do
+        changeset = User.changeset(%User{})
+        render(conn, "new.html", changeset: changeset)
+    end
+
     def create(conn, %{"user" => user_params}) do
-        changeset = User.register_changeset(%User{}, user_params)
-    end
-
-    def show(conn, %{"id" => id}) do
-        
-    end
-
-    def update(conn, %{"id" => id, "user" => user_params}) do
         
     end
 

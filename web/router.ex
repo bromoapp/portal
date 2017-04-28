@@ -15,6 +15,12 @@ defmodule Portal.Router do
         plug :fetch_flash
     end
 
+    pipeline :app do
+        plug :accepts, ["json"]
+        plug :fetch_session
+        plug :fetch_flash
+    end
+
     scope "/", Portal do
         pipe_through :browser # Use the default browser stack
 
@@ -25,12 +31,18 @@ defmodule Portal.Router do
         pipe_through :browser
 
         get "/", PageController, :home
-        resources "/sessions", WebSessionController, only: [:create, :delete]
-        resources "/users", WebUserController, only: [:create, :show, :update, :delete]
+        resources "/sessions", WebSessionController, only: [:new, :create, :delete]
+        resources "/users", WebUserController, only: [:new, :create, :delete]
+    end
+
+    scope "/api", Portal do
+        pipe_through :api
+
+        resources "/users", ApiUserController, only: [:show, :update]
     end
 
     scope "/app", Portal do
-        pipe_through :api
+        pipe_through :app
 
         resources "/sessions", AppSessionController, only: [:create, :delete]
         resources "/users", AppUserController, only: [:create, :show, :update, :delete]

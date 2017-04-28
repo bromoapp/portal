@@ -1,4 +1,4 @@
-defmodule Portal.AppUserView do
+defmodule Portal.ApiUserView do
     use Portal.Web, :view
     require Logger
 

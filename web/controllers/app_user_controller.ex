@@ -11,7 +11,7 @@ defmodule Portal.AppUserController do
                 conn
                 |> put_status(:created)
                 |> put_resp_header("location", app_user_path(conn, :show, user))
-                |> render("show.json", user: user)
+                |> render("user.json", user: user)
             {:error, changeset} ->
                 conn
                 |> put_status(:unprocessable_entity)
@@ -21,16 +21,16 @@ defmodule Portal.AppUserController do
 
     def show(conn, %{"id" => id}) do
         user = Repo.get!(User, id)
-        render(conn, "show.json", user: user)
+        render(conn, "user.json", user: user)
     end
 
     def update(conn, %{"id" => id, "user" => user_params}) do
         user = Repo.get!(User, id)
-        changeset = User.changeset(user, user_params)
+        changeset = User.update_changeset(user, user_params)
   
         case Repo.update(changeset) do
         {:ok, user} ->
-            render(conn, "show.json", user: user)
+            render(conn, "user.json", user: user)
         {:error, changeset} ->
             conn
             |> put_status(:unprocessable_entity)

@@ -28,6 +28,15 @@ defmodule Portal.User do
       |> set_password_hash()
   end
 
+  def update_changeset(struct, params) do
+      struct
+      |> cast(params, [:name, :username, :password])
+      |> validate_length(:username, min: 5, max: 20)
+      |> validate_length(:password, min: 6, max: 15)
+      |> unique_constraint(:username)
+      |> set_password_hash()
+  end
+
   defp set_password_hash(changeset) do
       case changeset do
           %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->

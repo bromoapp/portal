@@ -18,14 +18,14 @@ defmodule Portal.AppUserControllerTest do
         {:ok, conn: conn}
     end
 
-    test "Show method returns a valid user data on query user by id", %{conn: conn} do
+    test "Show method returns a valid user.json on query user by id", %{conn: conn} do
         user = insert_user(%{name: "John Doe", username: "john_doe", password: "john_secrets"})
 
         conn = get(conn, app_user_path(conn, :show, user.id))
         assert json_response(conn, 200)["name"] == user.name
     end
 
-    test "Create method returns a valid json result on a valid input", %{conn: conn} do
+    test "Create method returns a valid user.json on a valid input", %{conn: conn} do
         conn = post(conn, app_user_path(conn, :create), user: @valid_input)
         assert json_response(conn, 201)["name"] == @valid_input.name
         assert json_response(conn, 201)["username"] == @valid_input.username

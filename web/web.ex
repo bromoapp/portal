@@ -36,6 +36,7 @@ defmodule Portal.Web do
 
       import Portal.Router.Helpers
       import Portal.Gettext
+      import Portal.CurrentUser, only: [authorized: 2]
     end
   end
 

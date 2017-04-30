@@ -1,6 +1,8 @@
 defmodule Portal.SessionController do
     use Portal.Web, :controller
     
+    plug :authorized when action in [:new]
+
     alias Portal.Repo
     alias Portal.User
     alias Portal.SessionHelper

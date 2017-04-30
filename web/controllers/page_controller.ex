@@ -1,7 +1,7 @@
 defmodule Portal.PageController do
     use Portal.Web, :controller
-
-    require Logger
+    
+    plug :authorized when action in [:home]
 
     def to_home(conn, _params) do
         conn
@@ -13,7 +13,6 @@ defmodule Portal.PageController do
     end
 
     def lobby(conn, _params) do
-        Logger.info(">>> CON = #{inspect conn}")
         render conn, "lobby.html"
     end
 end

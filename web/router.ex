@@ -15,10 +15,10 @@ defmodule Portal.Router do
         plug :fetch_flash
     end
 
-    pipeline :app do
-        plug :accepts, ["json"]
-        plug :fetch_session
-        plug :fetch_flash
+    pipeline :authenticated do
+        plug Guardian.Plug.VerifySession
+        plug Guardian.Plug.LoadResource
+        plug Portal.CurrentUser
     end
 
     scope "/", Portal do
@@ -28,10 +28,11 @@ defmodule Portal.Router do
     end
 
     scope "/web", Portal do
-        pipe_through :browser
+        pipe_through [:browser, :authenticated]
 
         get "/", PageController, :home
-        resources "/sessions", WebSessionController, only: [:new, :create, :delete]
+        get "/lobby", PageController, :lobby
+        resources "/sessions", SessionController, only: [:new, :create, :delete]
         resources "/users", WebUserController, only: [:new, :create, :delete]
     end
 
@@ -39,13 +40,6 @@ defmodule Portal.Router do
         pipe_through :api
 
         resources "/users", ApiUserController, only: [:show, :update]
-    end
-
-    scope "/app", Portal do
-        pipe_through :app
-
-        resources "/sessions", AppSessionController, only: [:create, :delete]
-        resources "/users", AppUserController, only: [:create, :show, :update, :delete]
     end
 
 end

@@ -11,4 +11,10 @@ defmodule Portal.ApiUserView do
         }
     end
 
+    def render("error.json", %{error: message}) do
+        %{
+            error: message
+        }
+    end
+
 end

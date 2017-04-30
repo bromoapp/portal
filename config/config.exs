@@ -23,8 +23,9 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :guardian, Guardian,
-  issuer: "Portal",
-  secret_key: Mix.env,
+  issuer: "Portal.#{Mix.env}",
+  verify_issuer: true,
+  secret_key: "BDjxhdF0yOf5c2eXa7KY2PwRLvTHkC/yktktEFzrkWtzqiLGmwLZY+Ohd/cYKnVX",
   serializer: Portal.GuardianSerializer
 
 # Import environment specific config. This must remain at the bottom

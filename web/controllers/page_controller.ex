@@ -1,8 +1,6 @@
 defmodule Portal.PageController do
     use Portal.Web, :controller
 
-    alias Portal.DkvServer
-
     require Logger
 
     plug :authorized when action in [:home]

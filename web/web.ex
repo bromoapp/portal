@@ -68,6 +68,7 @@ defmodule Portal.Web do
 
       alias Portal.Repo
       alias Portal.OnlineUser
+      alias Porta.Room
       import Portal.OnlineUsersServer, only: [reg_user: 2, get_user: 1, unreg_user: 1, upd_user: 2, get_users: 0]
       import Portal.RoomsServer, only: [reg_room: 2, get_room: 1, unreg_room: 1, upd_room: 2, get_rooms: 0]
       import Ecto

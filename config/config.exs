@@ -23,7 +23,7 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :guardian, Guardian,
-  issuer: "Portal.#{Mix.env}",
+  issuer: "Portal.#{node()}",
   verify_issuer: true,
   secret_key: "BDjxhdF0yOf5c2eXa7KY2PwRLvTHkC/yktktEFzrkWtzqiLGmwLZY+Ohd/cYKnVX",
   serializer: Portal.GuardianSerializer

@@ -14,7 +14,8 @@ defmodule Portal do
           supervisor(Portal.Endpoint, []),
           # Start your own worker by calling: Portal.Worker.start_link(arg1, arg2, arg3)
           # worker(Portal.Worker, [arg1, arg2, arg3]),
-          worker(Portal.DkvServer, nodes)
+          worker(Portal.OnlineUsersServer, nodes),
+          worker(Portal.RoomsServer, nodes)
         ]
 
         # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

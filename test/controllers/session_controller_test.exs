@@ -6,6 +6,7 @@ defmodule Portal.SessionControllerTest do
     """
 
     @user %{name: "John Doe", username: "johndoe", password: "johndoe_pass"}
+    
     setup do
         insert_user(@user)
         valid_credential = %{"session" => %{"username" => @user.username, "password" => @user.password}}

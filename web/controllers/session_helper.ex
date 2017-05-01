@@ -1,5 +1,7 @@
 defmodule Portal.SessionHelper do
     
+    alias Portal.DkvServer
+
     def login(conn, user) do
         conn
         |> Guardian.Plug.sign_in(user)

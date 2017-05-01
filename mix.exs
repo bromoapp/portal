@@ -19,7 +19,7 @@ defmodule Portal.Mixfile do
   def application do
     [mod: {Portal, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :mariaex, :guardian]]
+                    :phoenix_ecto, :mariaex, :guardian, :lbm_kv]]
   end
 
   # Specifies which paths to compile per environment.

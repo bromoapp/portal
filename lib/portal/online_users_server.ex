@@ -13,7 +13,6 @@ defmodule Portal.OnlineUsersServer do
     end
 
     def init(join_addr) do
-        Logger.info(">>>>>> JOIN TO #{join_addr}")
         case join_addr do
             nil ->
                 :ok = :lbm_kv.create(OnlineUsers)

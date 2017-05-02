@@ -6,16 +6,16 @@ defmodule Portal.RoomsServer do
 
     @join_node_timeout 60_000
 
-    def start_link(node_addr \\ nil) do
-        GenServer.start_link(__MODULE__, node_addr, name: __MODULE__)
+    def start_link(join_addr \\ nil) do
+        GenServer.start_link(__MODULE__, join_addr, name: __MODULE__)
     end
 
-    def init(node_addr) do
-        case node_addr do
+    def init(join_addr) do
+        case join_addr do
             nil ->
                 :ok = :lbm_kv.create(Rooms)
             _  ->
-                worker = Task.async(__MODULE__, :run, [node_addr])
+                worker = Task.async(__MODULE__, :run, [join_addr])
                 Task.await(worker, @join_node_timeout)
                 case Node.list do
                     [] ->

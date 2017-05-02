@@ -61,22 +61,22 @@ defmodule Portal.OnlineUsersServer do
 
     def handle_call({:put, key, value}, _from, args) do
         {:ok, value} = :lbm_kv.put(OnlineUsers, key, value)
-        {:reply, value, args}
+        {:reply, :ok, args}
     end
 
     def handle_call({:get, key}, _from, args) do
         {:ok, value} = :lbm_kv.get(OnlineUsers, key)
-        {:reply, value, args}
+        {:reply, value[key], args}
     end
 
     def handle_call({:del, key}, _from, args) do
         {:ok, value} = :lbm_kv.del(OnlineUsers, key)
-        {:reply, value, args}
+        {:reply, :ok, args}
     end
 
     def handle_call({:upd, key, value}, _from, args) do
-        {:ok, value} = :lbm_kv.update(OnlineUsers, key, value)
-        {:reply, value, args}
+        {:ok, value} = :lbm_kv.put(OnlineUsers, key, value)
+        {:reply, value[key], args}
     end
 
     def handle_call(:all, _from, args) do
@@ -91,7 +91,7 @@ defmodule Portal.OnlineUsersServer do
 
     defp _select_all([h|t], list) do
         {:ok, value} = :lbm_kv.get(OnlineUsers, h)
-        nlist = list ++ value
+        nlist = list ++ [value[h]]
         _select_all(t, nlist)
     end
 

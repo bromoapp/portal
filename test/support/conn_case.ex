@@ -21,6 +21,8 @@ defmodule Portal.ConnCase do
       use Phoenix.ConnTest
 
       alias Portal.Repo
+      alias Portal.OnlineUsersServer
+
       import Ecto
       import Ecto.Changeset
       import Ecto.Query

@@ -59,22 +59,22 @@ defmodule Portal.RoomsServer do
 
     def handle_call({:put, key, value}, _from, args) do
         {:ok, value} = :lbm_kv.put(Rooms, key, value)
-        {:reply, value, args}
+        {:reply, :ok, args}
     end
 
     def handle_call({:get, key}, _from, args) do
         {:ok, value} = :lbm_kv.get(Rooms, key)
-        {:reply, value, args}
+        {:reply, value[key], args}
     end
 
     def handle_call({:del, key}, _from, args) do
         {:ok, value} = :lbm_kv.del(Rooms, key)
-        {:reply, value, args}
+        {:reply, :ok, args}
     end
 
     def handle_call({:upd, key, value}, _from, args) do
-        {:ok, value} = :lbm_kv.update(Rooms, key, value)
-        {:reply, value, args}
+        {:ok, value} = :lbm_kv.put(Rooms, key, value)
+        {:reply, value[key], args}
     end
 
     def handle_call(:all, _from, args) do
@@ -89,7 +89,7 @@ defmodule Portal.RoomsServer do
 
     defp _select_all([h|t], list) do
         {:ok, value} = :lbm_kv.get(Rooms, h)
-        nlist = list ++ value
+        nlist = list ++ [value[h]]
         _select_all(t, nlist)
     end
 

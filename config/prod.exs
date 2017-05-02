@@ -16,9 +16,6 @@ config :portal, Portal.Endpoint,
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/manifest.json"
 
-# Config to join with other node
-config :portal, node_addr: System.get_env("JOIN_TO")
-
 # Do not print debug messages in production
 config :logger, level: :info
 

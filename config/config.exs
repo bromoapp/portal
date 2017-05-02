@@ -17,6 +17,9 @@ config :portal, Portal.Endpoint,
   pubsub: [name: Portal.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+# Configure to join with other node
+config :portal, node_addr: System.get_env("JOIN_TO")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

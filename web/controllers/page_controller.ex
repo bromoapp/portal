@@ -15,7 +15,6 @@ defmodule Portal.PageController do
     end
 
     def lobby(conn, _params) do
-        Logger.info(">>> CONN = #{inspect conn.assigns.access_token}")
         render conn, "lobby.html"
     end
 end

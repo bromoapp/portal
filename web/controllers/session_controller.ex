@@ -17,7 +17,7 @@ defmodule Portal.SessionController do
         cond do
             user && passwd == user.password_hash ->
                 conn
-                |> SessionHelper.login(user)
+                |> login(user)
                 |> put_flash(:info, "Welcome #{user.name} :)")
                 |> redirect(to: page_path(conn, :lobby))
             true ->
@@ -30,7 +30,7 @@ defmodule Portal.SessionController do
     def delete(conn, _args) do
         user = Guardian.Plug.current_resource(conn)
         conn
-        |> SessionHelper.logout(user)
+        |> logout(user)
         |> put_flash(:info, "See you later #{user.name}")
         |> redirect(to: page_path(conn, :home))
     end

@@ -38,7 +38,7 @@ defmodule Portal.Web do
             import Portal.RoomsServer, only: [reg_room: 2, get_room: 1, unreg_room: 1, upd_room: 2, get_rooms: 0]
             import Portal.Router.Helpers
             import Portal.Gettext
-            import Portal.CurrentUser, only: [authorized: 2]
+            import Portal.CurrentUser, only: [authorized: 2, login: 2, logout: 2]
         end
     end
 

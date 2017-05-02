@@ -14,6 +14,8 @@ config :portal, Portal.Endpoint,
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../", __DIR__)]]
 
+# Config to join with other node
+config :portal, node_addr: System.get_env("JOIN_TO")
 
 # Watch static and templates for browser reloading.
 config :portal, Portal.Endpoint,

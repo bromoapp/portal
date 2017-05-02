@@ -17,7 +17,7 @@ defmodule Portal.Mixfile do
   #
   # Type `mix help compile.app` for more information.
   def application do
-    [mod: {Portal, Node.list},
+    [mod: {Portal, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
                     :phoenix_ecto, :mariaex, :guardian, :lbm_kv]]
   end

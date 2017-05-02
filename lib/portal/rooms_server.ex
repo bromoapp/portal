@@ -4,25 +4,33 @@ defmodule Portal.RoomsServer do
     import Process, only: [whereis: 1]
     alias Portal.Rooms
 
-    require Logger
+    @join_node_timeout 60_000
 
-    def start_link(nodes \\ []) do
-        GenServer.start_link(__MODULE__, nodes, name: __MODULE__)
+    def start_link(node_addr \\ nil) do
+        GenServer.start_link(__MODULE__, node_addr, name: __MODULE__)
     end
 
-    def init(nodes) do
-        case nodes do
-            [] ->
+    def init(node_addr) do
+        case node_addr do
+            nil ->
                 :ok = :lbm_kv.create(Rooms)
             _  ->
-                Logger.info("Waiting to replicate data across nodes, starts at: #{inspect Timer.now}")
-                :ok = :mnesia.wait_for_tables([Rooms], 60_000)
-                :ok = :lbm_kv.create(Rooms)
-                Logger.info("Data replications finished, ends at: #{inspect Timer.now}")
+                worker = Task.async(__MODULE__, :run, [node_addr])
+                Task.await(worker, @join_node_timeout)
+                case Node.list do
+                    [] ->
+                        :ok = :lbm_kv.create(Rooms)
+                    _  ->
+                        :ok = :mnesia.wait_for_tables([Rooms], 60_000)
+                        :ok = :lbm_kv.create(Rooms)
+                end
         end
         {:ok, []}
     end
 
+    def run(addr) do
+        Node.connect String.to_atom(addr)
+    end
 
     def reg_room(key, value) when is_atom(key) do
         pid = whereis(__MODULE__)

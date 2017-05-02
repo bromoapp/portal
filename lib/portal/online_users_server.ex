@@ -4,6 +4,8 @@ defmodule Portal.OnlineUsersServer do
     import Process, only: [whereis: 1]
     alias Portal.OnlineUsers
 
+    require Logger
+
     @join_node_timeout 60_000
 
     def start_link(join_addr \\ nil) do
@@ -11,6 +13,7 @@ defmodule Portal.OnlineUsersServer do
     end
 
     def init(join_addr) do
+        Logger.info(">>>>>> JOIN TO #{join_addr}")
         case join_addr do
             nil ->
                 :ok = :lbm_kv.create(OnlineUsers)

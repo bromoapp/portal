@@ -4,7 +4,7 @@ defmodule Portal do
     # See http://elixir-lang.org/docs/stable/elixir/Application.html
     # for more information on OTP Applications
     def start(_type, _args) do
-        join_addr = Application.get_env(:distkv, :join_addr)
+        join_addr = Application.get_env(:portal, :join_addr)
 
         import Supervisor.Spec
 

@@ -5,9 +5,8 @@ let lobby = {
         } else {
             socket.connect()
 
-            let username = element.getAttribute("data-username")
-            let userChannel = socket.channel("room:" + username)
-            userChannel.join()
+            let roomsChannel = socket.channel("channel:rooms")
+            roomsChannel.join()
         }
     }
 }

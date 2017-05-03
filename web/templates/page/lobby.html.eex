@@ -1,2 +1,2 @@
-<%= content_tag :div, id: "user-lobby", data: [username: @current_user.username] do %>
+<%= content_tag :div, id: "user-lobby" do %>
 <% end %>

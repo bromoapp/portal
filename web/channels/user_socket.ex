@@ -2,7 +2,7 @@ defmodule Portal.UserSocket do
     use Phoenix.Socket
 
     ## Channels
-    channel "room:*", Portal.UserChannel
+    channel "channel:rooms", Portal.Rooms
 
     ## Transports
     transport :websocket, Phoenix.Transports.WebSocket
@@ -24,8 +24,8 @@ defmodule Portal.UserSocket do
 
     def connect(%{"token" => token}, socket) do
         case Phoenix.Token.verify(socket, "portal_salt", token, max_age: @max_age) do
-            {:ok, user_id} ->
-                {:ok, assign(socket, :user_id, user_id)}
+            {:ok, user} ->
+                {:ok, assign(socket, :user, user)}
             {:error, _reason} ->
                 :error
         end

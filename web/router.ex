@@ -18,7 +18,7 @@ defmodule Portal.Router do
     pipeline :authenticated do
         plug Guardian.Plug.VerifySession
         plug Guardian.Plug.LoadResource
-        plug Portal.CurrentUser
+        plug Portal.SessionHelper
     end
 
     scope "/", Portal do

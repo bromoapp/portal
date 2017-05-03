@@ -1,11 +1,10 @@
-defmodule Portal.CurrentUser do
+defmodule Portal.SessionHelper do
+    
     import Phoenix.Controller
     import Plug.Conn
     import Guardian.Plug
 
     alias Portal.Router.Helpers
-    alias Portal.OnlineUsersServer
-    alias Portal.OnlineUser
 
     def init(opts) do
         opts
@@ -33,14 +32,6 @@ defmodule Portal.CurrentUser do
     end
 
     def login(conn, user) do
-        # Register user into OnlineUsersServer
-        oluser = %OnlineUser{
-            name: user.name,
-            username: user.username,
-            node: node()
-        }
-        OnlineUsersServer.reg_user(String.to_atom(user.username), oluser)
-        
         conn
         |> sign_in_user(user)
         |> Guardian.Plug.sign_in(user)
@@ -48,9 +39,6 @@ defmodule Portal.CurrentUser do
     end
 
     def logout(conn, user) do
-        # Unregister user from OnlineUsersServer
-        OnlineUsersServer.unreg_user(String.to_atom(user.username))
-
         # Invalidate user session
         conn
         |> Guardian.Plug.sign_out()
@@ -59,7 +47,7 @@ defmodule Portal.CurrentUser do
 
     defp sign_in_user(conn, user) do
         # Add access_token to Plug.Conn so it will accessible from view
-        token = Phoenix.Token.sign(conn, "portal_salt", user.id)
+        token = Phoenix.Token.sign(conn, "portal_salt", user)
 
         conn
         |> assign(:current_user, user)

@@ -5,7 +5,6 @@ defmodule Portal.SessionController do
 
     alias Portal.Repo
     alias Portal.User
-    alias Portal.SessionHelper
 
     def new(conn, _params) do
         render(conn, "new.html", [])

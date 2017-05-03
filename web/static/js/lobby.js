@@ -5,8 +5,8 @@ let lobby = {
         } else {
             socket.connect()
 
-            let roomsChannel = socket.channel("channel:rooms")
-            roomsChannel.join()
+            let lobbyChannel = socket.channel("channel:lobby")
+            lobbyChannel.join()
         }
     }
 }

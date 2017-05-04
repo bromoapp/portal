@@ -2,12 +2,23 @@ defmodule Portal.MemberTest do
   use Portal.ModelCase
 
   alias Portal.Member
+  alias Portal.Room
+  alias Portal.User
 
-  @valid_attrs %{name: "some content", role: "some content"}
+  @valid_attrs %{role: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
-    changeset = Member.changeset(%Member{}, @valid_attrs)
+    params = Map.put(@valid_attrs, :user, %{
+        name: "some name",
+        username: "username",
+        password: "password"
+    })
+    |> Map.put(:room, %{
+        name: "some room",
+        mode: "some mode"
+    })
+    changeset = Member.changeset(%Member{}, params)
     assert changeset.valid?
   end
 

@@ -2,8 +2,8 @@ defmodule Portal.Member do
     use Portal.Web, :model
 
     schema "members" do
-        field :name, :string
         field :role, :string
+
         belongs_to :user, Portal.User
         belongs_to :room, Portal.Room
 
@@ -13,9 +13,11 @@ defmodule Portal.Member do
     @doc """
     Builds a changeset based on the `struct` and `params`.
     """
-    def changeset(struct, params \\ %{}) do
+    def changeset(struct, params \\ :invalid) do
         struct
-        |> cast(params, [:name, :role])
-        |> validate_required([:name, :role])
+        |> cast(params, [:role])
+        |> cast_assoc(:user, required: true)
+        |> cast_assoc(:room, required: true)
+        |> validate_required([:role])
     end
 end

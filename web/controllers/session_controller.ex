@@ -17,7 +17,6 @@ defmodule Portal.SessionController do
             user && passwd == user.password_hash ->
                 conn
                 |> login(user)
-                |> put_flash(:info, "Welcome #{user.name} :)")
                 |> redirect(to: page_path(conn, :lobby))
             true ->
                 conn

@@ -2,7 +2,7 @@ defmodule Portal.UserSocket do
     use Phoenix.Socket
 
     ## Channels
-    channel "channel:lobby", Portal.Lobby
+    channel "lobby:*", Portal.Lobby
 
     ## Transports
     transport :websocket, Phoenix.Transports.WebSocket

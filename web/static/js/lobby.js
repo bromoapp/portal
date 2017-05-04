@@ -4,8 +4,8 @@ let lobby = {
             return
         } else {
             socket.connect()
-
-            let lobbyChannel = socket.channel("channel:lobby")
+            let username = element.getAttribute("data-username")
+            let lobbyChannel = socket.channel("lobby:" + username)
             lobbyChannel.join()
         }
     }

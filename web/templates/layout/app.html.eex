@@ -12,7 +12,11 @@
   </head>
 
   <body>
+  <%= if @current_user do %>
+    <div class="container-lobby">
+  <% else %>
     <div class="container">
+  <% end %>
       <header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
@@ -20,7 +24,7 @@
               <li><%= link "Sign out", to: session_path(@conn, :delete, :signout), class: "btn", method: "delete" %></li>
             <% else %>
               <li><%= link "Sign in", to: session_path(@conn, :new, []), class: "btn" %></li>
-              <li><%= link "Register", to: web_user_path(@conn, :new, []), class: "btn" %></li>
+              <li><%= link "Sign up", to: web_user_path(@conn, :new, []), class: "btn" %></li>
             <% end %>
           </ul>
         </nav>

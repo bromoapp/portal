@@ -23,14 +23,7 @@ defmodule Portal.SessionControllerTest do
 
     test "Create method returns redirect to lobby page on a valid credential", %{conn: conn, valid_credential: credential} do
         conn = post(conn, session_path(conn, :create), credential)
-        user = OnlineUsersServer.get_user(String.to_atom(@user.username))
         assert redirected_to(conn) == page_path(conn, :lobby)
-        assert user == %Portal.OnlineUser{
-            name: @user.name, 
-            username: @user.username,
-            node: :nonode@nohost,
-            room_pid: nil
-        }
     end
 
     test "Create method returns error back to login page on an invalid credential", %{conn: conn, invalid_credential: credential} do

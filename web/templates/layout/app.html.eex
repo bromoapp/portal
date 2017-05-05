@@ -9,6 +9,7 @@
 
     <title>Hello Portal!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/components.css") %>">
   </head>
 
   <body class="page-body">
@@ -37,7 +38,6 @@
       <main role="main">
         <%= render @view_module, @view_template, assigns %>
       </main>
-
     </div> <!-- /container -->
     <script>window.userToken = "<%= assigns[:access_token] %>"</script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

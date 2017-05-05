@@ -1,5 +1,5 @@
 <%= content_tag :div, id: "user-lobby", data: [username: @current_user.username] do %>
-<% end %>
-<div id="portal-app-container">
-    <portal-app><portal-app>
+<div id="lobby-container">
+    <lobby><lobby>
 </div>
+<% end %>

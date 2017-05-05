@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import PortalApp from "../components/portal_app.vue"
+import PortalApp from "../components/lobby.vue"
 
 let lobby = {
     init(socket, element) {
@@ -12,11 +12,11 @@ let lobby = {
             lobbyChannel.join()
 
             // Create the main component
-            Vue.component('portal-app', PortalApp)
+            Vue.component('lobby', PortalApp)
 
             // And create the top-level view model:
             new Vue({
-                el: '#portal-app-container',
+                el: '#lobby-container',
                 render(createElement) {
                     return createElement(PortalApp, {})
                 }

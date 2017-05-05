@@ -1,5 +1,5 @@
 <template>
-    <div class="portal-app">
+    <div class="lobby">
         <h1>Vuechat</h1>
     </div>
 </template>

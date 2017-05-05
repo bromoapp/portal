@@ -8,7 +8,7 @@
             <%= password_input f, :password, placeholder: "Password", class: "form-control" %>
         </div>
         <span class="pull-right">
-            <%= submit "Log in", class: "btn btn-primary" %>
+            <%= submit "Submit", class: "btn btn-primary" %>
             <%= link "Cancel", class: "btn btn-default", to: page_path(@conn, :home, []) %>
         </span>
     <% end %>

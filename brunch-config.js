@@ -5,8 +5,7 @@ exports.config = {
       joinTo: "js/app.js",
       order: {
         after: [
-          "web/static/vendor/js/jquery-3.2.1.min.js",
-          "web/static/vendor/js/bootstrap.min.js"
+          "web/static/vendor/js/pixi.min.js"
         ]
       }
 
@@ -29,7 +28,6 @@ exports.config = {
       joinTo: "css/app.css",
       order: {
         after: [
-          "web/static/vendor/css/bootstrap.css",
           "web/static/css/app.css"
         ] // concat app.css last
       }

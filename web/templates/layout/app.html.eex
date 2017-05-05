@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
-  <body>
+  <body class="page-body">
   <%= if @current_user do %>
     <div class="container-lobby">
   <% else %>
@@ -19,12 +19,12 @@
   <% end %>
       <header class="header">
         <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
+          <ul class="nav nav-pills pull-right top-nav">
             <%= if @current_user do %>
-              <li><%= link "Sign out", to: session_path(@conn, :delete, :signout), class: "btn", method: "delete" %></li>
+              <li><%= link "Sign out", to: session_path(@conn, :delete, :signout), class: "btn btn-danger", method: "delete" %></li>
             <% else %>
-              <li><%= link "Sign in", to: session_path(@conn, :new, []), class: "btn" %></li>
-              <li><%= link "Sign up", to: web_user_path(@conn, :new, []), class: "btn" %></li>
+              <li><%= link "Sign in", to: session_path(@conn, :new, []), class: "btn btn-danger" %></li>
+              <li><%= link "Sign up", to: web_user_path(@conn, :new, []), class: "btn btn-default" %></li>
             <% end %>
           </ul>
         </nav>

@@ -23,8 +23,10 @@
                 type="password">            
         </div>
         <span class="pull-right">
-            <button class="btn btn-primary" type="submit">Create</button>
-            <a class="btn btn-default" href="/web">Cancel</a>
+            <button class="btn btn-primary" 
+                type="submit">Create</button>
+            <a class="btn btn-default" 
+                href="/web">Cancel</a>
         </span>
     </div>
 </template>

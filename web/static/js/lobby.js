@@ -1,28 +1,28 @@
 import Vue from 'vue'
-import PortalApp from "../components/lobby.vue"
+import SelfCam from "../components/self_cam.vue"
 
 let lobby = {
     init(socket, element) {
         if (!element) {
             return
         } else {
-            this.initiate_vue()
-            this.initiate_connection(socket, element)
+            this.init_ui()
+            this.init_conn(socket, element)
         }
     },
-    initiate_vue() {
+    init_ui() {
         // Create the main component
-        Vue.component('lobby', PortalApp)
+        Vue.component('self_cam', SelfCam)
 
         // And create the top-level view model:
         new Vue({
             el: '#lobby-container',
             render(createElement) {
-                return createElement(PortalApp, {})
+                return createElement(SelfCam, {})
             }
         });
     },
-    initiate_connection(socket, element) {
+    init_conn(socket, element) {
         socket.connect()
         let username = element.getAttribute("data-username")
         let lobbyChannel = socket.channel("lobby:" + username)

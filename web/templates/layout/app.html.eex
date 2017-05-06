@@ -18,7 +18,11 @@
   <% else %>
     <div class="container">
   <% end %>
-      <header class="header">
+      <%= if @current_user do %>
+          <header>
+      <% else %>
+          <header class="header">
+      <% end %>
         <nav role="navigation">
           <ul class="nav nav-pills pull-right top-nav">
             <%= if @current_user do %>
@@ -29,7 +33,9 @@
             <% end %>
           </ul>
         </nav>
+        <%= if @current_user == nil do %>
         <span class="logo"></span>
+        <% end %>
       </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>

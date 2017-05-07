@@ -10,8 +10,8 @@
 
 /* Space out content a bit */
 body, form, ul, table {
-  margin-top: 20px;
-  margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .page-body {
@@ -24,62 +24,62 @@ body, form, ul, table {
 
 /* Phoenix inline forms in links and buttons */
 form.link, form.button {
-  display: inline;
+    display: inline;
 }
 
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 .logo {
-  width: 292px;
-  height: 40px;
-  display: inline-block;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  background-image: url("/images/phoenix.png");
-  background-size: 292px 40px;
+    width: 292px;
+    height: 40px;
+    display: inline-block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    background-image: url("/images/phoenix.png");
+    background-size: 292px 40px;
 }
 .top-nav {
-  margin-top: 1em;
+    margin-top: 1em;
 }
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing {
-  padding-right: 15px;
-  padding-left: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 /* Customize container */
 @media (min-width: 768px) {
   .container {
-    max-width: 900px;
+      max-width: 900px;
   }
   .container-lobby {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 95%;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 95%;
   }
   .container-login-register {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 500px;
   }
 }
 
 .container-narrow > hr {
-  margin: 30px 0;
+    margin: 30px 0;
 }
 
 /* Main marketing message */
 .jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 /* Supporting marketing content */
 .marketing {
-  margin: 35px 0;
+    margin: 35px 0;
 }
 
 /* Responsive: Portrait tablets and up */
@@ -87,15 +87,19 @@ form.link, form.button {
   /* Remove the padding we set earlier */
   .header,
   .marketing {
-    padding-right: 0;
-    padding-left: 0;
+      padding-right: 0;
+      padding-left: 0;
   }
   /* Space out the masthead */
   .header {
-    margin-bottom: 30px;
+      margin-bottom: 30px;
   }
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
-    border-bottom: 0;
+      border-bottom: 0;
   }
+}
+
+.form-label {
+    color: white;
 }

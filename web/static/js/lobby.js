@@ -2,26 +2,27 @@ import Vue from 'vue'
 import Webcam from "../components/webcam.vue"
 import Other from "../components/other.vue"
 
-let webcamWindow = null
-let onVideoSucceed = (stream) => {
-    webcamWindow.srcObject = stream;
-}
-let onVideoFailed = (error) => {
-    console.error(error)
-}
-
 let lobby = {
     init(socket, element) {
         if (!element) {
             return
         } else {
-            this.init_webcam()
-            this.init_other()
             let channel = this.init_conn(socket, element)
-            this.init_logout(channel)
+            if (channel) {
+                this.init_webcam(channel)
+                this.init_other()
+                this.init_logout(channel)
+            }
         }
     },
-    init_webcam() {
+    init_conn(socket, element) {
+        socket.connect()
+        let username = element.getAttribute("data-username")
+        let lobbyChannel = socket.channel("lobby:" + username)
+        lobbyChannel.join()
+        return lobbyChannel
+    },
+    init_webcam(channel) {
         Vue.component("webcam", Webcam)
         new Vue({
             el: '#webcam-container',
@@ -29,12 +30,30 @@ let lobby = {
                 return createElement(Webcam, {})
             },
             mounted() {
-                webcamWindow = document.getElementById("webcam-window")
-                if (webcamWindow) {
+                let canvasContext = null
+                let camVideo = document.getElementById("cam-video")
+                let camCanvas = document.getElementById("cam-canvas")
+                let camImage = document.getElementById("cam-image")
+
+                let onSucceed = (stream) => {
+                    camVideo.srcObject = stream
+                    setInterval(() => {
+                        canvasContext.drawImage(camVideo, 0, 0, 240, 120)
+                        let data = camCanvas.toDataURL("image/png")
+                        camImage.setAttribute("src", data)
+                    }, 40)
+                }
+                let onFailed = (error) => {
+                    console.error(error)
+                }
+
+                if (camVideo && camCanvas) {
+                    canvasContext = camCanvas.getContext("2d")
+
                     navigator.getUserMedia = (navigator.getUserMedia 
                     || navigator.webkitGetUserMedia || navigator.mozGetUserMedia 
                     || navigator.msGetUserMedia || navigator.oGetUserMedia)
-                    navigator.getUserMedia({video: true}, onVideoSucceed, onVideoFailed)
+                    navigator.getUserMedia({video: true}, onSucceed, onFailed)
                 }
             }
         })
@@ -50,13 +69,6 @@ let lobby = {
                 return createElement(Other, {})
             }
         })
-    },
-    init_conn(socket, element) {
-        socket.connect()
-        let username = element.getAttribute("data-username")
-        let lobbyChannel = socket.channel("lobby:" + username)
-        lobbyChannel.join()
-        return lobbyChannel
     }
 }
 export default lobby

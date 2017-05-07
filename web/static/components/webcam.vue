@@ -1,8 +1,8 @@
 <template>
-    <div class="webcam-video">
-        <video id="webcam-window" 
-            autoplay="true">
-        </video>
+    <div>
+        <video id="cam-video" autoplay="true"></video>
+        <canvas id="cam-canvas"></canvas>
+        <img id="cam-image">
     </div>
 </template>
 
@@ -11,17 +11,18 @@ export default {}
 </script>
 
 <style>
-.webcam-video {
-    width: 250px;
-    height: 250px;
-    border-radius: 125px;
-    -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+#cam-video {
+    width: 320px;
+    height: 240px;
+    display: none;
 }
-video {
-    width: 500px;
-    height: 500px;
-    position: absolute;
-    top: -125px;
-    left: -125px;
+#cam-canvas {
+    width: 320px;
+    height: 240px;
+    display: none;
+}
+#cam-image {
+    width: 320px;
+    height: 240px;
 }
 </style>

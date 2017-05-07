@@ -13,8 +13,8 @@ defmodule Portal.Lobby do
         {:noreply, socket}
     end
     
-    def handle_in("query:", message, socket) do
-        Logger.info(">>> MESSAGE = #{inspect message}")
+    def handle_in("stream:video", stream, socket) do
+        Logger.info(">>> MESSAGE = #{inspect stream}")
         
         {:noreply, socket}
     end

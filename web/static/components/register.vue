@@ -1,6 +1,6 @@
 <template>
     <div class="container-login-register">
-        <h1>New User</h1>
+        <h1 class="form-label">New User</h1>
         <div class="form-group">
             <input class="form-control" 
                 id="user_name" 
@@ -36,7 +36,4 @@ export default {}
 </script>
 
 <style>
-h1 {
-    color: white;
-}
 </style>

@@ -1,10 +1,34 @@
+import Vue from 'vue'
+import Webcam from "../components/webcam.vue"
+import Other from "../components/other.vue"
+
 let lobby = {
     init(socket, element) {
         if (!element) {
             return
         } else {
+            this.init_webcam()
+            this.init_other()
             this.init_conn(socket, element)
         }
+    },
+    init_webcam() {
+        Vue.component("webcam", Webcam)
+        new Vue({
+            el: '#webcam-container',
+            render(createElement) {
+                return createElement(Webcam, {})
+            }
+        })
+    },
+    init_other() {
+        Vue.component("other", Other)
+        new Vue({
+            el: '#other-container',
+            render(createElement) {
+                return createElement(Other, {})
+            }
+        })
     },
     init_conn(socket, element) {
         socket.connect()

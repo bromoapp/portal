@@ -22,9 +22,7 @@ import socket from "./socket"
 import lobby from "./lobby"
 import login from "./login"
 import register from "./register"
-import webcam from "./webcam"
 
 login.init(document.getElementById("login-form"))
 register.init(document.getElementById("register-form"))
 lobby.init(socket, document.getElementById("lobby-container"))
-webcam.init(document.getElementById("webcam-container"))

@@ -28,5 +28,8 @@
 export default {}
 </script>
 
-<style lang="sass">
+<style>
+h1 {
+    color: white;
+}
 </style>

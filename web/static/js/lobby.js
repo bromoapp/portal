@@ -17,7 +17,8 @@ let lobby = {
         } else {
             this.init_webcam()
             this.init_other()
-            this.init_conn(socket, element)
+            let channel = this.init_conn(socket, element)
+            this.init_logout(channel)
         }
     },
     init_webcam() {
@@ -38,6 +39,9 @@ let lobby = {
             }
         })
     },
+    init_logout(channel) {
+        
+    },
     init_other() {
         Vue.component("other", Other)
         new Vue({
@@ -52,6 +56,7 @@ let lobby = {
         let username = element.getAttribute("data-username")
         let lobbyChannel = socket.channel("lobby:" + username)
         lobbyChannel.join()
+        return lobbyChannel
     }
 }
 export default lobby

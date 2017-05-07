@@ -1,6 +1,6 @@
 <template>
     <div class="container-login-register">
-        <h2>New User</h2>
+        <h1>New User</h1>
         <div class="form-group">
             <input class="form-control" 
                 id="user_name" 
@@ -35,5 +35,8 @@
 export default {}
 </script>
 
-<style lang="sass">
+<style>
+h1 {
+    color: white;
+}
 </style>

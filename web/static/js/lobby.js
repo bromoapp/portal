@@ -2,6 +2,14 @@ import Vue from 'vue'
 import Webcam from "../components/webcam.vue"
 import Other from "../components/other.vue"
 
+let webcamWindow = null
+let onVideoSucceed = (stream) => {
+    webcamWindow.srcObject = stream;
+}
+let onVideoFailed = (error) => {
+    console.error(error)
+}
+
 let lobby = {
     init(socket, element) {
         if (!element) {
@@ -20,18 +28,12 @@ let lobby = {
                 return createElement(Webcam, {})
             },
             mounted() {
-                let webcamWindow = document.getElementById("webcam-window")
+                webcamWindow = document.getElementById("webcam-window")
                 if (webcamWindow) {
-                    let onSucceed = (stream) => {
-                        webcamWindow.srcObject = stream;
-                    }
-                    let onFailed = (error) => {
-                        console.error(error)
-                    }
                     navigator.getUserMedia = (navigator.getUserMedia 
                     || navigator.webkitGetUserMedia || navigator.mozGetUserMedia 
                     || navigator.msGetUserMedia || navigator.oGetUserMedia)
-                    navigator.getUserMedia({video: true}, onSucceed, onFailed)
+                    navigator.getUserMedia({video: true}, onVideoSucceed, onVideoFailed)
                 }
             }
         })

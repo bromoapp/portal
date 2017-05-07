@@ -14,7 +14,6 @@ defmodule Portal.Lobby do
     end
     
     def handle_in("stream:video", stream, socket) do
-        Logger.info(">>> MESSAGE = #{inspect stream}")
         
         {:noreply, socket}
     end

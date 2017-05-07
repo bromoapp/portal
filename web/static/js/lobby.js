@@ -48,6 +48,7 @@ let lobby = {
                     setInterval(() => {
                         canvasContext.drawImage(camVideo, 0, 0, 240, 120)
                         let data = camCanvas.toDataURL("image/png")
+                        channel.push("stream:video", JSON.stringify(data))
                         camImage.setAttribute("src", data)
                     }, delay)
                 }
@@ -67,7 +68,7 @@ let lobby = {
         })
     },
     init_logout(channel) {
-        
+        channel.leave()
     },
     init_other() {
         Vue.component("other", Other)

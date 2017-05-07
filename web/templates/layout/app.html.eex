@@ -1,51 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-    <title>Hello Portal!</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/components.css") %>">
-  </head>
+        <title>Hello Portal!</title>
+        <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+        <link rel="stylesheet" href="<%= static_path(@conn, "/css/components.css") %>">
+    </head>
 
-  <body class="page-body">
-  <%= if @current_user do %>
-    <div class="container-lobby">
-  <% else %>
-    <div class="container">
-  <% end %>
-      <%= if @current_user do %>
-          <header>
-      <% else %>
-          <header class="header">
-      <% end %>
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right top-nav">
-            <%= if @current_user do %>
-              <li><%= link "Sign out", to: session_path(@conn, :delete, :signout), class: "btn btn-danger", method: "delete" %></li>
-            <% else %>
-              <li><%= link "Sign in", to: session_path(@conn, :new, []), class: "btn btn-danger" %></li>
-              <li><%= link "Sign up", to: web_user_path(@conn, :new, []), class: "btn btn-default" %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <%= if @current_user == nil do %>
-        <span class="logo"></span>
+    <body class="page-body">
+        <%= if @current_user do %>
+        <div class="container-lobby">
+            <header>
+                <nav role="navigation">
+                    <ul class="nav nav-pills pull-right top-nav">
+                        <li><%= link "Sign out", to: session_path(@conn, :delete, :signout), class: "btn btn-danger", method: "delete" %></li>
+                    </ul>
+                </nav>
+            </header>
+        <% else %>
+        <div class="container">
+            <header class="header">
+                <nav role="navigation">
+                    <ul class="nav nav-pills pull-right top-nav">
+                        <li><%= link "Sign in", to: session_path(@conn, :new, []), class: "btn btn-danger" %></li>
+                        <li><%= link "Sign up", to: web_user_path(@conn, :new, []), class: "btn btn-default" %></li>
+                    </ul>
+                </nav>
+                <span class="logo"></span>
+            </header>
         <% end %>
-      </header>
+            <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+            <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
-    </div> <!-- /container -->
-    <script>window.userToken = "<%= assigns[:access_token] %>"</script>
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-  </body>
+            <main role="main">
+                <%= render @view_module, @view_template, assigns %>
+            </main>
+        </div> <!-- /container -->
+        <script>window.userToken = "<%= assigns[:access_token] %>"</script>
+        <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    </body>
 </html>

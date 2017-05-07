@@ -1,4 +1,4 @@
 <div class="jumbotron">
     <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
-    <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+    <p class="lead">With Chrome browser you will get up to 25fps<br />while others may only get around 10fps.</p>
 </div>

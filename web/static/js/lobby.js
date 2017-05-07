@@ -30,6 +30,13 @@ let lobby = {
                 return createElement(Webcam, {})
             },
             mounted() {
+                var delay = 100
+                if (navigator.userAgent.toLowerCase().indexOf("chrome") > -1) {
+                    delay = 40
+                    console.info(">>> using chrome")
+                } else {
+                    console.info(">>> using non chrome!")
+                }
                 let canvasContext = null
                 let camVideo = document.getElementById("cam-video")
                 let camCanvas = document.getElementById("cam-canvas")
@@ -37,11 +44,12 @@ let lobby = {
 
                 let onSucceed = (stream) => {
                     camVideo.srcObject = stream
+                    
                     setInterval(() => {
                         canvasContext.drawImage(camVideo, 0, 0, 240, 120)
                         let data = camCanvas.toDataURL("image/png")
                         camImage.setAttribute("src", data)
-                    }, 40)
+                    }, delay)
                 }
                 let onFailed = (error) => {
                     console.error(error)

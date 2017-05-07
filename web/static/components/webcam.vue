@@ -1,10 +1,18 @@
 <template>
-    <h1>Hello Webcam</h1>
+    <video id="webcam-window" 
+        class="webcam-video" 
+        autoplay="true">
+    </video>
 </template>
 
 <script>
 export default {}
 </script>
 
-<style lang="sass">
+<style>
+.webcam-video {
+    width: 320px;
+    height: 240px;
+    background-color: #000;
+}
 </style>

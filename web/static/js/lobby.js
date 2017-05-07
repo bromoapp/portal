@@ -16,8 +16,22 @@ let lobby = {
         Vue.component("webcam", Webcam)
         new Vue({
             el: '#webcam-container',
+            data() {
+                return {
+                    webcamWindow: null,
+                    userMedia: navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia
+                }
+            },
             render(createElement) {
                 return createElement(Webcam, {})
+            },
+            mounted() {
+                this.webcamWindow = document.getElementById("webcam-window")
+                if (this.userMedia && this.webcamWindow) {
+                    navigator.mediaDevices.getUserMedia({video: true})
+                        .then(stream => this.webcamWindow.srcObject = stream)
+                        .catch(e => console.error(e));
+                }
             }
         })
     },

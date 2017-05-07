@@ -12,14 +12,16 @@ export default {}
 
 <style>
 .webcam-video {
-    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    border-radius: 125px;
     -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
 }
 video {
-    width: 320px;
-    height: 320px;
+    width: 500px;
+    height: 500px;
     position: absolute;
-    top: -80px;
-    left: -80px;
+    top: -125px;
+    left: -125px;
 }
 </style>

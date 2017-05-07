@@ -18,19 +18,24 @@ let lobby = {
             el: '#webcam-container',
             data() {
                 return {
-                    webcamWindow: null,
-                    userMedia: navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia
+                    userMedia : navigator.getUserMedia 
+                    || navigator.webkitGetUserMedia || navigator.mozGetUserMedia 
+                    || navigator.msGetUserMedia || navigator.oGetUserMedia
                 }
             },
             render(createElement) {
                 return createElement(Webcam, {})
             },
             mounted() {
-                this.webcamWindow = document.getElementById("webcam-window")
-                if (this.userMedia && this.webcamWindow) {
-                    navigator.mediaDevices.getUserMedia({video: true})
-                        .then(stream => this.webcamWindow.srcObject = stream)
-                        .catch(e => console.error(e));
+                let webcamWindow = document.getElementById("webcam-window")
+                if (this.userMedia && webcamWindow) {
+                    let onSucceed = (stream) => {
+                        webcamWindow.srcObject = stream;
+                    }
+                    let onFailed = (error) => {
+                        console.error(error)
+                    }
+                    navigator.getUserMedia({video: true}, onSucceed, onFailed)
                 }
             }
         })

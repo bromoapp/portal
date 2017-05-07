@@ -1,6 +1,3 @@
-import Vue from 'vue'
-import SelfCam from "../components/self_cam.vue"
-
 let lobby = {
     init(socket, element) {
         if (!element) {

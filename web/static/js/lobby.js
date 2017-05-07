@@ -6,21 +6,8 @@ let lobby = {
         if (!element) {
             return
         } else {
-            this.init_ui()
             this.init_conn(socket, element)
         }
-    },
-    init_ui() {
-        // Create the main component
-        Vue.component('self_cam', SelfCam)
-
-        // And create the top-level view model:
-        new Vue({
-            el: '#lobby-container',
-            render(createElement) {
-                return createElement(SelfCam, {})
-            }
-        });
     },
     init_conn(socket, element) {
         socket.connect()

@@ -7,13 +7,4 @@ defmodule Portal.Room do
         Logger.info(">>> JOIN USER: #{inspect socket.assigns.user}; PID = #{inspect self()}")
         {:ok, socket}
     end
-
-    def handle_info(:after_join, socket) do
-        {:noreply, socket}
-    end
-    
-    def handle_in("stream:video", stream, socket) do
-        
-        {:noreply, socket}
-    end
 end

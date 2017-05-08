@@ -1,11 +1,10 @@
-defmodule Portal.Lobby do
+defmodule Portal.Room do
     use Portal.Web, :channel
     
     require Logger
 
-    def join("lobby:" <> username, _params, socket) do
+    def join("room:" <> username, _params, socket) do
         Logger.info(">>> JOIN USER: #{inspect socket.assigns.user}; PID = #{inspect self()}")
-        send self(), :after_join
         {:ok, socket}
     end
 

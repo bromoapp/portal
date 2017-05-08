@@ -18,7 +18,7 @@ let lobby = {
     init_conn(socket, element) {
         socket.connect()
         let username = element.getAttribute("data-username")
-        let lobbyChannel = socket.channel("lobby:" + username)
+        let lobbyChannel = socket.channel("room:" + username)
         lobbyChannel.join()
         return lobbyChannel
     },

@@ -47,7 +47,7 @@ let lobby = {
                     setInterval(() => {
                         canvasContext.drawImage(camVideo, 0, 0, 240, 120)
                         let data = camCanvas.toDataURL("image/png")
-                        channel.push("stream:video", JSON.stringify(data))
+                        //channel.push("stream:video", JSON.stringify(data))
                     }, delay)
                 }
                 let onFailed = (error) => {

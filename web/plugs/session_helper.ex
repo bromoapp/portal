@@ -1,9 +1,7 @@
 defmodule Portal.SessionHelper do
-    
     import Phoenix.Controller
     import Plug.Conn
     import Guardian.Plug
-
     alias Portal.Router.Helpers
 
     def init(opts) do

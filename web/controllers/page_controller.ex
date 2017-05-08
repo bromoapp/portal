@@ -1,6 +1,5 @@
 defmodule Portal.PageController do
     use Portal.Web, :controller
-
     require Logger
 
     plug :authorized when action in [:home]

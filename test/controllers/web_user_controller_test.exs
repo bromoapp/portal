@@ -1,6 +1,5 @@
 defmodule Portal.WebUserControllerTest do
     use Portal.ConnCase
-
     alias Portal.User
     
     @moduledoc """

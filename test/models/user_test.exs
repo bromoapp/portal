@@ -1,6 +1,5 @@
 defmodule Portal.UserTest do
     use Portal.ModelCase
-
     alias Portal.User
 
     @moduledoc """

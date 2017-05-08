@@ -1,8 +1,6 @@
 defmodule Portal.ApiUserController do
     use Portal.Web, :controller
-
     alias Portal.User
-
     require Logger
 
     def show(conn, %{"id" => id}) do

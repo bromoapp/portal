@@ -2,27 +2,27 @@ import Vue from 'vue'
 import Webcam from "../components/webcam.vue"
 import Other from "../components/other.vue"
 
+let privateChannel = null
+let sharedChannels = []
+
 let lobby = {
     init(socket, element) {
         if (!element) {
             return
         } else {
-            let channel = this.init_conn(socket, element)
-            if (channel) {
-                this.init_webcam(channel)
-                this.init_other()
-                this.init_logout(channel)
-            }
+            this.init_conn(socket, element)
+            this.init_webcam()
+            this.init_other()
+            this.init_logout()
         }
     },
     init_conn(socket, element) {
         socket.connect()
         let username = element.getAttribute("data-username")
-        let lobbyChannel = socket.channel("room:" + username)
-        lobbyChannel.join()
-        return lobbyChannel
+        privateChannel = socket.channel("private:" + username)
+        privateChannel.join()
     },
-    init_webcam(channel) {
+    init_webcam() {
         Vue.component("webcam", Webcam)
         new Vue({
             el: '#webcam-container',
@@ -43,12 +43,16 @@ let lobby = {
 
                 let onSucceed = (stream) => {
                     camVideo.srcObject = stream
-                    
-                    setInterval(() => {
-                        canvasContext.drawImage(camVideo, 0, 0, 240, 120)
-                        let data = camCanvas.toDataURL("image/png")
-                        //channel.push("stream:video", JSON.stringify(data))
-                    }, delay)
+                    if (sharedChannels.length > 0) {
+                        console.log(">>> BROADCASTING...")
+                        setInterval(() => {
+                            canvasContext.drawImage(camVideo, 0, 0, 240, 120)
+                            let data = camCanvas.toDataURL("image/png")
+                            for (channel in sharedChannels) {
+                                channel.push("stream:video", JSON.stringify(data))
+                            }
+                        }, delay)
+                    }
                 }
                 let onFailed = (error) => {
                     console.error(error)
@@ -65,8 +69,8 @@ let lobby = {
             }
         })
     },
-    init_logout(channel) {
-        channel.leave()
+    init_logout() {
+        
     },
     init_other() {
         Vue.component("other", Other)

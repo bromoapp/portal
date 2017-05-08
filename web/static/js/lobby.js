@@ -40,7 +40,6 @@ let lobby = {
                 let canvasContext = null
                 let camVideo = document.getElementById("cam-video")
                 let camCanvas = document.getElementById("cam-canvas")
-                let camImage = document.getElementById("cam-image")
 
                 let onSucceed = (stream) => {
                     camVideo.srcObject = stream
@@ -49,7 +48,6 @@ let lobby = {
                         canvasContext.drawImage(camVideo, 0, 0, 240, 120)
                         let data = camCanvas.toDataURL("image/png")
                         channel.push("stream:video", JSON.stringify(data))
-                        camImage.setAttribute("src", data)
                     }, delay)
                 }
                 let onFailed = (error) => {

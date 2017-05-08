@@ -1,6 +1,5 @@
 defmodule Portal.Private do
     use Portal.Web, :channel
-    alias Portal.Presence
     require Logger
 
     def join("private:" <> username, _params, socket) do

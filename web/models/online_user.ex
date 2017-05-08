@@ -1,3 +1,3 @@
 defmodule Portal.OnlineUser do
-    defstruct name: nil, username: nil, pid: nil
+    defstruct name: nil, username: nil, node: nil, pid: nil
 end

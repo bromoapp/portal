@@ -39,6 +39,7 @@ defmodule Portal.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:guardian, "~> 0.14.2"},
+     {:message_pack, "~> 0.2.0"},
      {:lbm_kv, "~> 0.0.2"}]
   end
 

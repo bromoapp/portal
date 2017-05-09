@@ -74,12 +74,6 @@ let lobby = {
             el: "#logout_container",
             render(createElement) {
                 return createElement(Logout, {})
-            },
-            mounted() {
-                let btn = document.getElementById("btn_logout")
-                btn.onclick = () => {
-                    
-                }
             }
         })
     }

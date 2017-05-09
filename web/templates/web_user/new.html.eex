@@ -1,5 +1,3 @@
-<%= form_for @changeset, web_user_path(@conn, :create), fn f -> %>
-    <div id="register_form">
-        <register></register>
-    </div>
-<% end %>
+<div id="register_form">
+    <register></register>
+</div>

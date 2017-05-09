@@ -1,3 +1,3 @@
 defmodule Portal.LayoutView do
-  use Portal.Web, :view
+    use Portal.Web, :view
 end

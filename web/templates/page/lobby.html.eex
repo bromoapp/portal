@@ -2,7 +2,4 @@
 <div id="webcam_container">
     <webcam><webcam>
 </div>
-<div id="logout_container">
-    <logout></logout>
-</div>
 <% end %>

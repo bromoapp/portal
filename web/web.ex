@@ -53,6 +53,7 @@ defmodule Portal.Web do
             import Portal.Router.Helpers
             import Portal.ErrorHelpers
             import Portal.Gettext
+            import Plug.Conn, only: [get_session: 2]
         end
     end
 

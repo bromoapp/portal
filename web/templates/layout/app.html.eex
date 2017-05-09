@@ -18,7 +18,7 @@
             <header>
                 <nav role="navigation">
                     <ul class="nav nav-pills pull-right top-nav">
-                        <li><%= link "Sign out", id: "btn_out", to: session_path(@conn, :delete, :signout), class: "btn btn-danger", method: "delete" %></li>
+                        <li id="logout_container"><logout></logout></li>
                     </ul>
                 </nav>
             </header>
@@ -27,8 +27,10 @@
             <header class="header">
                 <nav role="navigation">
                     <ul class="nav nav-pills pull-right top-nav">
-                        <li><%= link "Sign in", to: session_path(@conn, :new, []), class: "btn btn-danger" %></li>
-                        <li><%= link "Sign up", to: web_user_path(@conn, :new, []), class: "btn btn-default" %></li>
+                        <li><%= link "Sign in", to: session_path(@conn, :new, []), 
+                            class: "btn btn-danger" %></li>
+                        <li><%= link "Sign up", to: web_user_path(@conn, :new, []), 
+                            class: "btn btn-default" %></li>
                     </ul>
                 </nav>
                 <span class="logo"></span>
@@ -41,6 +43,7 @@
                 <%= render @view_module, @view_template, assigns %>
             </main>
         </div> <!-- /container -->
+        <script>window.csrfToken = "<%= get_csrf_token() %>"</script>
         <script>window.userToken = "<%= assigns[:access_token] %>"</script>
         <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
     </body>

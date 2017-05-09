@@ -12,7 +12,7 @@ let register = {
     init_ui() {
         Vue.component("register", RegisterForm)
         new Vue({
-            el: '#register-form',
+            el: '#register_form',
             render(createElement) {
                 return createElement(RegisterForm, {})
             }

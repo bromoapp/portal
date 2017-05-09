@@ -7,8 +7,6 @@ defmodule Portal.User do
       field :password, :string, virtual: true
       field :password_hash, :string
       
-      has_many :members, Portal.Member
-
       timestamps()
   end
 

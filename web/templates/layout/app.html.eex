@@ -18,7 +18,7 @@
             <header>
                 <nav role="navigation">
                     <ul class="nav nav-pills pull-right top-nav">
-                        <li><%= link "Sign out", to: session_path(@conn, :delete, :signout), class: "btn btn-danger", method: "delete" %></li>
+                        <li><%= link "Sign out", id: "btn_out", to: session_path(@conn, :delete, :signout), class: "btn btn-danger", method: "delete" %></li>
                     </ul>
                 </nav>
             </header>

@@ -1,8 +1,6 @@
 defmodule Portal.TestHelpers do
     alias Portal.Repo
     alias Portal.User
-    alias Portal.Room
-    alias Portal.Member
 
     def insert_user(attrs \\ %{}) do
         changes = Map.merge(%{
@@ -16,14 +14,4 @@ defmodule Portal.TestHelpers do
         |> Repo.insert!()
     end
 
-    def insert_room(attrs \\ %{}) do
-        changes = Map.merge(%{
-            name: "Some room",
-            mode: "Some mode"
-        }, attrs)
-
-        %Portal.Room{}
-        |> Portal.Room.changeset(changes)
-        |> Repo.insert!()
-    end
 end

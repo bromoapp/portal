@@ -54,12 +54,12 @@ defmodule Portal.OnlineUsersDb do
     end
 
     def handle_call({:put, key, value}, _from, args) do
-        {:ok, value} = :lbm_kv.put(OnlineUsersTbl, key, value)
+        {:ok, _value} = :lbm_kv.put(OnlineUsersTbl, key, value)
         {:reply, :ok, args}
     end
     
     def handle_call({:del, key}, _from, args) do
-        {:ok, value} = :lbm_kv.del(OnlineUsersTbl, key)
+        {:ok, _value} = :lbm_kv.del(OnlineUsersTbl, key)
         {:reply, :ok, args}
     end
 

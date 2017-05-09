@@ -23,6 +23,6 @@ import lobby from "./lobby"
 import login from "./login"
 import register from "./register"
 
-login.init(document.getElementById("login-form"))
-register.init(document.getElementById("register-form"))
-lobby.init(socket, document.getElementById("lobby-container"))
+login.init(document.getElementById("login_form"))
+register.init(document.getElementById("register_form"))
+lobby.init(socket, document.getElementById("lobby_container"))

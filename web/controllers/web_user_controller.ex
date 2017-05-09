@@ -18,7 +18,6 @@ defmodule Portal.WebUserController do
             {:ok, user} ->
                 conn
                 |> SessionHelper.login(user)
-                |> put_flash(:info, "#{user.name} account created!")
                 |> redirect(to: page_path(conn, :lobby))
             {:error, changeset} ->
                 render(conn, "new.html", changeset: changeset)

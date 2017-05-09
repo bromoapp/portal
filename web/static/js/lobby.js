@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Webcam from "../components/webcam.vue"
-import Other from "../components/other.vue"
+import Logout from "../components/logout.vue"
 
 let privateChannel = null
 let sharedChannels = []
@@ -12,7 +12,6 @@ let lobby = {
         } else {
             this.init_conn(socket, element)
             this.init_webcam()
-            this.init_other()
             this.init_logout()
         }
     },
@@ -25,7 +24,7 @@ let lobby = {
     init_webcam() {
         Vue.component("webcam", Webcam)
         new Vue({
-            el: '#webcam-container',
+            el: '#webcam_container',
             render(createElement) {
                 return createElement(Webcam, {})
             },
@@ -38,8 +37,8 @@ let lobby = {
                     console.info(">>> using non chrome!")
                 }
                 let canvasContext = null
-                let camVideo = document.getElementById("cam-video")
-                let camCanvas = document.getElementById("cam-canvas")
+                let camVideo = document.getElementById("cam_video")
+                let camCanvas = document.getElementById("cam_canvas")
 
                 let onSucceed = (stream) => {
                     camVideo.srcObject = stream
@@ -70,14 +69,17 @@ let lobby = {
         })
     },
     init_logout() {
-        
-    },
-    init_other() {
-        Vue.component("other", Other)
+        Vue.component("logout", Logout)
         new Vue({
-            el: '#other-container',
+            el: "#logout_container",
             render(createElement) {
-                return createElement(Other, {})
+                return createElement(Logout, {})
+            },
+            mounted() {
+                let btn = document.getElementById("btn_logout")
+                btn.onclick = () => {
+                    
+                }
             }
         })
     }

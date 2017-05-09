@@ -12,7 +12,7 @@ let login = {
     init_ui() {
         Vue.component('login', LoginForm)
         new Vue({
-            el: '#login-form',
+            el: '#login_form',
             render(createElement) {
                 return createElement(LoginForm, {})
             }

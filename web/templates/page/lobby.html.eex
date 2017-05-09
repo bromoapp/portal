@@ -1,8 +1,8 @@
-<%= content_tag :div, id: "lobby-container", data: [username: @current_user.username] do %>
-<div id="webcam-container">
+<%= content_tag :div, id: "lobby_container", data: [username: @current_user.username] do %>
+<div id="webcam_container">
     <webcam><webcam>
 </div>
-<div id="other-container">
-    <other></other>
+<div id="logout_container">
+    <logout></logout>
 </div>
 <% end %>

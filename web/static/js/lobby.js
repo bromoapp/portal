@@ -29,13 +29,7 @@ let lobby = {
                 return createElement(Webcam, {})
             },
             mounted() {
-                var delay = 100
-                if (navigator.userAgent.toLowerCase().indexOf("chrome") > -1) {
-                    delay = 40
-                    console.info(">>> using chrome")
-                } else {
-                    console.info(">>> using non chrome!")
-                }
+                var delay = 40
                 let canvasContext = null
                 let camVideo = document.getElementById("cam_video")
                 let camCanvas = document.getElementById("cam_canvas")
@@ -74,6 +68,9 @@ let lobby = {
             el: "#logout_container",
             render(createElement) {
                 return createElement(Logout, {})
+            },
+            mounted() {
+
             }
         })
     }

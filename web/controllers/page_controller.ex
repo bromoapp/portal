@@ -5,8 +5,7 @@ defmodule Portal.PageController do
     plug :authorized when action in [:home]
 
     def to_home(conn, _params) do
-        conn
-        |> redirect(to: page_path(conn, :home))
+        redirect(conn, to: page_path(conn, :home))
     end
 
     def home(conn, _params) do
@@ -14,6 +13,11 @@ defmodule Portal.PageController do
     end
 
     def lobby(conn, _params) do
-        render conn, "lobby.html"
+        cond do
+            conn.assigns.current_user != nil ->
+                render conn, "lobby.html"
+            true ->
+                redirect(conn, to: page_path(conn, :home))
+        end
     end
 end

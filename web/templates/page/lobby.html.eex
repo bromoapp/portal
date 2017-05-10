@@ -1,5 +1,7 @@
+<%= if @current_user do %>
 <%= content_tag :div, id: "lobby_container", data: [username: @current_user.username] do %>
 <div id="webcam_container">
     <webcam><webcam>
 </div>
+<% end %>
 <% end %>

@@ -70,7 +70,19 @@ let lobby = {
                 return createElement(Logout, {})
             },
             mounted() {
+                let form = document.getElementById("logout_form")
+                let btn = document.getElementById("logout_btn")
+                let onClicked = () => {
+                    if (privateChannel) {
+                        privateChannel.leave()
+                    }
+                    for (ch in sharedChannels) {
+                        ch.leave()
+                    }
+                    form.submit()
+                }
 
+                btn.addEventListener("click", onClicked)
             }
         })
     }

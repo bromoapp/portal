@@ -10,6 +10,11 @@ defmodule Portal.Private do
         {:ok, socket}
     end
 
+    def terminate(_reason, socket) do
+        Logger.info(">>> LEAVE USER: #{inspect socket.assigns.user}; PID = #{inspect self()}")
+        {:ok, socket}
+    end
+
     def handle_info({:after_join, user}, socket) do
         online_user = %OnlineUser{name: user.name, username: user.username, node: node(), pid: self()}
         :ok = insert(online_user)

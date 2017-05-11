@@ -1,8 +1,6 @@
 defmodule Portal.Private do
     use Portal.Web, :channel
-    import Portal.OnlineUsersDb, only: [select: 1, insert: 1, delete: 1, update: 1]
     alias Portal.Presence
-    alias Portal.OnlineUser
     require Logger
 
     def join("private:" <> username, _params, socket) do

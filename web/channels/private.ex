@@ -47,16 +47,20 @@ defmodule Portal.Private do
     def handle_info(:update_user, socket) do
         # Query user's friends from db
         user = socket.assigns.user
+        friends = _get_friends(user)
+        
+        Logger.info(">>> RECS = #{inspect friends}")
+        {:noreply, socket}
+    end
+
+    defp _get_friends(user) do
         sql_1 = "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
         %Mariaex.Result{rows: rows1} = Ecto.Adapters.SQL.query!(Repo, sql_1, [user.id])
         friends = _parse_users(rows1, [])
         
         sql_2 = "SELECT a.user_a_id AS 'id' FROM relations AS a WHERE a.user_b_id = ?"
         %Mariaex.Result{rows: rows2} = Ecto.Adapters.SQL.query!(Repo, sql_2, [user.id])
-        friends = _parse_users(rows2, friends)
-
-        Logger.info(">>> RECS = #{inspect friends}")
-        {:noreply, socket}
+        _parse_users(rows2, friends)      
     end
 
     defp _parse_users([], result) do

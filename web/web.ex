@@ -68,7 +68,6 @@ defmodule Portal.Web do
             use Phoenix.Channel
 
             alias Portal.Repo
-            alias Portal.Presence
 
             import Ecto
             import Ecto.Query

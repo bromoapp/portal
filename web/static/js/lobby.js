@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Webcam from "../components/webcam.vue"
 import Logout from "../components/logout.vue"
 
+let privateChannelPrefix = "ch:private:"
 let privateChannel = null
 let sharedChannels = []
 
@@ -18,7 +19,7 @@ let lobby = {
     init_conn(socket, element) {
         socket.connect()
         let username = element.getAttribute("data-username")
-        privateChannel = socket.channel("private:" + username)
+        privateChannel = socket.channel(privateChannelPrefix + username)
         privateChannel.join()
     },
     init_webcam() {

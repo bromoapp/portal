@@ -2,8 +2,7 @@ defmodule Portal.UserSocket do
     use Phoenix.Socket
 
     ## Channels
-    channel "private:*", Portal.Private
-    channel "shared:", Portal.Shared
+    channel "ch:private:*", Portal.Private
 
     ## Transports
     transport :websocket, Phoenix.Transports.WebSocket

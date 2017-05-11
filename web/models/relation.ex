@@ -9,10 +9,10 @@ defmodule Portal.Relation do
         timestamps() 
     end
 
-    def changeset(struct, params \\ :invalid) do
+    def changeset(struct, params) do
         struct
-        |> cast(params, [])
-        |> cast_assoc(:user_a, required: true)
-        |> cast_assoc(:user_b, required: true)
+        |> cast(params, [:tags])
+        |> foreign_key_constraint(:user_a)
+        |> foreign_key_constraint(:user_b)
     end
 end

@@ -22,6 +22,7 @@ defmodule Portal do
           # worker(Portal.Worker, [arg1, arg2, arg3]),
 
           supervisor(Portal.UserPresence, []),
+          worker(Portal.OnlineUsersDb, [join_addr])
         ]
 
         # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

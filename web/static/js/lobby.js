@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Webcam from "../components/webcam.vue"
 import Logout from "../components/logout.vue"
 
-let privateChannelPrefix = "ch:private:"
+let privateChannelPrefix = "private:"
 let privateChannel = null
 let sharedChannels = []
 

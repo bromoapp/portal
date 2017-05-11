@@ -3,7 +3,7 @@ defmodule Portal.Private do
     alias Portal.Presence
     require Logger
 
-    def join("ch:private:" <> username, _params, socket) do
+    def join("private:" <> username, _params, socket) do
         send self(), :after_join
         {:ok, socket}
     end
@@ -15,8 +15,7 @@ defmodule Portal.Private do
 
     def handle_info(:after_join, socket) do
         Logger.info(">>> USER JOIN: #{inspect socket.assigns.user.username}")   
-        user = socket.assigns.user     
-        Presence.track(socket, user, %{
+        Presence.track(socket, socket.assigns.user, %{
             online_at: :os.system_time(:milli_seconds)
         })
         {:noreply, socket}

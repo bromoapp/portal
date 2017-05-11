@@ -39,12 +39,13 @@ defmodule Portal.Private do
 
         # Initiate periodik checks on user's friends
         :timer.send_interval(5_000, :update_user)
+        
         {:noreply, socket}
     end
 
     def handle_info(:update_user, socket) do
         # Query user's friends from db
-        
+        {:noreply, socket}
     end
     
 end

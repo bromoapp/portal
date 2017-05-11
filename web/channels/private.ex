@@ -11,6 +11,9 @@ defmodule Portal.Private do
     def terminate(_reason, socket) do
         Logger.info(">>> USER LEFT: #{inspect socket.assigns.user.username}")        
         
+        # Delete user from db
+        user = socket.assigns.user
+        delete(user.username)
         {:noreply, socket}
     end
 
@@ -23,6 +26,16 @@ defmodule Portal.Private do
             name: user.name,
             online_at: :os.system_time(:milli_seconds)
         })
+
+        # Insert user to db
+        ol_user = %OnlineUser{
+            name: user.name,
+            username: user.username,
+            node: node(),
+            pid: self()
+        }
+        insert(ol_user)
+
         {:noreply, socket}
     end
     

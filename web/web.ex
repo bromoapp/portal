@@ -73,7 +73,6 @@ defmodule Portal.Web do
             import Ecto
             import Ecto.Query
             import Portal.Gettext
-            import Portal.OnlineUsersDb, only: [select: 1, insert: 1, delete: 1, update: 1]
         end
     end
 

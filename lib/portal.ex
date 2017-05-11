@@ -21,8 +21,7 @@ defmodule Portal do
           # Start your own worker by calling: Portal.Worker.start_link(arg1, arg2, arg3)
           # worker(Portal.Worker, [arg1, arg2, arg3]),
 
-          supervisor(Portal.Presence, []),
-          worker(Portal.OnlineUsersDb, [join_addr])
+          supervisor(Portal.UserPresence, []),
         ]
 
         # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

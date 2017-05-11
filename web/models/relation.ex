@@ -12,7 +12,7 @@ defmodule Portal.Relation do
     def changeset(struct, params \\ :invalid) do
         struct
         |> cast(params, [])
-        |> cast_assoc(:user_a)
-        |> cast_assoc(:user_b)
+        |> cast_assoc(:user_a, required: true)
+        |> cast_assoc(:user_b, required: true)
     end
 end

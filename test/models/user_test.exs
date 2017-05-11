@@ -19,6 +19,9 @@ defmodule Portal.UserTest do
     test "User.register_changeset returns valid == true, when all input params are correct" do
         changeset = User.register_changeset(%User{}, @valid_input)
         assert changeset.valid?
+
+        user = Repo.insert!(changeset)
+        assert user.name == @valid_input.name
     end
 
     test "User.register_changeset returns valid == false, when any of required param not present" do

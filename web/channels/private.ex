@@ -49,27 +49,34 @@ defmodule Portal.Private do
         user = socket.assigns.user
         friends = _get_friends(user)
         
-        Logger.info(">>> RECS = #{inspect friends}")
+        Logger.info(">>> FRIENDS = #{inspect friends}")
         {:noreply, socket}
     end
 
     defp _get_friends(user) do
         sql_1 = "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
         %Mariaex.Result{rows: rows1} = Ecto.Adapters.SQL.query!(Repo, sql_1, [user.id])
-        friends = _parse_users(rows1, [])
+        friends = _parse_friends(rows1, [])
         
         sql_2 = "SELECT a.user_a_id AS 'id' FROM relations AS a WHERE a.user_b_id = ?"
         %Mariaex.Result{rows: rows2} = Ecto.Adapters.SQL.query!(Repo, sql_2, [user.id])
-        _parse_users(rows2, friends)      
+        _parse_friends(rows2, friends)      
     end
 
-    defp _parse_users([], result) do
+    defp _parse_friends([], result) do
         result
     end
 
-    defp _parse_users([[id]|t], result) do
+    defp _parse_friends([[id]|t], result) do
         user = Repo.get(User, id)
-        n_result = result ++ [%{id: user.id, username: user.username, name: user.name}]
-        _parse_users(t, n_result)
+        ol_user = select(user.username)
+        cond do
+            ol_user == nil ->
+                n_result = result ++ [%{id: user.id, username: user.username, name: user.name, online: false}]
+                _parse_friends(t, n_result)
+            true ->
+                n_result = result ++ [%{id: user.id, username: user.username, name: user.name, online: true}]
+                _parse_friends(t, n_result)
+        end
     end
 end

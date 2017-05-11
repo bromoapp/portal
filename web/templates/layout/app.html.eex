@@ -11,8 +11,11 @@
         <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
         <link rel="stylesheet" href="<%= static_path(@conn, "/css/components.css") %>">
     </head>
-
-    <body class="page-body">
+    <%= if @current_user do %>
+    <body class="lobby-body">
+    <% else %>
+    <body class="home-body">
+    <% end %>
         <%= if @current_user do %>
         <div class="container-lobby">
             <header>

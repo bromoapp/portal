@@ -14,8 +14,13 @@ body, form, ul, table {
     margin-bottom: 20px;
 }
 
-.page-body {
-    background-image: url("/images/background.png");
+.home-body {
+    background-image: url("/images/background_1.png");
+    background-size: cover;
+}
+
+.lobby-body {
+    background-image: url("/images/background_2.png");
     background-size: cover;
 }
 

@@ -3,5 +3,6 @@
 <div id="webcam_container">
     <webcam><webcam>
 </div>
+
 <% end %>
 <% end %>

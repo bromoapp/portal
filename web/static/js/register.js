@@ -10,9 +10,29 @@ let register = {
         }
     },
     init_ui() {
+        let form = document.getElementById("register_form")
         Vue.component("register", RegisterForm)
         new Vue({
-            el: '#register_form',
+            el: '#register_form_group',
+            data() {
+                return {
+                    unameFieldName: "user[name]",
+                    unamePlaceholder: "Name",
+                    unameFieldType: "text",
+                    emailFieldName: "user[username]",
+                    emailPlaceholder: "Email",
+                    emailFieldType: "email",
+                    paswdFieldName: "user[password]",
+                    paswdPlaceholder: "Password",
+                    paswdFieldType: "password",
+                    doSubmit: () => {
+                        form.submit()
+                    },
+                    doCancel: () => {
+                        window.location.href = "/web"
+                    }
+                }
+            },
             render(createElement) {
                 return createElement(RegisterForm, {})
             }

@@ -1,37 +1,57 @@
 <template>
-    <form accept-charset="UTF-8" action="/web/sessions" method="post">
-        <input name="_csrf_token" v-bind:value="csrf_token" type="hidden">
-        <input name="_utf8" value="✓" type="hidden">
-        <div class="container-login-register">
-            <h1 class="form-label">Login</h1>
-            <div class="form-group">
-                <input class="form-control" 
-                    id="session_username" 
-                    name="session[username]" 
-                    placeholder="Username" 
-                    type="text">
-            </div>
-            <div class="form-group">
-                <input class="form-control" 
-                    id="session_password" 
-                    name="session[password]" 
-                    placeholder="Password" 
-                    type="password">
-            </div>
-            <span class="pull-right">
-                <button class="btn btn-primary" 
-                    type="submit">Submit</button>
-                <a class="btn btn-default" href="/web">Cancel</a>
-            </span>
+    <div class="container-login-register">
+        <h1 class="form-label">Login</h1>
+        <div class="form-group">
+            <input class="form-control"
+                id="session_username" 
+                v-bind:name="unameFieldName" 
+                v-bind:placeholder="unamePlaceholder" 
+                v-bind:type="unameFieldType">
         </div>
-    </form>
+        <div class="form-group">
+            <input class="form-control"
+                id="session_password" 
+                v-bind:name="paswdFieldName" 
+                v-bind:placeholder="paswdPlaceholder" 
+                v-bind:type="paswdFieldType">
+        </div>
+        <span class="pull-right">
+            <a class="btn btn-primary"
+                v-on:click="doSubmit">Submit</a>
+            <a class="btn btn-default" 
+                v-on:click="doCancel">Cancel</a>
+        </span>
+    </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            csrf_token: window.csrfToken
+    computed: {
+        unameFieldName() {
+            return this.$parent.unameFieldName
+        },
+        unamePlaceholder() {
+            return this.$parent.unamePlaceholder
+        },
+        unameFieldType() {
+            return this.$parent.unameFieldType
+        },
+        paswdFieldName() {
+            return this.$parent.paswdFieldName
+        },
+        paswdPlaceholder() {
+            return this.$parent.paswdPlaceholder
+        },
+        paswdFieldType() {
+            return this.$parent.paswdFieldType
+        },
+    },
+    methods: {
+        doCancel() {
+            this.$parent.doCancel()
+        },
+        doSubmit() {
+            this.$parent.doSubmit()
         }
     }
 }

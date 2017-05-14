@@ -10,9 +10,26 @@ let login = {
         }
     },
     init_ui() {
+        let form = document.getElementById("login_form")
         Vue.component('login', LoginForm)
         new Vue({
-            el: '#login_form',
+            el: '#login_form_group',
+            data() {
+                return {
+                    unameFieldName: "session[username]",
+                    unamePlaceholder: "Email",
+                    unameFieldType: "email",
+                    paswdFieldName: "session[password]",
+                    paswdPlaceholder: "Password",
+                    paswdFieldType: "password",
+                    doSubmit: () => {
+                        form.submit()
+                    },
+                    doCancel: () => {
+                        window.location.href = "/web"
+                    }
+                }
+            },
             render(createElement) {
                 return createElement(LoginForm, {})
             }

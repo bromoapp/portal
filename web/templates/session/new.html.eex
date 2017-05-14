@@ -1,3 +1,9 @@
-<div id="login_form">
-    <login></login>
-</div>
+
+<form id="login_form" accept-charset="UTF-8" action="/web/sessions" method="post">
+    <input name="_csrf_token" value="<%= get_csrf_token() %>" type="hidden">
+    <input name="_utf8" value="✓" type="hidden">
+    <div id="login_form_group">
+        <login></login>
+    </div>
+</form>
+

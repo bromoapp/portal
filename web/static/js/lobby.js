@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Webcam from "../components/webcam.vue"
 import Logout from "../components/logout.vue"
+import Sidenav from "../components/sidenav.vue"
 
 let privateChannelPrefix = "private:"
 let privateChannel = null
@@ -12,8 +13,9 @@ let lobby = {
             return
         } else {
             this.init_conn(socket, element)
-            this.init_webcam()
             this.init_logout()
+            this.init_webcam()
+            this.init_sidenav()
         }
     },
     init_conn(socket, element) {
@@ -84,6 +86,18 @@ let lobby = {
                 }
 
                 btn.addEventListener("click", onClicked)
+            }
+        })
+    },
+    init_sidenav() {
+        Vue.component("sidenav", Sidenav)
+        new Vue({
+            el: "#sidenav_container",
+            render(createElement) {
+                return createElement(Sidenav, {})
+            },
+            mounted() {
+
             }
         })
     }

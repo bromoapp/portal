@@ -39,7 +39,7 @@ defmodule Portal.Private do
         insert(ol_user)
 
         # Initiate periodik checks on user's friends
-        :timer.send_interval(10_000, :update_user)
+        #:timer.send_interval(10_000, :update_user)
         
         {:noreply, socket}
     end

@@ -16,9 +16,7 @@ export default {}
     width: 240px;
     height: 180px;
     border-radius: 15px;
-    position: absolute;
-    top: 25px;
-    left: 30px;
+    position: relative;
     -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
 }
 #cam_video {

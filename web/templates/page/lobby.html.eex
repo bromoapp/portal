@@ -5,7 +5,7 @@
         <webcam><webcam>
     </div>
 </div>
-<div style="max-width: 240px; margin-top: 230px;">
+<div style="max-width: 240px; margin-top: 20px">
     <div id="sidenav_container">
         <sidenav></sidenav>
     </div>

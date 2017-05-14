@@ -1,86 +1,119 @@
 <template>
-    <div class="acc-root">
-        <button class="acc-btn" 
-            v-on:click="onPanelHeaderClick">Section 1</button>
-        <div class="acc-panel">
-            <p>Lorem ipsum...</p>
+    <div class="togglebox">
+        <div>
+            <input id="radio1" type="radio" name="toggle" checked="checked"/>
+            <label for="radio1">Online Friends</label>
+            <div class="content">
+            <p>Cupcake ipsum dolor sit. Amet candy chocolate bar croissant marzipan toffee danish. Chocolate cake jujubes liquorice topping marzipan.</p>
+            <p>Macaroon bonbon sugar plum macaroon I love I love liquorice marzipan. Lemon drops I love caramels cheesecake croissant.</p>
+            </div>
         </div>
-        <button class="acc-btn" 
-            v-on:click="onPanelHeaderClick">Section 2</button>
-        <div class="acc-panel">
-            <p>Lorem ipsum...</p>
+        <div>
+            <input id="radio2" type="radio" name="toggle"/>
+            <label for="radio2">Offline Friends</label>
+            <div class="content">
+            <p>Cupcake ipsum dolor sit. Amet candy chocolate bar croissant marzipan toffee danish. Chocolate cake jujubes liquorice topping marzipan.</p>
+            <p>Macaroon bonbon sugar plum macaroon I love I love liquorice marzipan. Lemon drops I love caramels cheesecake croissant.</p>
+            </div>
         </div>
-        <button class="acc-btn" 
-            v-on:click="onPanelHeaderClick">Section 3</button>
-        <div class="acc-panel">
-            <p>Lorem ipsum...</p>
+        <div>
+            <input id="radio3" type="radio" name="toggle"/>
+            <label for="radio3">Favorite Rooms</label>
+            <div class="content">
+            <p>Cupcake ipsum dolor sit. Amet candy chocolate bar croissant marzipan toffee danish. Chocolate cake jujubes liquorice topping marzipan.</p>
+            <p>Macaroon bonbon sugar plum macaroon I love I love liquorice marzipan. Lemon drops I love caramels cheesecake croissant.</p>
+            </div>
         </div>
-        <button class="acc-btn" 
-            v-on:click="onPanelHeaderClick">Section 4</button>
-        <div class="acc-panel">
-            <p>Lorem ipsum...</p>
-        </div>
-        <button class="acc-btn" 
-            v-on:click="onPanelHeaderClick">Section 5</button>
-        <div class="acc-panel">
-            <p>Lorem ipsum...</p>
+        <div>
+            <input id="radio4" type="radio" name="toggle"/>
+            <label for="radio4">Public Rooms</label>
+            <div class="content">
+            <p>Cupcake ipsum dolor sit. Amet candy chocolate bar croissant marzipan toffee danish. Chocolate cake jujubes liquorice topping marzipan.</p>
+            <p>Macaroon bonbon sugar plum macaroon I love I love liquorice marzipan. Lemon drops I love caramels cheesecake croissant.</p>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-let curr_panel = null
-
 export default {
-    methods: {
-        onPanelHeaderClick(event) {
-            if (curr_panel) {
-                if (curr_panel.style.display === "block") {
-                    curr_panel.style.display = "none"
-                } else {
-                    curr_panel.style.display = "block"
-                }
-            }
-            let el = event.target
-            el.classList.toggle("active")
-
-            var panel = el.nextElementSibling
-            if (panel.style.display === "block") {
-                panel.style.display = "none"
-            } else {
-                panel.style.display = "block"
-            }
-            curr_panel = panel
-        }
-    }
+    
 }
 </script>
 
 <style>
-.acc-root {
+@import url("http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css");
+
+:before,
+:after {
+    content: '';
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.togglebox {
+    width: 240px;
+    height: 373px;
+    margin: 0 auto;
+    background: #3c566f;
+}
+
+input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+label {
+    position: relative;
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.5);
+    background: #2e4155;
+    cursor: pointer;
+}
+
+label:hover {
+    background: #1f2d3a;
+}
+
+label:after {
+    content: '\f078';
+    top: 0px;
+    right: 20px;
+    font-family: fontawesome;
+}
+
+.content {
+    height: 0;
     overflow: hidden;
 }
- /* Style the buttons that are used to open and close the accor-btn-panel panel */
-button.acc-btn {
-    background-color: #eee;
-    color: #444;
-    cursor: pointer;
-    height: 30px;
-    width: 100% !important;
-    text-align: left;
-    border: none;
-    outline: none;
-    transition: 0.4s;
+
+input[type="radio"]:checked ~ label {
+    color: rgba(255, 255, 255, 0.8);
 }
 
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-button.acc-btn.active, button.acc-btn:hover {
-    background-color: #ddd;
+input[type="radio"]:checked ~ label:after {
+    transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
 }
 
-/* Style the accordion panel. Note: hidden by default */
-div.acc-panel {
-    background-color: white;
-    display: none;
+input[type="radio"]:checked ~ .content {
+    height: 150px;
+}
+
+p {
+    margin: 15px 0;
+    padding: 0 20px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
 }
 </style>

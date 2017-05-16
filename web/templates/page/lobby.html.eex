@@ -1,13 +1,8 @@
 <%= if @current_user do %>
 <%= content_tag :div, id: "lobby_container", data: [username: @current_user.username] do %>
-<div>
-    <div id="webcam_container">
-        <webcam><webcam>
-    </div>
-</div>
 <div style="max-width: 240px; margin-top: 20px">
     <div id="sidenav_container">
-        <sidenav></sidenav>
+        <sidenav ref="sidenav"></sidenav>
     </div>
 </div>
 <% end %>

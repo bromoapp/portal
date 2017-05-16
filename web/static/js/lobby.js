@@ -14,7 +14,6 @@ let lobby = {
         } else {
             this.init_conn(socket, element)
             this.init_logout()
-            this.init_webcam()
             this.init_sidenav()
         }
     },
@@ -23,47 +22,6 @@ let lobby = {
         let username = element.getAttribute("data-username")
         privateChannel = socket.channel(privateChannelPrefix + username)
         privateChannel.join()
-    },
-    init_webcam() {
-        Vue.component("webcam", Webcam)
-        new Vue({
-            el: '#webcam_container',
-            render(createElement) {
-                return createElement(Webcam, {})
-            },
-            mounted() {
-                var delay = 40
-                let canvasContext = null
-                let camVideo = document.getElementById("cam_video")
-                let camCanvas = document.getElementById("cam_canvas")
-
-                let onSucceed = (stream) => {
-                    camVideo.srcObject = stream
-                    if (sharedChannels.length > 0) {
-                        console.log(">>> BROADCASTING...")
-                        setInterval(() => {
-                            canvasContext.drawImage(camVideo, 0, 0, 240, 120)
-                            let data = camCanvas.toDataURL("image/png")
-                            for (channel in sharedChannels) {
-                                channel.push("stream:video", JSON.stringify(data))
-                            }
-                        }, delay)
-                    }
-                }
-                let onFailed = (error) => {
-                    console.error(error)
-                }
-
-                if (camVideo && camCanvas) {
-                    canvasContext = camCanvas.getContext("2d")
-
-                    navigator.getUserMedia = (navigator.getUserMedia 
-                    || navigator.webkitGetUserMedia || navigator.mozGetUserMedia 
-                    || navigator.msGetUserMedia || navigator.oGetUserMedia)
-                    navigator.getUserMedia({video: true}, onSucceed, onFailed)
-                }
-            }
-        })
     },
     init_logout() {
         Vue.component("logout", Logout)
@@ -97,7 +55,37 @@ let lobby = {
                 return createElement(Sidenav, {})
             },
             mounted() {
+                document.getElementById("mySidenav").style.width = "282px"
+                let delay = 40
+                let canvasContext = null
+                let camVideo = document.getElementById("cam_video")
+                let camCanvas = document.getElementById("cam_canvas")
 
+                let onSucceed = (stream) => {
+                    camVideo.srcObject = stream
+                    if (sharedChannels.length > 0) {
+                        console.log(">>> BROADCASTING...")
+                        setInterval(() => {
+                            canvasContext.drawImage(camVideo, 0, 0, 240, 120)
+                            let data = camCanvas.toDataURL("image/png")
+                            for (channel in sharedChannels) {
+                                channel.push("stream:video", JSON.stringify(data))
+                            }
+                        }, delay)
+                    }
+                }
+                let onFailed = (error) => {
+                    console.error(error)
+                }
+
+                if (camVideo && camCanvas) {
+                    canvasContext = camCanvas.getContext("2d")
+
+                    navigator.getUserMedia = (navigator.getUserMedia 
+                    || navigator.webkitGetUserMedia || navigator.mozGetUserMedia 
+                    || navigator.msGetUserMedia || navigator.oGetUserMedia)
+                    navigator.getUserMedia({video: true}, onSucceed, onFailed)
+                }
             }
         })
     }

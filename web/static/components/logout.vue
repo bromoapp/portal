@@ -2,7 +2,7 @@
     <form id="logout_form" action="/web/sessions/signout" class="link" method="post">
         <input name="_method" type="hidden" value="delete">
         <input name="_csrf_token" type="hidden" v-bind:value="csrf_token">
-        <a class="pull-right btn btn-danger" id="logout_btn">Sign out</a>
+        <a class="pull-right btn btn-primary" id="logout_btn">Sign out</a>
     </form>
 </template>
 

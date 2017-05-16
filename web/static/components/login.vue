@@ -16,7 +16,7 @@
                 v-bind:type="paswdFieldType">
         </div>
         <span class="pull-right">
-            <a class="btn btn-primary"
+            <a class="btn btn-danger"
                 v-on:click="doSubmit">Submit</a>
             <a class="btn btn-default" 
                 v-on:click="doCancel">Cancel</a>

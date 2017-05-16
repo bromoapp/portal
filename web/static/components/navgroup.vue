@@ -5,6 +5,16 @@
                 <font style="font-size: 16px">Friends</font>
             </div>
         </div>
+        <div class="panel acc-header">
+            <div class="panel-heading bg-primary" style="border-radius: 0">
+                <font style="font-size: 16px">Rooms</font>
+            </div>
+        </div>
+        <div class="panel acc-header">
+            <div class="panel-heading bg-primary" style="border-radius: 0">
+                <font style="font-size: 16px">Audiences</font>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -23,7 +33,7 @@ export default {
 .acc-header {
     border: 0px; 
     border-radius: 0; 
-    margin: 3px 2px 1px 1px; 
+    margin: 1px 1px 0px 1px; 
     width: 280px;
 }
 

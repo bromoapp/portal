@@ -1,6 +1,5 @@
 <template>
     <div id="side_nav" class="sidenav">
-        <div id="side_nav_cover" class="sidenav-cover"></div>
         <button class="btn btn-primary closebtn box-shadow-menu" v-on:click="changeMode">
             &nbsp;
         </button>
@@ -8,6 +7,7 @@
             <webcam></webcam>
         </div>
         <navgroup></navgroup>
+        <div id="side_nav_cover" class="sidenav-cover"></div>
     </div>
 </template>
 

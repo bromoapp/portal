@@ -54,11 +54,11 @@ export default {
                 } else {
                     opened.style.display = "none"
                     opened = document.getElementById(data)
-                    opened.style.display = "inline"
+                    opened.style.display = "block"
                 }
             } else {
                 opened = document.getElementById(data)
-                opened.style.display = "inline"
+                opened.style.display = "block"
             }
         }
     }
@@ -79,21 +79,21 @@ export default {
 }
 
 .accordion-header:hover {
+    transition: 0.4s;
     background-color: #5bc0de;
     cursor: hand;
 }
 
 .accordion-header {
+    transition: 0.4s;
     background-color: #428bca;
     border-radius: 0;
 }
 
-.accordion-body .on {
-    display: block;
-}
-
 .accordion-body {
     display: none;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
 }
 
 .accordion-li {
@@ -107,10 +107,5 @@ export default {
     font-weight: normal;
     font-size: 16px;
     color: #ffffff;
-}
-
-#main {
-    transition: margin-left margin-top .5s;
-    padding: 20px;
 }
 </style>

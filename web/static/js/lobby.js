@@ -55,7 +55,7 @@ let lobby = {
                 return createElement(Sidenav, {})
             },
             mounted() {
-                document.getElementById("mySidenav").style.width = "282px"
+                document.getElementById("side_nav").style.width = "282px"
                 let delay = 40
                 let canvasContext = null
                 let camVideo = document.getElementById("cam_video")

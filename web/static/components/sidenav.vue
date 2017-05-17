@@ -1,5 +1,6 @@
 <template>
-    <div id="mySidenav" class="sidenav">
+    <div id="side_nav" class="sidenav">
+        <div id="side_nav_cover" class="sidenav-cover"></div>
         <button class="btn btn-primary closebtn box-shadow-menu" v-on:click="changeMode">
             &nbsp;
         </button>
@@ -37,12 +38,12 @@ export default {
         /* Set the width of the side navigation to 250px */
         changeMode() {
             if (isClosed) {
-                document.getElementById("mySidenav").style.width = "282px"
-                document.getElementById("cam_video").style.width = "280px"
+                document.getElementById("side_nav").style.width = "282px"
+                document.getElementById("side_nav_cover").style.width = "0px"
                 isClosed = false
             } else {
-                document.getElementById("mySidenav").style.width = "54px"
-                document.getElementById("cam_video").style.width = "0px"
+                document.getElementById("side_nav").style.width = "52px"
+                document.getElementById("side_nav_cover").style.width = "53px"
                 isClosed = true
             }
         },
@@ -65,8 +66,22 @@ export default {
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
+.sidenav-cover {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 0px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */    
+}
+
 /* Position and style the close button (top right corner) */
 .sidenav .closebtn {
+    z-index: 3;
     position: absolute;
     top: 8px;
     right: 8px;

@@ -8,10 +8,14 @@
             </div>
             <div id="friends_list" class="accordion-body">
                 <ul>
-                    <li class="accordion-li">Bromo Kunto Adji</li>
-                    <li class="accordion-li">Indra Birowo</li>
-                    <li class="accordion-li">Soraya Permatasari</li>
-                    <li class="accordion-li">Yunia Maharani</li>
+                    <li>Bromo Kunto Adji</li>
+                    <li>Indra Birowo</li>
+                    <li>Soraya Permatasari</li>
+                    <li>Yunia Maharani</li>
+                    <li>Vino Adriano</li>
+                    <li>Mulan Jameela</li>
+                    <li>Aura Kasih</li>
+                    <li>Pandu Dhamar Langit</li>
                 </ul>
             </div>
         </div>
@@ -23,10 +27,10 @@
             </div>
             <div id="rooms_list" class="accordion-body">
                 <ul>
-                    <li class="accordion-li">Bromo Kunto Adji</li>
-                    <li class="accordion-li">Indra Birowo</li>
-                    <li class="accordion-li">Soraya Permatasari</li>
-                    <li class="accordion-li">Yunia Maharani</li>
+                    <li>Bromo Kunto Adji</li>
+                    <li>Indra Birowo</li>
+                    <li>Soraya Permatasari</li>
+                    <li>Yunia Maharani</li>
                 </ul>
             </div>
         </div>
@@ -38,10 +42,10 @@
             </div>
             <div id="options_list" class="accordion-body">
                 <ul>
-                    <li class="accordion-li">Bromo Kunto Adji</li>
-                    <li class="accordion-li">Indra Birowo</li>
-                    <li class="accordion-li">Soraya Permatasari</li>
-                    <li class="accordion-li">Yunia Maharani</li>
+                    <li>Bromo Kunto Adji</li>
+                    <li>Indra Birowo</li>
+                    <li>Soraya Permatasari</li>
+                    <li>Yunia Maharani</li>
                 </ul>
             </div>
         </div>
@@ -50,8 +54,7 @@
 
 <script>
 let opened
-let sidenavMaxWidth = 282
-let sidenavMinWidth = 52
+let accordionMaxHeight = 250
 
 export default {
     methods: {
@@ -63,14 +66,15 @@ export default {
             if (opened) {
                 if (opened.getAttribute("id") == data) {
                     body.style.maxHeight = null
+                    opened = null
                 } else {
-                    body.style.maxHeight = "100px"
+                    body.style.maxHeight = accordionMaxHeight + "px"
                     opened.style.maxHeight = null
                     opened = body
                 }
             } else {
                 opened = body
-                body.style.maxHeight = "200px"
+                body.style.maxHeight = accordionMaxHeight + "px"
             }
         }
     }
@@ -100,15 +104,22 @@ export default {
 
 .accordion-body {
     max-height: 0;
-    overflow: hidden;
+    overflow: scroll;
     transition: max-height 0.2s ease-out;
 }
 
-.accordion-li { 
-    margin: 0px;
+.accordion li {
+    margin-left: 0px;
+    padding: 10px 0px 10px 0px;
     position: relative;
     display: block;
     font-style: italic;
+}
+
+.accordion ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
 }
 
 .accordion font {

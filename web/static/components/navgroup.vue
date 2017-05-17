@@ -4,9 +4,9 @@
             <div class="panel-heading accordion-header" 
                 v-on:click="onHeaderClicked"
                 data="friends_list">
-                <font>Friends</font>
+                Friends
             </div>
-            <div id="friends_list" class="panel-body accordion-body">
+            <div id="friends_list" class="accordion-body">
                 <ul>
                     <li class="accordion-li">Bromo Kunto Adji</li>
                     <li class="accordion-li">Indra Birowo</li>
@@ -19,9 +19,9 @@
             <div class="panel-heading accordion-header" 
                 v-on:click="onHeaderClicked"
                 data="rooms_list">
-                <font>Rooms</font>
+                Rooms
             </div>
-            <div id="rooms_list" class="panel-body accordion-body">
+            <div id="rooms_list" class="accordion-body">
                 List of rooms
             </div>
         </div>
@@ -29,9 +29,9 @@
             <div class="panel-heading accordion-header" 
                 v-on:click="onHeaderClicked"
                 data="options_list">
-                <font>Options</font>
+                Options
             </div>
-            <div id="options_list" class="panel-body accordion-body">
+            <div id="options_list" class="accordion-body">
                 List of options
             </div>
         </div>
@@ -39,26 +39,27 @@
 </template>
 
 <script>
-let opened;
+let opened
 
 export default {
     methods: {
         onHeaderClicked() {
             let el = event.target
+            el.classList.toggle("active")
             let data = el.getAttribute("data")
-            
+            let body = document.getElementById(data)
+
             if (opened) {
                 if (opened.getAttribute("id") == data) {
-                    opened.style.display = "none"
-                    opened = null;
+                    body.style.maxHeight = null
                 } else {
-                    opened.style.display = "none"
-                    opened = document.getElementById(data)
-                    opened.style.display = "block"
+                    body.style.maxHeight = "100px"
+                    opened.style.maxHeight = null
+                    opened = body
                 }
             } else {
-                opened = document.getElementById(data)
-                opened.style.display = "block"
+                opened = body
+                body.style.maxHeight = "100px"
             }
         }
     }
@@ -74,29 +75,28 @@ export default {
 .accordion {
     border: none; 
     outline: none;
-    margin: 1px 1px 0px 1px; 
+    margin: 1px 1px 1px 1px; 
     width: 100%;
 }
 
-.accordion-header:hover {
+.accordion-header {
+    background-color: #428bca;
     transition: 0.4s;
-    background-color: #5bc0de;
-    cursor: hand;
+    border-radius: 0;
+    cursor: pointer;
 }
 
-.accordion-header {
-    transition: 0.4s;
-    background-color: #428bca;
-    border-radius: 0;
+.accordion-header.active .accordion-header:hover {
+    background-color: #5bc0de;
 }
 
 .accordion-body {
-    display: none;
+    max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
 }
 
-.accordion-li {
+.accordion-li { 
     margin: 0px;
     position: relative;
     display: block;

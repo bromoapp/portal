@@ -6,6 +6,8 @@ import Sidenav from "../components/sidenav.vue"
 let privateChannelPrefix = "private:"
 let privateChannel = null
 let sharedChannels = []
+let sidenavMaxWidth = 282
+let sidenavMinWidth = 52
 
 let lobby = {
     init(socket, element) {
@@ -42,7 +44,6 @@ let lobby = {
                     }
                     form.submit()
                 }
-
                 btn.addEventListener("click", onClicked)
             }
         })
@@ -55,7 +56,7 @@ let lobby = {
                 return createElement(Sidenav, {})
             },
             mounted() {
-                document.getElementById("side_nav").style.width = "282px"
+                document.getElementById("side_nav").style.width = sidenavMaxWidth + "px"
                 let delay = 40
                 let canvasContext = null
                 let camVideo = document.getElementById("cam_video")

@@ -17,6 +17,8 @@ import Webcam from "./webcam.vue"
 import NavGroup from "./navgroup.vue"
 
 let isClosed = false
+let sidenavMaxWidth = 282
+let sidenavMinWidth = 52
 
 Vue.component("webcam", Webcam)
 Vue.component("navgroup", NavGroup)
@@ -38,12 +40,12 @@ export default {
         /* Set the width of the side navigation to 250px */
         changeMode() {
             if (isClosed) {
-                document.getElementById("side_nav").style.width = "282px"
+                document.getElementById("side_nav").style.width = sidenavMaxWidth + "px"
                 document.getElementById("side_nav_cover").style.width = "0px"
                 isClosed = false
             } else {
-                document.getElementById("side_nav").style.width = "52px"
-                document.getElementById("side_nav_cover").style.width = "53px"
+                document.getElementById("side_nav").style.width = sidenavMinWidth + "px"
+                document.getElementById("side_nav_cover").style.width = sidenavMinWidth + "px"
                 isClosed = true
             }
         },
@@ -54,29 +56,29 @@ export default {
 <style>
  /* The side navigation menu */
 .sidenav {
-    height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
-    background-color: #111; /* Black*/
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 0px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 0px;
+    transition: 0.5s;
 }
 
 .sidenav-cover {
-    height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
-    position: fixed; /* Stay in place */
-    z-index: 2; /* Stay on top */
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 2;
     top: 0;
     left: 0;
-    background-color: #111; /* Black*/
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 0px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */    
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 0px;
+    transition: 0.5s;
 }
 
 /* Position and style the close button (top right corner) */

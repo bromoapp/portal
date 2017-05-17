@@ -22,7 +22,12 @@
                 Rooms
             </div>
             <div id="rooms_list" class="accordion-body">
-                List of rooms
+                <ul>
+                    <li class="accordion-li">Bromo Kunto Adji</li>
+                    <li class="accordion-li">Indra Birowo</li>
+                    <li class="accordion-li">Soraya Permatasari</li>
+                    <li class="accordion-li">Yunia Maharani</li>
+                </ul>
             </div>
         </div>
         <div class="panel accordion">
@@ -32,7 +37,12 @@
                 Options
             </div>
             <div id="options_list" class="accordion-body">
-                List of options
+                <ul>
+                    <li class="accordion-li">Bromo Kunto Adji</li>
+                    <li class="accordion-li">Indra Birowo</li>
+                    <li class="accordion-li">Soraya Permatasari</li>
+                    <li class="accordion-li">Yunia Maharani</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -40,12 +50,13 @@
 
 <script>
 let opened
+let sidenavMaxWidth = 282
+let sidenavMinWidth = 52
 
 export default {
     methods: {
-        onHeaderClicked() {
+        onHeaderClicked(event) {
             let el = event.target
-            el.classList.toggle("active")
             let data = el.getAttribute("data")
             let body = document.getElementById(data)
 
@@ -59,7 +70,7 @@ export default {
                 }
             } else {
                 opened = body
-                body.style.maxHeight = "100px"
+                body.style.maxHeight = "200px"
             }
         }
     }
@@ -67,26 +78,23 @@ export default {
 </script>
 
 <style>
-#nav_group {
-    transition: 0.5s;
-    width: 100%;
-}
-
 .accordion {
+    width: 280px;
     border: none; 
     outline: none;
-    margin: 1px 1px 1px 1px; 
-    width: 100%;
+    margin: 1px 1px 1px 1px;
 }
 
 .accordion-header {
-    background-color: #428bca;
     transition: 0.4s;
     border-radius: 0;
     cursor: pointer;
+    color: white;
+    font-size: 16px;
+    background-color: #428bca;
 }
 
-.accordion-header.active .accordion-header:hover {
+.accordion-header:hover {
     background-color: #5bc0de;
 }
 

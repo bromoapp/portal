@@ -51,10 +51,12 @@ let opened
 let accordionMaxHeight = 250
 
 export default {
+    data() {
+        return {
+            friends: []
+        }
+    },
     computed: {
-        friends() {
-            return this.$parent.friends
-        },
         rooms() {
             return this.$parent.rooms
         }
@@ -79,6 +81,11 @@ export default {
                 body.style.maxHeight = accordionMaxHeight + "px"
             }
         }
+    },
+    created() {
+        this.$events.$on("on_updates_avail", (updates) => {
+            this.friends = updates.friends
+        })
     }
 }
 </script>

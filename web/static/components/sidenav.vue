@@ -13,6 +13,9 @@
 
 <script>
 import Vue from 'vue'
+import VueEvents from 'vue-events'
+Vue.use(VueEvents)
+
 import Webcam from "./webcam.vue"
 import Navgroup from "./navgroup.vue"
 
@@ -27,7 +30,6 @@ export default {
     },
     data() {
         return {
-            friends: this.$parent.friends,
             rooms: this.$parent.rooms
         }
     },
@@ -44,11 +46,6 @@ export default {
                 closed = true
             }
         }
-    },
-    created() {
-        this.$on("on_updates_avail", (updates) => {
-            console.log(updates)
-        })
     }
 }
 </script>

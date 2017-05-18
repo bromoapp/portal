@@ -1,4 +1,7 @@
 import Vue from 'vue'
+import VueEvents from 'vue-events'
+Vue.use(VueEvents)
+
 import Webcam from "../components/webcam.vue"
 import Logout from "../components/logout.vue"
 import Sidenav from "../components/sidenav.vue"
@@ -9,12 +12,7 @@ let privateChannel = null
 let sharedChannels = []
 let sidenavMaxWidth = 282
 let sidenavMinWidth = 52
-let friends = [
-        {name: "Bromo Kunto Adji"}, 
-        {name: "Yunia Maharani"}, 
-        {name: "Pandu Dhamar Langit"}, 
-        {name: "Gema Mahdi Pamungkas"}
-    ]
+
 let rooms = [
         {name: "80s Music"}, 
         {name: "Rock Balads"}, 
@@ -68,7 +66,6 @@ let lobby = {
             el: "#sidenav_container",
             data() {
                 return {
-                    friends: friends,
                     rooms: rooms
                 }
             },
@@ -77,7 +74,7 @@ let lobby = {
             },
             methods: {
                 onUpdates(updates) {
-                    console.log(JSON.stringify(updates))
+                    this.$events.$emit("on_updates_avail", updates)
                 }
             },
             mounted() {

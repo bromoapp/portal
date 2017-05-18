@@ -8,14 +8,14 @@
             </div>
             <div id="friends_list" class="accordion-body">
                 <ul>
-                    <li>Bromo Kunto Adji</li>
-                    <li>Indra Birowo</li>
-                    <li>Soraya Permatasari</li>
-                    <li>Yunia Maharani</li>
-                    <li>Vino Adriano</li>
-                    <li>Mulan Jameela</li>
-                    <li>Aura Kasih</li>
-                    <li>Pandu Dhamar Langit</li>
+                    <li><div class="accordion-btn">Bromo Kunto Adji</div></li>
+                    <li><div class="accordion-btn">Indra Birowo</div></li>
+                    <li><div class="accordion-btn">Soraya Permatasari</div></li>
+                    <li><div class="accordion-btn">Yunia Maharani</div></li>
+                    <li><div class="accordion-btn">Vino Adriano</div></li>
+                    <li><div class="accordion-btn">Mulan Jameela</div></li>
+                    <li><div class="accordion-btn">Aura Kasih</div></li>
+                    <li><div class="accordion-btn">Pandu Dhamar Langit</div></li>
                 </ul>
             </div>
         </div>
@@ -27,10 +27,10 @@
             </div>
             <div id="rooms_list" class="accordion-body">
                 <ul>
-                    <li>Bromo Kunto Adji</li>
-                    <li>Indra Birowo</li>
-                    <li>Soraya Permatasari</li>
-                    <li>Yunia Maharani</li>
+                    <li><div class="accordion-btn">Bromo Kunto Adji</div></li>
+                    <li><div class="accordion-btn">Indra Birowo</div></li>
+                    <li><div class="accordion-btn">Soraya Permatasari</div></li>
+                    <li><div class="accordion-btn">Yunia Maharani</div></li>
                 </ul>
             </div>
         </div>
@@ -42,10 +42,10 @@
             </div>
             <div id="options_list" class="accordion-body">
                 <ul>
-                    <li>Bromo Kunto Adji</li>
-                    <li>Indra Birowo</li>
-                    <li>Soraya Permatasari</li>
-                    <li>Yunia Maharani</li>
+                    <li><div class="accordion-btn">Bromo Kunto Adji</div></li>
+                    <li><div class="accordion-btn">Indra Birowo</div></li>
+                    <li><div class="accordion-btn">Soraya Permatasari</div></li>
+                    <li><div class="accordion-btn">Yunia Maharani</div></li>
                 </ul>
             </div>
         </div>
@@ -57,6 +57,11 @@ let opened
 let accordionMaxHeight = 250
 
 export default {
+    computed: {
+        friends() {
+            return this.$parent.friends
+        }
+    },
     methods: {
         onHeaderClicked(event) {
             let el = event.target
@@ -104,22 +109,31 @@ export default {
 
 .accordion-body {
     max-height: 0;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-wrap: hidden;
     transition: max-height 0.2s ease-out;
 }
 
-.accordion li {
-    margin-left: 0px;
-    padding: 10px 0px 10px 0px;
-    position: relative;
-    display: block;
-    font-style: italic;
-}
-
-.accordion ul {
+.accordion-body ul {
     margin-top: 0;
     margin-bottom: 0;
     padding: 0;
+}
+
+.accordion-btn {
+    cursor: pointer;
+	transition: 0.4s;
+	border-top: 1px solid black;
+	color: black;
+    margin-left: 0px;
+    padding: 5px 0px 5px 10px;
+    position: relative;
+    display: block;
+}
+
+.accordion-btn:hover {
+    color: white;
+	background-color: black;
 }
 
 .accordion font {

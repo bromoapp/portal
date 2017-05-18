@@ -22,7 +22,7 @@ defmodule Portal do
           # worker(Portal.Worker, [arg1, arg2, arg3]),
 
           supervisor(Portal.UserPresence, []),
-          worker(Portal.OnlineUsersDb, [join_addr])
+          worker(Portal.OnlineUsersDb, [join_addr]),
           worker(Portal.PublicRoomsDb, [join_addr])
         ]
 

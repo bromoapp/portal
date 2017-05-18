@@ -34,7 +34,7 @@ let lobby = {
         socket.connect()
         let username = element.getAttribute("data-username")
         privateChannel = socket.channel(privateChannelPrefix + username)
-        privateChannel.on("user_updates", updates => this.updatesUser(updates))
+        privateChannel.on("user_updates", updates => this.onUpdatesAvail(updates))
         privateChannel.join()
     },
     init_logout() {
@@ -73,7 +73,7 @@ let lobby = {
                 return createElement(Sidenav, {})
             },
             methods: {
-                onUpdates(updates) {
+                onUpdatesAvail(updates) {
                     this.$events.$emit("on_updates_avail", updates)
                 }
             },
@@ -112,8 +112,8 @@ let lobby = {
             }
         })
     },
-    updatesUser(updates) {
-        sideNavApp.onUpdates(updates)
+    onUpdatesAvail(updates) {
+        sideNavApp.onUpdatesAvail(updates)
     }
 }
 export default lobby

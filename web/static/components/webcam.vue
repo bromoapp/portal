@@ -8,18 +8,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+    mounted() {
+        console.log(">>> WEBCAM CREATED...")
+    }
+}
 </script>
 
 <style>
-#cam_video_mask {
-    width: 280px;
-    height: 210px;
-    border-radius: 5px;
-    position: relative;
-    -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
-}
-
 #cam_video {
     width: 280px;
     height: 210px;

@@ -3,11 +3,24 @@ import Webcam from "../components/webcam.vue"
 import Logout from "../components/logout.vue"
 import Sidenav from "../components/sidenav.vue"
 
+let sideNavApp
 let privateChannelPrefix = "private:"
 let privateChannel = null
 let sharedChannels = []
 let sidenavMaxWidth = 282
 let sidenavMinWidth = 52
+let friends = [
+        {name: "Bromo Kunto Adji"}, 
+        {name: "Yunia Maharani"}, 
+        {name: "Pandu Dhamar Langit"}, 
+        {name: "Gema Mahdi Pamungkas"}
+    ]
+let rooms = [
+        {name: "80s Music"}, 
+        {name: "Rock Balads"}, 
+        {name: "Trance Music"}, 
+        {name: "Chess Grand Master"}
+    ]
 
 let lobby = {
     init(socket, element) {
@@ -23,6 +36,7 @@ let lobby = {
         socket.connect()
         let username = element.getAttribute("data-username")
         privateChannel = socket.channel(privateChannelPrefix + username)
+        privateChannel.on("user_updates", updates => this.updatesUser(updates))
         privateChannel.join()
     },
     init_logout() {
@@ -50,10 +64,21 @@ let lobby = {
     },
     init_sidenav() {
         Vue.component("sidenav", Sidenav)
-        new Vue({
+        sideNavApp = new Vue({
             el: "#sidenav_container",
+            data() {
+                return {
+                    friends: friends,
+                    rooms: rooms
+                }
+            },
             render(createElement) {
                 return createElement(Sidenav, {})
+            },
+            methods: {
+                onUpdates(updates) {
+                    console.log(JSON.stringify(updates))
+                }
             },
             mounted() {
                 document.getElementById("side_nav").style.width = sidenavMaxWidth + "px"
@@ -89,6 +114,9 @@ let lobby = {
                 }
             }
         })
+    },
+    updatesUser(updates) {
+        sideNavApp.onUpdates(updates)
     }
 }
 export default lobby

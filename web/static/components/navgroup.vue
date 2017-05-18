@@ -8,14 +8,9 @@
             </div>
             <div id="friends_list" class="accordion-body">
                 <ul>
-                    <li><div class="accordion-btn">Bromo Kunto Adji</div></li>
-                    <li><div class="accordion-btn">Indra Birowo</div></li>
-                    <li><div class="accordion-btn">Soraya Permatasari</div></li>
-                    <li><div class="accordion-btn">Yunia Maharani</div></li>
-                    <li><div class="accordion-btn">Vino Adriano</div></li>
-                    <li><div class="accordion-btn">Mulan Jameela</div></li>
-                    <li><div class="accordion-btn">Aura Kasih</div></li>
-                    <li><div class="accordion-btn">Pandu Dhamar Langit</div></li>
+                    <li v-for="friend in friends">
+                        <div class="accordion-btn">{{ friend.name }}</div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -27,10 +22,9 @@
             </div>
             <div id="rooms_list" class="accordion-body">
                 <ul>
-                    <li><div class="accordion-btn">Bromo Kunto Adji</div></li>
-                    <li><div class="accordion-btn">Indra Birowo</div></li>
-                    <li><div class="accordion-btn">Soraya Permatasari</div></li>
-                    <li><div class="accordion-btn">Yunia Maharani</div></li>
+                    <li v-for="room in rooms">
+                        <div class="accordion-btn">{{ room.name }}</div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -60,6 +54,9 @@ export default {
     computed: {
         friends() {
             return this.$parent.friends
+        },
+        rooms() {
+            return this.$parent.rooms
         }
     },
     methods: {

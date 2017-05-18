@@ -2,6 +2,7 @@ defmodule Portal.Private do
     use Portal.Web, :channel
     alias Portal.UserPresence
     alias Portal.Relation
+    alias Portal.Updates
     alias Portal.User
     require Logger
 
@@ -39,17 +40,19 @@ defmodule Portal.Private do
         insert(ol_user)
 
         # Initiate periodik checks on user's friends
-        :timer.send_interval(10_000, :update_user)
+        :timer.send_interval(10_000, "user_updates")
         
         {:noreply, socket}
     end
 
-    def handle_info(:update_user, socket) do
+    def handle_info("user_updates", socket) do
         # Query user's friends from db
         user = socket.assigns.user
         friends = _get_friends(user)
-        
-        Logger.info(">>> FRIENDS = #{inspect friends}")
+
+        # Wrap friends data within updates and send it off
+        updates = %Updates{friends: friends}
+        push socket, "user_updates", updates
         {:noreply, socket}
     end
 

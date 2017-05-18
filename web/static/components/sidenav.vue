@@ -14,41 +14,41 @@
 <script>
 import Vue from 'vue'
 import Webcam from "./webcam.vue"
-import NavGroup from "./navgroup.vue"
+import Navgroup from "./navgroup.vue"
 
-let isClosed = false
+let closed = false
 let sidenavMaxWidth = 282
 let sidenavMinWidth = 52
 
-Vue.component("webcam", Webcam)
-Vue.component("navgroup", NavGroup)
-
-new Vue({
-    render(createElement) {
-        return createElement(Webcam, {})
-    }
-})
-
-new Vue({
-    render(createElement) {
-        return createElement(NavGroup, {})
-    }
-})
-
 export default {
+    components: {
+        Webcam,
+        Navgroup
+    },
+    data() {
+        return {
+            friends: this.$parent.friends,
+            rooms: this.$parent.rooms
+        }
+    },
     methods: {
         /* Set the width of the side navigation to 250px */
         changeMode() {
-            if (isClosed) {
+            if (closed) {
                 document.getElementById("side_nav").style.width = sidenavMaxWidth + "px"
                 document.getElementById("side_nav_cover").style.width = "0px"
-                isClosed = false
+                closed = false
             } else {
                 document.getElementById("side_nav").style.width = sidenavMinWidth + "px"
                 document.getElementById("side_nav_cover").style.width = sidenavMinWidth + "px"
-                isClosed = true
+                closed = true
             }
-        },
+        }
+    },
+    created() {
+        this.$on("on_updates_avail", (updates) => {
+            console.log(updates)
+        })
     }
 }
 </script>

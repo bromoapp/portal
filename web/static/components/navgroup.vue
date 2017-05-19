@@ -9,7 +9,9 @@
             <div id="friends_list" class="accordion-body">
                 <ul>
                     <li v-for="friend in friends">
-                        <div class="accordion-btn">{{ friend.name }}</div>
+                        <div class="accordion-btn">
+                            <span>{{ friend.name }}</span><span class="pull-right" style="margin-right: 10px;">+</span>
+                        </div>
                     </li>
                 </ul>
             </div>

@@ -7,7 +7,7 @@ defmodule Portal.Private do
     require Logger
 
     def join("private:" <> username, _params, socket) do
-        send self(), :after_join
+        send self(), "after_join"
         {:ok, socket}
     end
     
@@ -20,7 +20,7 @@ defmodule Portal.Private do
         {:noreply, socket}
     end
 
-    def handle_info(:after_join, socket) do
+    def handle_info("after_join", socket) do
         Logger.info(">>> USER JOIN: #{inspect socket.assigns.user.username}")
         
         # Tracking user with presence
@@ -39,6 +39,11 @@ defmodule Portal.Private do
         }
         insert(ol_user)
 
+        # Query user's friends data and push it to user
+        friends = _get_friends(user)
+        updates = %Updates{friends: friends}
+        push socket, "user_updates", updates
+
         # Initiate periodik checks on user's friends
         :timer.send_interval(10_000, "user_updates")
         
@@ -46,14 +51,19 @@ defmodule Portal.Private do
     end
 
     def handle_info("user_updates", socket) do
-        # Query user's friends from db
-        user = socket.assigns.user
-        friends = _get_friends(user)
+        
+        _send_friends_status_updates(socket)
 
-        # Wrap friends data within updates and send it off
+        {:noreply, socket}
+    end
+
+    defp _send_friends_status_updates(socket) do
+        user = socket.assigns.user
+
+        # Query user's friends data and push it to user
+        friends = _get_friends(user)
         updates = %Updates{friends: friends}
         push socket, "user_updates", updates
-        {:noreply, socket}
     end
 
     defp _get_friends(user) do

@@ -39,29 +39,27 @@ defmodule Portal.Private do
         }
         insert(ol_user)
 
-        # Query user's friends data and push it to user
-        _send_friends_status_updates(socket)
+        # Initial updates for user on joined
+        send self(), "user_updates"
 
-        # Initiate periodik checks on user's friends
+        # Initiate periodik checks on avail updates for user
         :timer.send_interval(10_000, "user_updates")
         
         {:noreply, socket}
     end
 
     def handle_info("user_updates", socket) do
+        updates = socket.assigns.user
+            |> _get_friends_status_updates()
         
-        _send_friends_status_updates(socket)
-
+        push socket, "user_updates", updates
         {:noreply, socket}
     end
 
-    defp _send_friends_status_updates(socket) do
-        user = socket.assigns.user
-
+    defp _get_friends_status_updates(user) do
         # Query user's friends data and push it to user
         friends = _get_friends(user)
-        updates = %Updates{friends: friends}
-        push socket, "user_updates", updates
+        %Updates{friends: friends}
     end
 
     defp _get_friends(user) do

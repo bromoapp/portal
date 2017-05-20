@@ -40,9 +40,7 @@ defmodule Portal.Private do
         insert(ol_user)
 
         # Query user's friends data and push it to user
-        friends = _get_friends(user)
-        updates = %Updates{friends: friends}
-        push socket, "user_updates", updates
+        _send_friends_status_updates(socket)
 
         # Initiate periodik checks on user's friends
         :timer.send_interval(10_000, "user_updates")

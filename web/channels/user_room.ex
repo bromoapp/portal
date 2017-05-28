@@ -1,5 +1,6 @@
 defmodule Portal.UserRoom do
     use Portal.Web, :channel
+    require Logger
 
     def join("user_room:" <> username, _params, socket) do
         send self(), "after_join"
@@ -12,6 +13,6 @@ defmodule Portal.UserRoom do
     end
 
     def handle_info("after_join", socket) do
-        
+        {:noreply, socket}
     end
 end

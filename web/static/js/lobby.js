@@ -35,7 +35,7 @@ let lobby = {
     init_conn(socket, element) {
         socket.connect()
         let username = element.getAttribute("data-username")
-        
+
         proxyChannel = socket.channel(proxyChannelPrefix + username)
         proxyChannel.on("user_updates", updates => this.onUpdatesAvail(updates))
         proxyChannel.join()
@@ -63,7 +63,7 @@ let lobby = {
                     if (proxyChannel) {
                         proxyChannel.leave()
                     }
-                    for (ch in sharedChannels) {
+                    for (let ch in sharedChannels) {
                         ch.leave()
                     }
                     form.submit()
@@ -99,14 +99,7 @@ let lobby = {
                 let onSucceed = (stream) => {
                     camVideo.srcObject = stream
                     if (sharedChannels.length > 0) {
-                        console.log(">>> BROADCASTING...")
-                        setInterval(() => {
-                            canvasContext.drawImage(camVideo, 0, 0, 240, 120)
-                            let data = camCanvas.toDataURL("image/png")
-                            for (channel in sharedChannels) {
-                                channel.push("stream:video", JSON.stringify(data))
-                            }
-                        }, delay)
+                        
                     }
                 }
                 let onFailed = (error) => {

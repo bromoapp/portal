@@ -7,8 +7,10 @@ import Logout from "../components/logout.vue"
 import Sidenav from "../components/sidenav.vue"
 
 let sideNavApp
-let privateChannelPrefix = "private:"
-let privateChannel = null
+let proxyChannelPrefix = "user_proxy:"
+let roomChannelPrefix = "user_room:"
+let proxyChannel = null
+let roomChannel = null
 let sharedChannels = []
 let sidenavMaxWidth = 282
 let sidenavMinWidth = 52
@@ -33,9 +35,19 @@ let lobby = {
     init_conn(socket, element) {
         socket.connect()
         let username = element.getAttribute("data-username")
-        privateChannel = socket.channel(privateChannelPrefix + username)
-        privateChannel.on("user_updates", updates => this.onUpdatesAvail(updates))
-        privateChannel.join()
+        
+        proxyChannel = socket.channel(proxyChannelPrefix + username)
+        proxyChannel.on("user_updates", updates => this.onUpdatesAvail(updates))
+        proxyChannel.join()
+            .receive("ok", () => { console.log("Succeed to join proxy ch") })
+            .receive("error", () => { console.log("Failed to join proxy ch") })
+
+        roomChannel = socket.channel(roomChannelPrefix + username)
+        roomChannel.join()
+            .receive("ok", () => { console.log("Succeed to join room ch") })
+            .receive("error", () => { console.log("Failed to join room ch") })
+
+        sharedChannels.push(roomChannel)
     },
     init_logout() {
         Vue.component("logout", Logout)
@@ -48,8 +60,8 @@ let lobby = {
                 let form = document.getElementById("logout_form")
                 let btn = document.getElementById("logout_btn")
                 let onClicked = () => {
-                    if (privateChannel) {
-                        privateChannel.leave()
+                    if (proxyChannel) {
+                        proxyChannel.leave()
                     }
                     for (ch in sharedChannels) {
                         ch.leave()

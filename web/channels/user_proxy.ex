@@ -1,4 +1,4 @@
-defmodule Portal.Private do
+defmodule Portal.UserProxy do
     use Portal.Web, :channel
     alias Portal.UserPresence
     alias Portal.Relation
@@ -6,7 +6,7 @@ defmodule Portal.Private do
     alias Portal.User
     require Logger
 
-    def join("private:" <> username, _params, socket) do
+    def join("user_proxy:" <> username, _params, socket) do
         send self(), "after_join"
         {:ok, socket}
     end

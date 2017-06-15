@@ -64,7 +64,7 @@ let lobby = {
                         proxyChannel.leave()
                     }
                     for (let ch in sharedChannels) {
-                        ch.leave()
+                        //ch.leave()
                     }
                     form.submit()
                 }

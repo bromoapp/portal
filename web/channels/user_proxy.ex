@@ -1,6 +1,6 @@
 defmodule Portal.UserProxy do
     use Portal.Web, :channel
-    alias Portal.UserPresence
+    alias Portal.ProxyPresence
     alias Portal.Relation
     alias Portal.Updates
     alias Portal.User
@@ -25,7 +25,7 @@ defmodule Portal.UserProxy do
         
         # Tracking user with presence
         user = socket.assigns.user
-        UserPresence.track(socket, user.username, %{
+        ProxyPresence.track(socket, user.username, %{
             name: user.name,
             online_at: :os.system_time(:milli_seconds)
         })

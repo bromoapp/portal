@@ -1,4 +1,4 @@
-defmodule Portal.UserPresence do
+defmodule Portal.ProxyPresence do
   @moduledoc """
   Provides presence tracking to channels and processes.
 

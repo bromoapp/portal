@@ -54,8 +54,8 @@ let lobby = {
                     if (proxyChannel) {
                         proxyChannel.leave()
                     }
-                    for (let ch in sharedChannels) {
-                        console.log(">>> CHANNEL: ", ch)
+                    for (let ch of sharedChannels) {
+                        ch.leave()
                     }
                     form.submit()
                 }

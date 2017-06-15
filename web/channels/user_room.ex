@@ -8,7 +8,7 @@ defmodule Portal.UserRoom do
     end
 
     def terminate(_reason, socket) do
-        Logger.info(">>> USER LEFT: #{inspect socket.assigns.user.username}")
+        Logger.info(">>> USER LEFT FROM ROOM: #{inspect socket.assigns.user.username}")
         {:noreply, socket}
     end
 

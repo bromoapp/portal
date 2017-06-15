@@ -12,7 +12,7 @@ defmodule Portal.UserProxy do
     end
     
     def terminate(_reason, socket) do
-        Logger.info(">>> USER LEFT: #{inspect socket.assigns.user.username}")        
+        Logger.info(">>> USER LEFT FROM PROXY: #{inspect socket.assigns.user.username}")        
         
         # Delete user from db
         user = socket.assigns.user

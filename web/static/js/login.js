@@ -14,6 +14,14 @@ let login = {
         Vue.component('login', LoginForm)
         new Vue({
             el: '#login_form_group',
+            methods: {
+                doSubmit() {
+                    form.submit()
+                },
+                doCancel() {
+                    window.location.href = "/web"
+                }
+            },
             data() {
                 return {
                     unameFieldName: "session[username]",
@@ -21,13 +29,7 @@ let login = {
                     unameFieldType: "email",
                     paswdFieldName: "session[password]",
                     paswdPlaceholder: "Password",
-                    paswdFieldType: "password",
-                    doSubmit: () => {
-                        form.submit()
-                    },
-                    doCancel: () => {
-                        window.location.href = "/web"
-                    }
+                    paswdFieldType: "password"
                 }
             },
             render(createElement) {

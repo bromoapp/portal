@@ -12,15 +12,6 @@ let roomChannelPrefix = "user_room:"
 let proxyChannel = null
 let roomChannel = null
 let sharedChannels = []
-let sidenavMaxWidth = 282
-let sidenavMinWidth = 52
-
-let rooms = [
-        {name: "80s Music"}, 
-        {name: "Rock Balads"}, 
-        {name: "Trance Music"}, 
-        {name: "Chess Grand Master"}
-    ]
 
 let lobby = {
     init(socket, element) {
@@ -64,7 +55,7 @@ let lobby = {
                         proxyChannel.leave()
                     }
                     for (let ch in sharedChannels) {
-                        //ch.leave()
+                        console.log(">>> CHANNEL: ", ch)
                     }
                     form.submit()
                 }
@@ -78,24 +69,22 @@ let lobby = {
             el: "#sidenav_container",
             data() {
                 return {
-                    rooms: rooms
+                    maxWidth: 282,
+                    minWidth: 50,
                 }
             },
             render(createElement) {
                 return createElement(Sidenav, {})
             },
             methods: {
-                onUpdatesAvail(updates) {
-                    this.$events.$emit("on_updates_avail", updates)
+                onFriendsListUpdates(updates) {
+                    this.$events.$emit("on_friends_list_updates", updates)
                 }
-            },
-            mounted() {
-                document.getElementById("side_nav").style.width = sidenavMaxWidth + "px"
             }
         })
     },
     onUpdatesAvail(updates) {
-        sideNavApp.onUpdatesAvail(updates)
+        sideNavApp.onFriendsListUpdates(updates.friends)
     }
 }
 export default lobby

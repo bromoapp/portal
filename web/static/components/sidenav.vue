@@ -20,8 +20,6 @@ import Webcam from "./webcam.vue"
 import Navgroup from "./navgroup.vue"
 
 let closed = false
-let sidenavMaxWidth = 282
-let sidenavMinWidth = 52
 
 export default {
     components: {
@@ -30,28 +28,38 @@ export default {
     },
     data() {
         return {
-            rooms: this.$parent.rooms
+            maxWidth: this.$parent.maxWidth,
+            minWidth: this.$parent.minWidth
         }
     },
     methods: {
-        /* Set the width of the side navigation to 250px */
         changeMode() {
             if (closed) {
-                document.getElementById("side_nav").style.width = sidenavMaxWidth + "px"
-                document.getElementById("side_nav_cover").style.width = "0px"
-                closed = false
+                this._open()
             } else {
-                document.getElementById("side_nav").style.width = sidenavMinWidth + "px"
-                document.getElementById("side_nav_cover").style.width = sidenavMinWidth + "px"
-                closed = true
+                this._close()
             }
+        },
+        _close() {
+            document.getElementById("side_nav").style.width = this.minWidth + "px"
+            document.getElementById("side_nav_cover").style.width = this.minWidth + "px"
+            closed = true
+        },
+        _open() {
+            document.getElementById("side_nav").style.width = this.maxWidth + "px"
+            document.getElementById("side_nav_cover").style.width = "0px"
+            closed = false
         }
+    },
+    mounted() {
+        this._open()
     }
 }
 </script>
 
 <style>
- /* The side navigation menu */
+/* The side navigation menu */
+
 .sidenav {
     height: 100%;
     width: 0;
@@ -79,6 +87,7 @@ export default {
 }
 
 /* Position and style the close button (top right corner) */
+
 .sidenav .closebtn {
     z-index: 3;
     position: absolute;
@@ -87,6 +96,7 @@ export default {
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+
 #main {
     transition-property: width;
     transition: margin-left .5s;
@@ -101,6 +111,7 @@ export default {
     position: relative;
     padding-left: 1.25em;
 }
+
 .box-shadow-menu:before {
     content: "";
     position: absolute;
@@ -109,14 +120,18 @@ export default {
     width: 18px;
     height: 0.1em;
     background: white;
-    box-shadow: 
-        0 0.4em 0 0 white,
-        0 0.8em 0 0 white;
+    box-shadow: 0 0.4em 0 0 white,
+    0 0.8em 0 0 white;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-} 
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}
 </style>

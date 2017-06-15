@@ -55,12 +55,8 @@ let accordionMaxHeight = 250
 export default {
     data() {
         return {
-            friends: []
-        }
-    },
-    computed: {
-        rooms() {
-            return this.$parent.rooms
+            friends: [],
+            rooms: [],
         }
     },
     methods: {
@@ -85,8 +81,11 @@ export default {
         }
     },
     created() {
-        this.$events.$on("on_updates_avail", (updates) => {
-            this.friends = updates.friends
+        this.$events.$on("on_friends_list_updates", (friends) => {
+            this.friends = friends
+        })
+        this.$events.$on("on_rooms_list_updates", (rooms) => {
+            this.rooms = rooms
         })
     }
 }
@@ -94,7 +93,6 @@ export default {
 
 <style>
 .accordion {
-    width: 280px;
     border: none; 
     outline: none;
     margin: 1px 1px 1px 1px;

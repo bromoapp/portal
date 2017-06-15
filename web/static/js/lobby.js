@@ -91,29 +91,6 @@ let lobby = {
             },
             mounted() {
                 document.getElementById("side_nav").style.width = sidenavMaxWidth + "px"
-                let delay = 40
-                let canvasContext = null
-                let camVideo = document.getElementById("cam_video")
-                let camCanvas = document.getElementById("cam_canvas")
-
-                let onSucceed = (stream) => {
-                    camVideo.srcObject = stream
-                    if (sharedChannels.length > 0) {
-                        
-                    }
-                }
-                let onFailed = (error) => {
-                    console.error(error)
-                }
-
-                if (camVideo && camCanvas) {
-                    canvasContext = camCanvas.getContext("2d")
-
-                    navigator.getUserMedia = (navigator.getUserMedia 
-                    || navigator.webkitGetUserMedia || navigator.mozGetUserMedia 
-                    || navigator.msGetUserMedia || navigator.oGetUserMedia)
-                    navigator.getUserMedia({video: true}, onSucceed, onFailed)
-                }
             }
         })
     },

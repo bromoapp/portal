@@ -1,8 +1,11 @@
 <template>
     <div id="side_nav" class="sidenav">
-        <button class="btn btn-primary closebtn box-shadow-menu" v-on:click="changeMode">
-            &nbsp;
-        </button>
+        <div>
+            <button class="btn btn-primary menubtn">&nbsp;</button>
+            <button class="btn btn-primary closebtn" v-on:click="changeMode">
+                &nbsp;
+            </button>
+        </div>
         <div id="video_cam" class="video-cam">
             <webcam></webcam>
         </div>
@@ -86,13 +89,20 @@ export default {
     transition: 0.5s;
 }
 
+
 /* Position and style the close button (top right corner) */
 
-.sidenav .closebtn {
+.closebtn {
     z-index: 3;
     position: absolute;
     top: 8px;
     right: 8px;
+}
+
+.menubtn {
+    position: absolute;
+    top: 8px;
+    right: 45px;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
@@ -123,6 +133,11 @@ export default {
     box-shadow: 0 0.4em 0 0 white,
     0 0.8em 0 0 white;
 }
+
+
+
+
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 

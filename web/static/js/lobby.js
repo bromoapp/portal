@@ -77,8 +77,8 @@ let lobby = {
                 return createElement(Sidenav, {})
             },
             methods: {
-                onFriendsListUpdates(updates) {
-                    this.$events.$emit("on_friends_list_updates", updates)
+                onFriendsListUpdates(friends) {
+                    this.$events.$emit("on_friends_list_updates", friends)
                 }
             }
         })

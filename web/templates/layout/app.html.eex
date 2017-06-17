@@ -19,6 +19,7 @@
         <%= if @current_user do %>
         <div class="container-lobby">
             <div id="logout_container"><logout></logout></div>
+            <div id="popup_container"><popup v-if="showPopup" @close="showPopup = false"></popup></div>
         <% else %>
         <div class="container">
             <header class="header">

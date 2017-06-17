@@ -109,13 +109,31 @@ let lobby = {
         sideNavApp.onFriendsListUpdates(updates.friends)
     },
     openSettings() {
-        alert("Open Settings")
+        Vue.component("popup", Settings)
+        new Vue({
+            el: "#popup_container",
+            render(createElement) {
+                return createElement(Settings, {})
+            },
+        })
     },
     openSearch() {
-        alert("Open Search")
+        Vue.component("popup", Search)
+        new Vue({
+            el: "#popup_container",
+            render(createElement) {
+                return createElement(Search, {})
+            },
+        })
     },
     openMessages() {
-        alert("Open Messages")
+        Vue.component("popup", Messages)
+        new Vue({
+            el: "#popup_container",
+            render(createElement) {
+                return createElement(Messages, {})
+            },
+        })
     }
 }
 export default lobby

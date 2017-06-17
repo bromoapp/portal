@@ -5,6 +5,9 @@ Vue.use(VueEvents)
 import Webcam from "../components/webcam.vue"
 import Logout from "../components/logout.vue"
 import Sidenav from "../components/sidenav.vue"
+import Settings from "../components/settings.vue"
+import Search from "../components/search.vue"
+import Messages from "../components/messages.vue"
 
 let sideNavApp, signOutForm
 let proxyChannelPrefix = "user_proxy:"

@@ -149,23 +149,6 @@ export default {
     margin: 50px 1px 0px 1px;
 }
 
-.box-shadow-menu {
-    position: relative;
-    padding-left: 1.25em;
-}
-
-.box-shadow-menu:before {
-    content: "";
-    position: absolute;
-    left: 8px;
-    top: 10px;
-    width: 18px;
-    height: 0.1em;
-    background: white;
-    box-shadow: 0 0.4em 0 0 white,
-    0 0.8em 0 0 white;
-}
-
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 
 @media screen and (max-height: 450px) {

@@ -6,7 +6,7 @@ import Webcam from "../components/webcam.vue"
 import Logout from "../components/logout.vue"
 import Sidenav from "../components/sidenav.vue"
 
-let sideNavApp
+let sideNavApp, signOutForm
 let proxyChannelPrefix = "user_proxy:"
 let roomChannelPrefix = "user_room:"
 let proxyChannel = null
@@ -42,24 +42,29 @@ let lobby = {
     },
     init_logout() {
         Vue.component("logout", Logout)
-        new Vue({
+        signOutForm = new Vue({
             el: "#logout_container",
             render(createElement) {
                 return createElement(Logout, {})
             },
+            data() {
+                return {
+                    form: null
+                }
+            },
             mounted() {
-                let form = document.getElementById("logout_form")
-                let btn = document.getElementById("logout_btn")
-                let onClicked = () => {
+                this.form = document.getElementById("logout_form")
+            },
+            methods: {
+                signOut() {
                     if (proxyChannel) {
                         proxyChannel.leave()
                     }
                     for (let ch of sharedChannels) {
                         ch.leave()
                     }
-                    form.submit()
+                    this.form.submit()
                 }
-                btn.addEventListener("click", onClicked)
             }
         })
     },
@@ -80,6 +85,11 @@ let lobby = {
                 onFriendsListUpdates(friends) {
                     this.$events.$emit("on_friends_list_updates", friends)
                 }
+            },
+            created() {
+                this.$events.$on("sign_out", () => {
+                    signOutForm.signOut()
+                })
             }
         })
     },

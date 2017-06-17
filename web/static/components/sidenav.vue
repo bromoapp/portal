@@ -3,7 +3,7 @@
         <div>
             <div class="outer">
                 <div class="inner">
-                    <button class="btn btn-primary">
+                    <button id="btn_signout" class="btn btn-primary" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>
                     </button>
                 </div>
@@ -58,6 +58,9 @@ export default {
             } else {
                 this._close()
             }
+        },
+        signout() {
+            this.$events.$emit("sign_out")
         },
         _close() {
             document.getElementById("side_nav").style.width = this.minWidth + "px"
@@ -117,6 +120,9 @@ export default {
     transition: 0.5s;
 }
 
+
+
+
 /* Position and style the close button (top right corner) */
 
 .closebtn {
@@ -137,6 +143,9 @@ export default {
     display: inline-block;
 }
 
+
+
+
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 
 #main {
@@ -148,6 +157,9 @@ export default {
 .video-cam {
     margin: 50px 1px 0px 1px;
 }
+
+
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 

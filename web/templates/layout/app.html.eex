@@ -18,13 +18,7 @@
     <% end %>
         <%= if @current_user do %>
         <div class="container-lobby">
-            <header>
-                <nav role="navigation">
-                    <ul class="nav nav-pills pull-right top-nav">
-                        <li id="logout_container"><logout></logout></li>
-                    </ul>
-                </nav>
-            </header>
+            <div id="logout_container"><logout></logout></div>
         <% else %>
         <div class="container">
             <header class="header">

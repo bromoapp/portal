@@ -90,11 +90,29 @@ let lobby = {
                 this.$events.$on("sign_out", () => {
                     signOutForm.signOut()
                 })
+                this.$events.$on("open_settings", () => {
+                    lobby.openSettings()
+                })
+                this.$events.$on("open_search", () => {
+                    lobby.openSearch()
+                })
+                this.$events.$on("open_messages", () => {
+                    lobby.openMessages()
+                })
             }
         })
     },
     onUpdatesAvail(updates) {
         sideNavApp.onFriendsListUpdates(updates.friends)
+    },
+    openSettings() {
+        alert("Open Settings")
+    },
+    openSearch() {
+        alert("Open Search")
+    },
+    openMessages() {
+        alert("Open Messages")
     }
 }
 export default lobby

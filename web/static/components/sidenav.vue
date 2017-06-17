@@ -71,12 +71,15 @@ export default {
         },
         openSettings() {
             btnSettings.blur()
+            this.$events.$emit("open_settings")
         },
         openSearch() {
             btnSearch.blur()
+            this.$events.$emit("open_search")
         },
         openMessages() {
             btnMessages.blur()
+            this.$events.$emit("open_messages")
         },
         _close() {
             document.getElementById("side_nav").style.width = this.minWidth + "px"

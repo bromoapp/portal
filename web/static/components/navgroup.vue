@@ -30,21 +30,6 @@
                 </ul>
             </div>
         </div>
-        <div class="panel accordion">
-            <div class="panel-heading accordion-header" 
-                v-on:click="onHeaderClicked"
-                data="options_list">
-                Options
-            </div>
-            <div id="options_list" class="accordion-body">
-                <ul>
-                    <li><div class="accordion-btn">Bromo Kunto Adji</div></li>
-                    <li><div class="accordion-btn">Indra Birowo</div></li>
-                    <li><div class="accordion-btn">Soraya Permatasari</div></li>
-                    <li><div class="accordion-btn">Yunia Maharani</div></li>
-                </ul>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -104,6 +89,7 @@ export default {
     cursor: pointer;
     color: white;
     font-size: 16px;
+    font-weight: bold;
     background-color: #428bca;
 }
 

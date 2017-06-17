@@ -3,17 +3,22 @@
         <div>
             <div class="outer">
                 <div class="inner">
-                    <button id="btn_signout" class="btn btn-primary" v-on:click="signout">
+                    <button title="Signout" id="btn_signout" class="btn btn-primary" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>
                     </button>
                 </div>
                 <div class="inner">
-                    <button class="btn btn-primary">
+                    <button title="Settings" id="btn_settings" class="btn btn-primary" v-on:click="openSettings">
+                        <i class="fa fa-gear"></i>
+                    </button>
+                </div>
+                <div class="inner">
+                    <button title="Search" id="btn_search" class="btn btn-primary" v-on:click="openSearch">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
                 <div class="inner">
-                    <button class="btn btn-primary">
+                    <button title="Messages" id="btn_messages" class="btn btn-primary" v-on:click="openMessages">
                         <i class="fa fa-envelope-o"></i>
                     </button>
                 </div>
@@ -38,6 +43,7 @@ Vue.use(VueEvents)
 import Webcam from "./webcam.vue"
 import Navgroup from "./navgroup.vue"
 
+let btnSignout, btnSettings, btnSearch, btnMessages
 let closed = false
 
 export default {
@@ -60,7 +66,17 @@ export default {
             }
         },
         signout() {
+            btnSignout.blur()
             this.$events.$emit("sign_out")
+        },
+        openSettings() {
+            btnSettings.blur()
+        },
+        openSearch() {
+            btnSearch.blur()
+        },
+        openMessages() {
+            btnMessages.blur()
         },
         _close() {
             document.getElementById("side_nav").style.width = this.minWidth + "px"
@@ -69,7 +85,7 @@ export default {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-right")
                 document.getElementById("switch").classList.remove("fa-chevron-left")
                 document.getElementById("switch").blur()
-            }, 500)
+            }, 250)
 
             closed = true
         },
@@ -80,12 +96,16 @@ export default {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-left")
                 document.getElementById("switch").classList.remove("fa-chevron-right")
                 document.getElementById("switch").blur()
-            }, 500);
+            }, 250);
 
             closed = false
         }
     },
     mounted() {
+        btnSignout = document.getElementById("btn_signout")
+        btnSettings = document.getElementById("btn_settings")
+        btnSearch = document.getElementById("btn_search")
+        btnMessages = document.getElementById("btn_messages")
         this._open()
     }
 }
@@ -120,9 +140,6 @@ export default {
     transition: 0.5s;
 }
 
-
-
-
 /* Position and style the close button (top right corner) */
 
 .closebtn {
@@ -143,9 +160,6 @@ export default {
     display: inline-block;
 }
 
-
-
-
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 
 #main {
@@ -157,9 +171,6 @@ export default {
 .video-cam {
     margin: 50px 1px 0px 1px;
 }
-
-
-
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 

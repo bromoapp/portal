@@ -6,7 +6,7 @@
     
                     <div class="modal-header">
                         <slot name="header">
-                            default header
+                            Search
                         </slot>
                     </div>
     

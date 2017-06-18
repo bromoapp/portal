@@ -181,17 +181,12 @@ export default {
 
 .popup-body {
     margin: 10px 0;
+    padding: 5px 20px 10px 20px;
 }
 
 .popup-footer {
-    position: absolute;
     bottom: 0px;
-    padding: 10px;
-}
-
-.popup-footer button {
-    margin-right: 5px;
-    float: right;
+    padding: 0px 10px 10px 0px;
 }
 
 .popup-close {
@@ -218,4 +213,9 @@ export default {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
+
+option, select, input[type="text"] {
+    font-weight: bold;
+}
+
 </style>

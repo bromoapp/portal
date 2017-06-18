@@ -84,7 +84,7 @@ export default {
 }
 
 .accordion-header {
-    transition: 0.4s;
+    transition: 0.4s ease;
     border-radius: 0;
     cursor: pointer;
     color: white;
@@ -112,7 +112,7 @@ export default {
 
 .accordion-btn {
     cursor: pointer;
-	transition: 0.4s;
+	transition: 0.4s ease;
 	border-top: 1px solid black;
 	color: black;
     margin-left: 0px;

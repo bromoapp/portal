@@ -127,7 +127,7 @@ export default {
     background-color: #111;
     overflow-x: hidden;
     padding-top: 0px;
-    transition: 0.5s;
+    transition: 0.5s ease;
 }
 
 .sidenav-cover {
@@ -140,7 +140,7 @@ export default {
     background-color: #111;
     overflow-x: hidden;
     padding-top: 0px;
-    transition: 0.5s;
+    transition: 0.5s ease;
 }
 
 /* Position and style the close button (top right corner) */

@@ -24,6 +24,7 @@ let lobby = {
             this.init_conn(socket, element)
             this.init_logout()
             this.init_sidenav()
+            this.init_popups()
         }
     },
     init_conn(socket, element) {
@@ -93,47 +94,34 @@ let lobby = {
                 this.$events.$on("sign_out", () => {
                     signOutForm.signOut()
                 })
-                this.$events.$on("open_settings", () => {
-                    lobby.openSettings()
-                })
-                this.$events.$on("open_search", () => {
-                    lobby.openSearch()
-                })
-                this.$events.$on("open_messages", () => {
-                    lobby.openMessages()
-                })
             }
         })
     },
-    onUpdatesAvail(updates) {
-        sideNavApp.onFriendsListUpdates(updates.friends)
-    },
-    openSettings() {
-        Vue.component("popup", Settings)
+    init_popups() {
+        Vue.component("settings", Settings)
         new Vue({
-            el: "#popup_container",
+            el: "#settings_container",
             render(createElement) {
                 return createElement(Settings, {})
             },
         })
-    },
-    openSearch() {
-        Vue.component("popup", Search)
+        Vue.component("search", Search)
         new Vue({
-            el: "#popup_container",
+            el: "#search_container",
             render(createElement) {
                 return createElement(Search, {})
             },
         })
-    },
-    openMessages() {
-        Vue.component("popup", Messages)
+        Vue.component("messages", Messages)
         new Vue({
-            el: "#popup_container",
+            el: "#messages_container",
             render(createElement) {
                 return createElement(Messages, {})
             },
         })
+    },
+    onUpdatesAvail(updates) {
+        sideNavApp.onFriendsListUpdates(updates.friends)
     }
 }
 export default lobby

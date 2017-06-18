@@ -11,7 +11,7 @@
                             default body
                         </div>
                         <div class="popup-footer">
-                            <button v-on:click="hidePopup" class="btn btn-primary">Submit</button>
+                            
                         </div>
                     </div>
                 </div>

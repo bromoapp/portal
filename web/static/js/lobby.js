@@ -7,7 +7,7 @@ import Logout from "../components/logout.vue"
 import Sidenav from "../components/sidenav.vue"
 import Settings from "../components/settings.vue"
 import Search from "../components/search.vue"
-import Messages from "../components/messages.vue"
+import Invitations from "../components/invitations.vue"
 
 let sideNavApp, signOutForm
 let proxyChannelPrefix = "user_proxy:"
@@ -112,11 +112,11 @@ let lobby = {
                 return createElement(Search, {})
             },
         })
-        Vue.component("messages", Messages)
+        Vue.component("invitations", Invitations)
         new Vue({
-            el: "#messages_container",
+            el: "#invitations_container",
             render(createElement) {
-                return createElement(Messages, {})
+                return createElement(Invitations, {})
             },
         })
     },

@@ -21,7 +21,7 @@
             <div id="logout_container"><logout></logout></div>
             <div id="settings_container"><settings></settings></div>
             <div id="search_container"><search></search></div>
-            <div id="messages_container"><messages></messages></div>
+            <div id="invitations_container"><invitations></invitations></div>
         <% else %>
         <div class="container">
             <header class="header">

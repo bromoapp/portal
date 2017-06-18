@@ -5,7 +5,7 @@
                 <div class="popup-wrapper">
                     <div class="popup-container">
                         <div class="popup-header">
-                            Messages <a href="#" v-on:click="hidePopup" > <i class="fa fa-close popup-close pull-right"></i></a>
+                            Invitations <a href="#" v-on:click="hidePopup" > <i class="fa fa-close popup-close pull-right"></i></a>
                         </div>
                         <div class="popup-body">
                             default body
@@ -28,7 +28,7 @@ export default {
         }
     },
     created() {
-        this.$events.$on("open_messages", () => {
+        this.$events.$on("open_invitations", () => {
             this.showPopup = true
         })
     },

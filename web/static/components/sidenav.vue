@@ -18,7 +18,7 @@
                     </button>
                 </div>
                 <div class="toolbar-button">
-                    <button title="Messages" id="btn_messages" class="btn btn-primary" v-on:click="openMessages">
+                    <button title="Messages" id="btn_messages" class="btn btn-primary" v-on:click="openInvitations">
                         <i class="fa fa-envelope-o"></i>
                     </button>
                 </div>
@@ -77,9 +77,9 @@ export default {
             btnSearch.blur()
             this.$events.$emit("open_search")
         },
-        openMessages() {
+        openInvitations() {
             btnMessages.blur()
-            this.$events.$emit("open_messages")
+            this.$events.$emit("open_invitations")
         },
         _close() {
             document.getElementById("side_nav").style.width = this.minWidth + "px"

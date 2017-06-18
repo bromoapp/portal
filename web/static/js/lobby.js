@@ -104,7 +104,7 @@ let lobby = {
             render(createElement) {
                 return createElement(Settings, {})
             },
-        })/*
+        })
         Vue.component("search", Search)
         new Vue({
             el: "#search_container",
@@ -118,7 +118,7 @@ let lobby = {
             render(createElement) {
                 return createElement(Messages, {})
             },
-        })*/
+        })
     },
     onUpdatesAvail(updates) {
         sideNavApp.onFriendsListUpdates(updates.friends)

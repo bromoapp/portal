@@ -77,58 +77,5 @@ export default {
 </script>
 
 <style>
-.accordion {
-    border: none; 
-    outline: none;
-    margin: 1px 1px 1px 1px;
-}
 
-.accordion-header {
-    transition: 0.4s ease;
-    border-radius: 0;
-    cursor: pointer;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #428bca;
-}
-
-.accordion-header:hover {
-    background-color: #5bc0de;
-}
-
-.accordion-body {
-    max-height: 0;
-    overflow-y: auto;
-    overflow-wrap: hidden;
-    transition: max-height 0.2s ease-out;
-}
-
-.accordion-body ul {
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0;
-}
-
-.accordion-btn {
-    cursor: pointer;
-	transition: 0.4s ease;
-	border-top: 1px solid black;
-	color: black;
-    margin-left: 0px;
-    padding: 5px 0px 5px 10px;
-    position: relative;
-    display: block;
-}
-
-.accordion-btn:hover {
-    color: white;
-	background-color: black;
-}
-
-.accordion font {
-    font-weight: normal;
-    font-size: 16px;
-    color: #ffffff;
-}
 </style>

@@ -34,20 +34,5 @@ export default {
 </script>
 
 <style>
-#cam_video {
-    width: 280px;
-    height: 210px;
-    transition: 0.5s;
-}
 
-#cam_canvas {
-    width: 280px;
-    height: 210px;
-    display: none;
-}
-
-#main {
-    transition: margin-left margin-top .5s;
-    padding: 20px;
-}
 </style>

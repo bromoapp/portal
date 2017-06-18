@@ -1,6 +1,6 @@
 <template>
-    <div v-if="showPopup">
-        <transition name="modal">
+    <transition name="fade">
+        <div v-if="showPopup">
             <div class="modal-mask">
                 <div class="modal-wrapper">
                     <div class="modal-container">
@@ -22,8 +22,8 @@
                     </div>
                 </div>
             </div>
-        </transition>
-    </div>
+        </div>
+    </transition>
 </template>
 
 <script>

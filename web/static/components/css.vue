@@ -153,7 +153,7 @@ export default {
     height: 100%;
     background-color: rgba(0, 0, 0, .5);
     display: table;
-    transition: opacity .3s ease;
+    transition: opacity .3s ease-in-out;
 }
 
 .modal-wrapper {
@@ -167,7 +167,7 @@ export default {
     margin: 0px auto;
     background-color: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-    transition: all .3s ease;
+    transition: all .3s ease-in-out;
     font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -184,16 +184,16 @@ export default {
     float: right;
 }
 
-.modal-enter {
+.fade-enter {
     opacity: 0;
 }
 
-.modal-leave-active {
+.fade-leave-active {
     opacity: 0;
 }
 
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
+.fade-enter .modal-container,
+.fade-leave-active .modal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }

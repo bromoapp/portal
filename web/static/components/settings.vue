@@ -1,23 +1,17 @@
 <template>
     <transition name="fade">
         <div v-if="showPopup">
-            <div class="modal-mask">
-                <div class="modal-wrapper">
-                    <div class="modal-container">
-                        <div class="modal-header">
-                            <slot name="header">
-                                Settings
-                            </slot>
+            <div class="popup-mask">
+                <div class="popup-wrapper">
+                    <div class="popup-container">
+                        <div class="popup-header">
+                            Settings <a href="#" v-on:click="hidePopup" > <i class="fa fa-close popup-close pull-right"></i></a>
                         </div>
-                        <div class="modal-body">
-                            <slot name="body">
-                                default body
-                            </slot>
+                        <div class="popup-body">
+                            default body
                         </div>
-                        <div class="modal-footer">
-                            <slot name="footer">
-                                <button v-on:click="hidePopup" class="btn btn-danger">Close</button>
-                            </slot>
+                        <div class="popup-footer">
+                            <button v-on:click="hidePopup" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
                 </div>

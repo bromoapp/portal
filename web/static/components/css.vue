@@ -144,7 +144,7 @@ export default {
 }
 
 /* Popup styles */
-.modal-mask {
+.popup-mask {
     position: fixed;
     z-index: 9998;
     top: 0;
@@ -156,32 +156,53 @@ export default {
     transition: opacity .3s ease-in-out;
 }
 
-.modal-wrapper {
+.popup-wrapper {
     display: table-cell;
     vertical-align: middle;
 }
 
-.modal-container {
+.popup-container {
+    position: relative;
     width: 400px;
     height: 300px;
     margin: 0px auto;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    background-color: #000;
     transition: all .3s ease-in-out;
     font-family: Helvetica, Arial, sans-serif;
 }
 
-.modal-header h3 {
-    margin-top: 0;
-    color: #42b983;
+.popup-header {
+    position: relative;
+    background: #428bca;
+    padding: 10px;
+    color: #fff;
+    font-size: 18px;
 }
 
-.modal-body {
+.popup-body {
     margin: 10px 0;
 }
 
-.modal-default-button {
+.popup-footer {
+    position: absolute;
+    bottom: 0px;
+    padding: 10px;
+}
+
+.popup-footer button {
+    margin-right: 5px;
     float: right;
+}
+
+.popup-close {
+    position: absolute;
+    bottom: 13px;
+    right: 10px;
+    color: #000;
+}
+
+.popup-close:hover{
+    color: #fff;
 }
 
 .fade-enter {
@@ -192,8 +213,8 @@ export default {
     opacity: 0;
 }
 
-.fade-enter .modal-container,
-.fade-leave-active .modal-container {
+.fade-enter .popup-container,
+.fade-leave-active .popup-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }

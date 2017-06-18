@@ -23,7 +23,7 @@
                     </button>
                 </div>
             </div>
-            <button id="switch" class="btn btn-primary closebtn" v-on:click="changeMode">
+            <button id="switch" class="btn btn-danger closebtn" v-on:click="changeMode">
                 <i class=""></i>
             </button>
         </div>

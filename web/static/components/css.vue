@@ -163,7 +163,7 @@ export default {
 
 .popup-container {
     position: relative;
-    width: 400px;
+    width: 500px;
     height: 300px;
     margin: 0px auto;
     background-color: #000;
@@ -214,8 +214,11 @@ export default {
     transform: scale(1.1);
 }
 
-option, select, input[type="text"] {
-    font-weight: bold;
+.inline {
+    display: inline-block;
 }
 
+.inline a {
+    margin-bottom: 4px;
+}
 </style>

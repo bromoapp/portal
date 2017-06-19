@@ -103,7 +103,7 @@ let lobby = {
             el: "#settings_container",
             render(createElement) {
                 return createElement(Settings, {})
-            },
+            }
         })
         Vue.component("search", Search)
         new Vue({

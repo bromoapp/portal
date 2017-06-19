@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div v-if="showPopup">
+        <div v-if="visible">
             <div class="popup-mask">
                 <div class="popup-wrapper">
                     <div class="popup-container">
@@ -24,17 +24,17 @@
 export default {
     data() {
         return {
-            showPopup: false
+            visible: false
         }
     },
     created() {
         this.$events.$on("open_invitations", () => {
-            this.showPopup = true
+            this.visible = true
         })
     },
     methods: {
         hidePopup() {
-            this.showPopup = false
+            this.visible = false
         }
     }
 }

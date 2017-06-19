@@ -31,10 +31,9 @@ export default {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #111;
     overflow-x: hidden;
     padding-top: 0px;
-    transition: 0.5s ease;
+    transition: 0.3s ease;
 }
 
 .sidenav-cover {
@@ -44,10 +43,9 @@ export default {
     z-index: 2;
     top: 0;
     left: 0;
-    background-color: #111;
     overflow-x: hidden;
     padding-top: 0px;
-    transition: 0.5s ease;
+    transition: 0.3s ease;
 }
 
 .closebtn {
@@ -98,14 +96,9 @@ export default {
     transition: 0.4s ease;
     border-radius: 0;
     cursor: pointer;
-    color: white;
+    color: black;
     font-size: 16px;
     font-weight: bold;
-    background-color: #428bca;
-}
-
-.accordion-header:hover {
-    background-color: #5bc0de;
 }
 
 .accordion-body {
@@ -125,16 +118,11 @@ export default {
     cursor: pointer;
 	transition: 0.4s ease;
 	border-top: 1px solid black;
-	color: black;
+	color: white;
     margin-left: 0px;
     padding: 5px 0px 5px 10px;
     position: relative;
     display: block;
-}
-
-.accordion-btn:hover {
-    color: white;
-	background-color: black;
 }
 
 .accordion font {
@@ -173,15 +161,9 @@ export default {
 
 .popup-header {
     position: relative;
-    background: #428bca;
     padding: 10px;
     color: #fff;
     font-size: 18px;
-}
-
-.popup-body {
-    margin: 10px 0;
-    padding: 5px 20px 10px 20px;
 }
 
 .popup-footer {
@@ -220,5 +202,53 @@ export default {
 
 .inline a {
     margin-bottom: 4px;
+}
+
+/** Color styles **/
+.bg-37474f-d {
+    transition: 0.4s ease;
+    color: white;
+    background-color: #37474f;
+}
+
+.bg-37474f-d:hover {
+    color: black;
+    background-color: #f50057;
+}
+
+.bg-f50057-d {
+    transition: 0.4s ease;
+    color: white;
+    background-color: #f50057;
+}
+
+.bg-f50057-d:hover {
+    color: black;
+    background-color: #37474f;
+}
+
+.bg-37474f-s {
+    color: white;
+    background-color: #37474f;
+}
+
+.bg-263238-d {
+    transition: 0.4s ease;
+    color: white;
+    background-color: #263238;
+}
+
+.bg-263238-d:hover {
+    color: black;
+    background-color: #d81b60;
+}
+
+.bg-263238-s {
+    color: white;
+    background-color: #263238;
+}
+
+.bg-212121-s {
+    background-color: #212121;
 }
 </style>

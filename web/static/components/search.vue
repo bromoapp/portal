@@ -4,31 +4,33 @@
             <div class="popup-mask">
                 <div class="popup-wrapper">
                     <div class="popup-container">
-                        <div class="popup-header">
+                        <div class="popup-header bg-7cb342-s">
                             Search
                             <a href="#" v-on:click="hidePopup">
                                 <i class="fa fa-close popup-close pull-right"></i>
                             </a>
                         </div>
                         <div class="popup-body">
-                            <span class="inline">
-                                <div class="form-group">
-                                    <select id="search_type" class="form-control">
-                                        <option>Room</option>
-                                        <option>Player</option>
-                                    </select>
-                                </div>
-                            </span>
-                            <span class="inline">
-                                <div class="form-group">
-                                    <input id="search_args" type="text" class="form-control">
-                                </div>
-                            </span>
-                            <span class="inline">
-                                <div class="form-group">
-                                    <a class="btn btn-primary" v-on:click="submitForm">Submit</a>
-                                </div>
-                            </span>
+                            <div class="bg-c5e1a5-s" style="width: 100%; text-align: center;">
+                                <span style="margin-top: 20px" class="inline">
+                                    <div class="form-group">
+                                        <select id="search_type" class="form-control">
+                                            <option>Room</option>
+                                            <option>Player</option>
+                                        </select>
+                                    </div>
+                                </span>
+                                <span class="inline">
+                                    <div class="form-group">
+                                        <input id="search_args" type="text" class="form-control">
+                                    </div>
+                                </span>
+                                <span class="inline">
+                                    <div class="form-group">
+                                        <a class="btn btn-primary" v-on:click="submitForm">Submit</a>
+                                    </div>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,29 +1,29 @@
 <template>
-    <div id="side_nav" class="sidenav">
+    <div id="side_nav" class="sidenav bg-212121-s">
         <div>
             <div class="toolbar">
                 <div class="toolbar-button">
-                    <button title="Signout" id="btn_signout" class="btn btn-primary" v-on:click="signout">
+                    <button title="Signout" id="btn_signout" class="btn bg-37474f-d" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>
                     </button>
                 </div>
                 <div class="toolbar-button">
-                    <button title="Settings" id="btn_settings" class="btn btn-primary" v-on:click="openSettings">
+                    <button title="Settings" id="btn_settings" class="btn bg-37474f-d" v-on:click="openSettings">
                         <i class="fa fa-gear"></i>
                     </button>
                 </div>
                 <div class="toolbar-button">
-                    <button title="Search" id="btn_search" class="btn btn-primary" v-on:click="openSearch">
+                    <button title="Search" id="btn_search" class="btn bg-37474f-d" v-on:click="openSearch">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
                 <div class="toolbar-button">
-                    <button title="Messages" id="btn_messages" class="btn btn-primary" v-on:click="openInvitations">
+                    <button title="Messages" id="btn_messages" class="btn bg-37474f-d" v-on:click="openInvitations">
                         <i class="fa fa-envelope-o"></i>
                     </button>
                 </div>
             </div>
-            <button id="switch" class="btn btn-danger closebtn" v-on:click="changeMode">
+            <button id="switch" class="btn bg-f50057-d closebtn" v-on:click="changeMode">
                 <i class=""></i>
             </button>
         </div>
@@ -31,7 +31,7 @@
             <webcam></webcam>
         </div>
         <navgroup></navgroup>
-        <div id="side_nav_cover" class="sidenav-cover"></div>
+        <div id="side_nav_cover" class="sidenav-cover bg-212121-s"></div>
     </div>
 </template>
 
@@ -82,24 +82,26 @@ export default {
             this.$events.$emit("open_invitations")
         },
         _close() {
-            document.getElementById("side_nav").style.width = this.minWidth + "px"
-            document.getElementById("side_nav_cover").style.width = this.minWidth + "px"
-            setTimeout(function () {
+            document.getElementById("side_nav_cover").style.width = this.maxWidth + "px"
+            setTimeout(() => {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-right")
                 document.getElementById("switch").classList.remove("fa-chevron-left")
                 document.getElementById("switch").blur()
-            }, 250)
+                document.getElementById("side_nav").style.width = this.minWidth + "px"
+                document.getElementById("side_nav_cover").style.width = this.minWidth + "px"
+            }, 300)
 
             closed = true
         },
         _open() {
             document.getElementById("side_nav").style.width = this.maxWidth + "px"
-            document.getElementById("side_nav_cover").style.width = "0px"
-            setTimeout(function () {
+            document.getElementById("side_nav_cover").style.width = this.maxWidth + "px"
+            setTimeout(() => {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-left")
                 document.getElementById("switch").classList.remove("fa-chevron-right")
                 document.getElementById("switch").blur()
-            }, 250);
+                document.getElementById("side_nav_cover").style.width = "0px"
+           }, 300);
 
             closed = false
         }

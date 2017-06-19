@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="panel accordion">
-            <div class="panel-heading accordion-header" 
+            <div class="panel-heading accordion-header bg-37474f-d" 
                 v-on:click="onHeaderClicked"
                 data="friends_list">
                 Friends
@@ -9,7 +9,7 @@
             <div id="friends_list" class="accordion-body">
                 <ul>
                     <li v-for="friend in friends">
-                        <div class="accordion-btn">
+                        <div class="accordion-btn bg-263238-d">
                             <span>{{ friend.name }}</span><span class="pull-right" style="margin-right: 10px;">+</span>
                         </div>
                     </li>
@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="panel accordion">
-            <div class="panel-heading accordion-header" 
+            <div class="panel-heading accordion-header bg-37474f-d" 
                 v-on:click="onHeaderClicked"
                 data="rooms_list">
                 Rooms
@@ -25,7 +25,7 @@
             <div id="rooms_list" class="accordion-body">
                 <ul>
                     <li v-for="room in rooms">
-                        <div class="accordion-btn">{{ room.name }}</div>
+                        <div class="accordion-btn bg-263238-d">{{ room.name }}</div>
                     </li>
                 </ul>
             </div>

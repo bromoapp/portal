@@ -120,6 +120,7 @@ export default {
 
 /* Navgroup styles */
 .accordion {
+    transition: 0.4s ease;
     border: none; 
     outline: none;
     margin: 1px 1px 1px 1px;

@@ -27,16 +27,18 @@ export default {
         }
     },
     methods: {
-        
+
     },
     created() {
         this.$events.$on("open_chats", () => {
-            this.visible = true
             setTimeout(() => {
-                let el = document.getElementsByClassName("accordion-header")[0]
-                let data = el.getAttribute("data")
-                let body = document.getElementById(data)
-                body.style.maxHeight = "500px"
+                this.visible = true
+                setTimeout(() => {
+                    let el = document.getElementsByClassName("accordion-header")[0]
+                    let data = el.getAttribute("data")
+                    let body = document.getElementById(data)
+                    body.style.maxHeight = "500px"
+                }, 200)
             }, 300)
         })
         this.$events.$on("close_chats", () => {

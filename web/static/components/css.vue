@@ -17,12 +17,6 @@ export default {
     transition: 0.5s;
 }
 
-#cam_canvas {
-    width: 280px;
-    height: 210px;
-    display: none;
-}
-
 /* Sidenav styles */
 .sidenav {
     height: 100%;
@@ -48,7 +42,7 @@ export default {
     transition: 0.3s ease;
 }
 
-.closebtn {
+.sidenav-close {
     z-index: 3;
     position: absolute;
     top: 8px;
@@ -83,6 +77,45 @@ export default {
     .sidenav a {
         font-size: 18px;
     }
+}
+
+/* List panel styles */
+.list-panel {
+    border: none; 
+    outline: none;
+    margin: 1px 1px 1px 1px;
+}
+
+.list-panel-header {
+    transition: 0.4s ease;
+    border-radius: 0;
+    cursor: pointer;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.list-panel-body {
+    overflow-y: auto;
+    overflow-wrap: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.list-panel-body ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.list-panel-btn {
+    cursor: pointer;
+	transition: 0.4s ease;
+	border-top: 1px solid black;
+	color: white;
+    margin-left: 0px;
+    padding: 5px 0px 5px 10px;
+    position: relative;
+    display: block;
 }
 
 /* Navgroup styles */
@@ -216,6 +249,11 @@ export default {
     background-color: #f50057;
 }
 
+.bg-37474f-s {
+    color: white;
+    background-color: #37474f;
+}
+
 .bg-f50057-d {
     transition: 0.4s ease;
     color: white;
@@ -227,9 +265,9 @@ export default {
     background-color: #37474f;
 }
 
-.bg-37474f-s {
+.bg-f50057-s {
     color: white;
-    background-color: #37474f;
+    background-color: #f50057;
 }
 
 .bg-263238-d {

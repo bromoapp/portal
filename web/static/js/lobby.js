@@ -2,12 +2,8 @@ import Vue from 'vue'
 import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
-import Webcam from "../components/webcam.vue"
 import Logout from "../components/logout.vue"
 import Sidenav from "../components/sidenav.vue"
-import Settings from "../components/settings.vue"
-import Search from "../components/search.vue"
-import Invitations from "../components/invitations.vue"
 
 let sideNavApp, signOutForm
 let proxyChannelPrefix = "user_proxy:"
@@ -24,7 +20,6 @@ let lobby = {
             this.init_conn(socket, element)
             this.init_logout()
             this.init_sidenav()
-            this.init_popups()
         }
     },
     init_conn(socket, element) {
@@ -75,7 +70,7 @@ let lobby = {
     init_sidenav() {
         Vue.component("sidenav", Sidenav)
         sideNavApp = new Vue({
-            el: "#sidenav_container",
+            el: "#leftside_bar",
             data() {
                 return {
                     maxWidth: 282,
@@ -85,39 +80,16 @@ let lobby = {
             render(createElement) {
                 return createElement(Sidenav, {})
             },
-            methods: {
-                onFriendsListUpdates(friends) {
-                    this.$events.$emit("on_friends_list_updates", friends)
-                }
-            },
             created() {
                 this.$events.$on("sign_out", () => {
                     signOutForm.signOut()
                 })
-            }
-        })
-    },
-    init_popups() {
-        Vue.component("settings", Settings)
-        new Vue({
-            el: "#settings_container",
-            render(createElement) {
-                return createElement(Settings, {})
-            }
-        })
-        Vue.component("search", Search)
-        new Vue({
-            el: "#search_container",
-            render(createElement) {
-                return createElement(Search, {})
             },
-        })
-        Vue.component("invitations", Invitations)
-        new Vue({
-            el: "#invitations_container",
-            render(createElement) {
-                return createElement(Invitations, {})
-            },
+            methods: {
+                onFriendsListUpdates(friends) {
+                    this.$events.$emit("on_friends_list_updates", friends)
+                }
+            }
         })
     },
     onUpdatesAvail(updates) {

@@ -1,14 +1,14 @@
 <template>
-    <div v-if="visible">
+    <div id="channels_panel" v-if="visible">
         <div class="panel list-panel">
             <div class="panel-heading list-panel-header bg-f50057-s">
-                Invitations
+                Channels
             </div>
-            <div id="invitations_list" class="list-panel-body">
+            <div id="channels_list" class="list-panel-body">
                 <ul>
-                    <li v-for="invit in invitations">
+                    <li v-for="ch in channels">
                         <div class="list-panel-btn bg-263238-d">
-                            <span>{{ invit.from }}</span>
+                            <span>{{ ch.name }}</span>
                             <span class="pull-right" style="margin-right: 10px;">+</span>
                         </div>
                     </li>
@@ -22,7 +22,7 @@
 export default {
     data() {
         return {
-            invitations: [],
+            channels: [],
             visible: false
         }
     },
@@ -30,14 +30,14 @@ export default {
         
     },
     created() {
-        this.$events.$on("open_invitations", () => {
+        this.$events.$on("open_channels", () => {
             this.visible = true
         })
-        this.$events.$on("close_invitations", () => {
+        this.$events.$on("close_channels", () => {
             this.visible = false
         })
-        this.$events.$on("on_invitations_list_updates", (invitations) => {
-            this.invitations = invitations
+        this.$events.$on("on_channels_list_updates", (channels) => {
+            this.channels = channels
         })
     }
 }

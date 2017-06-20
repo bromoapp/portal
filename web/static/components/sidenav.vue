@@ -8,29 +8,37 @@
                     </button>
                 </div>
                 <div class="toolbar-button">
-                    <button title="Settings" id="btn_settings" class="btn bg-37474f-d" v-on:click="openSettings">
-                        <i class="fa fa-gear"></i>
+                    <button title="Channels" id="btn_channels" class="btn bg-37474f-d" v-on:click="openChannels">
+                        <i class="fa fa-window-restore"></i>
                     </button>
                 </div>
                 <div class="toolbar-button">
-                    <button title="Search" id="btn_search" class="btn bg-37474f-d" v-on:click="openSearch">
-                        <i class="fa fa-search"></i>
+                    <button title="Friends" id="btn_friends" class="btn bg-37474f-d" v-on:click="openFriends">
+                        <i class="fa fa-users"></i>
                     </button>
                 </div>
                 <div class="toolbar-button">
-                    <button title="Messages" id="btn_messages" class="btn bg-37474f-d" v-on:click="openInvitations">
+                    <button title="Chats" id="btn_chats" class="btn bg-37474f-d" v-on:click="openChats">
+                        <i class="fa fa-comments-o"></i>
+                    </button>
+                </div>
+                <div class="toolbar-button">
+                    <button title="Invitations" id="btn_inivitations" class="btn bg-37474f-d" v-on:click="openInvitations">
                         <i class="fa fa-envelope-o"></i>
                     </button>
                 </div>
             </div>
-            <button id="switch" class="btn bg-f50057-d closebtn" v-on:click="changeMode">
+            <button id="switch" class="btn bg-f50057-d sidenav-close" v-on:click="changeMode">
                 <i class=""></i>
             </button>
         </div>
         <div id="video_cam" class="video-cam">
             <webcam></webcam>
         </div>
-        <navgroup></navgroup>
+        <channels></channels>
+        <friends></friends>
+        <chats></chats>
+        <invitations></invitations>
         <div id="side_nav_cover" class="sidenav-cover bg-212121-s"></div>
     </div>
 </template>
@@ -41,45 +49,65 @@ import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
 import Webcam from "./webcam.vue"
-import Navgroup from "./navgroup.vue"
+import Channels from "./channels.vue"
+import Friends from "./friends.vue"
+import Chats from "./chats.vue"
+import Invitations from "./invitations.vue"
 
-let btnSignout, btnSettings, btnSearch, btnMessages
+let btnSignout, btnChannels, btnFriends
+let btnChats, btnInvitations
 let closed = false
 
 export default {
     components: {
         Webcam,
-        Navgroup
+        Channels,
+        Friends,
+        Chats,
+        Invitations
     },
     data() {
         return {
             maxWidth: this.$parent.maxWidth,
-            minWidth: this.$parent.minWidth
+            minWidth: this.$parent.minWidth,
+            closeCmd: null
         }
     },
     methods: {
+        signout() {
+            btnSignout.blur()
+            this.$events.$emit("sign_out")
+        },
+        openChannels() {
+            btnChannels.blur()
+            this._closePanel()
+            this.$events.$emit("open_channels")
+            this.closeCmd = "close_channels"
+        },
+        openFriends() {
+            btnFriends.blur()
+            this._closePanel()
+            this.$events.$emit("open_friends")
+            this.closeCmd = "close_friends"
+        },
+        openChats() {
+            btnChats.blur()
+            this._closePanel()
+            this.$events.$emit("open_chats")
+            this.closeCmd = "close_chats"
+        },
+        openInvitations() {
+            btnInvitations.blur()
+            this._closePanel()
+            this.$events.$emit("open_invitations")
+            this.closeCmd = "close_invitations"
+        },
         changeMode() {
             if (closed) {
                 this._open()
             } else {
                 this._close()
             }
-        },
-        signout() {
-            btnSignout.blur()
-            this.$events.$emit("sign_out")
-        },
-        openSettings() {
-            btnSettings.blur()
-            this.$events.$emit("open_settings")
-        },
-        openSearch() {
-            btnSearch.blur()
-            this.$events.$emit("open_search")
-        },
-        openInvitations() {
-            btnMessages.blur()
-            this.$events.$emit("open_invitations")
         },
         _close() {
             document.getElementById("side_nav_cover").style.width = this.maxWidth + "px"
@@ -101,17 +129,26 @@ export default {
                 document.getElementById("switch").classList.remove("fa-chevron-right")
                 document.getElementById("switch").blur()
                 document.getElementById("side_nav_cover").style.width = "0px"
-           }, 300);
+            }, 300);
 
             closed = false
+        },
+        _closePanel() {
+            if (this.closeCmd) {
+                this.$events.$emit(this.closeCmd)
+            }
         }
     },
     mounted() {
         btnSignout = document.getElementById("btn_signout")
-        btnSettings = document.getElementById("btn_settings")
-        btnSearch = document.getElementById("btn_search")
-        btnMessages = document.getElementById("btn_messages")
-        this._open()
+        btnChannels = document.getElementById("btn_channels")
+        btnFriends = document.getElementById("btn_friends")
+        btnChats = document.getElementById("btn_chats")
+        btnInvitations = document.getElementById("btn_inivitations")
+
+        setTimeout(() => {
+            this._open()
+        }, 100)
     }
 }
 </script>

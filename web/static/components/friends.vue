@@ -2,13 +2,13 @@
     <div v-if="visible">
         <div class="panel list-panel">
             <div class="panel-heading list-panel-header bg-f50057-s">
-                Invitations
+                Friends
             </div>
-            <div id="invitations_list" class="list-panel-body">
+            <div id="friends_list" class="list-panel-body">
                 <ul>
-                    <li v-for="invit in invitations">
+                    <li v-for="friend in friends">
                         <div class="list-panel-btn bg-263238-d">
-                            <span>{{ invit.from }}</span>
+                            <span>{{ friend.name }}</span>
                             <span class="pull-right" style="margin-right: 10px;">+</span>
                         </div>
                     </li>
@@ -22,7 +22,7 @@
 export default {
     data() {
         return {
-            invitations: [],
+            friends: [],
             visible: false
         }
     },
@@ -30,14 +30,14 @@ export default {
         
     },
     created() {
-        this.$events.$on("open_invitations", () => {
+        this.$events.$on("open_friends", () => {
             this.visible = true
         })
-        this.$events.$on("close_invitations", () => {
+        this.$events.$on("close_friends", () => {
             this.visible = false
         })
-        this.$events.$on("on_invitations_list_updates", (invitations) => {
-            this.invitations = invitations
+        this.$events.$on("on_friends_list_updates", (friends) => {
+            this.friends = friends
         })
     }
 }

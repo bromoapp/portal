@@ -4,7 +4,7 @@
             <div class="panel-heading accordion-header bg-37474f-d" 
                 v-on:click="onHeaderClicked"
                 data="friends_list">
-                Friends
+                Chats
             </div>
             <div id="friends_list" class="accordion-body">
                 <ul>
@@ -20,7 +20,7 @@
             <div class="panel-heading accordion-header bg-37474f-d" 
                 v-on:click="onHeaderClicked"
                 data="rooms_list">
-                Rooms
+                Groups
             </div>
             <div id="rooms_list" class="accordion-body">
                 <ul>

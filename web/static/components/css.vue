@@ -79,45 +79,6 @@ export default {
     }
 }
 
-/* List panel styles */
-.list-panel {
-    border: none; 
-    outline: none;
-    margin: 1px 1px 1px 1px;
-}
-
-.list-panel-header {
-    transition: 0.4s ease;
-    border-radius: 0;
-    cursor: pointer;
-    color: black;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.list-panel-body {
-    overflow-y: auto;
-    overflow-wrap: hidden;
-    transition: max-height 0.2s ease-out;
-}
-
-.list-panel-body ul {
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0;
-}
-
-.list-panel-btn {
-    cursor: pointer;
-	transition: 0.4s ease;
-	border-top: 1px solid black;
-	color: white;
-    margin-left: 0px;
-    padding: 5px 0px 5px 10px;
-    position: relative;
-    display: block;
-}
-
 /* Navgroup styles */
 .accordion {
     transition: 0.4s ease;

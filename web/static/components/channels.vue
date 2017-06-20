@@ -1,14 +1,14 @@
 <template>
-    <div id="channels_panel" v-if="visible">
-        <div class="panel list-panel">
-            <div class="panel-heading list-panel-header bg-f50057-s">
+    <div v-if="visible">
+        <div class="panel accordion">
+            <div class="panel-heading accordion-header bg-f50057-s" data="channels_list">
                 Channels
             </div>
-            <div id="channels_list" class="list-panel-body">
+            <div id="channels_list" class="accordion-body">
                 <ul>
                     <li v-for="ch in channels">
-                        <div class="list-panel-btn bg-263238-d">
-                            <span>{{ ch.name }}</span>
+                        <div class="accordion-btn bg-263238-d">
+                            <span>{{ ch }}</span>
                             <span class="pull-right" style="margin-right: 10px;">+</span>
                         </div>
                     </li>
@@ -22,7 +22,7 @@
 export default {
     data() {
         return {
-            channels: [],
+            channels: ["Classic 90's Songs", "Classic Balads", "Tiesto Concert", "Double Six Bali"],
             visible: false
         }
     },
@@ -32,9 +32,21 @@ export default {
     created() {
         this.$events.$on("open_channels", () => {
             this.visible = true
+            setTimeout(() => {
+                let el = document.getElementsByClassName("accordion-header")[0]
+                let data = el.getAttribute("data")
+                let body = document.getElementById(data)
+                body.style.maxHeight = "500px"
+            }, 300)
         })
         this.$events.$on("close_channels", () => {
-            this.visible = false
+            let el = document.getElementsByClassName("accordion-header")[0]
+            let data = el.getAttribute("data")
+            let body = document.getElementById(data)
+            body.style.maxHeight = "0px"
+            setTimeout(() => {
+                this.visible = false
+            }, 300)
         })
         this.$events.$on("on_channels_list_updates", (channels) => {
             this.channels = channels

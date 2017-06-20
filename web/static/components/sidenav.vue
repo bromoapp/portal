@@ -80,27 +80,35 @@ export default {
         },
         openChannels() {
             btnChannels.blur()
-            this._closePanel()
-            this.$events.$emit("open_channels")
-            this.closeCmd = "close_channels"
+            if (this.closeCmd != "close_channels") {
+                this._closePanel()
+                this.$events.$emit("open_channels")
+                this.closeCmd = "close_channels"
+            }
         },
         openFriends() {
             btnFriends.blur()
-            this._closePanel()
-            this.$events.$emit("open_friends")
-            this.closeCmd = "close_friends"
+            if (this.closeCmd != "close_friends") {
+                this._closePanel()
+                this.$events.$emit("open_friends")
+                this.closeCmd = "close_friends"
+            }
         },
         openChats() {
             btnChats.blur()
-            this._closePanel()
-            this.$events.$emit("open_chats")
-            this.closeCmd = "close_chats"
+            if (this.closeCmd != "close_chats") {
+                this._closePanel()
+                this.$events.$emit("open_chats")
+                this.closeCmd = "close_chats"
+            }
         },
         openInvitations() {
             btnInvitations.blur()
-            this._closePanel()
-            this.$events.$emit("open_invitations")
-            this.closeCmd = "close_invitations"
+            if (this.closeCmd != "close_invitations") {
+                this._closePanel()
+                this.$events.$emit("open_invitations")
+                this.closeCmd = "close_invitations"
+            }
         },
         changeMode() {
             if (closed) {

@@ -1,6 +1,7 @@
 <template>
     <div id="side_nav" class="sidenav bg-212121-s">
         <logout></logout>
+        <server></server>
         <div>
             <div class="toolbar">
                 <div class="toolbar-button">
@@ -50,6 +51,7 @@ import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
 import Logout from "./logout.vue"
+import Server from "./server.vue"
 import Webcam from "./webcam.vue"
 import Channels from "./channels.vue"
 import Friends from "./friends.vue"
@@ -63,6 +65,7 @@ let closed = false
 export default {
     components: {
         Logout,
+        Server,
         Webcam,
         Channels,
         Friends,
@@ -73,6 +76,7 @@ export default {
         return {
             maxWidth: this.$parent.maxWidth,
             minWidth: this.$parent.minWidth,
+            wsocket: this.$parent.wsocket,
             closeCmd: null
         }
     },

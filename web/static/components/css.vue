@@ -9,8 +9,20 @@ export default {
 </script>
 
 <style>
-/************************** Webcam styles **************************/
+/************************** Common styles **************************/
+.container-lobby {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+}
 
+.container-login-register {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+}
+
+/************************** Webcam styles **************************/
 #cam_video {
     width: 280px;
     height: 210px;
@@ -82,7 +94,7 @@ export default {
 /************************** Navgroup styles **************************/
 .accordion {
     transition: 0.4s ease;
-    border: none; 
+    border: none;
     outline: none;
     margin: 1px 1px 1px 1px;
 }
@@ -111,9 +123,9 @@ export default {
 
 .accordion-btn {
     cursor: pointer;
-	transition: 0.4s ease;
-	border-top: 1px solid black;
-	color: white;
+    transition: 0.4s ease;
+    border-top: 1px solid black;
+    color: white;
     margin-left: 0px;
     padding: 5px 0px 5px 10px;
     position: relative;
@@ -173,7 +185,7 @@ export default {
     color: #000;
 }
 
-.popup-close:hover{
+.popup-close:hover {
     color: #fff;
 }
 

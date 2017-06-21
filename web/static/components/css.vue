@@ -156,7 +156,7 @@ export default {
     height: 100%;
     background-color: rgba(0, 0, 0, .8);
     display: table;
-    transition: opacity .3s ease-in-out;
+    transition: opacity .3s ease;
 }
 
 .popup-wrapper {
@@ -170,7 +170,7 @@ export default {
     height: 150px;
     margin: 0px auto;
     background-color: #000;
-    transition: all .3s ease-in-out;
+    transition: all .3s ease;
 }
 
 .popup-header {

@@ -1,4 +1,7 @@
 import Vue from 'vue'
+import VueEvents from 'vue-events'
+Vue.use(VueEvents)
+
 import RegisterForm from "../components/register.vue"
 
 let register = {
@@ -24,17 +27,19 @@ let register = {
                     emailFieldType: "email",
                     paswdFieldName: "user[password]",
                     paswdPlaceholder: "Password",
-                    paswdFieldType: "password",
-                    doSubmit: () => {
-                        form.submit()
-                    },
-                    doCancel: () => {
-                        window.location.href = "/web"
-                    }
+                    paswdFieldType: "password"
                 }
             },
             render(createElement) {
                 return createElement(RegisterForm, {})
+            },
+            created() {
+                this.$events.$on("register_cancel", () => {
+                    window.location.href = "/web"
+                })
+                this.$events.$on("register_submit", () => {
+                    form.submit()
+                })
             }
         })
     }

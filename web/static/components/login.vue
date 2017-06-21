@@ -48,10 +48,10 @@ export default {
     },
     methods: {
         doCancel() {
-            this.$parent.doCancel()
+            this.$events.$emit("login_cancel")
         },
         doSubmit() {
-            this.$parent.doSubmit()
+            this.$events.$emit("login_submit")
         }
     }
 }

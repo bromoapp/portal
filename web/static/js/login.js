@@ -1,4 +1,7 @@
 import Vue from 'vue'
+import VueEvents from 'vue-events'
+Vue.use(VueEvents)
+
 import LoginForm from "../components/login.vue"
 
 let login = {
@@ -14,14 +17,6 @@ let login = {
         Vue.component('login', LoginForm)
         new Vue({
             el: '#login_form_group',
-            methods: {
-                doSubmit() {
-                    form.submit()
-                },
-                doCancel() {
-                    window.location.href = "/web"
-                }
-            },
             data() {
                 return {
                     unameFieldName: "session[username]",
@@ -34,6 +29,14 @@ let login = {
             },
             render(createElement) {
                 return createElement(LoginForm, {})
+            },
+            created() {
+                this.$events.$on("login_cancel", () => {
+                    window.location.href = "/web"
+                })
+                this.$events.$on("login_submit", () => {
+                    form.submit()
+                })
             }
         })
     }

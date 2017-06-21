@@ -18,10 +18,7 @@
     <% end %>
         <%= if @current_user do %>
         <div class="container-lobby">
-            <div id="logout_container"><logout></logout></div>
-            <div id="settings_container"><settings></settings></div>
-            <div id="search_container"><search></search></div>
-            <div id="invitations_container"><invitations></invitations></div>
+            <div><connector></connector></div>
         <% else %>
         <div class="container">
             <header class="header">
@@ -38,7 +35,7 @@
         <% end %>
             <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
             <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-
+            <div id="popup_container"><popup></popup></div>
             <main role="main"><%= render @view_module, @view_template, assigns %></main>
         </div> <!-- /container -->
         <script>window.csrfToken = "<%= get_csrf_token() %>"</script>

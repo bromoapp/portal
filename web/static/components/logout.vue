@@ -9,11 +9,21 @@
 export default {
     data() {
         return {
-            csrf_token: window.csrfToken
+            csrf_token: window.csrfToken,
+            form: null
         }
+    },
+    created() {
+        this.$events.$on("sign_out", () => {
+            this.form.submit()
+        })
+    },
+    mounted() {
+        this.form = document.getElementById("logout_form")
     }
 }
 </script>
 
 <style>
+
 </style>

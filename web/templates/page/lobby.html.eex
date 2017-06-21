@@ -7,9 +7,6 @@
     <div id="main_container" style="position: fixed; height: 100%; width: 100%; top: 0; left: 0" class="lobby-body">
         
     </div>
-    <div id="rightside_bar">
-        <sidebar></sidebar>
-    </div>
 </div>
 <% end %>
 <% end %>

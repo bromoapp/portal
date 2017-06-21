@@ -2,10 +2,10 @@ import Vue from 'vue'
 import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
-import Logout from "../components/logout.vue"
 import Sidenav from "../components/sidenav.vue"
+import Popup from "../components/popup.vue"
 
-let sideNavApp, signOutForm
+let sideNavApp
 let proxyChannelPrefix = "user_proxy:"
 let roomChannelPrefix = "user_room:"
 let proxyChannel = null
@@ -18,7 +18,7 @@ let lobby = {
             return
         } else {
             this.init_conn(socket, element)
-            this.init_logout()
+            //this.init_logout()
             this.init_sidenav()
         }
     },
@@ -39,34 +39,6 @@ let lobby = {
 
         sharedChannels.push(roomChannel)
     },
-    init_logout() {
-        Vue.component("logout", Logout)
-        signOutForm = new Vue({
-            el: "#logout_container",
-            render(createElement) {
-                return createElement(Logout, {})
-            },
-            data() {
-                return {
-                    form: null
-                }
-            },
-            mounted() {
-                this.form = document.getElementById("logout_form")
-            },
-            methods: {
-                signOut() {
-                    if (proxyChannel) {
-                        proxyChannel.leave()
-                    }
-                    for (let ch of sharedChannels) {
-                        ch.leave()
-                    }
-                    this.form.submit()
-                }
-            }
-        })
-    },
     init_sidenav() {
         Vue.component("sidenav", Sidenav)
         sideNavApp = new Vue({
@@ -79,11 +51,6 @@ let lobby = {
             },
             render(createElement) {
                 return createElement(Sidenav, {})
-            },
-            created() {
-                this.$events.$on("sign_out", () => {
-                    signOutForm.signOut()
-                })
             },
             methods: {
                 onFriendsListUpdates(friends) {

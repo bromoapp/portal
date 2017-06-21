@@ -9,7 +9,7 @@ export default {
 </script>
 
 <style>
-/* Webcam styles */
+/************************** Webcam styles **************************/
 
 #cam_video {
     width: 280px;
@@ -17,7 +17,7 @@ export default {
     transition: 0.5s;
 }
 
-/* Sidenav styles */
+/************************** Sidenav styles **************************/
 .sidenav {
     height: 100%;
     width: 0;
@@ -79,7 +79,7 @@ export default {
     }
 }
 
-/* Navgroup styles */
+/************************** Navgroup styles **************************/
 .accordion {
     transition: 0.4s ease;
     border: none; 
@@ -126,7 +126,7 @@ export default {
     color: #ffffff;
 }
 
-/* Popup styles */
+/************************** Popup styles **************************/
 .popup-mask {
     position: fixed;
     z-index: 9998;
@@ -199,7 +199,7 @@ export default {
     margin-bottom: 4px;
 }
 
-/** Color styles **/
+/************************** Color styles **************************/
 .bg-37474f-d {
     transition: 0.4s ease;
     color: white;

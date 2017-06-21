@@ -9,6 +9,16 @@ export default {
 </script>
 
 <style>
+/************************** Main window styles **************************/
+.main-window {
+    transition: 0.3s ease;
+    position: fixed; 
+    height: 100%; 
+    width: 100%; 
+    top: 0; 
+    left: 0;
+}
+
 /************************** Common styles **************************/
 .container-lobby {
     margin-left: auto;

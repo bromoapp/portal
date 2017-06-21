@@ -7,8 +7,8 @@
     <div id="sidebar_div">
         <sidebar></sidebar>
     </div>
-    <div id="main_container" style="position: fixed; height: 100%; width: 100%; top: 0; left: 0" class="lobby-body">
-        
+    <div id="main_div">
+        <main-window></main-window>
     </div>
 </div>
 <% end %>

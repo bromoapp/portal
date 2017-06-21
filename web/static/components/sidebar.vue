@@ -122,6 +122,7 @@ export default {
             }
         },
         _close() {
+            this.$events.$emit("pull_window")
             document.getElementById("side_nav_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-right")
@@ -134,6 +135,7 @@ export default {
             closed = true
         },
         _open() {
+            this.$events.$emit("push_window")
             document.getElementById("side_nav").style.width = this.maxWidth + "px"
             document.getElementById("side_nav_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {

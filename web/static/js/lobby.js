@@ -3,6 +3,7 @@ import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
 import ServerConn from "../components/server_conn.vue"
+import MainWindow from "../components/main_window.vue"
 import Sidebar from "../components/sidebar.vue"
 import Popup from "../components/popup.vue"
 
@@ -13,7 +14,8 @@ let lobby = {
         } else {
             this.init_server_conn(socket, element)
             this.init_popup()
-            this.init_sidenav()
+            this.init_sideNav()
+            this.init_mainWindow()
         }
     },
     init_server_conn(socket, element) {
@@ -41,7 +43,7 @@ let lobby = {
             }
         })
     },
-    init_sidenav() {
+    init_sideNav() {
         Vue.component("sidebar", Sidebar)
         new Vue({
             el: "#sidebar_div",
@@ -53,6 +55,20 @@ let lobby = {
             },
             render(createElement) {
                 return createElement(Sidebar, {})
+            }
+        })
+    },
+    init_mainWindow() {
+        Vue.component("main-window", MainWindow)
+        new Vue({
+            el: "#main_div",
+            data() {
+                return {
+                    maxLeftMargin: 282
+                }
+            },
+            render(createElement) {
+                return createElement(MainWindow, {})
             }
         })
     }

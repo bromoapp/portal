@@ -15,7 +15,7 @@ export default {
     },
     created() {
         this.$events.$on("sign_out", () => {
-            this.form.submit()
+            //this.form.submit()
         })
     },
     mounted() {

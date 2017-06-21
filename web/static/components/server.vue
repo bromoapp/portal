@@ -17,6 +17,7 @@ export default {
         }
     },
     created() {
+        // Connecting to server
         this.socket.connect()
         this.proxyChannel = this.socket.channel(proxyChannelPrefix + this.user)
         this.proxyChannel.on("user_updates", updates => this.onUpdatesAvail(updates))
@@ -30,6 +31,16 @@ export default {
             .receive("error", () => { console.log("Failed to join room ch") })
 
         this.sharedChannels.push(this.roomChannel)
+
+        // Events handling
+        this.$events.$on("sign_out", () => {
+            if (this.proxyChannel) {
+                this.proxyChannel.leave()
+            }
+            for (let ch of this.sharedChannels) {
+                ch.leave()
+            }
+        })
     },
     methods: {
         onUpdatesAvail(updates) {

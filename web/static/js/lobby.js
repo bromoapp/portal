@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
-import Sidenav from "../components/sidenav.vue"
+import ServerConn from "../components/server_conn.vue"
+import Sidebar from "../components/sidebar.vue"
 import Popup from "../components/popup.vue"
 
 let lobby = {
@@ -10,24 +11,38 @@ let lobby = {
         if (!element) {
             return
         } else {
-            this.init_sidenav(socket, element)
+            this.init_server_conn(socket, element)
+            this.init_sidenav()
         }
     },
-    init_sidenav(socket, element) {
+    init_server_conn(socket, element) {
         let username = element.getAttribute("data-username")
-        Vue.component("sidenav", Sidenav)
+        Vue.component("server-conn", ServerConn)
+        new Vue({
+            el: "#server_conn",
+            data() {
+                return {
+                    user: username,
+                    wsocket: socket
+                }
+            },
+            render(createElement) {
+                return createElement(ServerConn, {})
+            }
+        })
+    },
+    init_sidenav() {
+        Vue.component("sidebar", Sidebar)
         new Vue({
             el: "#leftside_bar",
             data() {
                 return {
                     maxWidth: 282,
-                    minWidth: 50,
-                    user: username,
-                    wsocket: socket,
+                    minWidth: 50
                 }
             },
             render(createElement) {
-                return createElement(Sidenav, {})
+                return createElement(Sidebar, {})
             }
         })
     }

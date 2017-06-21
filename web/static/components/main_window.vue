@@ -21,9 +21,7 @@ export default {
     },
     methods: {
         _push() {
-            setTimeout(() => {
-                document.getElementById("main_window").style.marginLeft = this.maxLeftMargin + "px"
-            }, 300)
+            document.getElementById("main_window").style.marginLeft = this.maxLeftMargin + "px"
         },
         _pull() {
             setTimeout(() => {

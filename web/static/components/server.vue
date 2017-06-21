@@ -37,7 +37,8 @@ export default {
             if (this.proxyChannel) {
                 this.proxyChannel.leave()
             }
-            for (let ch of this.sharedChannels) {
+            for (let x = 0; x < this.sharedChannels.length; x++) {
+                let ch = this.sharedChannels[x]
                 ch.leave()
             }
         })

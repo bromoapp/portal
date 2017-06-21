@@ -25,4 +25,4 @@ import register from "./register"
 
 login.init(document.getElementById("login_form"))
 register.init(document.getElementById("register_form"))
-lobby.init(socket, document.getElementById("lobby_container"))
+lobby.init(socket, document.getElementById("lobby_div"))

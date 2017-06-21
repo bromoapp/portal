@@ -1,7 +1,7 @@
 <template>
     <div v-if="visible">
         <div class="panel accordion">
-            <div class="panel-heading accordion-header bg-f50057-s" data="channels_list">
+            <div class="panel-heading accordion-header bg-37474f-s" data="channels_list">
                 Channels
             </div>
             <div id="channels_list" class="accordion-body">

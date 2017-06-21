@@ -158,19 +158,26 @@ export default {
 
 .popup-container {
     position: relative;
-    width: 500px;
-    height: 300px;
+    width: 300px;
+    height: 150px;
     margin: 0px auto;
     background-color: #000;
     transition: all .3s ease-in-out;
-    font-family: Helvetica, Arial, sans-serif;
 }
 
 .popup-header {
     position: relative;
-    padding: 10px;
+    padding: 8px 0px 4px 10px;
     color: #fff;
     font-size: 18px;
+}
+
+.popup-body {
+    padding: 20px;
+    color: #fff;
+    height: 100px;
+    font-size: 14px;
+    text-align: center;
 }
 
 .popup-footer {

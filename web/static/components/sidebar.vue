@@ -45,10 +45,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueEvents from 'vue-events'
-Vue.use(VueEvents)
-
 import Logout from "./logout.vue"
 import Webcam from "./webcam.vue"
 import Channels from "./channels.vue"
@@ -80,7 +76,11 @@ export default {
     methods: {
         signout() {
             btnSignout.blur()
-            this.$events.$emit("sign_out")
+            let obj = {
+                msg: "Do you really want to exit?",
+                onYes: "sign_out"
+            }
+            this.$events.$emit("pop_question", obj)
         },
         openChannels() {
             btnChannels.blur()

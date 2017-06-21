@@ -1,35 +1,101 @@
 <template>
-    <transition name="popup">
-        <div class="popup-mask">
-            <div class="popup-wrapper">
-                <div class="popup-container">
-                    <div class="popup-header">
-                        <slot name="header">
-                            default header
-                        </slot>
-                    </div>
-                    <div class="popup-body">
-                        <slot name="body">
-                            default body
-                        </slot>
-                    </div>
-                    <div class="popup-footer">
-                        <slot name="footer">
-                            default footer
-                            <button class="popup-default-button" @click="$emit('close')">
-                                OK
-                            </button>
-                        </slot>
+    <div v-if="visible">
+        <transition name="popup">
+            <div class="popup-mask">
+                <div class="popup-wrapper">
+                    <div class="popup-container">
+                        <div class="popup-header bg-37474f-s">
+                            <label v-if="question">
+                                <i class="fa fa-question-circle"></i>
+                            </label>
+                            <label v-if="error">
+                                <i class="fa fa-warning"></i>
+                            </label>
+                            <label v-if="info">
+                                <i class="fa fa-info-circle"></i>
+                            </label>
+                        </div>
+                        <div class="popup-body bg-263238-s">
+                            {{ message }}
+                        </div>
+                        <div class="popup-footer text-center bg-263238-s">
+                            <span v-if="question">
+                                <button class="btn bg-f50057-d" v-on:click="onYesEvent">
+                                    Yes
+                                </button>
+                                <button class="btn bg-f50057-d" v-on:click="onNoEvent">
+                                    No
+                                </button>
+                            </span>
+                            <span v-else>
+                                <button class="btn bg-f50057-d" v-on:click="close">
+                                    Ok
+                                </button>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </transition>
+        </transition>
+    </div>
 </template>
 
 <script>
 export default {
-
+    data() {
+        return {
+            visible: false,
+            question: false,
+            error: false,
+            info: false,
+            message: null,
+            onYes: null,
+            onNo: null
+        }
+    },
+    created() {
+        this.$events.$on("pop_question", (obj) => {
+            this.visible = true
+            this.question = true
+            this.message = obj.msg
+            if (obj.onYes) {
+                this.onYes = obj.onYes
+            }
+            if (obj.onNo) {
+                this.onNo = obj.onNo
+            }
+        })
+        this.$events.$on("pop_info", (obj) => {
+            this.visible = true
+            this.info = true
+            this.message = obj.msg
+        })
+        this.$events.$on("pop_error", (obj) => {
+            this.visible = true
+            this.error = true
+            this.message = obj.msg
+        })
+    },
+    methods: {
+        close() {
+            this.visible = false
+            this.question = false
+            this.error = false
+            this.info = false
+        },
+        onYesEvent() {
+            if (this.onYes) {
+                this.$events.$emit(this.onYes)
+            }
+            this.close()
+        },
+        onNoEvent() {
+            if (this.onNo) {
+                this.$events.$emit(this.onNo)
+            }
+            this.close()
+        }
+    }
 }
 </script>
 

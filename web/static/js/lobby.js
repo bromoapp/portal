@@ -12,6 +12,7 @@ let lobby = {
             return
         } else {
             this.init_server_conn(socket, element)
+            this.init_popup()
             this.init_sidenav()
         }
     },
@@ -19,7 +20,7 @@ let lobby = {
         let username = element.getAttribute("data-username")
         Vue.component("server-conn", ServerConn)
         new Vue({
-            el: "#server_conn",
+            el: "#server_conn_div",
             data() {
                 return {
                     user: username,
@@ -31,10 +32,19 @@ let lobby = {
             }
         })
     },
+    init_popup() {
+        Vue.component("popup", Popup)
+        new Vue({
+            el: "#popup_div",
+            render(createElement) {
+                return createElement(Popup, {})
+            }
+        })
+    },
     init_sidenav() {
         Vue.component("sidebar", Sidebar)
         new Vue({
-            el: "#leftside_bar",
+            el: "#sidebar_div",
             data() {
                 return {
                     maxWidth: 282,

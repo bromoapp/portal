@@ -1,7 +1,7 @@
 <template>
     <div v-if="visible">
         <div class="panel accordion">
-            <div class="panel-heading accordion-header bg-f50057-s" data="invitations_list">
+            <div class="panel-heading accordion-header bg-37474f-s" data="invitations_list">
                 Invitations
             </div>
             <div id="invitations_list" class="accordion-body">

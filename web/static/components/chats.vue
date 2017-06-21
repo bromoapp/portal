@@ -3,6 +3,9 @@
         <div class="panel accordion">
             <div class="panel-heading accordion-header bg-37474f-s" data="chats_list">
                 Chats
+                <a title="Add chats" href="javascript:" class="btn cl-f50057-d" v-on:click="addChat">
+                    <i class="fa fa-plus-square"></i>
+                </a>
             </div>
             <div id="chats_list" class="accordion-body">
                 <ul>
@@ -27,7 +30,9 @@ export default {
         }
     },
     methods: {
-
+        addChat() {
+            alert()
+        }
     },
     created() {
         this.$events.$on("open_chats", () => {

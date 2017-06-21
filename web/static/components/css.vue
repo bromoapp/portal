@@ -106,6 +106,14 @@ export default {
     color: black;
     font-size: 16px;
     font-weight: bold;
+    position: relative;
+}
+
+.accordion-header a {
+    font-weight: normal;
+    position: absolute;
+    top: 3px;
+    right: 5px;
 }
 
 .accordion-body {
@@ -269,5 +277,14 @@ export default {
 
 .bg-212121-s {
     background-color: #212121;
+}
+
+.cl-f50057-d {
+    transition: 0.4s ease;
+    color: #fff;
+}
+
+.cl-f50057-d:hover {
+    color: #f50057;
 }
 </style>

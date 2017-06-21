@@ -3,6 +3,9 @@
         <div class="panel accordion">
             <div class="panel-heading accordion-header bg-37474f-s" data="friends_list">
                 Friends
+                <a title="Add friend" href="javascript:" class="btn cl-f50057-d" v-on:click="addFriend">
+                    <i class="fa fa-plus-square"></i>
+                </a>
             </div>
             <div id="friends_list" class="accordion-body">
                 <ul>
@@ -19,6 +22,8 @@
 </template>
 
 <script>
+let btnAddFriend
+
 export default {
     data() {
         return {
@@ -27,7 +32,9 @@ export default {
         }
     },
     methods: {
-
+        addFriend() {
+            alert()
+        }
     },
     created() {
         this.$events.$on("open_friends", () => {

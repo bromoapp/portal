@@ -26,9 +26,6 @@ export default {
             visible: false
         }
     },
-    methods: {
-
-    },
     created() {
         this.$events.$on("open_invitations", () => {
             setTimeout(() => {

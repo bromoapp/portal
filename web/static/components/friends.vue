@@ -13,7 +13,7 @@
                     <div class="form-inline">
                         <input id="friend_email" class="form-control" type="text" placeholder="Email">
                         <a title="Invite" class="btn bg-1976D2-d">
-                            <i class="fa fa-share"></i>
+                            <i class="fa fa-search"></i>
                         </a>
                     </div>
                 </div>

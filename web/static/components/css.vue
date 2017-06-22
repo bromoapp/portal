@@ -232,6 +232,12 @@ export default {
     margin-bottom: 4px;
 }
 
+.slide-in {
+    transition: 0.4s ease;
+    max-height: 0;
+    padding: 0px;
+}
+
 /************************** Color styles **************************/
 .bg-37474f-d {
     transition: 0.4s ease;

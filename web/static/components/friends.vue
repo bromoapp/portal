@@ -7,18 +7,15 @@
                     <i class="fa fa-plus-square"></i>
                 </a>
             </div>
+            <div v-if="form_visible" id="add_friend" class="bg-212121-s form-inline slide-in text-center">
+                <input class="form-control" type="text" placeholder="Email">
+                <a title="Invite" class="btn bg-1976D2-d">
+                    <i class="fa fa-envelope"></i>
+                </a>
+            </div>
             <div id="friends_list" class="accordion-body">
-                <div id="add_friend" class="bg-212121-s form-inline text-center" style="padding: 10px">
-                    <input class="form-control" type="text" placeholder="Email">
-                    <a title="Invite" class="btn bg-1976D2-d">
-                        <i class="fa fa-envelope"></i>
-                    </a>
-                    <a href="javascript:" style="position: fixed; right: 15px; top: 16px">
-                        <i class="fa fa-close"></i>
-                    </a>
-                </div>
                 <ul>
-                    <li v-for="friend in friends">
+                    <li v-for="friend in friends" v-bind:key="friend">
                         <div class="accordion-btn bg-263238-d">
                             <span>{{ friend.name }}</span>
                             <span class="pull-right" style="margin-right: 10px;">+</span>
@@ -38,12 +35,18 @@ export default {
     data() {
         return {
             friends: [],
-            visible: false
+            visible: false,
+            form_visible: false
         }
     },
     methods: {
         addFriend() {
-            alert()
+            this.form_visible = true
+            setTimeout(() => {
+                let el = document.getElementById("add_friend")
+                el.style.maxHeight = "80px"
+                el.style.padding = "10px"
+            }, 200)
         }
     },
     created() {
@@ -65,6 +68,7 @@ export default {
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
+                this.form_visible = false
             }, 300)
         })
         this.$events.$on("on_friends_list_updates", (friends) => {

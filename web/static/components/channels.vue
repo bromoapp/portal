@@ -9,7 +9,7 @@
             </div>
             <div id="channels_list" class="accordion-body">
                 <ul>
-                    <li v-for="ch in channels">
+                    <li v-for="ch in channels" v-bind:key="ch">
                         <div class="accordion-btn bg-263238-d">
                             <span>{{ ch }}</span>
                             <span class="pull-right" style="margin-right: 10px;">+</span>

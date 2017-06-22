@@ -9,7 +9,7 @@
             </div>
             <div id="chats_list" class="accordion-body">
                 <ul>
-                    <li v-for="chat in chats">
+                    <li v-for="chat in chats" v-bind:key="chat">
                         <div class="accordion-btn bg-263238-d">
                             <span>{{ chat }}</span>
                             <span class="pull-right" style="margin-right: 10px;">+</span>

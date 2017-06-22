@@ -6,7 +6,7 @@
             </div>
             <div id="friends_list" class="accordion-body">
                 <ul>
-                    <li v-for="friend in friends">
+                    <li v-for="friend in friends" v-bind:key="friend">
                         <div class="accordion-btn bg-263238-d">
                             <span>{{ friend.name }}</span>
                             <span class="pull-right" style="margin-right: 10px;">+</span>
@@ -21,7 +21,7 @@
             </div>
             <div id="rooms_list" class="accordion-body">
                 <ul>
-                    <li v-for="room in rooms">
+                    <li v-for="room in rooms" v-bind:key="room">
                         <div class="accordion-btn bg-263238-d">{{ room.name }}</div>
                     </li>
                 </ul>

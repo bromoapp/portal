@@ -6,7 +6,7 @@
             </div>
             <div id="invitations_list" class="accordion-body">
                 <ul>
-                    <li v-for="invit in invitations">
+                    <li v-for="invit in invitations" v-bind:key="invit">
                         <div class="accordion-btn bg-263238-d">
                             <span>{{ invit }}</span>
                             <span class="pull-right" style="margin-right: 10px;">+</span>

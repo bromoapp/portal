@@ -13,11 +13,9 @@ export default {
     },
     created() {
         this.$events.$on("push_window", () => {
-            console.log(">>> PUSH...")
             this._push()
         })
         this.$events.$on("pull_window", () => {
-            console.log(">>> PULL...")
             this._pull()
         })
     },

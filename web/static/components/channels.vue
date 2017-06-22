@@ -88,6 +88,7 @@ export default {
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
+                this.form_visible = false
             }, 300)
         })
         this.$events.$on("on_channels_list_updates", (channels) => {

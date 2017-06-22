@@ -64,7 +64,7 @@ let lobby = {
             el: "#main_div",
             data() {
                 return {
-                    leftMargin: 282,
+                    maxLeftMargin: 282,
                 }
             },
             render(createElement) {

@@ -229,7 +229,7 @@ export default {
 .slide-in {
     transition: 0.4s ease;
     max-height: 0;
-    padding: 0px;
+    padding: 0px 0px 0px 10px;
 }
 
 /************************** Color styles **************************/

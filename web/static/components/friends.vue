@@ -1,17 +1,22 @@
 <template>
     <div v-if="visible">
         <div class="panel accordion">
-            <div class="panel-heading accordion-header bg-37474f-s" data="friends_list">
+            <div class="panel-heading accordion-header bg-37474f-d" v-on:click="addFriend">
                 Friends
-                <a title="Add friend" href="javascript:" class="btn cl-f50057-d" v-on:click="addFriend">
-                    <i class="fa fa-plus-square"></i>
+                <a title="Add friend" href="javascript:" class="btn cl-f50057-d">
+                    <i id="header_btn" class="fa fa-chevron-down"></i>
                 </a>
             </div>
-            <div v-if="form_visible" id="add_friend" class="bg-212121-s form-inline slide-in text-center">
-                <input class="form-control" type="text" placeholder="Email">
-                <a title="Invite" class="btn bg-1976D2-d">
-                    <i class="fa fa-envelope"></i>
-                </a>
+            <div v-if="form_visible" id="add_friend" class="bg-212121-s slide-in">
+                <div style="margin-left: 15px">
+                    <span style="color: white">New friend:</span>
+                    <div class="form-inline">
+                        <input id="friend_email" class="form-control" type="text" placeholder="Email">
+                        <a title="Invite" class="btn bg-1976D2-d">
+                            <i class="fa fa-share"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div id="friends_list" class="accordion-body">
                 <ul>
@@ -44,18 +49,28 @@ export default {
     methods: {
         addFriend() {
             if (this.form_visible) {
-                let el = document.getElementById("add_friend")
-                el.style.maxHeight = "0px"
-                el.style.padding = "0px"
+                let div = document.getElementById("add_friend")
+                div.style.maxHeight = "0px"
+                div.style.padding = "10px"
                 setTimeout(() => {
                     this.form_visible = false
+                    let btn = document.getElementById("header_btn")
+                    btn.classList.remove("fa-chevron-up")
+                    btn.classList.add("fa-chevron-down")
                 }, 200)
             } else {
                 this.form_visible = true
                 setTimeout(() => {
-                    let el = document.getElementById("add_friend")
-                    el.style.maxHeight = "80px"
-                    el.style.padding = "10px"
+                    let div = document.getElementById("add_friend")
+                    div.style.maxHeight = "80px"
+                    div.style.padding = "10px"
+
+                    let btn = document.getElementById("header_btn")
+                    btn.classList.remove("fa-chevron-down")
+                    btn.classList.add("fa-chevron-up")
+
+                    let mail = document.getElementById("friend_email")
+                    mail.focus()
                 }, 200)
             }
         }
@@ -65,17 +80,13 @@ export default {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
-                    let el = document.getElementsByClassName("accordion-header")[0]
-                    let data = el.getAttribute("data")
-                    let body = document.getElementById(data)
+                    let body = document.getElementById("friends_list")
                     body.style.maxHeight = "500px"
                 }, 200)
             }, 300)
         })
         this.$events.$on("close_friends", () => {
-            let el = document.getElementsByClassName("accordion-header")[0]
-            let data = el.getAttribute("data")
-            let body = document.getElementById(data)
+            let body = document.getElementById("friends_list")
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false

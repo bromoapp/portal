@@ -48,6 +48,7 @@ export default {
     top: 0;
     left: 0;
     overflow-x: hidden;
+    overflow-y: hidden;
     padding-top: 0px;
     transition: 0.3s ease;
 }
@@ -60,6 +61,7 @@ export default {
     top: 0;
     left: 0;
     overflow-x: hidden;
+    overflow-y: hidden;
     padding-top: 0px;
     transition: 0.3s ease;
 }

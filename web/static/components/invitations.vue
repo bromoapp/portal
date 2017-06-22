@@ -16,6 +16,7 @@
             </div>
         </div>
     </div>
+    <div v-else></div>
 </template>
 
 <script>

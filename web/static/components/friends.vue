@@ -9,7 +9,7 @@
             </div>
             <div id="friends_list" class="accordion-body">
                 <div id="add_friend" class="bg-212121-s form-inline text-center" style="padding: 10px">
-                    <input class="form-control" type="text" placeholder="Email" />
+                    <input class="form-control" type="text" placeholder="Email">
                     <a title="Invite" class="btn bg-1976D2-d">
                         <i class="fa fa-envelope"></i>
                     </a>
@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+    <div v-else></div>
 </template>
 
 <script>

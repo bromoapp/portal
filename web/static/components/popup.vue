@@ -38,6 +38,7 @@
             </div>
         </transition>
     </div>
+    <div v-else></div>
 </template>
 
 <script>

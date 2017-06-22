@@ -146,12 +146,6 @@ export default {
     display: block;
 }
 
-.accordion font {
-    font-weight: normal;
-    font-size: 16px;
-    color: #ffffff;
-}
-
 /************************** Popup styles **************************/
 .popup-mask {
     position: fixed;

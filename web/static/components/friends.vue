@@ -18,7 +18,9 @@
                     <li v-for="friend in friends" v-bind:key="friend">
                         <div class="accordion-btn bg-263238-d">
                             <span>{{ friend.name }}</span>
-                            <span class="pull-right" style="margin-right: 10px;">+</span>
+                            <span class="pull-right" style="margin-right: 10px;">
+                                <i class="fa fa-circle"></i>
+                            </span>
                         </div>
                     </li>
                 </ul>
@@ -29,7 +31,7 @@
 </template>
 
 <script>
-let btnAddFriend
+let closed = true
 
 export default {
     data() {
@@ -41,12 +43,21 @@ export default {
     },
     methods: {
         addFriend() {
-            this.form_visible = true
-            setTimeout(() => {
+            if (this.form_visible) {
                 let el = document.getElementById("add_friend")
-                el.style.maxHeight = "80px"
-                el.style.padding = "10px"
-            }, 200)
+                el.style.maxHeight = "0px"
+                el.style.padding = "0px"
+                setTimeout(() => {
+                    this.form_visible = false
+                }, 200)
+            } else {
+                this.form_visible = true
+                setTimeout(() => {
+                    let el = document.getElementById("add_friend")
+                    el.style.maxHeight = "80px"
+                    el.style.padding = "10px"
+                }, 200)
+            }
         }
     },
     created() {

@@ -1,35 +1,35 @@
 <template>
-    <div id="side_nav" class="sidenav bg-212121-s">
+    <div id="sidebar" class="sidebar bg-212121-s">
         <logout></logout>
         <div>
             <div class="toolbar">
-                <div class="toolbar-button">
+                <div class="inline">
                     <button title="Signout" id="btn_signout" class="btn bg-37474f-d" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>
                     </button>
                 </div>
-                <div class="toolbar-button">
+                <div class="inline">
                     <button title="Channels" id="btn_channels" class="btn bg-37474f-d" v-on:click="openChannels">
                         <i class="fa fa-window-restore"></i>
                     </button>
                 </div>
-                <div class="toolbar-button">
+                <div class="inline">
                     <button title="Friends" id="btn_friends" class="btn bg-37474f-d" v-on:click="openFriends">
                         <i class="fa fa-users"></i>
                     </button>
                 </div>
-                <div class="toolbar-button">
+                <div class="inline">
                     <button title="Chats" id="btn_chats" class="btn bg-37474f-d" v-on:click="openChats">
                         <i class="fa fa-comments-o"></i>
                     </button>
                 </div>
-                <div class="toolbar-button">
+                <div class="inline">
                     <button title="Invitations" id="btn_inivitations" class="btn bg-37474f-d" v-on:click="openInvitations">
                         <i class="fa fa-envelope-o"></i>
                     </button>
                 </div>
             </div>
-            <button id="switch" class="btn bg-f50057-d sidenav-close" v-on:click="changeMode">
+            <button id="switch" class="btn bg-f50057-d sidebar-close" v-on:click="changeMode">
                 <i class=""></i>
             </button>
         </div>
@@ -40,7 +40,7 @@
         <friends></friends>
         <chats></chats>
         <invitations></invitations>
-        <div id="side_nav_cover" class="sidenav-cover bg-212121-s"></div>
+        <div id="sidebar_cover" class="sidebar-cover bg-212121-s"></div>
     </div>
 </template>
 
@@ -123,26 +123,26 @@ export default {
         },
         _close() {
             this.$events.$emit("pull_window")
-            document.getElementById("side_nav_cover").style.width = this.maxWidth + "px"
+            document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-right")
                 document.getElementById("switch").classList.remove("fa-chevron-left")
                 document.getElementById("switch").blur()
-                document.getElementById("side_nav").style.width = this.minWidth + "px"
-                document.getElementById("side_nav_cover").style.width = this.minWidth + "px"
+                document.getElementById("sidebar").style.width = this.minWidth + "px"
+                document.getElementById("sidebar_cover").style.width = this.minWidth + "px"
             }, 300)
 
             closed = true
         },
         _open() {
             this.$events.$emit("push_window")
-            document.getElementById("side_nav").style.width = this.maxWidth + "px"
-            document.getElementById("side_nav_cover").style.width = this.maxWidth + "px"
+            document.getElementById("sidebar").style.width = this.maxWidth + "px"
+            document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-left")
                 document.getElementById("switch").classList.remove("fa-chevron-right")
                 document.getElementById("switch").blur()
-                document.getElementById("side_nav_cover").style.width = "0px"
+                document.getElementById("sidebar_cover").style.width = "0px"
             }, 300);
 
             closed = false

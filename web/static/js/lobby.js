@@ -14,7 +14,7 @@ let lobby = {
         } else {
             this.init_server_conn(socket, element)
             this.init_popup()
-            this.init_sideNav()
+            this.init_sideBar()
             this.init_mainWindow()
         }
     },
@@ -43,7 +43,7 @@ let lobby = {
             }
         })
     },
-    init_sideNav() {
+    init_sideBar() {
         Vue.component("sidebar", Sidebar)
         new Vue({
             el: "#sidebar_div",
@@ -64,7 +64,7 @@ let lobby = {
             el: "#main_div",
             data() {
                 return {
-                    maxLeftMargin: 282
+                    leftMargin: 282,
                 }
             },
             render(createElement) {

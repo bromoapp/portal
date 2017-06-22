@@ -7,6 +7,9 @@
     <div id="sidebar_div">
         <sidebar></sidebar>
     </div>
+    <div id="topbar_div">
+        <topbar></topbar>
+    </div>
     <div id="main_div">
         <main-window></main-window>
     </div>

@@ -8,6 +8,15 @@
                 </a>
             </div>
             <div id="friends_list" class="accordion-body">
+                <div id="add_friend" class="bg-212121-s form-inline text-center" style="padding: 10px">
+                    <input class="form-control" type="text" placeholder="Email" />
+                    <a title="Invite" class="btn bg-1976D2-d">
+                        <i class="fa fa-envelope"></i>
+                    </a>
+                    <a href="javascript:" style="position: fixed; right: 15px; top: 16px">
+                        <i class="fa fa-close"></i>
+                    </a>
+                </div>
                 <ul>
                     <li v-for="friend in friends">
                         <div class="accordion-btn bg-263238-d">

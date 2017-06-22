@@ -9,16 +9,6 @@ export default {
 </script>
 
 <style>
-/************************** Main window styles **************************/
-.main-window {
-    transition: 0.3s ease;
-    position: fixed; 
-    height: 100%; 
-    width: 100%; 
-    top: 0; 
-    left: 0;
-}
-
 /************************** Common styles **************************/
 .container-lobby {
     margin-left: auto;
@@ -32,6 +22,16 @@ export default {
     max-width: 500px;
 }
 
+/************************** Main window styles **************************/
+.main-window {
+    transition: 0.3s ease;
+    position: fixed; 
+    height: 100%; 
+    width: 100%; 
+    top: 0; 
+    left: 0;
+}
+
 /************************** Webcam styles **************************/
 #cam_video {
     width: 280px;
@@ -39,20 +39,8 @@ export default {
     transition: 0.5s;
 }
 
-/************************** Sidenav styles **************************/
-.sidenav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    overflow-x: hidden;
-    padding-top: 0px;
-    transition: 0.3s ease;
-}
-
-.sidenav-cover {
+/************************** Sidebar styles **************************/
+.sidebar {
     height: 100%;
     width: 0;
     position: fixed;
@@ -64,8 +52,20 @@ export default {
     transition: 0.3s ease;
 }
 
-.sidenav-close {
+.sidebar-cover {
+    height: 100%;
+    width: 0;
+    position: fixed;
     z-index: 3;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 0px;
+    transition: 0.3s ease;
+}
+
+.sidebar-close {
+    z-index: 4;
     position: absolute;
     top: 8px;
     right: 8px;
@@ -76,10 +76,6 @@ export default {
     position: absolute;
     top: 8px;
     left: 8px;
-}
-
-.toolbar-button {
-    display: inline-block;
 }
 
 #main {
@@ -93,10 +89,10 @@ export default {
 }
 
 @media screen and (max-height: 450px) {
-    .sidenav {
+    .sidebar {
         padding-top: 15px;
     }
-    .sidenav a {
+    .sidebar a {
         font-size: 18px;
     }
 }
@@ -260,7 +256,7 @@ export default {
 }
 
 .bg-f50057-d:hover {
-    color: black;
+    color: white;
     background-color: #37474f;
 }
 
@@ -287,6 +283,17 @@ export default {
 
 .bg-212121-s {
     background-color: #212121;
+}
+
+.bg-1976D2-d {
+    transition: 0.4s ease;
+    color: white;
+    background-color: #1565C0;
+}
+
+.bg-1976D2-d:hover {
+    color: white;
+    background-color: #37474f;
 }
 
 .cl-f50057-d {

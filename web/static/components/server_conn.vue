@@ -51,9 +51,11 @@ export default {
         },
         onFriendOnline(friend) {
             console.log(">>> ONLINE FRIEND = ", friend)
+            this.$events.$emit("online_friend", friend)
         },
         onFriendOffline(friend) {
             console.log(">>> OFFLINE FRIEND = ", friend)
+            this.$events.$emit("offline_friend", friend)
         }
     }
 }

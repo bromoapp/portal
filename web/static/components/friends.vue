@@ -24,7 +24,8 @@
                         <div class="accordion-btn bg-263238-d">
                             <span>{{ friend.name }}</span>
                             <span class="pull-right" style="margin-right: 10px;">
-                                <i class="fa fa-circle"></i>
+                                <i v-if="friend.online" class="fa fa-user-circle"></i>
+                                <i v-else class="fa fa-user-circle-o"></i>
                             </span>
                         </div>
                     </li>
@@ -95,6 +96,12 @@ export default {
         })
         this.$events.$on("on_friends_list_updates", (friends) => {
             this.friends = friends
+        })
+        this.$events.$on("online_friend", (friend) => {
+            
+        })
+        this.$events.$on("offline_friend", (friend) => {
+            
         })
     }
 }

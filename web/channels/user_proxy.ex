@@ -95,7 +95,6 @@ defmodule Portal.UserProxy do
     end
 
     defp _get_friends_status_updates(user) do
-        # Query user's friends data and push it to user
         friends = _get_friends(user)
         %Updates{friends: friends}
     end

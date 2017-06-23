@@ -20,7 +20,7 @@ export default {
         // Connecting to server
         this.socket.connect()
         this.proxyChannel = this.socket.channel(proxyChannelPrefix + this.user)
-        this.proxyChannel.on("user_updates", updates => this.onUpdatesAvail(updates))
+        this.proxyChannel.on("initial_updates", updates => this.onInitialUpdates(updates))
         this.proxyChannel.join()
             .receive("ok", () => { console.log("Succeed to join proxy ch") })
             .receive("error", () => { console.log("Failed to join proxy ch") })
@@ -44,7 +44,7 @@ export default {
         })
     },
     methods: {
-        onUpdatesAvail(updates) {
+        onInitialUpdates(updates) {
             this.$events.$emit("on_friends_list_updates", updates.friends)
         }
     }

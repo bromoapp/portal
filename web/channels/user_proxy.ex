@@ -40,19 +40,16 @@ defmodule Portal.UserProxy do
         OnlineUsersDb.insert(ol_user)
 
         # Initial updates for user on joined
-        send self(), "user_updates"
-
-        # Initiate periodik checks on avail updates for user
-        :timer.send_interval(10_000, "user_updates")
+        send self(), "initial_updates"
         
         {:noreply, socket}
     end
 
-    def handle_info("user_updates", socket) do
+    def handle_info("initial_updates", socket) do
         updates = socket.assigns.user
             |> _get_friends_status_updates()
         
-        push socket, "user_updates", updates
+        push socket, "initial_updates", updates
         {:noreply, socket}
     end
 

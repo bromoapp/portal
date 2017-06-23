@@ -23,8 +23,7 @@ defmodule Portal.UserProxy do
                         ol_user = OnlineUsersDb.select(friend.username)
                         cond do
                             ol_user != nil ->
-                                :ok
-                                # Inform user's friends that he/she is offline
+                                send ol_user.pid, {:friend_offline, user}
                             true ->
                                 :ignore
                         end
@@ -71,8 +70,7 @@ defmodule Portal.UserProxy do
                         ol_user = OnlineUsersDb.select(friend.username)
                         cond do
                             ol_user != nil ->
-                                :ok
-                                # Informs user's friends that he/she is online
+                                send ol_user.pid, {:friend_online, user}
                             true ->
                                 :ignore
                         end
@@ -84,8 +82,16 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    def handle_info(:online_friend, socket) do
-        
+    def handle_info({:friend_online, friend}, socket) do
+        user = socket.assigns.user
+        push socket, "friend_online", %{id: user.id, username: user.username, name: user.name, online: true}
+        {:noreply, socket}
+    end
+
+    def handle_info({:friend_offline, friend}, socket) do
+        user = socket.assigns.user
+        push socket, "friend_offline", %{id: user.id, username: user.username, name: user.name, online: false}
+        {:noreply, socket}
     end
 
     defp _get_friends_status_updates(user) do

@@ -54,7 +54,6 @@ import Invitations from "./invitations.vue"
 
 let btnSignout, btnChannels, btnFriends
 let btnChats, btnInvitations
-let closed = false
 
 export default {
     components: {
@@ -70,8 +69,8 @@ export default {
             maxWidth: this.$parent.maxWidth,
             minWidth: this.$parent.minWidth,
             wsocket: this.$parent.wsocket,
-            leftMargin: this.$parent.maxWidth,
             closeCmd: null,
+            closed: false
         }
     },
     methods: {
@@ -86,7 +85,7 @@ export default {
         openChannels() {
             btnChannels.blur()
             if (this.closeCmd != "close_channels") {
-                this._closePanel()
+                this._closeSubPanel()
                 this.$events.$emit("open_channels")
                 this.closeCmd = "close_channels"
             }
@@ -94,7 +93,7 @@ export default {
         openFriends() {
             btnFriends.blur()
             if (this.closeCmd != "close_friends") {
-                this._closePanel()
+                this._closeSubPanel()
                 this.$events.$emit("open_friends")
                 this.closeCmd = "close_friends"
             }
@@ -102,7 +101,7 @@ export default {
         openChats() {
             btnChats.blur()
             if (this.closeCmd != "close_chats") {
-                this._closePanel()
+                this._closeSubPanel()
                 this.$events.$emit("open_chats")
                 this.closeCmd = "close_chats"
             }
@@ -110,13 +109,13 @@ export default {
         openInvitations() {
             btnInvitations.blur()
             if (this.closeCmd != "close_invitations") {
-                this._closePanel()
+                this._closeSubPanel()
                 this.$events.$emit("open_invitations")
                 this.closeCmd = "close_invitations"
             }
         },
         changeMode() {
-            if (closed) {
+            if (this.closed) {
                 this._open()
             } else {
                 this._close()
@@ -133,7 +132,7 @@ export default {
                 document.getElementById("sidebar_cover").style.width = this.minWidth + "px"
             }, 300)
 
-            closed = true
+            this.closed = true
         },
         _open() {
             this.$events.$emit("push_window")
@@ -146,9 +145,9 @@ export default {
                 document.getElementById("sidebar_cover").style.width = "0px"
             }, 300);
 
-            closed = false
+            this.closed = false
         },
-        _closePanel() {
+        _closeSubPanel() {
             if (this.closeCmd) {
                 this.$events.$emit(this.closeCmd)
             }

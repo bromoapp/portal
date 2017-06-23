@@ -40,6 +40,18 @@ export default {
 }
 
 /************************** Sidebar styles **************************/
+.float-panel {
+    position: fixed;
+    width: 0;
+    z-index: 2;
+    top: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-top: 0px;
+    transition: 0.3s ease;
+}
+
+/************************** Sidebar styles **************************/
 .sidebar {
     height: 100%;
     width: 0;

@@ -1,6 +1,5 @@
 <template>
     <div v-if="visible">
-        <friend-detail></friend-detail>
         <div class="panel accordion">
             <div class="panel-heading accordion-header bg-37474f-d" v-on:click="addFriend">
                 Friends
@@ -22,7 +21,7 @@
             <div id="friends_list" class="accordion-body">
                 <ul>
                     <li v-for="friend in friends" v-bind:key="friend">
-                        <div v-on:click="onClickFriend" class="accordion-btn bg-263238-d">
+                        <div v-on:click="onClickFriend(friend.username)" class="accordion-btn bg-263238-d">
                             <span>{{ friend.name }}</span>
                             <span v-if="friend.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-user"></i>
@@ -40,30 +39,20 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueEvents from 'vue-events'
-Vue.use(VueEvents)
-
-import FriendDetail from "./friend_detail.vue"
-
 let closed = true
 
 export default {
-    components: {
-        FriendDetail
-    },
     data() {
         return {
             friends: [],
             visible: false,
             form_visible: false,
-            leftMargin: this.$parent.leftMargin,
             detailPanelWidth: 300
         }
     },
     methods: {
-        onClickFriend() {
-            console.log(">>> LEFT MARGIN: " + this.leftMargin + "; MAX WIDTH: " + this.maxWidth)
+        onClickFriend(username) {
+            this.$events.$emit("switch_friend_detail", username)            
         },
         addFriend() {
             if (this.form_visible) {

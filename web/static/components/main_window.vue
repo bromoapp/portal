@@ -1,14 +1,24 @@
 <template>
     <div id="main_window" class="main-window lobby-body">
-    
+        <friend-detail></friend-detail>
     </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import VueEvents from 'vue-events'
+Vue.use(VueEvents)
+
+import FriendDetail from "./friend_detail.vue"
+
 export default {
+    components: {
+        FriendDetail
+    },
     data() {
         return {
-            leftMargin: this.$parent.leftMargin
+            maxLeftMargin: this.$parent.maxLeftMargin,
+            minLeftMargin: this.$parent.minLeftMargin,
         }
     },
     created() {
@@ -21,11 +31,11 @@ export default {
     },
     methods: {
         _push() {
-            document.getElementById("main_window").style.marginLeft = this.leftMargin + "px"
+            document.getElementById("main_window").style.marginLeft = this.maxLeftMargin + "px"
         },
         _pull() {
             setTimeout(() => {
-                document.getElementById("main_window").style.marginLeft = "0px"
+                document.getElementById("main_window").style.marginLeft = this.minLeftMargin + "px"
             }, 300)
         }
     }

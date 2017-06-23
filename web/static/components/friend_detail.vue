@@ -1,5 +1,8 @@
 <template>
-    <div id="panel_window"></div>
+    <div v-if="panel_visible" id="panel_window">
+        
+    </div>
+    <div v-else></div>
 </template>
 
 <script>

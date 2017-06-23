@@ -12,10 +12,28 @@ defmodule Portal.UserProxy do
     end
     
     def terminate(_reason, socket) do
-        Logger.info(">>> USER LEFT FROM PROXY: #{inspect socket.assigns.user.username}")        
+        user = socket.assigns.user
+        Logger.info(">>> USER LEFT FROM PROXY: #{inspect user.username}")        
+        
+        # Inform user's friends that he/she is offline
+        _get_friends(user) |>
+            Enum.each(fn(friend) ->
+                cond do
+                    friend.online == true ->
+                        ol_user = OnlineUsersDb.select(friend.username)
+                        cond do
+                            ol_user != nil ->
+                                :ok
+                                # Inform user's friends that he/she is offline
+                            true ->
+                                :ignore
+                        end
+                    true ->
+                        :ignore
+                end
+            end)
         
         # Delete user from db
-        user = socket.assigns.user
         OnlineUsersDb.delete(user.username)
         {:noreply, socket}
     end
@@ -50,6 +68,24 @@ defmodule Portal.UserProxy do
             |> _get_friends_status_updates()
         
         push socket, "initial_updates", updates
+
+        # Informs user's friends that he/she is online
+        updates.friends |>
+            Enum.each(fn(friend) ->
+                cond do
+                    friend.online == true ->
+                        ol_user = OnlineUsersDb.select(friend.username)
+                        cond do
+                            ol_user != nil ->
+                                :ok
+                                # Informs user's friends that he/she is online
+                            true ->
+                                :ignore
+                        end
+                    true ->
+                        :ignore
+                end
+            end)
         {:noreply, socket}
     end
 

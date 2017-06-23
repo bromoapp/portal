@@ -13,17 +13,18 @@ defmodule Portal.UserProxy do
     
     def terminate(_reason, socket) do
         user = socket.assigns.user
-        Logger.info(">>> USER LEFT FROM PROXY: #{inspect user.username}")        
+        Logger.info(">>> USER LEFT: #{inspect user.username} IN NODE: #{inspect node()}")
         
         # 1. Inform user's friends that he/she is offline
         _get_friends(user) |>
             Enum.each(fn(friend) ->
                 cond do
                     friend.online == true ->
-                        ol_user = OnlineUsersDb.select(friend.username)
+                        ol_friend = OnlineUsersDb.select(friend.username)
                         cond do
-                            ol_user != nil ->
-                                send ol_user.pid, {:friend_offline, user}
+                            ol_friend != nil ->
+                                Logger.info(">>> TRY TO INFORM #{inspect ol_friend.username} AT #{inspect ol_friend.node}")
+                                send ol_friend.pid, {:friend_offline, user}
                             true ->
                                 :ignore
                         end
@@ -38,8 +39,6 @@ defmodule Portal.UserProxy do
     end
 
     def handle_info(:after_join, socket) do
-        Logger.info(">>> USER JOIN: #{inspect socket.assigns.user.username}")
-        
         # 1. Tracking user with presence
         user = socket.assigns.user
         ProxyPresence.track(socket, user.username, %{
@@ -54,6 +53,8 @@ defmodule Portal.UserProxy do
             node: node(),
             pid: self()
         }
+        Logger.info(">>> USER JOIN: #{inspect ol_user.username} IN NODE: #{inspect ol_user.node}")
+
         OnlineUsersDb.insert(ol_user)
 
         # 3. Send updates for user on joined
@@ -67,10 +68,11 @@ defmodule Portal.UserProxy do
             Enum.each(fn(friend) ->
                 cond do
                     friend.online == true ->
-                        ol_user = OnlineUsersDb.select(friend.username)
+                        ol_friend = OnlineUsersDb.select(friend.username)
                         cond do
-                            ol_user != nil ->
-                                send ol_user.pid, {:friend_online, user}
+                            ol_friend != nil ->
+                                Logger.info(">>> TRY TO INFORM #{inspect ol_friend.username} AT #{inspect ol_friend.node}")
+                                send ol_friend.pid, {:friend_online, user}
                             true ->
                                 :ignore
                         end
@@ -84,12 +86,14 @@ defmodule Portal.UserProxy do
 
     def handle_info({:friend_online, friend}, socket) do
         user = socket.assigns.user
+        Logger.info(">>> #{inspect user.username} GOT ONLINE FRIEND: #{inspect friend.username}")
         push socket, "friend_online", %{id: user.id, username: user.username, name: user.name, online: true}
         {:noreply, socket}
     end
 
     def handle_info({:friend_offline, friend}, socket) do
         user = socket.assigns.user
+        Logger.info(">>> #{inspect user.username} GOT OFFLINE FRIEND: #{inspect friend.username}")
         push socket, "friend_offline", %{id: user.id, username: user.username, name: user.name, online: false}
         {:noreply, socket}
     end

@@ -69,11 +69,11 @@ defmodule Portal.Web do
 
             alias Portal.Repo
             alias Portal.OnlineUser
+            alias Portal.OnlineUsersDb
 
             import Ecto
             import Ecto.Query
             import Portal.Gettext
-            import Portal.OnlineUsersDb, only: [insert: 1, delete: 1, select: 1, update: 1]
         end
     end
 

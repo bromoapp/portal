@@ -24,7 +24,4 @@ defmodule Portal.WebUserController do
         end
     end
 
-    def delete(conn, %{"id" => id}) do
-        
-    end
 end

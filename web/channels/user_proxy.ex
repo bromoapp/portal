@@ -16,7 +16,7 @@ defmodule Portal.UserProxy do
         
         # Delete user from db
         user = socket.assigns.user
-        delete(user.username)
+        OnlineUsersDb.delete(user.username)
         {:noreply, socket}
     end
 
@@ -37,7 +37,7 @@ defmodule Portal.UserProxy do
             node: node(),
             pid: self()
         }
-        insert(ol_user)
+        OnlineUsersDb.insert(ol_user)
 
         # Initial updates for user on joined
         send self(), "user_updates"
@@ -66,10 +66,10 @@ defmodule Portal.UserProxy do
         sql_1 = "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
         %Mariaex.Result{rows: rows1} = Ecto.Adapters.SQL.query!(Repo, sql_1, [user.id])
         friends = _parse_friends(rows1, [])
-        
+
         sql_2 = "SELECT a.user_a_id AS 'id' FROM relations AS a WHERE a.user_b_id = ?"
         %Mariaex.Result{rows: rows2} = Ecto.Adapters.SQL.query!(Repo, sql_2, [user.id])
-        _parse_friends(rows2, friends)      
+        _parse_friends(rows2, friends)
     end
 
     defp _parse_friends([], result) do
@@ -78,7 +78,7 @@ defmodule Portal.UserProxy do
 
     defp _parse_friends([[id]|t], result) do
         user = Repo.get(User, id)
-        ol_user = select(user.username)
+        ol_user = OnlineUsersDb.select(user.username)
         cond do
             ol_user == nil ->
                 n_result = result ++ [%{id: user.id, username: user.username, name: user.name, online: false}]

@@ -23,8 +23,8 @@
                     <li v-for="chat in chats" v-bind:key="chat">
                         <div class="accordion-btn bg-263238-d">
                             <span>{{ chat }}</span>
-                            <span class="pull-right" style="margin-right: 10px;">
-                                <i class="fa fa-circle"></i>
+                            <span class="pull-right icon">
+                                <i class="fa fa-comment"></i>
                             </span>
                         </div>
                     </li>

@@ -70,7 +70,8 @@ export default {
             maxWidth: this.$parent.maxWidth,
             minWidth: this.$parent.minWidth,
             wsocket: this.$parent.wsocket,
-            closeCmd: null
+            leftMargin: this.$parent.maxWidth,
+            closeCmd: null,
         }
     },
     methods: {

@@ -1,31 +1,30 @@
 <template>
-    <div id="main_window" class="main-window lobby-body">
-    
-    </div>
+    <div id="panel_window"></div>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            leftMargin: this.$parent.leftMargin
+            leftMargin: this.$parent.leftMargin,
+            maxWidth: this.$parent.detailPanelWidth
         }
     },
     created() {
         this.$events.$on("push_window", () => {
-            this._push()
+            //this._push()
         })
         this.$events.$on("pull_window", () => {
-            this._pull()
+            //this._pull()
         })
     },
     methods: {
         _push() {
-            document.getElementById("main_window").style.marginLeft = this.leftMargin + "px"
+            document.getElementById("panel_window").style.marginLeft = this.leftMargin + "px"
         },
         _pull() {
             setTimeout(() => {
-                document.getElementById("main_window").style.marginLeft = "0px"
+                document.getElementById("panel_window").style.marginLeft = "0px"
             }, 300)
         }
     }

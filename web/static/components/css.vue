@@ -148,6 +148,10 @@ export default {
     display: block;
 }
 
+.accordion-btn .icon {
+    margin-right: 20px;
+}
+
 /************************** Popup styles **************************/
 .popup-mask {
     position: fixed;

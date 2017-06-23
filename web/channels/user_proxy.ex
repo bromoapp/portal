@@ -7,7 +7,7 @@ defmodule Portal.UserProxy do
     require Logger
 
     def join("user_proxy:" <> username, _params, socket) do
-        send self(), "after_join"
+        send self(), :after_join
         {:ok, socket}
     end
     
@@ -15,7 +15,7 @@ defmodule Portal.UserProxy do
         user = socket.assigns.user
         Logger.info(">>> USER LEFT FROM PROXY: #{inspect user.username}")        
         
-        # Inform user's friends that he/she is offline
+        # 1. Inform user's friends that he/she is offline
         _get_friends(user) |>
             Enum.each(fn(friend) ->
                 cond do
@@ -33,22 +33,22 @@ defmodule Portal.UserProxy do
                 end
             end)
         
-        # Delete user from db
+        # 2. Delete user from db
         OnlineUsersDb.delete(user.username)
         {:noreply, socket}
     end
 
-    def handle_info("after_join", socket) do
+    def handle_info(:after_join, socket) do
         Logger.info(">>> USER JOIN: #{inspect socket.assigns.user.username}")
         
-        # Tracking user with presence
+        # 1. Tracking user with presence
         user = socket.assigns.user
         ProxyPresence.track(socket, user.username, %{
             name: user.name,
             online_at: :os.system_time(:milli_seconds)
         })
 
-        # Insert user to db
+        # 2. Insert user to db
         ol_user = %OnlineUser{
             name: user.name,
             username: user.username,
@@ -57,19 +57,13 @@ defmodule Portal.UserProxy do
         }
         OnlineUsersDb.insert(ol_user)
 
-        # Initial updates for user on joined
-        send self(), "initial_updates"
-        
-        {:noreply, socket}
-    end
-
-    def handle_info("initial_updates", socket) do
+        # 3. Send updates for user on joined
         updates = socket.assigns.user
             |> _get_friends_status_updates()
         
         push socket, "initial_updates", updates
-
-        # Informs user's friends that he/she is online
+        
+        # 4. Informs user's friends that he/she is online
         updates.friends |>
             Enum.each(fn(friend) ->
                 cond do
@@ -86,7 +80,12 @@ defmodule Portal.UserProxy do
                         :ignore
                 end
             end)
+
         {:noreply, socket}
+    end
+
+    def handle_info(:online_friend, socket) do
+        
     end
 
     defp _get_friends_status_updates(user) do

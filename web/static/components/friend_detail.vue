@@ -1,6 +1,6 @@
 <template>
     <div v-if="panel_visible" id="panel_window">
-        
+
     </div>
     <div v-else></div>
 </template>
@@ -14,6 +14,9 @@ export default {
         }
     },
     created() {
+        this.$events.$on("open_friend_detail", () => {
+            //this._push()
+        })
         this.$events.$on("push_window", () => {
             //this._push()
         })

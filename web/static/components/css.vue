@@ -51,9 +51,29 @@ export default {
     transition: 0.3s ease;
 }
 
+.float-panel-cover {
+    position: fixed;
+    width: 0;
+    z-index: 3;
+    top: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-top: 0px;
+    transition: 0.3s ease;
+}
+
 .friend-profile {
-    border-radius: 5px;
+    margin-top: 25px;
     padding: 10px; 
+}
+
+.frind-details {
+    padding: 5px; 
+}
+
+.friend-image {
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 /************************** Sidebar styles **************************/
@@ -317,6 +337,11 @@ export default {
 .bg-1976D2-d:hover {
     color: white;
     background-color: #37474f;
+}
+
+.bg-455A64-s {
+    color: #fff;
+    background-color: #455A64;
 }
 
 .cl-f50057-d {

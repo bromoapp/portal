@@ -87,14 +87,14 @@ defmodule Portal.UserProxy do
     def handle_info({:friend_online, friend}, socket) do
         user = socket.assigns.user
         Logger.info(">>> #{inspect user.username} GOT ONLINE FRIEND: #{inspect friend.username}")
-        push socket, "friend_online", %{id: user.id, username: user.username, name: user.name, online: true}
+        push socket, "friend_online", %{id: friend.id, username: friend.username, name: friend.name, online: true}
         {:noreply, socket}
     end
 
     def handle_info({:friend_offline, friend}, socket) do
         user = socket.assigns.user
         Logger.info(">>> #{inspect user.username} GOT OFFLINE FRIEND: #{inspect friend.username}")
-        push socket, "friend_offline", %{id: user.id, username: user.username, name: user.name, online: false}
+        push socket, "friend_offline", %{id: friend.id, username: friend.username, name: friend.name, online: false}
         {:noreply, socket}
     end
 

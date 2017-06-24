@@ -104,10 +104,18 @@ export default {
             this.friends = friends
         })
         this.$events.$on("online_friend", (friend) => {
-            
+            for (let x = 0; x < this.friends.length; x++) {
+                if (this.friends[x].username == friend.username) {
+                    this.friends[x].online = true
+                }
+            }
         })
         this.$events.$on("offline_friend", (friend) => {
-            
+            for (let x = 0; x < this.friends.length; x++) {
+                if (this.friends[x].username == friend.username) {
+                    this.friends[x].online = false
+                }
+            }
         })
     }
 }

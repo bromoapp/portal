@@ -51,6 +51,11 @@ export default {
     transition: 0.3s ease;
 }
 
+.friend-profile {
+    border-radius: 5px;
+    padding: 10px; 
+}
+
 /************************** Sidebar styles **************************/
 .sidebar {
     height: 100%;

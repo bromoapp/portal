@@ -1,17 +1,17 @@
 <template>
     <div v-if="visible">
         <div class="panel accordion">
-            <div class="panel-heading accordion-header bg-37474f-d" v-on:click="addFriend">
+            <div class="panel-heading accordion-header bg-37474f-d" v-on:click="seekFriend">
                 Friends
-                <a title="Add friend" href="javascript:" style="color: white" class="btn">
+                <a href="javascript:" style="color: white" class="btn">
                     <i id="header_btn" class="fa fa-chevron-down"></i>
                 </a>
             </div>
-            <div v-if="form_visible" id="add_friend" class="bg-212121-s slide-in">
+            <div v-if="form_visible" id="seek_friend" class="bg-212121-s slide-in">
                 <div style="margin-left: 15px">
-                    <span style="color: white">New friend:</span>
+                    <span style="color: white">Search:</span>
                     <div class="form-inline">
-                        <input id="friend_email" class="form-control" type="text" placeholder="Email">
+                        <input id="search_args" class="form-control" type="text" placeholder="Name or email">
                         <a title="Invite" class="btn bg-1976D2-d">
                             <i class="fa fa-search"></i>
                         </a>
@@ -54,9 +54,9 @@ export default {
         onClickFriend(friend) {
             this.$events.$emit("switch_friend_detail", friend)            
         },
-        addFriend() {
+        seekFriend() {
             if (this.form_visible) {
-                let div = document.getElementById("add_friend")
+                let div = document.getElementById("seek_friend")
                 div.style.maxHeight = "0px"
                 div.style.padding = "10px"
                 setTimeout(() => {
@@ -68,7 +68,7 @@ export default {
             } else {
                 this.form_visible = true
                 setTimeout(() => {
-                    let div = document.getElementById("add_friend")
+                    let div = document.getElementById("seek_friend")
                     div.style.maxHeight = "80px"
                     div.style.padding = "10px"
 

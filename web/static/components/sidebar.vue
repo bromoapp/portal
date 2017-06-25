@@ -154,6 +154,11 @@ export default {
             }
         }
     },
+    created() {
+        this.$events.$on("switch_settings", () => {
+            alert()
+        })
+    },
     mounted() {
         btnSignout = document.getElementById("btn_signout")
         btnChannels = document.getElementById("btn_channels")

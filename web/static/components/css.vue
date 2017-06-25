@@ -127,7 +127,6 @@ export default {
     display: block;
     width: 100%;
     text-align: left;
-    margin-left: 8px;
     top: 225px;
 }
 
@@ -137,10 +136,6 @@ export default {
     border-radius: 3px;
     font-size: 18px;
     padding: 5px;
-}
-
-.video-cam {
-    margin: 50px 1px 0px 1px;
 }
 
 @media screen and (max-height: 450px) {

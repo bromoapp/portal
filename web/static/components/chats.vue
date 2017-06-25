@@ -1,17 +1,17 @@
 <template>
     <div v-if="visible">
         <div class="panel accordion">
-            <div class="panel-heading accordion-header bg-37474f-d" v-on:click="addChat">
+            <div class="panel-heading accordion-header bg-37474f-d" v-on:click="seekChat">
                 Chats
                 <a title="Add chats" href="javascript:" style="color: white" class="btn">
                     <i id="header_btn" class="fa fa-chevron-down"></i>
                 </a>
             </div>
-            <div v-if="form_visible" id="seek_friend" class="bg-212121-s slide-in">
+            <div v-if="form_visible" id="seek_chat" class="bg-212121-s slide-in">
                 <div style="margin-left: 15px">
-                    <span style="color: white">New chat:</span>
+                    <span style="color: white">Search:</span>
                     <div class="form-inline">
-                        <input id="friend_name" class="form-control" type="text" placeholder="Name">
+                        <input id="search_args" class="form-control" type="text" placeholder="Name or email">
                         <a title="Search" class="btn bg-1976D2-d">
                             <i class="fa fa-search"></i>
                         </a>
@@ -45,9 +45,9 @@ export default {
         }
     },
     methods: {
-        addChat() {
+        seekChat() {
             if (this.form_visible) {
-                let div = document.getElementById("seek_friend")
+                let div = document.getElementById("seek_chat")
                 div.style.maxHeight = "0px"
                 div.style.padding = "10px"
                 setTimeout(() => {
@@ -59,7 +59,7 @@ export default {
             } else {
                 this.form_visible = true
                 setTimeout(() => {
-                    let div = document.getElementById("seek_friend")
+                    let div = document.getElementById("seek_chat")
                     div.style.maxHeight = "80px"
                     div.style.padding = "10px"
 

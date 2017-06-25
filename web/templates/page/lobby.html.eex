@@ -1,7 +1,7 @@
 <%= if @current_user do %>
 <%= content_tag :div, id: "lobby_div", data: [username: @current_user.username] do %>
-<div id="server_conn_div">
-    <server-conn></server-conn>
+<div id="wsock_conn_div">
+    <wsock-conn></wsock-conn>
 </div>
 <div>
     <div id="sidebar_div">

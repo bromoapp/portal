@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
-import ServerConn from "../components/server_conn.vue"
+import WsockConn from "../components/wsock_conn.vue"
 import MainWindow from "../components/main_window.vue"
 import Sidebar from "../components/sidebar.vue"
 import Popup from "../components/popup.vue"
@@ -20,9 +20,9 @@ let lobby = {
     },
     init_server_conn(socket, element) {
         let username = element.getAttribute("data-username")
-        Vue.component("server-conn", ServerConn)
+        Vue.component("wsock-conn", WsockConn)
         new Vue({
-            el: "#server_conn_div",
+            el: "#wsock_conn_div",
             data() {
                 return {
                     user: username,
@@ -30,7 +30,7 @@ let lobby = {
                 }
             },
             render(createElement) {
-                return createElement(ServerConn, {})
+                return createElement(WsockConn, {})
             }
         })
     },

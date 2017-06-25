@@ -150,6 +150,7 @@ export default {
         _closeSubPanel() {
             if (this.closeCmd) {
                 this.$events.$emit(this.closeCmd)
+                this.$events.$emit("close_float_panel")
             }
         }
     },

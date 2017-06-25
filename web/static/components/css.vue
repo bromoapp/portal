@@ -39,7 +39,7 @@ export default {
     transition: 0.5s;
 }
 
-/************************** Sidebar styles **************************/
+/************************** Float panel styles **************************/
 .float-panel {
     position: fixed;
     width: 0;
@@ -62,18 +62,19 @@ export default {
     transition: 0.3s ease;
 }
 
+/************************** Friend detail panel styles **************************/
 .friend-profile {
     margin-top: 25px;
     padding: 10px; 
 }
 
-.frind-details {
-    padding: 5px; 
-}
-
 .friend-image {
     text-align: center;
     margin-bottom: 10px;
+}
+
+.frind-details {
+    padding: 5px; 
 }
 
 /************************** Sidebar styles **************************/

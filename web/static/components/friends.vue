@@ -26,7 +26,7 @@
                             <span v-if="friend.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-user"></i>
                             </span>
-                            <span v-else style="color: #1976D2" class="pull-right icon">
+                            <span v-else style="color: #000" class="pull-right icon">
                                 <i class="fa fa-user"></i>
                             </span>
                         </div>

@@ -20,9 +20,9 @@ export default {
         // Connecting to server
         this.socket.connect()
         this.proxyChannel = this.socket.channel(proxyChannelPrefix + this.user)
-        this.proxyChannel.on("initial_updates", updates => this.onInitialUpdates(updates))
-        this.proxyChannel.on("friend_online", friend => this.onFriendOnline(friend))
-        this.proxyChannel.on("friend_offline", friend => this.onFriendOffline(friend))
+        this.proxyChannel.on("initial_updates", updates => this._onInitialUpdates(updates))
+        this.proxyChannel.on("friend_online", friend => this._onFriendOnline(friend))
+        this.proxyChannel.on("friend_offline", friend => this._onFriendOffline(friend))
         this.proxyChannel.join()
             .receive("ok", () => { console.log("Succeed to join proxy ch") })
             .receive("error", () => { console.log("Failed to join proxy ch") })
@@ -46,14 +46,14 @@ export default {
         })
     },
     methods: {
-        onInitialUpdates(updates) {
+        _onInitialUpdates(updates) {
             this.$events.$emit("on_friends_list_updates", updates.friends)
         },
-        onFriendOnline(friend) {
+        _onFriendOnline(friend) {
             console.log(">>> ONLINE FRIEND = ", friend)
             this.$events.$emit("online_friend", friend)
         },
-        onFriendOffline(friend) {
+        _onFriendOffline(friend) {
             console.log(">>> OFFLINE FRIEND = ", friend)
             this.$events.$emit("offline_friend", friend)
         }

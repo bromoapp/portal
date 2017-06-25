@@ -126,6 +126,7 @@ export default {
     position: absolute;
     display: block;
     width: 100%;
+    margin-left: 8px;
     text-align: left;
     top: 225px;
 }

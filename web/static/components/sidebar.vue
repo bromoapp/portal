@@ -98,11 +98,11 @@ export default {
                 this.closeCmd = "close_friends"
             }
         },
-        openChats() {
+        openChats(friend) {
             btnChats.blur()
             if (this.closeCmd != "close_chats") {
                 this._closeSubPanel()
-                this.$events.$emit("open_chats")
+                this.$events.$emit("open_chats", friend)
                 this.closeCmd = "close_chats"
             }
         },
@@ -156,7 +156,7 @@ export default {
     },
     created() {
         this.$events.$on("start_chat", (friend) => {
-            this.openChats()
+            this.openChats(friend)
         })
     },
     mounted() {

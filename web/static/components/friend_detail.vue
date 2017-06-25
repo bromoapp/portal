@@ -1,5 +1,5 @@
 <template>
-    <div v-if="friend_detail_visible">
+    <div v-if="panel_visible">
         <div id="friend_detail_panel_window" class="float-panel bg-455A64-s">
             <span class="pull-right" style="margin: 8px 10px">
                 <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
@@ -12,7 +12,7 @@
                         <img src="/images/profile.png">
                     </div>
                 </div>
-                <div class="frind-details">
+                <div class="friend-details">
                     <div>
                         <label id="friend_name"></label>
                     </div>
@@ -42,29 +42,28 @@
 export default {
     data() {
         return {
-            currUser: null,
-            height: "55%",
+            currFriend: null,
+            height: "350px",
             maxWidth: "250px",
-            friend_detail_visible: false
+            panel_visible: false
         }
     },
     created() {
         this.$events.$on("close_float_panel", () => {
-            if (this.friend_detail_visible) {
+            if (this.panel_visible) {
                 this._close()
             }
         })
-        this.$events.$on("switch_friend_detail", (user) => {
-            console.log(">>> CUR: " + this.currUser + "; USER: " + user)
-            if (this.friend_detail_visible) {
-                if (this.currUser == user) {
+        this.$events.$on("switch_friend_detail", (friend) => {
+            if (this.panel_visible) {
+                if (this.currFriend == friend) {
                     this._close()
                 } else {
-                    this.currUser = user
+                    this.currFriend = friend
                     this._showDetails()
                 }
             } else {
-                this.currUser = user
+                this.currFriend = friend
                 this._open()
             }
         })
@@ -72,7 +71,7 @@ export default {
     methods: {
         startChat() {
             document.getElementById("btn_start_chat").blur()
-            this.$events.$emit("start_chat", this.currUser)
+            this.$events.$emit("start_chat", this.currFriend)
         },
         sendMessage() {
             document.getElementById("btn_send_msg").blur()
@@ -81,7 +80,7 @@ export default {
             document.getElementById("btn_invite_2_room").blur()
         },
         _close() {
-            this.currUser = null
+            this.currFriend = null
             let cover = document.getElementById("friend_detail_panel_cover")
             cover.style.width = this.maxWidth
 
@@ -90,12 +89,12 @@ export default {
                 panel.style.width = "0px"
                 cover.style.width = "0px"
                 setTimeout(() => {
-                    this.friend_detail_visible = false
+                    this.panel_visible = false
                 }, 300)
             }, 300)
         },
         _open() {
-            this.friend_detail_visible = true
+            this.panel_visible = true
             setTimeout(() => {
                 this._showDetails()
 
@@ -111,9 +110,9 @@ export default {
             }, 300)
         },
         _showDetails() {
-            document.getElementById("friend_name").innerHTML = this.currUser.name
+            document.getElementById("friend_name").innerHTML = this.currFriend.name
             document.getElementById("friend_status").innerHTML = "Hi, this is my status and the only status that deserve tobe appreciate by anyone here :P"
-            if (this.currUser.online) {
+            if (this.currFriend.online) {
                 document.getElementById("online_friend_buttons").style.display = "inline"
                 document.getElementById("offline_friend_buttons").style.display = "none"
             } else {

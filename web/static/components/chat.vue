@@ -1,11 +1,18 @@
 <template>
-    <div v-if="chat_dialog_visible">
+    <div v-if="panel_visible">
         <div id="chat_dialog_panel_window" class="float-panel bg-455A64-s">
             <span class="pull-right" style="margin: 8px 10px">
                 <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
                     <i class="fa fa-close"></i>
                 </a>
             </span>
+            <div class="chat-dialog">
+                <textarea class="chat-conversation" disabled></textarea>
+                <div class="form-inline">
+                    <textarea id="message" class="chat-message form-control"></textarea>
+                    <button class="btn bg-f50057-d">Send</button>
+                </div>
+            </div>
         </div>
         <div id="chat_dialog_panel_cover" class="float-panel-cover bg-455A64-s"></div>
     </div>
@@ -16,35 +23,34 @@
 export default {
     data() {
         return {
-            currUser: null,
-            height: "55%",
+            currFriend: null,
+            height: "400px",
             maxWidth: "400px",
-            chat_dialog_visible: false
+            panel_visible: false
         }
     },
     created() {
         this.$events.$on("close_float_panel", () => {
-            if (this.chat_dialog_visible) {
+            if (this.panel_visible) {
                 this._close()
             }
         })
-        this.$events.$on("switch_chat", (user) => {
-            console.log(">>> CUR: " + this.currUser + "; USER: " + user)
-            if (this.friend_detail_visible) {
-                if (this.currUser == user) {
+        this.$events.$on("switch_chat", (friend) => {
+            if (this.panel_visible) {
+                if (this.currFriend == friend) {
                     this._close()
                 } else {
-                    this.currUser = user
+                    this.currFriend = friend
                 }
             } else {
-                this.currUser = user
+                this.currFriend = friend
                 this._open()
             }
         })
     },
     methods: {
         _close() {
-            this.currUser = null
+            this.currFriend = null
             let cover = document.getElementById("chat_dialog_panel_cover")
             cover.style.width = this.maxWidth
 
@@ -53,15 +59,13 @@ export default {
                 panel.style.width = "0px"
                 cover.style.width = "0px"
                 setTimeout(() => {
-                    this.chat_dialog_visible = false
+                    this.panel_visible = false
                 }, 300)
             }, 300)
         },
         _open() {
-            this.chat_dialog_visible = true
+            this.panel_visible = true
             setTimeout(() => {
-                this._showDetails()
-
                 let panel = document.getElementById("chat_dialog_panel_window")
                 let cover = document.getElementById("chat_dialog_panel_cover")
                 panel.style.width = this.maxWidth

@@ -73,8 +73,37 @@ export default {
     margin-bottom: 10px;
 }
 
-.frind-details {
+.friend-details {
     padding: 5px; 
+}
+
+/************************** Chat dialog styles **************************/
+.chat-dialog {
+    margin-top: 25px;
+    padding: 10px;
+}
+
+.chat-conversation {
+    background: #E0E0E0;
+    min-width: 380px;
+    max-width: 380px;
+    min-height: 300px;
+    max-height: 400px;
+    color: black;
+}
+
+.chat-message {
+    min-width: 316px;
+    max-width: 316px;
+    min-height: 50px;
+    max-height: 50px;
+}
+
+.chat-dialog button {
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 50px;
+    max-height: 50px;
 }
 
 /************************** Sidebar styles **************************/

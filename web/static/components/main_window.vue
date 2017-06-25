@@ -1,5 +1,6 @@
 <template>
     <div id="main_window" class="main-window lobby-body">
+        <chat></chat>
         <friend-detail></friend-detail>
     </div>
 </template>
@@ -10,10 +11,12 @@ import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
 import FriendDetail from "./friend_detail.vue"
+import Chat from "./chat.vue"
 
 export default {
     components: {
-        FriendDetail
+        FriendDetail,
+        Chat
     },
     data() {
         return {

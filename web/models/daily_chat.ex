@@ -9,4 +9,11 @@ defmodule Portal.DailyChat do
         timestamps()
     end
 
+    def changeset(struct, params) do
+        struct
+        |> cast(params, [:messages])
+        |> foreign_key_constraint(:user_a)
+        |> foreign_key_constraint(:user_b)
+    end
+
 end

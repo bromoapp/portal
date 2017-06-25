@@ -3,7 +3,7 @@
         <div class="panel accordion">
             <div class="panel-heading accordion-header bg-37474f-d" v-on:click="addChat">
                 Chats
-                <a title="Add chats" href="javascript:" class="btn cl-f50057-d">
+                <a title="Add chats" href="javascript:" style="color: white" class="btn">
                     <i id="header_btn" class="fa fa-chevron-down"></i>
                 </a>
             </div>

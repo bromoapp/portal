@@ -118,12 +118,6 @@ export default {
     left: 8px;
 }
 
-#main {
-    transition-property: width;
-    transition: margin-left .5s;
-    padding: 20px;
-}
-
 .video-cam {
     margin: 50px 1px 0px 1px;
 }
@@ -345,12 +339,21 @@ export default {
     background-color: #455A64;
 }
 
-.cl-f50057-d {
+.cl-ffffff-d {
     transition: 0.4s ease;
     color: #fff;
 }
 
-.cl-f50057-d:hover {
+.cl-ffffff-d:hover {
     color: #f50057;
 }
+
+.cl-f50057-d {
+    color: #f50057;
+}
+
+.cl-f50057-d:hover {
+    color: #fff;
+}
+
 </style>

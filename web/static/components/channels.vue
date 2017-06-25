@@ -3,7 +3,7 @@
         <div class="panel accordion">
             <div class="panel-heading accordion-header bg-37474f-d" v-on:click="addChannel">
                 Channels
-                <a title="Add channel" href="javascript:" class="btn cl-f50057-d">
+                <a title="Add channel" href="javascript:" style="color: white" class="btn">
                     <i id="header_btn" class="fa fa-chevron-down"></i>
                 </a>
             </div>

@@ -2,7 +2,7 @@
     <div v-if="friend_detail_visible">
         <div id="friend_detail_panel_window" class="float-panel bg-455A64-s">
             <span class="pull-right" style="margin: 8px 10px">
-                <a href="javascript:" class="cl-f50057-d" v-on:click="_close">
+                <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
                     <i class="fa fa-close"></i>
                 </a>
             </span>
@@ -22,8 +22,13 @@
                     </div>
                 </div>
                 <div style="text-align: center">
-                    <button id="btn_start_chat" class="btn bg-f50057-d" v-on:click="startChat">Start Chat</button>
-                    <button id="btn_send_msg" class="btn bg-263238-d" v-on:click="sendMessage">Send Message</button>
+                    <div id="offline_friend_buttons">
+                        <button id="btn_send_msg" class="btn bg-263238-d" v-on:click="sendMessage">Send Message</button>
+                    </div>
+                    <div id="online_friend_buttons">
+                        <button id="btn_start_chat" class="btn bg-263238-d" v-on:click="startChat">Start Chat</button>
+                        <button id="btn_invite_2_room" class="btn bg-263238-d" v-on:click="inivite2Room">Invite to Room</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,6 +81,9 @@ export default {
         sendMessage() {
             document.getElementById("btn_send_msg").blur()
         },
+        inivite2Room() {
+            document.getElementById("btn_invite_2_room").blur()
+        },
         _close() {
             this.currUser = null
             let cover = document.getElementById("friend_detail_panel_cover")
@@ -110,11 +118,11 @@ export default {
             document.getElementById("friend_name").innerHTML = this.currUser.name
             document.getElementById("friend_status").innerHTML = "Hi, this is my status and the only status that deserve tobe appreciate by anyone here :P"
             if (this.currUser.online) {
-                document.getElementById("btn_start_chat").style.display = "inline"
-                document.getElementById("btn_send_msg").style.display = "none"
+                document.getElementById("online_friend_buttons").style.display = "inline"
+                document.getElementById("offline_friend_buttons").style.display = "none"
             } else {
-                document.getElementById("btn_start_chat").style.display = "none"
-                document.getElementById("btn_send_msg").style.display = "inline"
+                document.getElementById("online_friend_buttons").style.display = "none"
+                document.getElementById("offline_friend_buttons").style.display = "inline"
             }
         }
     }

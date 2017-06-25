@@ -155,8 +155,8 @@ export default {
         }
     },
     created() {
-        this.$events.$on("switch_settings", () => {
-            alert()
+        this.$events.$on("start_chat", (friend) => {
+            this.openChats()
         })
     },
     mounted() {

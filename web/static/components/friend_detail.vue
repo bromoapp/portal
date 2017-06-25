@@ -40,16 +40,11 @@
 <script>
 
 export default {
-    openPanel() {
-        alert()
-    },
     data() {
         return {
             currUser: null,
             height: "55%",
             maxWidth: "250px",
-            maxLeftMargin: this.$parent.maxLeftMargin,
-            minLeftMargin: this.$parent.minLeftMargin,
             friend_detail_visible: false
         }
     },
@@ -77,6 +72,7 @@ export default {
     methods: {
         startChat() {
             document.getElementById("btn_start_chat").blur()
+            this.$events.$emit("start_chat", this.currUser)
         },
         sendMessage() {
             document.getElementById("btn_send_msg").blur()

@@ -2,9 +2,9 @@ defmodule Portal.Invitation do
     use Portal.Web, :model
 
     schema "invitations" do
-        field :message, :string
         belongs_to :to_user, Portal.User
         belongs_to :from_user, Portal.User
+        field :message, :string
 
         timestamps()
     end

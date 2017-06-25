@@ -21,7 +21,7 @@
             <div id="friends_list" class="accordion-body">
                 <ul>
                     <li v-for="friend in friends" v-bind:key="friend">
-                        <div v-on:click="onClickFriend(friend)" class="accordion-btn bg-263238-d">
+                        <div v-on:click="onFriendClicked(friend)" class="accordion-btn bg-263238-d">
                             <span>{{ friend.name }}</span>
                             <span v-if="friend.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-user"></i>
@@ -51,7 +51,7 @@ export default {
         }
     },
     methods: {
-        onClickFriend(friend) {
+        onFriendClicked(friend) {
             this.$events.$emit("switch_friend_detail", friend)            
         },
         seekFriend() {

@@ -1,3 +1,3 @@
 defmodule Portal.Updates do
-    defstruct friends: nil
+    defstruct friends: nil, chats: nil
 end

@@ -40,20 +40,5 @@ export default {
 </script>
 
 <style>
-.overlay-buttons {
-    position: absolute;
-    display: block;
-    width: 100%;
-    text-align: left;
-    margin-left: 8px;
-    top: 225px;
-}
 
-.overlay-buttons a {
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 3px;
-    font-size: 18px;
-    padding: 5px;
-}
 </style>

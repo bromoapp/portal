@@ -122,6 +122,27 @@ export default {
     margin: 50px 1px 0px 1px;
 }
 
+.video-cam .overlay-buttons {
+    position: absolute;
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-left: 8px;
+    top: 225px;
+}
+
+.video-cam .overlay-buttons a {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    font-size: 18px;
+    padding: 5px;
+}
+
+.video-cam {
+    margin: 50px 1px 0px 1px;
+}
+
 @media screen and (max-height: 450px) {
     .sidebar {
         padding-top: 15px;

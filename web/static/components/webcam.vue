@@ -3,13 +3,13 @@
         <div>
             <video id="cam_video" autoplay="true"></video>
             <div class="overlay-buttons">
-                <a title="Settings" href="javascript:" class="cl-f50057-d" v-on:click="openSettings">
+                <a id="open_settings_btn" title="Settings" href="javascript:" class="cl-f50057-d" v-on:click="openSettings">
                     <i class="fa fa-gear"></i>
                 </a>
-                <a title="Video" href="javascript:" class="cl-f50057-d" v-on:click="switchVideo">
+                <a id="switch_video_btn" title="Video" href="javascript:" class="cl-f50057-d" v-on:click="switchVideo">
                     <i class="fa fa-video-camera"></i>
                 </a>
-                <a title="Sound" href="javascript:" class="cl-f50057-d" v-on:click="switchSound">
+                <a id="switch_sound_btn" title="Sound" href="javascript:" class="cl-f50057-d" v-on:click="switchSound">
                     <i class="fa fa-microphone"></i>
                 </a>
             </div>
@@ -37,10 +37,15 @@ export default {
     },
     methods: {
         openSettings() {
+            document.getElementById("open_settings_btn").blur()
             this.$events.$emit("switch_settings")
         },
-        switchVideo() { },
-        switchSound() { }
+        switchVideo() {
+            document.getElementById("switch_video_btn").blur()
+        },
+        switchSound() {
+            document.getElementById("switch_sound_btn").blur()
+        }
     }
 }
 </script>

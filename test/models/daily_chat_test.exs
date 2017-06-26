@@ -25,14 +25,14 @@ defmodule Portal.DailyChatTest do
         #user_b = %{id: b_id, name: b_name, username: b_username, password: b_password}
 
         # create daily chat
-        ch1 = %Chat{from: @user_a.name, message: "Hello A", time: _get_time}
-        ch2 = %Chat{from: @user_a.name, message: "Hello B how are you", time: _get_time}
-        ch3 = %Chat{from: @user_a.name, message: "I'm fine A, you?", time: _get_time}
-        ch4 = %Chat{from: @user_a.name, message: "I'm fine too thanks B", time: _get_time}
+        ch1 = %Chat{from: "B", message: "Hello A", time: _get_time}
+        ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time}
+        ch3 = %Chat{from: "B", message: "I'm fine A, you?", time: _get_time}
+        ch4 = %Chat{from: "A", message: "I'm fine too thanks B", time: _get_time}
         chats = %Chats{chats: [ch1, ch2, ch3, ch4]}
 
-        msgs = Poison.encode(chats)
-        dchat_map = %{messages: msgs}
+        text = Poison.encode!(chats)
+        dchat_map = %{messages: text}
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
         

@@ -53,11 +53,10 @@ defmodule Portal.UserProxy do
             node: node(),
             pid: self()
         }
+        OnlineUsersDb.insert(ol_user)
         Logger.info(">>> USER JOIN: #{inspect ol_user.username} IN NODE: #{inspect ol_user.node}")
 
-        OnlineUsersDb.insert(ol_user)
-
-        # 3. Send updates for user on joined
+        # 3. Send initial updates for user on joined
         updates = socket.assigns.user
             |> _get_friends_status_updates()
         
@@ -95,6 +94,11 @@ defmodule Portal.UserProxy do
         user = socket.assigns.user
         Logger.info(">>> #{inspect user.username} GOT OFFLINE FRIEND: #{inspect friend.username}")
         push socket, "friend_offline", %{id: friend.id, username: friend.username, name: friend.name, online: false}
+        {:noreply, socket}
+    end
+
+    def handle_in("p2p_msg", %{"to" => friend_uname, "msg" => message}, socket) do
+        Logger.info(">>> P2P MSG [to: #{inspect friend_uname}, msg: #{inspect message}]")
         {:noreply, socket}
     end
 

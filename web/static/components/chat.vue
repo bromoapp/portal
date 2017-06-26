@@ -10,7 +10,7 @@
                 <textarea class="chat-conversation" disabled></textarea>
                 <div class="form-inline">
                     <textarea id="message" class="chat-message form-control"></textarea>
-                    <button class="btn bg-f50057-d">Send</button>
+                    <button class="btn bg-f50057-d" v-on:click="sendMessage">Send</button>
                 </div>
             </div>
         </div>
@@ -49,6 +49,9 @@ export default {
         })
     },
     methods: {
+        sendMessage() {
+            alert()
+        },
         _close() {
             this.currFriend = null
             let cover = document.getElementById("chat_dialog_panel_cover")

@@ -12,7 +12,7 @@ defmodule Portal.WebUserController do
     end
 
     def create(conn, %{"user" => user_params}) do
-        changeset = User.register_changeset(%User{}, user_params)
+        changeset = User.create_changeset(%User{}, user_params)
 
         case Repo.insert(changeset) do
             {:ok, user} ->

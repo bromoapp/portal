@@ -11,14 +11,14 @@ defmodule Portal.DailyChatTest do
 
     test "Insert new daily chat success when all input params are correct" do
         # create user changeset for inserting a user
-        user_a_cs = User.register_changeset(%User{}, @user_a)
+        user_a_cs = User.create_changeset(%User{}, @user_a)
         assert user_a_cs.valid?
         
         user_a = Repo.insert!(user_a_cs)
         #user_a = %{id: a_id, name: a_name, username: a_username, password: a_password}
 
         # create user changeset for inserting b user
-        user_b_cs = User.register_changeset(%User{}, @user_b)
+        user_b_cs = User.create_changeset(%User{}, @user_b)
         assert user_b_cs.valid?
 
         user_b = Repo.insert!(user_b_cs)

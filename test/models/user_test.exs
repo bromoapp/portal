@@ -16,26 +16,26 @@ defmodule Portal.UserTest do
         refute changeset.valid?
     end
 
-    test "User.register_changeset returns valid == true, when all input params are correct" do
-        changeset = User.register_changeset(%User{}, @valid_input)
+    test "User.create_changeset returns valid == true, when all input params are correct" do
+        changeset = User.create_changeset(%User{}, @valid_input)
         assert changeset.valid?
 
         user = Repo.insert!(changeset)
         assert user.name == @valid_input.name
     end
 
-    test "User.register_changeset returns valid == false, when any of required param not present" do
-        changeset = User.register_changeset(%User{}, @invalid_input_no_passwd)
+    test "User.create_changeset returns valid == false, when any of required param not present" do
+        changeset = User.create_changeset(%User{}, @invalid_input_no_passwd)
         refute changeset.valid?
     end
 
-    test "User.register_changeset returns valid == false, when password less than 5 chars" do
-        changeset = User.register_changeset(%User{}, @invalid_input_passwd_less_than_6)
+    test "User.create_changeset returns valid == false, when password less than 5 chars" do
+        changeset = User.create_changeset(%User{}, @invalid_input_passwd_less_than_6)
         refute changeset.valid?
     end
 
-    test "User.register_changeset returns valid == false, when username bigger than 20 chars" do
-        changeset = User.register_changeset(%User{}, @invalid_input_uname_bigger_than_20)
+    test "User.create_changeset returns valid == false, when username bigger than 20 chars" do
+        changeset = User.create_changeset(%User{}, @invalid_input_uname_bigger_than_20)
         refute changeset.valid?
     end
     

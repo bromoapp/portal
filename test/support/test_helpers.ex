@@ -10,7 +10,7 @@ defmodule Portal.TestHelpers do
         }, attrs)
 
         %Portal.User{}
-        |> Portal.User.register_changeset(changes)
+        |> Portal.User.create_changeset(changes)
         |> Repo.insert!()
     end
 

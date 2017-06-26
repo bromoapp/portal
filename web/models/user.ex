@@ -22,7 +22,7 @@ defmodule Portal.User do
       |> unique_constraint(:username)
   end
 
-  def register_changeset(struct, params) do
+  def create_changeset(struct, params) do
       struct
       |> changeset(params)
       |> set_password_hash()

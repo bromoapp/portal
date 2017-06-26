@@ -16,4 +16,11 @@ defmodule Portal.DailyChat do
         |> foreign_key_constraint(:user_b)
     end
 
+    def update_changeset(struct, params) do
+        struct
+        |> cast(params, [:messages])
+        |> foreign_key_constraint(:user_a)
+        |> foreign_key_constraint(:user_b)
+    end
+
 end

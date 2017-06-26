@@ -54,6 +54,52 @@ defmodule Portal.DailyChatTest do
         assert dchat.user_b.id == user_b.id
     end
 
+    test "Update a daily chat success when all input params are correct", %{user_1: user_a, user_2: user_b} do
+        # create first daily chat
+        ch1 = %Chat{from: "B", message: "Hello A", time: _get_time}
+        ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time}
+        ch3 = %Chat{from: "B", message: "I'm fine A, you?", time: _get_time}
+        chats = %Chats{chats: [ch1, ch2, ch3]}
+
+        text1 = Poison.encode!(chats)
+        dchat_map = %{messages: text1}
+            |> Map.put(:user_a, user_a)
+            |> Map.put(:user_b, user_b)
+        
+        dchat_cs = DailyChat.create_changeset(%DailyChat{}, dchat_map)
+            |> put_assoc(:user_a, user_a)
+            |> put_assoc(:user_b, user_b)
+        assert dchat_cs.valid?
+        dchat = Repo.insert!(dchat_cs)
+
+        # update first daily chat
+        odchat = DailyChat
+            |> Repo.get!(dchat.id)
+        
+        old_msgs = odchat.messages
+        old_chats = Poison.decode!(old_msgs, as: %Chats{})
+
+        # check if total chats in original record is 3
+        assert length(old_chats.chats) == 3
+
+        ch4 = %Chat{from: "A", message: "I'm fine too thanks B", time: _get_time}
+        upd_chat_list = %Chats{chats: old_chats.chats ++ [ch4]}
+        text2 = Poison.encode!(upd_chat_list)
+        upd_dchat_map = %{messages: text2}
+            |> Map.put(:user_a, user_a)
+            |> Map.put(:user_b, user_b)
+
+        upd_dchat_cs = DailyChat.update_changeset(odchat, upd_dchat_map)
+        assert upd_dchat_cs.valid?
+        udchat = Repo.update!(upd_dchat_cs)
+
+        upd_msgs = udchat.messages
+        upd_chats = Poison.decode!(upd_msgs, as: %Chats{})
+
+        # check if total chats in updated record is 4
+        assert length(upd_chats.chats) == 4
+    end
+
     defp _get_time do
         {_, {hh, mm, ss}} = :calendar.local_time
         Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)

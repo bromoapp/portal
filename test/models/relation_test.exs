@@ -39,5 +39,6 @@ defmodule Portal.RelationTest do
             |> Repo.preload(:user_b)
 
         assert rel.user_a.id == user_a.id
+        assert rel.user_b.id == user_b.id
     end
 end

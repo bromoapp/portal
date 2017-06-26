@@ -13,7 +13,7 @@ defmodule Portal.User do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ :invalid) do
+  def new_changeset(struct, params \\ :invalid) do
       struct
       |> cast(params, [:name, :username, :password])
       |> validate_required([:name, :username, :password])
@@ -24,7 +24,7 @@ defmodule Portal.User do
 
   def create_changeset(struct, params) do
       struct
-      |> changeset(params)
+      |> new_changeset(params)
       |> set_password_hash()
   end
 

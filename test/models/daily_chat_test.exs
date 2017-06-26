@@ -4,12 +4,11 @@ defmodule Portal.DailyChatTest do
     alias Portal.User
     alias Portal.Chats
     alias Portal.Chat
-    require Logger
 
     @user_a %{name: "my_name_a", username: "my_username_a", password: "my_password_a"}
     @user_b %{name: "my_name_b", username: "my_username_b", password: "my_password_b"}
 
-    test "Insert new daily chat success when all input params are correct" do
+    setup do
         # create user changeset for inserting a user
         user_a_cs = User.create_changeset(%User{}, @user_a)
         assert user_a_cs.valid?
@@ -24,6 +23,10 @@ defmodule Portal.DailyChatTest do
         user_b = Repo.insert!(user_b_cs)
         #user_b = %{id: b_id, name: b_name, username: b_username, password: b_password}
 
+        {:ok, user_1: user_a, user_2: user_b}
+    end
+
+    test "Insert new daily chat success when all input params are correct", %{user_1: user_a, user_2: user_b} do
         # create daily chat
         ch1 = %Chat{from: "B", message: "Hello A", time: _get_time}
         ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time}
@@ -36,7 +39,7 @@ defmodule Portal.DailyChatTest do
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
         
-        dchat_cs = DailyChat.changeset(%DailyChat{}, dchat_map)
+        dchat_cs = DailyChat.create_changeset(%DailyChat{}, dchat_map)
             |> put_assoc(:user_a, user_a)
             |> put_assoc(:user_b, user_b)
         assert dchat_cs.valid?
@@ -51,7 +54,7 @@ defmodule Portal.DailyChatTest do
         assert dchat.user_b.id == user_b.id
     end
 
-    def _get_time do
+    defp _get_time do
         {_, {hh, mm, ss}} = :calendar.local_time
         Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)
     end

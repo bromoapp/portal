@@ -2,7 +2,6 @@ defmodule Portal.RelationTest do
     use Portal.ModelCase
     alias Portal.Relation
     alias Portal.User
-    require Logger
     
     @user_a %{name: "my_name_a", username: "my_username_a", password: "my_password_a"}
     @user_b %{name: "my_name_b", username: "my_username_b", password: "my_password_b"}
@@ -27,7 +26,7 @@ defmodule Portal.RelationTest do
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
 
-        rel_cs = Relation.changeset(%Relation{}, rel_map)
+        rel_cs = Relation.create_changeset(%Relation{}, rel_map)
             |> put_assoc(:user_a, user_a)
             |> put_assoc(:user_b, user_b)
         assert rel_cs.valid?

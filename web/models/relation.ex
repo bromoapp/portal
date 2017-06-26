@@ -9,7 +9,7 @@ defmodule Portal.Relation do
         timestamps() 
     end
 
-    def changeset(struct, params) do
+    def create_changeset(struct, params) do
         struct
         |> cast(params, [:tags])
         |> foreign_key_constraint(:user_a)

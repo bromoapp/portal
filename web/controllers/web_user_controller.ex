@@ -7,7 +7,7 @@ defmodule Portal.WebUserController do
     plug :scrub_params, "user" when action in [:create]
 
     def new(conn, _params) do
-        changeset = User.changeset(%User{})
+        changeset = User.new_changeset(%User{})
         render(conn, "new.html", changeset: changeset)
     end
 

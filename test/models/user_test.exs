@@ -12,7 +12,7 @@ defmodule Portal.UserTest do
     @invalid_input_uname_bigger_than_20    %{name: "my_name", username: "my_username_is_so_fucking_long_until_it_become_uneficient!", password: "my_password"}
 
     test "User.changeset returns valid == false, when building new user input form" do
-        changeset = User.changeset(%User{})
+        changeset = User.new_changeset(%User{})
         refute changeset.valid?
     end
 

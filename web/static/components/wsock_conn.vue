@@ -23,6 +23,7 @@ export default {
         this.proxyChannel.on("initial_updates", updates => this._onInitialUpdates(updates))
         this.proxyChannel.on("friend_online", friend => this._onFriendOnline(friend))
         this.proxyChannel.on("friend_offline", friend => this._onFriendOffline(friend))
+        this.proxyChannel.on("friend_msg", msg => this._onFriendMessage(msg))
         this.proxyChannel.join()
             .receive("ok", () => { console.log("Succeed to join proxy ch") })
             .receive("error", () => { console.log("Failed to join proxy ch") })
@@ -44,6 +45,12 @@ export default {
                 ch.leave()
             }
         })
+        this.$events.$on("send_online_p2p_msg", (friend, message) => {
+            this.proxyChannel.push("online_p2p_msg", {to: friend.username, msg: message})
+        })
+        this.$events.$on("send_offline_p2p_msg", (friend, message) => {
+            this.proxyChannel.push("offline_p2p_msg", {to: friend.username, msg: message})
+        })
     },
     methods: {
         _onInitialUpdates(updates) {
@@ -56,6 +63,10 @@ export default {
         _onFriendOffline(friend) {
             console.log(">>> OFFLINE FRIEND = ", friend)
             this.$events.$emit("offline_friend", friend)
+        },
+        _onFriendMessage(msg) {
+            console.log(">>> FRIEND MSG, FROM: " + msg.from + ", MSG: " + msg.msg)
+            this.$events.$emit("friend_msg", msg)
         }
     }
 }

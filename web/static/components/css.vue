@@ -80,7 +80,7 @@ export default {
 /************************** Chat dialog styles **************************/
 .chat-dialog {
     margin-top: 25px;
-    padding: 10px;
+    padding: 0px 10px 0px 10px;
 }
 
 .chat-conversation {
@@ -140,7 +140,7 @@ export default {
     right: 8px;
 }
 
-.toolbar {
+.sidebar-toolbar {
     width: 100%;
     position: absolute;
     top: 8px;

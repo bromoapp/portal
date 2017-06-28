@@ -2,7 +2,7 @@
     <div id="sidebar" class="sidebar bg-212121-s">
         <logout></logout>
         <div>
-            <div class="toolbar">
+            <div class="sidebar-toolbar">
                 <div class="inline">
                     <button title="Signout" id="btn_signout" class="btn bg-37474f-d" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>

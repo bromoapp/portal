@@ -46,7 +46,7 @@ defmodule Portal.UserProxy do
             online_at: :os.system_time(:milli_seconds)
         })
 
-        # 2. Insert user to db
+        # 2. Insert user to distributed db
         ol_user = %OnlineUser{
             name: user.name,
             username: user.username,
@@ -57,8 +57,9 @@ defmodule Portal.UserProxy do
         Logger.info(">>> USER JOIN: #{inspect ol_user.username} IN NODE: #{inspect ol_user.node}")
 
         # 3. Send initial updates for user on joined
-        updates = socket.assigns.user
-            |> _get_friends_status_updates()
+        {_user, updates} = {socket.assigns.user, %Updates{}}
+            |> _get_friends_status()
+            |> _get_last_chats()
         
         push socket, "initial_updates", updates
         
@@ -97,14 +98,37 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    def handle_in("p2p_msg", %{"to" => friend_uname, "msg" => message}, socket) do
-        Logger.info(">>> P2P MSG [to: #{inspect friend_uname}, msg: #{inspect message}]")
+    def handle_info({:p2p_msg, from, message}, socket) do
+        user = socket.assigns.user
+        push socket, "friend_msg", %{from: from, msg: message}
         {:noreply, socket}
     end
 
-    defp _get_friends_status_updates(user) do
+    def handle_in("online_p2p_msg", %{"to" => friend_uname, "msg" => message}, socket) do
+        user = socket.assigns.user
+        Logger.info(">>> ONLINE P2P MSG [to: #{inspect friend_uname}, msg: #{inspect message}]")
+        ol_friend = OnlineUsersDb.select(friend_uname)
+        cond do
+            ol_friend != nil ->
+                send ol_friend.pid, {:p2p_msg, user.username, message}
+            true ->
+                :ignore
+        end
+        {:noreply, socket}
+    end
+
+    def handle_in("offline_p2p_msg", %{"to" => friend_uname, "msg" => message}, socket) do
+        Logger.info(">>> OFFLINE P2P MSG [to: #{inspect friend_uname}, msg: #{inspect message}]")
+        {:noreply, socket}
+    end
+
+    defp _get_last_chats({user, struct}) do
+        {user, %Updates{struct | chats: nil}}
+    end
+
+    defp _get_friends_status({user, struct}) do
         friends = _get_friends(user)
-        %Updates{friends: friends}
+        {user, %Updates{struct | friends: friends}}
     end
 
     defp _get_friends(user) do

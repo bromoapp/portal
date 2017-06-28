@@ -7,7 +7,17 @@
                 </a>
             </span>
             <div class="chat-dialog">
-                <textarea class="chat-conversation" disabled></textarea>
+                <div>
+                    <label id="chat_to"></label>
+                </div>
+                <div>
+                    <textarea class="chat-conversation" disabled></textarea>
+                </div>
+                <div class="inline">
+                    <a href="javascript:" class="btn btn-sm bg-263238-d">Hello</a>
+                    <a href="javascript:" class="btn btn-sm bg-263238-d">Hello</a>
+                    <a href="javascript:" class="btn btn-sm bg-263238-d">Hello</a>
+                </div>
                 <div class="form-inline">
                     <textarea id="message" class="chat-message form-control"></textarea>
                     <button class="btn bg-f50057-d" v-on:click="sendMessage">Send</button>
@@ -24,7 +34,7 @@ export default {
     data() {
         return {
             currFriend: null,
-            height: "400px",
+            height: "450px",
             maxWidth: "400px",
             panel_visible: false
         }
@@ -50,7 +60,12 @@ export default {
     },
     methods: {
         sendMessage() {
-            alert()
+            let msg = document.getElementById("message").value
+            if (this.currFriend.online) {
+                this.$events.$emit("send_online_p2p_msg", this.currFriend, msg)
+            } else {
+                this.$events.$emit("send_offline_p2p_msg", this.currFriend, msg)
+            }
         },
         _close() {
             this.currFriend = null
@@ -69,6 +84,7 @@ export default {
         _open() {
             this.panel_visible = true
             setTimeout(() => {
+                document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
                 let panel = document.getElementById("chat_dialog_panel_window")
                 let cover = document.getElementById("chat_dialog_panel_cover")
                 panel.style.width = this.maxWidth

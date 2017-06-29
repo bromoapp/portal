@@ -6,13 +6,11 @@ defmodule Portal.Repo.Migrations.SpLastChats do
     BEGIN
 		DECLARE _username VARCHAR(255);
       DECLARE _friend_id, __friend_id BIGINT;
-      DECLARE _messages LONGTEXT;
       DECLARE _updated DATETIME;
       
       DROP TEMPORARY TABLE IF EXISTS temp_last_chats;
       CREATE TEMPORARY TABLE IF NOT EXISTS temp_last_chats (
-        friend_id VARCHAR(255),
-        messages LONGTEXT,
+        friend_id BIGINT,
         updated DATETIME
       );
       
@@ -30,19 +28,17 @@ defmodule Portal.Repo.Migrations.SpLastChats do
           
           BLOCK2: BEGIN
             DECLARE on_finished2 BIGINT;
-            DECLARE cur1 CURSOR FOR SELECT a.user_a_id AS 'friend_id', a.messages, a.updated_at FROM daily_chats AS a WHERE a.updated_at = (SELECT MAX(a.updated_at) FROM daily_chats AS a WHERE a.user_a_id = _friend_id AND a.user_b_id = uid);
+            DECLARE cur1 CURSOR FOR SELECT a.user_a_id AS 'friend_id', a.updated_at FROM daily_chats AS a WHERE a.updated_at = (SELECT MAX(a.updated_at) FROM daily_chats AS a WHERE a.user_a_id = _friend_id AND a.user_b_id = uid);
             DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished2 = 1;
             
             OPEN cur1;
             loop2 : LOOP
-              FETCH cur1 INTO __friend_id, _messages, _updated;
+              FETCH cur1 INTO __friend_id, _updated;
               IF on_finished2 = 1 THEN
                 LEAVE loop2;
               END IF;
-              
-              SELECT b.username INTO _username FROM users AS b WHERE b.id = __friend_id;
-            
-              INSERT INTO temp_last_chats(friend_id, messages, updated) VALUES (_username, _messages, _updated);
+                          
+              INSERT INTO temp_last_chats(friend_id, updated) VALUES (__friend_id, _updated);
             END LOOP loop2;
             CLOSE cur1;
           END BLOCK2;
@@ -65,19 +61,17 @@ defmodule Portal.Repo.Migrations.SpLastChats do
           
           BLOCK4: BEGIN
             DECLARE on_finished4 BIGINT;
-            DECLARE cur3 CURSOR FOR SELECT a.user_b_id AS 'friend_id', a.messages, a.updated_at FROM daily_chats AS a WHERE a.updated_at = (SELECT MAX(a.updated_at) FROM daily_chats AS a WHERE a.user_b_id = _friend_id AND a.user_a_id = uid);
+            DECLARE cur3 CURSOR FOR SELECT a.user_b_id AS 'friend_id', a.updated_at FROM daily_chats AS a WHERE a.updated_at = (SELECT MAX(a.updated_at) FROM daily_chats AS a WHERE a.user_b_id = _friend_id AND a.user_a_id = uid);
             DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished4 = 1;
             
             OPEN cur3;
             loop4 : LOOP
-              FETCH cur3 INTO __friend_id, _messages, _updated;
+              FETCH cur3 INTO __friend_id, _updated;
               IF on_finished4 = 1 THEN
                 LEAVE loop4;
               END IF;
-              
-              SELECT b.username INTO _username FROM users AS b WHERE b.id = __friend_id;
-            
-              INSERT INTO temp_last_chats(friend_id, messages, updated) VALUES (_username, _messages, _updated);
+                          
+              INSERT INTO temp_last_chats(friend_id, updated) VALUES (__friend_id, _updated);
             END LOOP loop4;
             CLOSE cur3;
           END BLOCK4;

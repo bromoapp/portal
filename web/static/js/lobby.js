@@ -1,27 +1,39 @@
+import loki from 'lokijs'
 import Vue from 'vue'
 import VueEvents from 'vue-events'
 Vue.use(VueEvents)
 
+import Database from "../components/database.vue"
 import WsockConn from "../components/wsock_conn.vue"
 import MainWindow from "../components/main_window.vue"
 import Sidebar from "../components/sidebar.vue"
 import Popup from "../components/popup.vue"
-
-import loki from 'lokijs'
-
-let db = new loki('mydb.json')
 
 let lobby = {
     init(socket, element) {
         if (!element) {
             return
         } else {
-            var children = db.addCollection('children')
+            this.init_database()
             this.init_server_conn(socket, element)
             this.init_popup()
             this.init_sideBar()
             this.init_mainWindow()
         }
+    },
+    init_database() {
+        Vue.component("database", Database)
+        new Vue({
+            el: "#database_div",
+            data() {
+                return {
+                    db: new loki('portaldb.json')
+                }
+            },
+            render(createElement) {
+                return createElement(Database, {})
+            }
+        })
     },
     init_server_conn(socket, element) {
         let username = element.getAttribute("data-username")

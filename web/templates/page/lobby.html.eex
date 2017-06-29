@@ -3,6 +3,9 @@
 <div id="wsock_conn_div">
     <wsock-conn></wsock-conn>
 </div>
+<div id="database_div">
+    <database></database>
+</div>
 <div>
     <div id="sidebar_div">
         <sidebar></sidebar>

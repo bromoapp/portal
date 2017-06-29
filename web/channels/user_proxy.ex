@@ -16,7 +16,7 @@ defmodule Portal.UserProxy do
         #Logger.info(">>> USER LEFT: #{inspect user.username} IN NODE: #{inspect node()}")
         
         # 1. Inform user's friends that he/she is offline
-        _get_friends(user) |>
+        _get_friends_list(user) |>
             Enum.each(fn(friend) ->
                 cond do
                     friend.online == true ->

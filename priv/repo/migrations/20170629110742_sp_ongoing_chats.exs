@@ -2,7 +2,7 @@ defmodule Portal.Repo.Migrations.SpLastChats do
   use Ecto.Migration
 
   def up do
-    execute "CREATE PROCEDURE `sp_last_chats`(IN `uid` BIGINT)
+    execute "CREATE PROCEDURE `sp_ongoing_chats`(IN `uid` BIGINT)
     BEGIN
 		DECLARE _username VARCHAR(255);
       DECLARE _friend_id, __friend_id BIGINT;
@@ -91,6 +91,6 @@ defmodule Portal.Repo.Migrations.SpLastChats do
   end
 
   def down do
-    execute "DROP PROCEDURE IF EXISTS `sp_last_chats`;"
+    execute "DROP PROCEDURE IF EXISTS `sp_ongoing_chats`;"
   end
 end

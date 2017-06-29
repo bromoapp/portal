@@ -7,11 +7,16 @@ import MainWindow from "../components/main_window.vue"
 import Sidebar from "../components/sidebar.vue"
 import Popup from "../components/popup.vue"
 
+import loki from 'lokijs'
+
+let db = new loki('mydb.json')
+
 let lobby = {
     init(socket, element) {
         if (!element) {
             return
         } else {
+            var children = db.addCollection('children')
             this.init_server_conn(socket, element)
             this.init_popup()
             this.init_sideBar()

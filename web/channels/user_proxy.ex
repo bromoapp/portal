@@ -58,8 +58,8 @@ defmodule Portal.UserProxy do
 
         # 3. Send initial updates for user on joined
         {_user, updates} = {socket.assigns.user, %Updates{}}
-            |> _get_friends()
-            |> _get_chats()
+            |> _get_friends_list()
+            |> _get_ongoing_chats()
         
         push socket, "initial_updates", updates
         
@@ -122,8 +122,8 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    defp _get_chats({user, struct}) do
-        sql = "CALL `sp_last_chats`(?)"
+    defp _get_ongoing_chats({user, struct}) do
+        sql = "CALL `sp_ongoing_chats`(?)"
         %Mariaex.Result{rows: rows} = Ecto.Adapters.SQL.query!(Repo, sql, [user.id])
         chats = _parse_chats(rows, [])
         {user, %Updates{struct | chats: chats}}
@@ -141,7 +141,7 @@ defmodule Portal.UserProxy do
         _parse_chats(t, nresult)
     end
 
-    defp _get_friends({user, struct}) do
+    defp _get_friends_list({user, struct}) do
         sql_1 = "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
         %Mariaex.Result{rows: rows1} = Ecto.Adapters.SQL.query!(Repo, sql_1, [user.id])
         friends = _parse_friends(rows1, [])

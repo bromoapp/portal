@@ -16,7 +16,8 @@ defmodule Portal.UserProxy do
         #Logger.info(">>> USER LEFT: #{inspect user.username} IN NODE: #{inspect node()}")
         
         # 1. Inform user's friends that he/she is offline
-        _get_friends_list(user) |>
+        {_user, updates} = _get_friends_list({user, %Updates{}})
+        updates.friends |>
             Enum.each(fn(friend) ->
                 cond do
                     friend.online == true ->
@@ -135,9 +136,9 @@ defmodule Portal.UserProxy do
 
     defp _parse_chats([h|t], result) do
         Logger.info(">>> CHAT: #{inspect h}")
-        [friend_uname, chats, {{yy, mm, dd},_time}] = h
+        [friend_id, {{yy, mm, dd},_time}] = h
         date = Integer.to_string(dd) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(yy)
-        nresult = result ++ [%{uname: friend_uname, chats: chats, date: date}]
+        nresult = result ++ [%{friend_id: friend_id, date: date}]
         _parse_chats(t, nresult)
     end
 

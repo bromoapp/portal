@@ -39,7 +39,7 @@ defmodule Portal.DailyChatTest do
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
         
-        dchat_cs = DailyChat.create_changeset(%DailyChat{}, dchat_map)
+        dchat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, dchat_map)
             |> put_assoc(:user_a, user_a)
             |> put_assoc(:user_b, user_b)
         assert dchat_cs.valid?
@@ -66,7 +66,7 @@ defmodule Portal.DailyChatTest do
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
         
-        dchat_cs = DailyChat.create_changeset(%DailyChat{}, dchat_map)
+        dchat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, dchat_map)
             |> put_assoc(:user_a, user_a)
             |> put_assoc(:user_b, user_b)
         assert dchat_cs.valid?
@@ -89,7 +89,7 @@ defmodule Portal.DailyChatTest do
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
 
-        upd_dchat_cs = DailyChat.update_changeset(odchat, upd_dchat_map)
+        upd_dchat_cs = DailyChat.create_or_update_changeset(odchat, upd_dchat_map)
         assert upd_dchat_cs.valid?
         udchat = Repo.update!(upd_dchat_cs)
 

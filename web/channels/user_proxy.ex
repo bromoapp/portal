@@ -58,8 +58,8 @@ defmodule Portal.UserProxy do
 
         # 3. Send initial updates for user on joined
         {_user, updates} = {socket.assigns.user, %Updates{}}
-            |> _get_friends_status()
-            |> _get_last_chats()
+            |> _get_friends()
+            |> _get_chats()
         
         push socket, "initial_updates", updates
         
@@ -122,26 +122,35 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    defp _get_last_chats({user, struct}) do
+    defp _get_chats({user, struct}) do
         sql = "CALL `sp_last_chats`(?)"
         %Mariaex.Result{rows: rows} = Ecto.Adapters.SQL.query!(Repo, sql, [user.id])
-        Logger.info(">>> LAST CHATS: #{inspect rows}")
-        {user, %Updates{struct | chats: nil}}
+        chats = _parse_chats(rows, [])
+        {user, %Updates{struct | chats: chats}}
     end
 
-    defp _get_friends_status({user, struct}) do
-        friends = _get_friends(user)
-        {user, %Updates{struct | friends: friends}}
+    defp _parse_chats([], result) do
+        result
     end
 
-    defp _get_friends(user) do
+    defp _parse_chats([h|t], result) do
+        Logger.info(">>> CHAT: #{inspect h}")
+        [friend_uname, chats, {{yy, mm, dd},_time}] = h
+        date = Integer.to_string(dd) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(yy)
+        nresult = result ++ [%{uname: friend_uname, chats: chats, date: date}]
+        _parse_chats(t, nresult)
+    end
+
+    defp _get_friends({user, struct}) do
         sql_1 = "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
         %Mariaex.Result{rows: rows1} = Ecto.Adapters.SQL.query!(Repo, sql_1, [user.id])
         friends = _parse_friends(rows1, [])
 
         sql_2 = "SELECT a.user_a_id AS 'id' FROM relations AS a WHERE a.user_b_id = ?"
         %Mariaex.Result{rows: rows2} = Ecto.Adapters.SQL.query!(Repo, sql_2, [user.id])
-        _parse_friends(rows2, friends)
+        friends = _parse_friends(rows2, friends)
+
+        {user, %Updates{struct | friends: friends}}
     end
 
     defp _parse_friends([], result) do

@@ -100,8 +100,8 @@ export default {
                 this.form_visible = false
             }, 300)
         })
-        this.$events.$on("on_friends_list_updates", (friends) => {
-            this.friends = friends
+        this.$events.$on("on_friends_list_updates", (updates) => {
+            this.friends = updates.friends
         })
         this.$events.$on("online_friend", (friend) => {
             for (let x = 0; x < this.friends.length; x++) {

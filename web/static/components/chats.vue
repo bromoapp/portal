@@ -98,8 +98,8 @@ export default {
                 this.form_visible = false
             }, 300)
         })
-        this.$events.$on("on_chats_list_updates", (chats) => {
-            this.chats = chats
+        this.$events.$on("on_chats_list_updates", (updates) => {
+            this.chats = updates.chats
         })
     }
 }

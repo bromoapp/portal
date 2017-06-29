@@ -54,7 +54,9 @@ export default {
     },
     methods: {
         _onInitialUpdates(updates) {
-            this.$events.$emit("on_friends_list_updates", updates.friends)
+            console.log(">>> UPDATES: ", updates)
+            this.$events.$emit("on_friends_list_updates", updates)
+            this.$events.$emit("on_chats_list_updates", updates)
         },
         _onFriendOnline(friend) {
             console.log(">>> ONLINE FRIEND = ", friend)

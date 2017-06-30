@@ -2,10 +2,7 @@ defmodule Portal.ApiChatView do
     use Portal.Web, :view
 
     def render("chats.json", %{chats: chats}) do
-        %{
-            date: "nil",
-            chats: []
-        }
+        Poison.decode!(chats)
     end
 
     def render("error.json", %{error: message}) do

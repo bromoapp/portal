@@ -39,11 +39,12 @@ defmodule Portal.Router do
     scope "/api", Portal do
         pipe_through [:api, :authenticated]
 
-        get "/chats", ApiChatController, :latest
-        get "/chats/on", ApiChatController, :chats_on
+        post "/chats/latest", ApiChatController, :latest
+        post "/chats/ongoing", ApiChatController, :ongoing
         get "/unauthorized", ApiUnauthorizedController, :show
-        
-        resources "/users", ApiUserController, only: [:show, :update]
+        get "/user/show", ApiUserController, :show
+
+        put "/user/update", ApiUserController, :update
     end
 
 end

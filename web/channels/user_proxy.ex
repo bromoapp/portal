@@ -4,6 +4,8 @@ defmodule Portal.UserProxy do
     alias Portal.Relation
     alias Portal.Updates
     alias Portal.User
+    alias Ecto.Adapters.SQL
+    alias Mariaex.Result
     require Logger
 
     def join("user_proxy:" <> username, _params, socket) do
@@ -125,7 +127,7 @@ defmodule Portal.UserProxy do
 
     defp _get_ongoing_chats({user, struct}) do
         sql = "CALL `sp_ongoing_chats`(?)"
-        %Mariaex.Result{rows: rows} = Ecto.Adapters.SQL.query!(Repo, sql, [user.id])
+        %Result{rows: rows} = SQL.query!(Repo, sql, [user.id])
         chats = _parse_chats(rows, [])
         {user, %Updates{struct | chats: chats}}
     end
@@ -144,11 +146,11 @@ defmodule Portal.UserProxy do
 
     defp _get_friends_list({user, struct}) do
         sql_1 = "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
-        %Mariaex.Result{rows: rows1} = Ecto.Adapters.SQL.query!(Repo, sql_1, [user.id])
+        %Result{rows: rows1} = SQL.query!(Repo, sql_1, [user.id])
         friends = _parse_friends(rows1, [])
 
         sql_2 = "SELECT a.user_a_id AS 'id' FROM relations AS a WHERE a.user_b_id = ?"
-        %Mariaex.Result{rows: rows2} = Ecto.Adapters.SQL.query!(Repo, sql_2, [user.id])
+        %Result{rows: rows2} = SQL.query!(Repo, sql_2, [user.id])
         friends = _parse_friends(rows2, friends)
 
         {user, %Updates{struct | friends: friends}}

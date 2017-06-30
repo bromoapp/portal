@@ -4,7 +4,7 @@ defmodule Portal.Repo.Migrations.SpLastChats do
   def up do
     execute "CREATE PROCEDURE `sp_ongoing_chats`(IN `uid` BIGINT)
     BEGIN
-		DECLARE _username VARCHAR(255);
+		  DECLARE _username VARCHAR(255);
       DECLARE _friend_id, __friend_id BIGINT;
       DECLARE _updated DATETIME;
       

@@ -11,7 +11,7 @@
                     <label id="chat_to"></label>
                 </div>
                 <div>
-                    <textarea class="chat-conversation" disabled></textarea>
+                    <div class="chat-conversation" disabled></div>
                 </div>
                 <div class="inline">
                     <a href="javascript:" class="btn btn-sm bg-263238-d">Hello</a>
@@ -51,6 +51,7 @@ export default {
                     this._close()
                 } else {
                     this.currFriend = friend
+                    document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
                 }
             } else {
                 this.currFriend = friend

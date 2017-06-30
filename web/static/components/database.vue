@@ -19,7 +19,8 @@ export default {
         // Insert or update database events handlers
         this.$events.$on("on_initial_updates", (updates) => {
             for (let n = 0; n < updates.friends.length; n++) {
-                this.tbl_friends.insert(updates.friends[n])
+                let friend = updates.friends[n]
+                this.tbl_friends.insert(friend)
             }
             this._updateFriendsList()
 
@@ -29,12 +30,18 @@ export default {
             this._updateChatsList()
         })
 
-        this.$events.$on("online_friend", (friend) => {
+        this.$events.$on("online_friend", (data) => {
+            let friend = this.tbl_friends.find({ 'id': data.id })
+            friend[0].online = true
 
+            this._updateFriendsList()
         })
 
-        this.$events.$on("offline_friend", (friend) => {
-
+        this.$events.$on("offline_friend", (data) => {
+            let friend = this.tbl_friends.find({ 'id': data.id })
+            friend[0].online = false
+            
+            this._updateFriendsList()
         })
     },
     methods: {
@@ -50,8 +57,8 @@ export default {
             })
             let chats = []
             for (let n = 0; n < raw.length; n++) {
-                let friend = this.tbl_friends.find( {'id': raw[n].friend_id} )
-                chats.push({'name': friend[0].name, 'username': friend[0].username})
+                let friend = this.tbl_friends.find({ 'id': raw[n].friend_id })
+                chats.push({ 'name': friend[0].name, 'username': friend[0].username })
             }
             this.$events.$emit("update_chats_list", chats)
         }

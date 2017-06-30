@@ -89,6 +89,7 @@ export default {
     max-width: 380px;
     min-height: 300px;
     max-height: 400px;
+    margin-bottom: 5px;
     color: black;
 }
 

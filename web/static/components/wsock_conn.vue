@@ -58,7 +58,6 @@ export default {
             this.$events.$emit("on_initial_updates", updates)
         },
         _onFriendOnline(friend) {
-            console.log(">>> ONLINE FRIEND = ", friend)
             this.$events.$emit("online_friend", friend)
         },
         _onFriendOffline(friend) {

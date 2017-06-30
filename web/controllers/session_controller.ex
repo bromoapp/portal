@@ -3,7 +3,7 @@ defmodule Portal.SessionController do
     alias Portal.Repo
     alias Portal.User
 
-    plug :is_web_req_authorized when action in [:new]
+    plug :is_web_req_authorized? when action in [:delete]
 
     def new(conn, _params) do
         render(conn, "new.html", [])
@@ -27,8 +27,8 @@ defmodule Portal.SessionController do
     def delete(conn, _args) do
         user = Guardian.Plug.current_resource(conn)
         conn
-        |> logout(user)
-        |> put_flash(:info, "See you later #{user.name}")
-        |> redirect(to: page_path(conn, :home))
+            |> logout()
+            |> put_flash(:info, "See you later #{user.name}")
+            |> redirect(to: page_path(conn, :home))
     end
 end

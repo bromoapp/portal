@@ -2,7 +2,7 @@ defmodule Portal.PageController do
     use Portal.Web, :controller
     require Logger
 
-    plug :is_web_req_authorized when action in [:home]
+    plug :is_web_req_authorized? when action in [:lobby]
 
     def to_home(conn, _params) do
         redirect(conn, to: page_path(conn, :home))

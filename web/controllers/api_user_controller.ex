@@ -2,7 +2,7 @@ defmodule Portal.ApiUserController do
     use Portal.Web, :controller
     alias Portal.User
 
-    plug :is_api_req_authorized when action in [:show, :update]
+    plug :is_api_req_authorized?
     
     def show(conn, %{"id" => id}) do
         try do

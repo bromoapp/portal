@@ -1,9 +1,7 @@
 defmodule Portal.WebUserController do
     use Portal.Web, :controller
     alias Portal.User
-    alias Portal.SessionHelper
 
-    plug :is_web_req_authorized when action in [:new]
     plug :scrub_params, "user" when action in [:create]
 
     def new(conn, _params) do
@@ -13,14 +11,17 @@ defmodule Portal.WebUserController do
 
     def create(conn, %{"user" => user_params}) do
         changeset = User.create_changeset(%User{}, user_params)
-
-        case Repo.insert(changeset) do
-            {:ok, user} ->
-                conn
-                |> SessionHelper.login(user)
-                |> redirect(to: page_path(conn, :lobby))
-            {:error, changeset} ->
-                render(conn, "new.html", changeset: changeset)
+        if changeset.valid? do
+            case Repo.insert(changeset) do
+                {:ok, user} ->
+                    conn
+                    |> login(user)
+                    |> redirect(to: page_path(conn, :lobby))
+                {:error, changeset} ->
+                    render(conn, "new.html", changeset: changeset)
+            end
+        else
+            render(conn, "new.html", changeset: changeset)
         end
     end
 

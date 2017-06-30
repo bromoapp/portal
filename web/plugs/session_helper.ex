@@ -20,16 +20,31 @@ defmodule Portal.SessionHelper do
         end
     end
 
-    def is_web_req_authorized(conn, _opts) do
+    def login(conn, user) do
+        conn
+            |> sign_in_user(user)
+            |> configure_session(renew: true)
+    end
+
+    def logout(conn) do
+        # Invalidate user session
+        conn
+            |> Guardian.Plug.sign_out()
+            |> configure_session(drop: true)
+    end
+
+    def is_web_req_authorized?(conn, _opts) do
         if conn.assigns.current_user do
             conn
-                |> redirect(to: Helpers.page_path(conn, :lobby))
         else
             conn
+                |> configure_session(drop: true)
+                |> redirect(to: Helpers.page_path(conn, :to_home))
+                |> halt
         end
     end
 
-    def is_api_req_authorized(conn, _opts) do
+    def is_api_req_authorized?(conn, _opts) do
         if conn.assigns.current_user do
             conn
         else
@@ -38,19 +53,6 @@ defmodule Portal.SessionHelper do
                 |> redirect(to: Helpers.api_unauthorized_path(conn, :show))
                 |> halt
         end
-    end
-
-    def login(conn, user) do
-        conn
-            |> sign_in_user(user)
-            |> configure_session(renew: true)
-    end
-
-    def logout(conn, user) do
-        # Invalidate user session
-        conn
-            |> Guardian.Plug.sign_out()
-            |> configure_session(drop: true)
     end
 
     defp sign_in_user(conn, user) do

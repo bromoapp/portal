@@ -12,6 +12,7 @@ defmodule Portal.ApiUserControllerTest do
         user = insert_user(@user)
         conn = build_conn()
             |> put_req_header("accept", "application/json")
+            |> assign(:current_user, user)
         {:ok, conn: conn, user: user}
     end
 

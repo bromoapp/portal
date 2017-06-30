@@ -34,6 +34,9 @@ defmodule Portal.SessionHelper do
             conn
         else
             conn
+            |> configure_session(drop: true)
+            |> redirect(to: Helpers.api_unauthorized_path(conn, :show))
+            |> halt
         end
     end
 

@@ -41,6 +41,8 @@ defmodule Portal.Router do
 
         get "/chats", ApiChatController, :latest
         get "/chats/on", ApiChatController, :chats_on
+        get "/unauthorized", ApiUnauthorizedController, :show
+        
         resources "/users", ApiUserController, only: [:show, :update]
     end
 

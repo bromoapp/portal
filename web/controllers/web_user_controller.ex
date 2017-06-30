@@ -3,7 +3,7 @@ defmodule Portal.WebUserController do
     alias Portal.User
     alias Portal.SessionHelper
 
-    plug :authorized when action in [:new]
+    plug :is_web_req_authorized when action in [:new]
     plug :scrub_params, "user" when action in [:create]
 
     def new(conn, _params) do

@@ -20,10 +20,18 @@ defmodule Portal.SessionHelper do
         end
     end
 
-    def authorized(conn, _opts) do
+    def is_web_req_authorized(conn, _opts) do
         if conn.assigns.current_user do
             conn
             |> redirect(to: Helpers.page_path(conn, :lobby))
+        else
+            conn
+        end
+    end
+
+    def is_api_req_authorized(conn, _opts) do
+        if conn.assigns.current_user do
+            conn
         else
             conn
         end

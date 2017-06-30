@@ -28,10 +28,10 @@ defmodule Portal.DailyChatTest do
 
     test "Insert new daily chat success when all input params are correct", %{user_1: user_a, user_2: user_b} do
         # create daily chat
-        ch1 = %Chat{from: "B", message: "Hello A", time: _get_time}
-        ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time}
-        ch3 = %Chat{from: "B", message: "I'm fine A, you?", time: _get_time}
-        ch4 = %Chat{from: "A", message: "I'm fine too thanks B", time: _get_time}
+        ch1 = %Chat{from: "B", message: "Hello A", time: _get_time()}
+        ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time()}
+        ch3 = %Chat{from: "B", message: "I'm fine A, you?", time: _get_time()}
+        ch4 = %Chat{from: "A", message: "I'm fine too thanks B", time: _get_time()}
         chats = %Chats{chats: [ch1, ch2, ch3, ch4]}
 
         text = Poison.encode!(chats)
@@ -56,9 +56,9 @@ defmodule Portal.DailyChatTest do
 
     test "Update a daily chat success when all input params are correct", %{user_1: user_a, user_2: user_b} do
         # create first daily chat
-        ch1 = %Chat{from: "B", message: "Hello A", time: _get_time}
-        ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time}
-        ch3 = %Chat{from: "B", message: "I'm fine A, you?", time: _get_time}
+        ch1 = %Chat{from: "B", message: "Hello A", time: _get_time()}
+        ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time()}
+        ch3 = %Chat{from: "B", message: "I'm fine A, you?", time: _get_time()}
         chats = %Chats{chats: [ch1, ch2, ch3]}
 
         text1 = Poison.encode!(chats)
@@ -82,7 +82,7 @@ defmodule Portal.DailyChatTest do
         # check if total chats in original record is 3
         assert length(old_chats.chats) == 3
 
-        ch4 = %Chat{from: "A", message: "I'm fine too thanks B", time: _get_time}
+        ch4 = %Chat{from: "A", message: "I'm fine too thanks B", time: _get_time()}
         upd_chat_list = %Chats{chats: old_chats.chats ++ [ch4]}
         text2 = Poison.encode!(upd_chat_list)
         upd_dchat_map = %{messages: text2}

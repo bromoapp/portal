@@ -3,7 +3,7 @@ defmodule Portal.SessionController do
     alias Portal.Repo
     alias Portal.User
 
-    plug :authorized when action in [:new]
+    plug :is_web_req_authorized when action in [:new]
 
     def new(conn, _params) do
         render(conn, "new.html", [])

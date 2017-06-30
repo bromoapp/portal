@@ -2,8 +2,8 @@ defmodule Portal.ApiUserController do
     use Portal.Web, :controller
     alias Portal.User
 
-    plug :authorized when action in [:show, :update]
-
+    plug :is_api_req_authorized when action in [:show, :update]
+    
     def show(conn, %{"id" => id}) do
         try do
             user = Repo.get!(User, id)

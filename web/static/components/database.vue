@@ -1,5 +1,6 @@
 <template>
-    <div></div>
+    <div>
+    </div>
 </template>
 
 <script>
@@ -14,10 +15,50 @@ export default {
     created() {
         this.tbl_friends = this.db.addCollection('friends')
         this.tbl_chats = this.db.addCollection('chats')
+
+        // Insert or update database events handlers
+        this.$events.$on("on_initial_updates", (updates) => {
+            for (let n = 0; n < updates.friends.length; n++) {
+                this.tbl_friends.insert(updates.friends[n])
+            }
+            this._updateFriendsList()
+
+            for (let n = 0; n < updates.chats.length; n++) {
+                this.tbl_chats.insert(updates.chats[n])
+            }
+            this._updateChatsList()
+        })
+
+        this.$events.$on("online_friend", (friend) => {
+
+        })
+
+        this.$events.$on("offline_friend", (friend) => {
+
+        })
+    },
+    methods: {
+        _updateFriendsList() {
+            let friends = this.tbl_friends.where((o) => {
+                return o.name != null
+            })
+            this.$events.$emit("update_friends_list", friends)
+        },
+        _updateChatsList() {
+            let raw = this.tbl_chats.where((o) => {
+                return o.friend_id > 0
+            })
+            let chats = []
+            for (let n = 0; n < raw.length; n++) {
+                let friend = this.tbl_friends.find( {'id': raw[n].friend_id} )
+                chats.push({'name': friend[0].name, 'username': friend[0].username})
+            }
+            this.$events.$emit("update_chats_list", chats)
+        }
     }
 }
 </script>
 
 <style>
-  
+
 </style>

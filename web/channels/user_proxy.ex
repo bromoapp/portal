@@ -138,7 +138,7 @@ defmodule Portal.UserProxy do
         Logger.info(">>> CHAT: #{inspect h}")
         [friend_id, {{yy, mm, dd},_time}] = h
         date = Integer.to_string(dd) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(yy)
-        nresult = result ++ [%{friend_id: friend_id, date: date}]
+        nresult = result ++ [%{friend_id: friend_id, chats: nil, date: date}]
         _parse_chats(t, nresult)
     end
 

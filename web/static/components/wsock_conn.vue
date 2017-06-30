@@ -1,5 +1,6 @@
 <template>
-    <div></div>
+    <div>
+    </div>
 </template>
 
 <script>
@@ -20,10 +21,10 @@ export default {
         // Connecting to server
         this.socket.connect()
         this.proxyChannel = this.socket.channel(proxyChannelPrefix + this.user)
-        this.proxyChannel.on("initial_updates", updates => this._onInitialUpdates(updates))
-        this.proxyChannel.on("friend_online", friend => this._onFriendOnline(friend))
-        this.proxyChannel.on("friend_offline", friend => this._onFriendOffline(friend))
-        this.proxyChannel.on("friend_msg", msg => this._onFriendMessage(msg))
+        this.proxyChannel.on("initial_updates", (updates) => { this._onInitialUpdates(updates) })
+        this.proxyChannel.on("friend_online", (friend) => { this._onFriendOnline(friend) })
+        this.proxyChannel.on("friend_offline", (friend) => { this._onFriendOffline(friend) })
+        this.proxyChannel.on("friend_msg", (msg) => { this._onFriendMessage(msg) })
         this.proxyChannel.join()
             .receive("ok", () => { console.log("Succeed to join proxy ch") })
             .receive("error", () => { console.log("Failed to join proxy ch") })
@@ -46,17 +47,15 @@ export default {
             }
         })
         this.$events.$on("send_online_p2p_msg", (friend, message) => {
-            this.proxyChannel.push("online_p2p_msg", {to: friend.username, msg: message})
+            this.proxyChannel.push("online_p2p_msg", { to: friend.username, msg: message })
         })
         this.$events.$on("send_offline_p2p_msg", (friend, message) => {
-            this.proxyChannel.push("offline_p2p_msg", {to: friend.username, msg: message})
+            this.proxyChannel.push("offline_p2p_msg", { to: friend.username, msg: message })
         })
     },
     methods: {
         _onInitialUpdates(updates) {
-            console.log(">>> UPDATES: ", updates)
-            this.$events.$emit("on_friends_list_updates", updates)
-            this.$events.$emit("on_chats_list_updates", updates)
+            this.$events.$emit("on_initial_updates", updates)
         },
         _onFriendOnline(friend) {
             console.log(">>> ONLINE FRIEND = ", friend)

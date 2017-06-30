@@ -22,7 +22,7 @@
                 <ul>
                     <li v-for="chat in chats" v-bind:key="chat">
                         <div v-on:click="onChatClicked(chat)" class="accordion-btn bg-263238-d">
-                            <span>{{ chat }}</span>
+                            <span>{{ chat.name }}</span>
                             <span class="pull-right icon">
                                 <i class="fa fa-comment"></i>
                             </span>
@@ -39,7 +39,7 @@
 export default {
     data() {
         return {
-            chats: ["Yunia Maharani", "Indra Birowo", "Aura Kasih", "Erwin Utomo"],
+            chats: [],
             visible: false,
             form_visible: false
         }
@@ -98,8 +98,8 @@ export default {
                 this.form_visible = false
             }, 300)
         })
-        this.$events.$on("on_chats_list_updates", (updates) => {
-            this.chats = updates.chats
+        this.$events.$on("update_chats_list", (chats) => {
+            this.chats = chats
         })
     }
 }

@@ -1,7 +1,8 @@
 defmodule Portal.ApiUserController do
     use Portal.Web, :controller
     alias Portal.User
-    require Logger
+
+    plug :authorized when action in [:show, :update]
 
     def show(conn, %{"id" => id}) do
         try do

@@ -32,7 +32,6 @@ defmodule Portal.SessionHelper do
     def login(conn, user) do
         conn
         |> sign_in_user(user)
-        |> Guardian.Plug.sign_in(user)
         |> configure_session(renew: true)
     end
 

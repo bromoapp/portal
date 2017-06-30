@@ -6,7 +6,7 @@ defmodule Portal.ApiUserControllerTest do
     This is an integration test for Portal.ApiUserController
     """
 
-    @user %{name: "my_name", password: "my_password"}
+    @user %{name: "my_name", username: "my_username", password: "my_password"}
     @user_updates %{name: "John Doe", username: "johndoe"}
 
     setup do

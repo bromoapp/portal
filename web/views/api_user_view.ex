@@ -1,6 +1,5 @@
 defmodule Portal.ApiUserView do
     use Portal.Web, :view
-    require Logger
 
     def render("user.json", %{user: user}) do
         %{

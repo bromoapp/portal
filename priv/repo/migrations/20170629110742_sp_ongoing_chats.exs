@@ -6,12 +6,12 @@ defmodule Portal.Repo.Migrations.SpLastChats do
     BEGIN
 		  DECLARE _username VARCHAR(255);
       DECLARE _friend_id, __friend_id BIGINT;
-      DECLARE _updated DATETIME;
+      DECLARE _rec_id BIGINT;
       
       DROP TEMPORARY TABLE IF EXISTS temp_last_chats;
       CREATE TEMPORARY TABLE IF NOT EXISTS temp_last_chats (
         friend_id BIGINT,
-        updated DATETIME
+        rec_id BIGINT
       );
       
       BLOCK1: BEGIN
@@ -28,17 +28,17 @@ defmodule Portal.Repo.Migrations.SpLastChats do
           
           BLOCK2: BEGIN
             DECLARE on_finished2 BIGINT;
-            DECLARE cur1 CURSOR FOR SELECT a.user_a_id AS 'friend_id', a.updated_at FROM daily_chats AS a WHERE a.updated_at = (SELECT MAX(a.updated_at) FROM daily_chats AS a WHERE a.user_a_id = _friend_id AND a.user_b_id = uid);
+            DECLARE cur1 CURSOR FOR SELECT a.user_a_id AS 'friend_id', a.id FROM daily_chats AS a WHERE a.user_a_id = _friend_id AND a.user_b_id = uid;
             DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished2 = 1;
             
             OPEN cur1;
             loop2 : LOOP
-              FETCH cur1 INTO __friend_id, _updated;
+              FETCH cur1 INTO __friend_id, _rec_id;
               IF on_finished2 = 1 THEN
                 LEAVE loop2;
               END IF;
                           
-              INSERT INTO temp_last_chats(friend_id, updated) VALUES (__friend_id, _updated);
+              INSERT INTO temp_last_chats(friend_id, rec_id) VALUES (__friend_id, _rec_id);
             END LOOP loop2;
             CLOSE cur1;
           END BLOCK2;
@@ -60,28 +60,18 @@ defmodule Portal.Repo.Migrations.SpLastChats do
           END IF;
 
           BLOCK4: BEGIN
-            DECLARE chk_fid BIGINT;
-            DECLARE chk_upd DATETIME;
             DECLARE on_finished4 BIGINT;
-            DECLARE cur3 CURSOR FOR SELECT a.user_b_id AS 'friend_id', a.updated_at FROM daily_chats AS a WHERE a.updated_at = (SELECT MAX(a.updated_at) FROM daily_chats AS a WHERE a.user_b_id = _friend_id AND a.user_a_id = uid);
+            DECLARE cur3 CURSOR FOR SELECT a.user_b_id AS 'friend_id', a.id FROM daily_chats AS a WHERE a.user_b_id = _friend_id AND a.user_a_id = uid;
             DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished4 = 1;
             
             OPEN cur3;
             loop4 : LOOP
-              FETCH cur3 INTO __friend_id, _updated;
+              FETCH cur3 INTO __friend_id, _rec_id;
               IF on_finished4 = 1 THEN
                 LEAVE loop4;
               END IF;
               
-              SELECT friend_id, updated INTO chk_fid, chk_upd FROM temp_last_chats WHERE friend_id = __friend_id;
-              IF chk_fid IS NULL THEN
-                INSERT INTO temp_last_chats(friend_id, updated) VALUES (__friend_id, _updated);
-              END IF;
-              IF chk_fid IS NOT NULL THEN
-                IF DATE(chk_upd) < DATE(_updated) THEN
-                  UPDATE temp_last_chats SET updated = _updated WHERE friend_id = __friend_id;
-                END IF;
-              END IF;
+              INSERT INTO temp_last_chats(friend_id, rec_id) VALUES (__friend_id, _rec_id);
             END LOOP loop4;
             CLOSE cur3;
           END BLOCK4;
@@ -90,7 +80,7 @@ defmodule Portal.Repo.Migrations.SpLastChats do
         CLOSE cur2;
       END BLOCK3;
       
-      SELECT * FROM temp_last_chats ORDER BY updated ASC;
+      SELECT * FROM temp_last_chats ORDER BY rec_id ASC;
     END"
   end
 

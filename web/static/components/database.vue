@@ -42,6 +42,19 @@ export default {
             friend[0].online = false
             this._updateFriendsList()
         })
+
+        this.$events.$on("get_chats", (data) => {
+            let chats = this.tbl_chats.find({ 'friend_id': data.id })
+            for (let n = 0; n < chats.length; n++) {
+                let chat = chats[n]
+                console.log(">>> CHAT ", chat)
+                if (chat.chats == null) {
+                    this.$events.$emit("query_chat", chat)
+                } else {
+                    this.$events.$emit("update_chat_dialog", chat)
+                }
+            }
+        })
     },
     methods: {
         _updateFriendsList() {
@@ -57,10 +70,12 @@ export default {
             let chats = []
             for (let n = 0; n < raw.length; n++) {
                 let friend = this.tbl_friends.find({ 'id': raw[n].friend_id })
-                chats.push(friend[0])
+                if (!chats.includes(friend[0])) {
+                    chats.push(friend[0])
+                }
             }
             this.$events.$emit("update_chats_list", chats)
-        }
+        },
     }
 }
 </script>

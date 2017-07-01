@@ -87,7 +87,6 @@ export default {
                     let body = document.getElementById("chats_list")
                     body.style.maxHeight = "500px"
                     if (friend && friend.target == null) {
-                        console.log(">>> SWITCH CHAT: ", friend)
                         this.$events.$emit("switch_chat", friend)
                     }
                 }, 200)
@@ -102,7 +101,6 @@ export default {
             }, 300)
         })
         this.$events.$on("update_chats_list", (friends) => {
-            console.log(">>> CHATS ", friends)
             this.friends = friends
         })
     }

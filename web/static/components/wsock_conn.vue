@@ -46,6 +46,11 @@ export default {
                 ch.leave()
             }
         })
+        this.$events.$on("query_chat", (chat) => {
+            this.proxyChannel.push("query_chat", { rec_id: chat.rec_id }).receive("ok", (resp) => {
+                console.log(">>> RESP: ", resp)
+            })
+        })
         this.$events.$on("send_online_p2p_msg", (friend, message) => {
             this.proxyChannel.push("online_p2p_msg", { to: friend.username, msg: message })
         })

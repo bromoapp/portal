@@ -52,6 +52,7 @@ export default {
                 } else {
                     this.currFriend = friend
                     document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
+                    this.$events.$emit("get_chats", this.currFriend)
                 }
             } else {
                 this.currFriend = friend

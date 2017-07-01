@@ -110,6 +110,11 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
+    def handle_in("query_chat", %{"rec_id" => rec_id}, socket) do
+        Logger.info(">>> QUERY CHAT REC ID: #{inspect rec_id}")
+        {:reply, {:ok, %{"resp" => "SUCCEED"}}, socket}
+    end
+
     def handle_in("offline_p2p_msg", %{"to" => friend_uname, "msg" => message}, socket) do
         Logger.info(">>> OFFLINE P2P MSG [to: #{inspect friend_uname}, msg: #{inspect message}]")
         {:noreply, socket}
@@ -118,6 +123,7 @@ defmodule Portal.UserProxy do
     defp _get_ongoing_chats({user, struct}) do
         sql = "CALL `sp_ongoing_chats`(?)"
         %Result{rows: rows} = SQL.query!(Repo, sql, [user.id])
+        Logger.info(">>> CHATS ROWS #{inspect rows}")
         chats = _parse_chats(rows, [])
         {user, %Updates{struct | chats: chats}}
     end
@@ -127,9 +133,8 @@ defmodule Portal.UserProxy do
     end
 
     defp _parse_chats([h|t], result) do
-        [friend_id, {{yy, mm, dd},_time}] = h
-        date = Integer.to_string(dd) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(yy)
-        nresult = result ++ [%{friend_id: friend_id, chats: nil, date: date}]
+        [friend_id, rec_id] = h
+        nresult = result ++ [%{rec_id: rec_id, friend_id: friend_id, chats: nil, date: nil}]
         _parse_chats(t, nresult)
     end
 

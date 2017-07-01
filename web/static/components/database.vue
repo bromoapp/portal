@@ -57,7 +57,7 @@ export default {
             let chats = []
             for (let n = 0; n < raw.length; n++) {
                 let friend = this.tbl_friends.find({ 'id': raw[n].friend_id })
-                chats.push({ 'name': friend[0].name, 'username': friend[0].username })
+                chats.push(friend[0])
             }
             this.$events.$emit("update_chats_list", chats)
         }

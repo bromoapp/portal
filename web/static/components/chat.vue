@@ -95,6 +95,8 @@ export default {
                 setTimeout(() => {
                     cover.style.width = "0px"
                 }, 300);
+
+                this.$events.$emit("get_chats", this.currFriend)
             }, 300)
         },
     }

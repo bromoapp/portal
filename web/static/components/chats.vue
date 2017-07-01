@@ -20,10 +20,13 @@
             </div>
             <div id="chats_list" class="accordion-body">
                 <ul>
-                    <li v-for="chat in chats" v-bind:key="chat">
-                        <div v-on:click="onChatClicked(chat)" class="accordion-btn bg-263238-d">
-                            <span>{{ chat.name }}</span>
-                            <span class="pull-right icon">
+                    <li v-for="friend in friends" v-bind:key="friend">
+                        <div v-on:click="onChatClicked(friend)" class="accordion-btn bg-263238-d">
+                            <span>{{ friend.name }}</span>
+                            <span v-if="friend.online" style="color: #ffb300" class="pull-right icon">
+                                <i class="fa fa-comment"></i>
+                            </span>
+                            <span v-else style="color: #000" class="pull-right icon">
                                 <i class="fa fa-comment"></i>
                             </span>
                         </div>
@@ -39,7 +42,7 @@
 export default {
     data() {
         return {
-            chats: [],
+            friends: [],
             visible: false,
             form_visible: false
         }
@@ -98,8 +101,9 @@ export default {
                 this.form_visible = false
             }, 300)
         })
-        this.$events.$on("update_chats_list", (chats) => {
-            this.chats = chats
+        this.$events.$on("update_chats_list", (friends) => {
+            console.log(">>> CHATS ", friends)
+            this.friends = friends
         })
     }
 }

@@ -13,5 +13,5 @@ defmodule Portal.TestHelpers do
         |> Portal.User.create_changeset(changes)
         |> Repo.insert!()
     end
-
+    
 end

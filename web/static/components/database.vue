@@ -20,14 +20,12 @@ export default {
         this.$events.$on("on_initial_updates", (updates) => {
             for (let n = 0; n < updates.friends.length; n++) {
                 let friend = updates.friends[n]
-                console.log(">>> FRIEND: ", friend)
                 this.tbl_friends.insert(friend)
             }
             this._updateFriendsList()
 
             for (let n = 0; n < updates.chats.length; n++) {
                 let chat = updates.chats[n]
-                console.log(">>> CHAT: ", chat)
                 this.tbl_chats.insert(chat)
             }
             this._updateChatsList()
@@ -54,7 +52,7 @@ export default {
         },
         _updateChatsList() {
             let raw = this.tbl_chats.where((o) => {
-                return o.friend_id > 0
+                return o.friend_id != null
             })
             let chats = []
             for (let n = 0; n < raw.length; n++) {

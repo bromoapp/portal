@@ -90,7 +90,7 @@ defmodule Portal.Repo.Migrations.SpLastChats do
         CLOSE cur2;
       END BLOCK3;
       
-      SELECT * FROM temp_last_chats ORDER BY updated DESC;
+      SELECT * FROM temp_last_chats ORDER BY updated ASC;
     END"
   end
 

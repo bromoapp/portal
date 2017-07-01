@@ -6,7 +6,7 @@ defmodule Portal.RelationTest do
     @user_a %{name: "my_name_a", username: "my_username_a", password: "my_password_a"}
     @user_b %{name: "my_name_b", username: "my_username_b", password: "my_password_b"}
 
-    test "Insert new relation success when all input params are correct" do
+    test "1. Insert new relation success when all input params are correct" do
         # create user changeset for inserting a user
         user_a_cs = User.create_changeset(%User{}, @user_a)
         assert user_a_cs.valid?

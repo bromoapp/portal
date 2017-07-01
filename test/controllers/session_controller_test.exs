@@ -15,17 +15,17 @@ defmodule Portal.SessionControllerTest do
         {:ok, conn: conn, valid_credential: valid_credential, invalid_credential: invalid_credential}
     end
 
-    test "New method returns login page form", %{conn: conn} do
+    test "1. New method returns login page form", %{conn: conn} do
         conn = get(conn, session_path(conn, :new, []))
         assert html_response(conn, 200)
     end
 
-    test "Create method returns redirect to lobby page on a valid credential", %{conn: conn, valid_credential: credential} do
+    test "2. Create method returns redirect to lobby page on a valid credential", %{conn: conn, valid_credential: credential} do
         conn = post(conn, session_path(conn, :create), credential)
         assert redirected_to(conn) == page_path(conn, :lobby)
     end
 
-    test "Create method returns error back to login page on an invalid credential", %{conn: conn, invalid_credential: credential} do
+    test "3. Create method returns error back to login page on an invalid credential", %{conn: conn, invalid_credential: credential} do
         conn = post(conn, session_path(conn, :create), credential)
         assert redirected_to(conn) == session_path(conn, :new)
     end

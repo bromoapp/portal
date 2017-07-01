@@ -2,7 +2,7 @@ defmodule Portal.ApiUserController do
     use Portal.Web, :controller
     alias Portal.User
 
-    plug :is_api_req_authorized?
+    #plug :is_api_req_authorized?
     
     def show(conn, _params) do
         user = conn.assigns.current_user

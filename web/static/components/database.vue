@@ -20,12 +20,15 @@ export default {
         this.$events.$on("on_initial_updates", (updates) => {
             for (let n = 0; n < updates.friends.length; n++) {
                 let friend = updates.friends[n]
+                console.log(">>> FRIEND: ", friend)
                 this.tbl_friends.insert(friend)
             }
             this._updateFriendsList()
 
             for (let n = 0; n < updates.chats.length; n++) {
-                this.tbl_chats.insert(updates.chats[n])
+                let chat = updates.chats[n]
+                console.log(">>> CHAT: ", chat)
+                this.tbl_chats.insert(chat)
             }
             this._updateChatsList()
         })
@@ -33,14 +36,12 @@ export default {
         this.$events.$on("online_friend", (data) => {
             let friend = this.tbl_friends.find({ 'id': data.id })
             friend[0].online = true
-
             this._updateFriendsList()
         })
 
         this.$events.$on("offline_friend", (data) => {
             let friend = this.tbl_friends.find({ 'id': data.id })
             friend[0].online = false
-            
             this._updateFriendsList()
         })
     },

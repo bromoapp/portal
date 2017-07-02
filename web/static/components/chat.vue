@@ -59,6 +59,9 @@ export default {
                 this._open()
             }
         })
+        this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => {
+            console.log(">>> CHAT: ", chat)
+        })
     },
     methods: {
         sendMessage() {

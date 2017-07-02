@@ -24,10 +24,6 @@ import login from "./login"
 import register from "./register"
 import Vue from 'vue'
 
-login.init(document.getElementById("login_form"))
-register.init(document.getElementById("register_form"))
-lobby.init(socket, document.getElementById("lobby_div"))
-
 Vue.mixin({
     data: function () {
         return {
@@ -43,6 +39,7 @@ Vue.mixin({
             get UPDATE_CHATS_LIST() { return "update_chats_list" },
             get UPDATE_CHANNELS_LIST() { return "update_channels_list" },
             get UPDATE_INVITATIONS_LIST() { return "update_invitations_list" },
+            get UPDATE_CHAT_DATA() { return "update_chat_data" },
             get UPDATE_CHAT_DIALOG() { return "update_chat_dialog" },
             get P2P_MSG_OUT() { return "p2p_msg_out" },
             get GET_CHATS() { return "get_chats" },
@@ -76,3 +73,7 @@ Vue.mixin({
         }
     }
 })
+
+login.init(document.getElementById("login_form"))
+register.init(document.getElementById("register_form"))
+lobby.init(socket, document.getElementById("lobby_div"))

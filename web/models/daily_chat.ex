@@ -2,6 +2,7 @@ defmodule Portal.DailyChat do
     use Portal.Web, :model
 
     schema "daily_chats" do
+        field :read, :boolean
         field :messages, :string
         belongs_to :user_a, Portal.User
         belongs_to :user_b, Portal.User

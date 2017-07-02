@@ -30,29 +30,35 @@ export default {
             }
             this._updateChatsList()
         })
-
         this.$events.$on(this.FRIEND_ONLINE, (data) => {
             let friend = this.tbl_friends.find({ 'id': data.id })
             friend[0].online = true
             this._updateFriendsList()
         })
-
         this.$events.$on(this.FRIEND_OFFLINE, (data) => {
             let friend = this.tbl_friends.find({ 'id': data.id })
             friend[0].online = false
             this._updateFriendsList()
         })
-
         this.$events.$on(this.GET_CHATS, (data) => {
             let chats = this.tbl_chats.find({ 'friend_id': data.id })
             for (let n = 0; n < chats.length; n++) {
                 let chat = chats[n]
-                console.log(">>> CHAT ", chat)
                 if (chat.chats == null) {
                     this.$events.$emit(this.QUERY_CHATS, chat)
                 } else {
+                    console.log(">>> GET FROM LOCAL")
                     this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                 }
+            }
+        })
+        this.$events.$on(this.UPDATE_CHAT_DATA, (data) => {
+            let chat = this.tbl_chats.find({ 'rec_id': data.id })
+            if (chat.length > 0) {
+                chat[0].chats = data.chats
+                chat[0].read = data.read
+                chat[0].date = data.date
+                this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat[0])
             }
         })
     },

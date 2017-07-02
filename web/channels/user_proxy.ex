@@ -8,12 +8,19 @@ defmodule Portal.UserProxy do
     alias Mariaex.Result
     require Logger
 
+    # Event topics
     @initial_updates "initial_updates"
     @friend_online "friend_online"
     @friend_offline "friend_offline"
     @p2p_msg_in "p2p_msg_in"
     @p2p_msg_out "p2p_msg_out"
     @query_chats "query_chats"
+
+    # SQLs
+    @sql_ongoing_chats "CALL `sp_ongoing_chats`(?)"
+    @sql_friends_list_1 "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
+    @sql_friends_list_2 "SELECT a.user_a_id AS 'id' FROM relations AS a WHERE a.user_b_id = ?"
+    @sql_query_chats "SELECT a.id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?"
 
     def join("user_proxy:" <> username, _params, socket) do
         send self(), :after_join
@@ -118,14 +125,15 @@ defmodule Portal.UserProxy do
     end
 
     def handle_in(@query_chats, %{"rec_id" => rec_id}, socket) do
-        Logger.info(">>> QUERY CHAT REC ID: #{inspect rec_id}")
-        {:reply, {:ok, %{"resp" => "SUCCEED"}}, socket}
+        %Result{rows: rows} = SQL.query!(Repo, @sql_query_chats, [rec_id])
+        [[id, messages, {{yyyy, mm, dd}, _}, read]] = rows
+        date = Integer.to_string(yyyy) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(dd)
+        json = %{id: id, date: date, chats: Poison.decode!(messages), read: read}
+        {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
     end
 
     defp _get_ongoing_chats({user, struct}) do
-        sql = "CALL `sp_ongoing_chats`(?)"
-        %Result{rows: rows} = SQL.query!(Repo, sql, [user.id])
-        Logger.info(">>> CHATS ROWS #{inspect rows}")
+        %Result{rows: rows} = SQL.query!(Repo, @sql_ongoing_chats, [user.id])
         chats = _parse_chats(rows, [])
         {user, %Updates{struct | chats: chats}}
     end
@@ -136,17 +144,15 @@ defmodule Portal.UserProxy do
 
     defp _parse_chats([h|t], result) do
         [friend_id, rec_id] = h
-        nresult = result ++ [%{rec_id: rec_id, friend_id: friend_id, chats: nil, date: nil}]
+        nresult = result ++ [%{rec_id: rec_id, friend_id: friend_id, chats: nil, date: nil, read: nil}]
         _parse_chats(t, nresult)
     end
 
     defp _get_friends_list({user, struct}) do
-        sql_1 = "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
-        %Result{rows: rows1} = SQL.query!(Repo, sql_1, [user.id])
+        %Result{rows: rows1} = SQL.query!(Repo, @sql_friends_list_1, [user.id])
         friends = _parse_friends(rows1, [])
 
-        sql_2 = "SELECT a.user_a_id AS 'id' FROM relations AS a WHERE a.user_b_id = ?"
-        %Result{rows: rows2} = SQL.query!(Repo, sql_2, [user.id])
+        %Result{rows: rows2} = SQL.query!(Repo, @sql_friends_list_2, [user.id])
         friends = _parse_friends(rows2, friends)
 
         {user, %Updates{struct | friends: friends}}

@@ -3,6 +3,7 @@ defmodule Portal.Repo.Migrations.CreateDailyChat do
 
   def change do
     create table(:daily_chats) do
+      add :read, :boolean, default: true
       add :messages, :string
       add :user_a_id, references(:users, on_delete: :nothing)
       add :user_b_id, references(:users, on_delete: :nothing)

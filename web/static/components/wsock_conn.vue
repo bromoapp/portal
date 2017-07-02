@@ -26,13 +26,13 @@ export default {
         this.proxyChannel.on(this.FRIEND_OFFLINE, (friend) => { this._onFriendOffline(friend) })
         this.proxyChannel.on(this.P2P_MSG_IN, (msg) => { this._onP2pMsgIn(msg) })
         this.proxyChannel.join()
-            .receive("ok", () => { console.log("Succeed to join proxy ch") })
-            .receive("error", () => { console.log("Failed to join proxy ch") })
+            .receive("ok", () => { /*console.log("Succeed to join proxy ch")*/ })
+            .receive("error", () => { /*console.log("Failed to join proxy ch")*/ })
 
         this.roomChannel = this.socket.channel(roomChannelPrefix + this.user)
         this.roomChannel.join()
-            .receive("ok", () => { console.log("Succeed to join room ch") })
-            .receive("error", () => { console.log("Failed to join room ch") })
+            .receive("ok", () => { /*console.log("Succeed to join room ch")*/ })
+            .receive("error", () => { /*console.log("Failed to join room ch")*/ })
 
         this.sharedChannels.push(this.roomChannel)
 
@@ -50,7 +50,7 @@ export default {
         // P2p chat events handlers
         this.$events.$on(this.QUERY_CHATS, (chat) => {
             this.proxyChannel.push(this.QUERY_CHATS, { rec_id: chat.rec_id }).receive("ok", (resp) => {
-                console.log(">>> RESP: ", resp)
+                this.$events.$emit(this.UPDATE_CHAT_DATA, resp.query_chats_resp)
             })
         })
         this.$events.$on(this.P2P_MSG_OUT, (friend, message) => {

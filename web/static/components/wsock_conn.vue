@@ -48,8 +48,8 @@ export default {
         })
 
         // P2p chat events handlers
-        this.$events.$on(this.QUERY_CHAT, (chat) => {
-            this.proxyChannel.push(this.QUERY_CHAT, { rec_id: chat.rec_id }).receive("ok", (resp) => {
+        this.$events.$on(this.QUERY_CHATS, (chat) => {
+            this.proxyChannel.push(this.QUERY_CHATS, { rec_id: chat.rec_id }).receive("ok", (resp) => {
                 console.log(">>> RESP: ", resp)
             })
         })

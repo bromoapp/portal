@@ -55,7 +55,7 @@ export default {
         }
     },
     created() {
-        this.$events.$on("pop_question", (obj) => {
+        this.$events.$on(this.POP_QUESTION, (obj) => {
             this.visible = true
             this.question = true
             this.message = obj.msg
@@ -66,12 +66,12 @@ export default {
                 this.onNo = obj.onNo
             }
         })
-        this.$events.$on("pop_info", (obj) => {
+        this.$events.$on(this.POP_INFO, (obj) => {
             this.visible = true
             this.info = true
             this.message = obj.msg
         })
-        this.$events.$on("pop_error", (obj) => {
+        this.$events.$on(this.POP_ERROR, (obj) => {
             this.visible = true
             this.error = true
             this.message = obj.msg

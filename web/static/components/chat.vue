@@ -40,19 +40,19 @@ export default {
         }
     },
     created() {
-        this.$events.$on("close_float_panel", () => {
+        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => {
             if (this.panel_visible) {
                 this._close()
             }
         })
-        this.$events.$on("switch_chat", (friend) => {
+        this.$events.$on(this.SWITCH_CHAT, (friend) => {
             if (this.panel_visible) {
                 if (this.currFriend == friend) {
                     this._close()
                 } else {
                     this.currFriend = friend
                     document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
-                    this.$events.$emit("get_chats", this.currFriend)
+                    this.$events.$emit(this.GET_CHATS, this.currFriend)
                 }
             } else {
                 this.currFriend = friend
@@ -63,11 +63,7 @@ export default {
     methods: {
         sendMessage() {
             let msg = document.getElementById("message").value
-            if (this.currFriend.online) {
-                this.$events.$emit("send_online_p2p_msg", this.currFriend, msg)
-            } else {
-                this.$events.$emit("send_offline_p2p_msg", this.currFriend, msg)
-            }
+            this.$events.$emit(this.P2P_MSG_OUT, this.currFriend, msg)
         },
         _close() {
             this.currFriend = null
@@ -97,7 +93,7 @@ export default {
                     cover.style.width = "0px"
                 }, 300);
 
-                this.$events.$emit("get_chats", this.currFriend)
+                this.$events.$emit(this.GET_CHATS, this.currFriend)
             }, 300)
         },
     }

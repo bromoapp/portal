@@ -78,40 +78,40 @@ export default {
             btnSignout.blur()
             let obj = {
                 msg: "Do you really want to exit?",
-                onYes: "sign_out"
+                onYes: this.SIGN_OUT
             }
-            this.$events.$emit("pop_question", obj)
+            this.$events.$emit(this.POP_QUESTION, obj)
         },
         openChannels() {
             btnChannels.blur()
-            if (this.closeCmd != "close_channels") {
+            if (this.closeCmd != this.CLOSE_CHANNELS) {
                 this._closeSubPanel()
-                this.$events.$emit("open_channels")
-                this.closeCmd = "close_channels"
+                this.$events.$emit(this.OPEN_CHANNELS)
+                this.closeCmd = this.CLOSE_CHANNELS
             }
         },
         openFriends() {
             btnFriends.blur()
-            if (this.closeCmd != "close_friends") {
+            if (this.closeCmd != this.CLOSE_FRIENDS) {
                 this._closeSubPanel()
-                this.$events.$emit("open_friends")
-                this.closeCmd = "close_friends"
+                this.$events.$emit(this.OPEN_FRIENDS)
+                this.closeCmd = this.CLOSE_FRIENDS
             }
         },
         openChats(friend) {
             btnChats.blur()
-            if (this.closeCmd != "close_chats") {
+            if (this.closeCmd != this.CLOSE_CHATS) {
                 this._closeSubPanel()
-                this.$events.$emit("open_chats", friend)
-                this.closeCmd = "close_chats"
+                this.$events.$emit(this.OPEN_CHATS, friend)
+                this.closeCmd = this.CLOSE_CHATS
             }
         },
         openInvitations() {
             btnInvitations.blur()
-            if (this.closeCmd != "close_invitations") {
+            if (this.closeCmd != this.CLOSE_INVITATIONS) {
                 this._closeSubPanel()
-                this.$events.$emit("open_invitations")
-                this.closeCmd = "close_invitations"
+                this.$events.$emit(this.OPEN_INVITATIONS)
+                this.closeCmd = this.CLOSE_INVITATIONS
             }
         },
         changeMode() {
@@ -122,7 +122,7 @@ export default {
             }
         },
         _close() {
-            this.$events.$emit("pull_window")
+            this.$events.$emit(this.PULL_WINDOW)
             document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-right")
@@ -135,7 +135,7 @@ export default {
             this.closed = true
         },
         _open() {
-            this.$events.$emit("push_window")
+            this.$events.$emit(this.PUSH_WINDOW)
             document.getElementById("sidebar").style.width = this.maxWidth + "px"
             document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
@@ -150,12 +150,12 @@ export default {
         _closeSubPanel() {
             if (this.closeCmd) {
                 this.$events.$emit(this.closeCmd)
-                this.$events.$emit("close_float_panel")
+                this.$events.$emit(this.CLOSE_FLOAT_PANEL)
             }
         }
     },
     created() {
-        this.$events.$on("start_chat", (friend) => {
+        this.$events.$on(this.START_CHAT, (friend) => {
             this.openChats(friend)
         })
     },

@@ -64,10 +64,10 @@ export default {
     },
     methods: {
         doCancel() {
-            this.$events.$emit("register_cancel")
+            this.$events.$emit(this.REGISTER_CANCEL)
         },
         doSubmit() {
-            this.$events.$emit("register_submit")
+            this.$events.$emit(this.REGISTER_SUBMIT)
         }
     }
 }

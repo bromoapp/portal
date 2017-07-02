@@ -6,10 +6,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueEvents from 'vue-events'
-Vue.use(VueEvents)
-
 import FriendDetail from "./friend_detail.vue"
 import Chat from "./chat.vue"
 
@@ -25,10 +21,10 @@ export default {
         }
     },
     created() {
-        this.$events.$on("push_window", () => {
+        this.$events.$on(this.PUSH_WINDOW, () => {
             this._push()
         })
-        this.$events.$on("pull_window", () => {
+        this.$events.$on(this.PULL_WINDOW, () => {
             this._pull()
         })
     },

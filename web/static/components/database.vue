@@ -17,7 +17,7 @@ export default {
         this.tbl_chats = this.db.addCollection('chats')
 
         // Insert or update database events handlers
-        this.$events.$on("on_initial_updates", (updates) => {
+        this.$events.$on(this.INITIAL_UPDATES, (updates) => {
             for (let n = 0; n < updates.friends.length; n++) {
                 let friend = updates.friends[n]
                 this.tbl_friends.insert(friend)
@@ -31,27 +31,27 @@ export default {
             this._updateChatsList()
         })
 
-        this.$events.$on("online_friend", (data) => {
+        this.$events.$on(this.FRIEND_ONLINE, (data) => {
             let friend = this.tbl_friends.find({ 'id': data.id })
             friend[0].online = true
             this._updateFriendsList()
         })
 
-        this.$events.$on("offline_friend", (data) => {
+        this.$events.$on(this.FRIEND_OFFLINE, (data) => {
             let friend = this.tbl_friends.find({ 'id': data.id })
             friend[0].online = false
             this._updateFriendsList()
         })
 
-        this.$events.$on("get_chats", (data) => {
+        this.$events.$on(this.GET_CHATS, (data) => {
             let chats = this.tbl_chats.find({ 'friend_id': data.id })
             for (let n = 0; n < chats.length; n++) {
                 let chat = chats[n]
                 console.log(">>> CHAT ", chat)
                 if (chat.chats == null) {
-                    this.$events.$emit("query_chat", chat)
+                    this.$events.$emit(this.QUERY_CHATS, chat)
                 } else {
-                    this.$events.$emit("update_chat_dialog", chat)
+                    this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                 }
             }
         })
@@ -61,7 +61,7 @@ export default {
             let friends = this.tbl_friends.where((o) => {
                 return o.name != null
             })
-            this.$events.$emit("update_friends_list", friends)
+            this.$events.$emit(this.UPDATE_FRIENDS_LIST, friends)
         },
         _updateChatsList() {
             let raw = this.tbl_chats.where((o) => {
@@ -74,7 +74,7 @@ export default {
                     chats.push(friend[0])
                 }
             }
-            this.$events.$emit("update_chats_list", chats)
+            this.$events.$emit(this.UPDATE_CHATS_LIST, chats)
         },
     }
 }

@@ -21,10 +21,10 @@ export default {
         // Connecting to server
         this.socket.connect()
         this.proxyChannel = this.socket.channel(proxyChannelPrefix + this.user)
-        this.proxyChannel.on("initial_updates", (updates) => { this._onInitialUpdates(updates) })
-        this.proxyChannel.on("friend_online", (friend) => { this._onFriendOnline(friend) })
-        this.proxyChannel.on("friend_offline", (friend) => { this._onFriendOffline(friend) })
-        this.proxyChannel.on("friend_msg", (msg) => { this._onFriendMessage(msg) })
+        this.proxyChannel.on(this.INITIAL_UPDATES, (updates) => { this._onInitialUpdates(updates) })
+        this.proxyChannel.on(this.FRIEND_ONLINE, (friend) => { this._onFriendOnline(friend) })
+        this.proxyChannel.on(this.FRIEND_OFFLINE, (friend) => { this._onFriendOffline(friend) })
+        this.proxyChannel.on(this.P2P_MSG_IN, (msg) => { this._onP2pMsgIn(msg) })
         this.proxyChannel.join()
             .receive("ok", () => { console.log("Succeed to join proxy ch") })
             .receive("error", () => { console.log("Failed to join proxy ch") })
@@ -36,8 +36,8 @@ export default {
 
         this.sharedChannels.push(this.roomChannel)
 
-        // Events handling
-        this.$events.$on("sign_out", () => {
+        // Logout event handling
+        this.$events.$on(this.SIGN_OUT, () => {
             if (this.proxyChannel) {
                 this.proxyChannel.leave()
             }
@@ -46,32 +46,30 @@ export default {
                 ch.leave()
             }
         })
-        this.$events.$on("query_chat", (chat) => {
-            this.proxyChannel.push("query_chat", { rec_id: chat.rec_id }).receive("ok", (resp) => {
+
+        // P2p chat events handlers
+        this.$events.$on(this.QUERY_CHAT, (chat) => {
+            this.proxyChannel.push(this.QUERY_CHAT, { rec_id: chat.rec_id }).receive("ok", (resp) => {
                 console.log(">>> RESP: ", resp)
             })
         })
-        this.$events.$on("send_online_p2p_msg", (friend, message) => {
-            this.proxyChannel.push("online_p2p_msg", { to: friend.username, msg: message })
-        })
-        this.$events.$on("send_offline_p2p_msg", (friend, message) => {
-            this.proxyChannel.push("offline_p2p_msg", { to: friend.username, msg: message })
+        this.$events.$on(this.P2P_MSG_OUT, (friend, message) => {
+            this.proxyChannel.push(this.P2P_MSG_OUT, { to: friend.username, msg: message })
         })
     },
     methods: {
         _onInitialUpdates(updates) {
-            this.$events.$emit("on_initial_updates", updates)
+            this.$events.$emit(this.INITIAL_UPDATES, updates)
         },
         _onFriendOnline(friend) {
-            this.$events.$emit("online_friend", friend)
+            this.$events.$emit(this.FRIEND_ONLINE, friend)
         },
         _onFriendOffline(friend) {
-            console.log(">>> OFFLINE FRIEND = ", friend)
-            this.$events.$emit("offline_friend", friend)
+            this.$events.$emit(this.FRIEND_OFFLINE, friend)
         },
-        _onFriendMessage(msg) {
+        _onP2pMsgIn(msg) {
             console.log(">>> FRIEND MSG, FROM: " + msg.from + ", MSG: " + msg.msg)
-            this.$events.$emit("friend_msg", msg)
+            this.$events.$emit(this.P2P_MSG_IN, msg)
         }
     }
 }

@@ -52,7 +52,7 @@ export default {
     },
     methods: {
         onFriendClicked(friend) {
-            this.$events.$emit("switch_friend_detail", friend)            
+            this.$events.$emit(this.SWITCH_FRIEND_DETAIL, friend)
         },
         seekFriend() {
             if (this.form_visible) {
@@ -83,7 +83,7 @@ export default {
         }
     },
     created() {
-        this.$events.$on("open_friends", () => {
+        this.$events.$on(this.OPEN_FRIENDS, () => {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
@@ -92,7 +92,7 @@ export default {
                 }, 200)
             }, 300)
         })
-        this.$events.$on("close_friends", () => {
+        this.$events.$on(this.CLOSE_FRIENDS, () => {
             let body = document.getElementById("friends_list")
             body.style.maxHeight = "0px"
             setTimeout(() => {
@@ -100,7 +100,7 @@ export default {
                 this.form_visible = false
             }, 300)
         })
-        this.$events.$on("update_friends_list", (friends) => {
+        this.$events.$on(this.UPDATE_FRIENDS_LIST, (friends) => {
             this.friends = friends
         })
     }

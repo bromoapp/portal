@@ -34,10 +34,10 @@ let register = {
                 return createElement(RegisterForm, {})
             },
             created() {
-                this.$events.$on("register_cancel", () => {
+                this.$events.$on(this.REGISTER_CANCEL, () => {
                     window.location.href = "/web"
                 })
-                this.$events.$on("register_submit", () => {
+                this.$events.$on(this.REGISTER_SUBMIT, () => {
                     form.submit()
                 })
             }

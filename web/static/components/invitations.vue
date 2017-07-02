@@ -74,7 +74,7 @@ export default {
         }
     },
     created() {
-        this.$events.$on("open_invitations", () => {
+        this.$events.$on(this.OPEN_INVITATIONS, () => {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
@@ -83,14 +83,14 @@ export default {
                 }, 200)
             }, 300)
         })
-        this.$events.$on("close_invitations", () => {
+        this.$events.$on(this.CLOSE_INVITATIONS, () => {
             let body = document.getElementById("invitations_list")
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
             }, 300)
         })
-        this.$events.$on("on_invitations_list_updates", (invitations) => {
+        this.$events.$on(this.UPDATE_INVITATIONS_LIST, (invitations) => {
             this.invitations = invitations
         })
     }

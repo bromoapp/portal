@@ -38,7 +38,6 @@
 </template>
 
 <script>
-
 export default {
     data() {
         return {
@@ -49,12 +48,12 @@ export default {
         }
     },
     created() {
-        this.$events.$on("close_float_panel", () => {
+        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => {
             if (this.panel_visible) {
                 this._close()
             }
         })
-        this.$events.$on("switch_friend_detail", (friend) => {
+        this.$events.$on(this.SWITCH_FRIEND_DETAIL, (friend) => {
             if (this.panel_visible) {
                 if (this.currFriend == friend) {
                     this._close()
@@ -71,7 +70,7 @@ export default {
     methods: {
         startChat() {
             document.getElementById("btn_start_chat").blur()
-            this.$events.$emit("start_chat", this.currFriend)
+            this.$events.$emit(this.START_CHAT, this.currFriend)
         },
         sendMessage() {
             document.getElementById("btn_send_msg").blur()

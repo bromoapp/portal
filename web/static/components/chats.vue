@@ -49,7 +49,7 @@ export default {
     },
     methods: {
         onChatClicked(friend) {
-            this.$events.$emit("switch_chat", friend)
+            this.$events.$emit(this.SWITCH_CHAT, friend)
         },
         seekChat() {
             if (this.form_visible) {
@@ -80,19 +80,19 @@ export default {
         }
     },
     created() {
-        this.$events.$on("open_chats", (friend) => {
+        this.$events.$on(this.OPEN_CHATS, (friend) => {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
                     let body = document.getElementById("chats_list")
                     body.style.maxHeight = "500px"
                     if (friend && friend.target == null) {
-                        this.$events.$emit("switch_chat", friend)
+                        this.$events.$emit(this.SWITCH_CHAT, friend)
                     }
                 }, 200)
             }, 300)
         })
-        this.$events.$on("close_chats", () => {
+        this.$events.$on(this.CLOSE_CHATS, () => {
             let body = document.getElementById("chats_list")
             body.style.maxHeight = "0px"
             setTimeout(() => {
@@ -100,7 +100,7 @@ export default {
                 this.form_visible = false
             }, 300)
         })
-        this.$events.$on("update_chats_list", (friends) => {
+        this.$events.$on(this.UPDATE_CHATS_LIST, (friends) => {
             this.friends = friends
         })
     }

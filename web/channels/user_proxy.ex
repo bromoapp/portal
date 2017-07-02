@@ -8,6 +8,13 @@ defmodule Portal.UserProxy do
     alias Mariaex.Result
     require Logger
 
+    @initial_updates "initial_updates"
+    @friend_online "friend_online"
+    @friend_offline "friend_offline"
+    @p2p_msg_in "p2p_msg_in"
+    @p2p_msg_out "p2p_msg_out"
+    @query_chats "query_chats"
+
     def join("user_proxy:" <> username, _params, socket) do
         send self(), :after_join
         {:ok, socket}
@@ -61,7 +68,7 @@ defmodule Portal.UserProxy do
             |> _get_friends_list()
             |> _get_ongoing_chats()
         
-        push socket, "initial_updates", updates
+        push socket, @initial_updates, updates
         
         # 4. Informs user's friends that he/she is online
         updates.friends |>
@@ -84,21 +91,21 @@ defmodule Portal.UserProxy do
     end
 
     def handle_info({:friend_online, friend}, socket) do
-        push socket, "friend_online", %{id: friend.id, username: friend.username, name: friend.name, online: true}
+        push socket, @friend_online, %{id: friend.id, username: friend.username, name: friend.name, online: true}
         {:noreply, socket}
     end
 
     def handle_info({:friend_offline, friend}, socket) do
-        push socket, "friend_offline", %{id: friend.id, username: friend.username, name: friend.name, online: false}
+        push socket, @friend_offline, %{id: friend.id, username: friend.username, name: friend.name, online: false}
         {:noreply, socket}
     end
 
     def handle_info({:p2p_msg, from, message}, socket) do
-        push socket, "friend_msg", %{from: from, msg: message}
+        push socket, @p2p_msg_in, %{from: from, msg: message}
         {:noreply, socket}
     end
 
-    def handle_in("online_p2p_msg", %{"to" => friend_uname, "msg" => message}, socket) do
+    def handle_in(@p2p_msg_out, %{"to" => friend_uname, "msg" => message}, socket) do
         user = socket.assigns.user
         ol_friend = OnlineUsersDb.select(friend_uname)
         cond do
@@ -110,14 +117,9 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    def handle_in("query_chat", %{"rec_id" => rec_id}, socket) do
+    def handle_in(@query_chats, %{"rec_id" => rec_id}, socket) do
         Logger.info(">>> QUERY CHAT REC ID: #{inspect rec_id}")
         {:reply, {:ok, %{"resp" => "SUCCEED"}}, socket}
-    end
-
-    def handle_in("offline_p2p_msg", %{"to" => friend_uname, "msg" => message}, socket) do
-        Logger.info(">>> OFFLINE P2P MSG [to: #{inspect friend_uname}, msg: #{inspect message}]")
-        {:noreply, socket}
     end
 
     defp _get_ongoing_chats({user, struct}) do

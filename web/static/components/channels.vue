@@ -74,7 +74,7 @@ export default {
         }
     },
     created() {
-        this.$events.$on("open_channels", () => {
+        this.$events.$on(this.OPEN_CHANNELS, () => {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
@@ -83,7 +83,7 @@ export default {
                 }, 200)
             }, 300)
         })
-        this.$events.$on("close_channels", () => {
+        this.$events.$on(this.CLOSE_CHANNELS, () => {
             let body = document.getElementById("channels_list")
             body.style.maxHeight = "0px"
             setTimeout(() => {
@@ -91,7 +91,7 @@ export default {
                 this.form_visible = false
             }, 300)
         })
-        this.$events.$on("on_channels_list_updates", (channels) => {
+        this.$events.$on(this.UPDATE_CHANNELS_LIST, (channels) => {
             this.channels = channels
         })
     }

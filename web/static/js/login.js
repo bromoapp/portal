@@ -31,10 +31,10 @@ let login = {
                 return createElement(LoginForm, {})
             },
             created() {
-                this.$events.$on("login_cancel", () => {
+                this.$events.$on(this.LOGIN_CANCEL, () => {
                     window.location.href = "/web"
                 })
-                this.$events.$on("login_submit", () => {
+                this.$events.$on(this.LOGIN_SUBMIT, () => {
                     form.submit()
                 })
             }

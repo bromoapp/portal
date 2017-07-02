@@ -14,7 +14,7 @@ export default {
         }
     },
     created() {
-        this.$events.$on("sign_out", () => {
+        this.$events.$on(this.SIGN_OUT, () => {
             this.form.submit()
         })
     },

@@ -38,7 +38,7 @@ export default {
     methods: {
         openSettings() {
             document.getElementById("open_settings_btn").blur()
-            this.$events.$emit("switch_settings")
+            this.$events.$emit(this.SWITCH_SETTINGS)
         },
         switchVideo() {
             document.getElementById("switch_video_btn").blur()

@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueEvents from 'vue-events'
-Vue.use(VueEvents)
-
 import RegisterForm from "../components/register.vue"
+
+Vue.use(VueEvents)
 
 let register = {
     init(element) {

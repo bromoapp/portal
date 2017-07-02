@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueEvents from 'vue-events'
-Vue.use(VueEvents)
-
 import LoginForm from "../components/login.vue"
+
+Vue.use(VueEvents)
 
 let login = {
     init(element) {

@@ -64,7 +64,8 @@ export default {
         })
         this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => {
             let chats = chat.chats.chats
-            let old_conv = document.getElementById("messages").innerHTML
+            let conv_div = document.getElementById("messages")
+            let old_conv = conv_div.innerHTML
             let conv = "<div>"
             conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
             for (let n = 0; n < chats.length; n++) {
@@ -77,13 +78,16 @@ export default {
             }
             conv = conv + "</div>"
             conv = old_conv + conv
-            document.getElementById("messages").innerHTML = conv
+            conv_div.innerHTML = conv
+            conv_div.scrollTop = conv_div.scrollHeight;
         })
     },
     methods: {
         sendMessage() {
-            let msg = document.getElementById("message").value
+            let msg_form = document.getElementById("message")
+            let msg = msg_form.value
             this.$events.$emit(this.P2P_MSG_OUT, this.currFriend, msg)
+            msg_form.value = ""
         },
         _close() {
             this.currFriend = null

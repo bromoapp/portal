@@ -18,8 +18,7 @@ defmodule Portal.UserProxy do
 
     # SQLs
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?)"
-    @sql_friends_list_1 "SELECT a.user_b_id AS 'id' FROM relations AS a WHERE a.user_a_id = ?"
-    @sql_friends_list_2 "SELECT a.user_a_id AS 'id' FROM relations AS a WHERE a.user_b_id = ?"
+    @sql_friends_list "CALL `sp_friends_list`(?)"
     @sql_query_chats "SELECT a.id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?"
 
     def join("user_proxy:" <> username, _params, socket) do
@@ -149,28 +148,22 @@ defmodule Portal.UserProxy do
     end
 
     defp _get_friends_list({user, struct}) do
-        %Result{rows: rows1} = SQL.query!(Repo, @sql_friends_list_1, [user.id])
-        friends = _parse_friends(rows1, [])
-
-        %Result{rows: rows2} = SQL.query!(Repo, @sql_friends_list_2, [user.id])
-        friends = _parse_friends(rows2, friends)
-
-        {user, %Updates{struct | friends: friends}}
+        %Result{rows: rows} = SQL.query!(Repo, @sql_friends_list, [user.id])
+        {user, %Updates{struct | friends: _parse_friends(rows, [])}}
     end
 
     defp _parse_friends([], result) do
         result
     end
 
-    defp _parse_friends([[id]|t], result) do
-        user = Repo.get(User, id)
-        ol_user = OnlineUsersDb.select(user.username)
+    defp _parse_friends([[id, name, username]|t], result) do
+        ol_user = OnlineUsersDb.select(username)
         cond do
             ol_user == nil ->
-                n_result = result ++ [%{id: user.id, username: user.username, name: user.name, online: false}]
+                n_result = result ++ [%{id: id, username: username, name: name, online: false}]
                 _parse_friends(t, n_result)
             true ->
-                n_result = result ++ [%{id: user.id, username: user.username, name: user.name, online: true}]
+                n_result = result ++ [%{id: id, username: username, name: name, online: true}]
                 _parse_friends(t, n_result)
         end
     end

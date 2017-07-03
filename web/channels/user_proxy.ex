@@ -119,7 +119,7 @@ defmodule Portal.UserProxy do
     def handle_in(@p2p_msg_out, %{"to" => friend_uname, "msg" => message}, socket) do
         sender = socket.assigns.user
         friend = Repo.get_by!(User, username: friend_uname)
-        ch = %Chat{from: sender.username, message: message, time: _get_time()}
+        ch = %Chat{from: sender.username, message: message, time: _format_time()}
         
         %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [sender.id, friend.id, sender.id, friend.id])
         if rows == [] do
@@ -215,7 +215,7 @@ defmodule Portal.UserProxy do
         end
     end
 
-    defp _get_time do
+    defp _format_time do
         {_, {hh, mm, ss}} = :calendar.local_time
         Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)
     end

@@ -12,7 +12,8 @@ defmodule Portal.DailyChat do
 
     def create_or_update_changeset(struct, params) do
         struct
-        |> cast(params, [:messages])
+        |> cast(params, [:read, :messages])
+        |> validate_required([:read, :messages])
         |> foreign_key_constraint(:user_a)
         |> foreign_key_constraint(:user_b)
     end

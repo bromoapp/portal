@@ -35,7 +35,7 @@ defmodule Portal.DailyChatTest do
         chats = %Chats{chats: [ch1, ch2, ch3, ch4]}
 
         text = Poison.encode!(chats)
-        dchat_map = %{messages: text}
+        dchat_map = %{read: true, messages: text}
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
         
@@ -62,7 +62,7 @@ defmodule Portal.DailyChatTest do
         chats = %Chats{chats: [ch1, ch2, ch3]}
 
         text1 = Poison.encode!(chats)
-        dchat_map = %{messages: text1}
+        dchat_map = %{read: true, messages: text1}
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
         
@@ -85,7 +85,7 @@ defmodule Portal.DailyChatTest do
         ch4 = %Chat{from: "A", message: "I'm fine too thanks B", time: _get_time()}
         upd_chat_list = %Chats{chats: old_chats.chats ++ [ch4]}
         text2 = Poison.encode!(upd_chat_list)
-        upd_dchat_map = %{messages: text2}
+        upd_dchat_map = %{read: false, messages: text2}
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
 

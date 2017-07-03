@@ -4,6 +4,10 @@ defmodule Portal.UserProxy do
     alias Portal.Relation
     alias Portal.Updates
     alias Portal.User
+    alias Portal.DailyChat
+    alias Portal.Chats
+    alias Portal.Chat
+    alias Ecto.Changeset
     alias Ecto.Adapters.SQL
     alias Mariaex.Result
     require Logger
@@ -20,6 +24,7 @@ defmodule Portal.UserProxy do
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?)"
     @sql_friends_list "CALL `sp_friends_list`(?)"
     @sql_query_chats "SELECT a.id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?"
+    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE (DATE(a.updated_at) = CURDATE()) AND ((a.user_a_id = ? AND a.user_b_id = ?) OR (a.user_b_id = ? AND a.user_a_id = ?));"
 
     def join("user_proxy:" <> username, _params, socket) do
         send self(), :after_join
@@ -112,11 +117,43 @@ defmodule Portal.UserProxy do
     end
 
     def handle_in(@p2p_msg_out, %{"to" => friend_uname, "msg" => message}, socket) do
-        user = socket.assigns.user
+        sender = socket.assigns.user
+        friend = Repo.get_by!(User, username: friend_uname)
+        ch = %Chat{from: sender.username, message: message, time: _get_time()}
+        
+        %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [sender.id, friend.id, sender.id, friend.id])
+        if rows == [] do
+            # creates new chat
+            chats = %Chats{chats: [ch]}
+            text = Poison.encode!(chats)
+            dchat_map = %{messages: text}
+                |> Map.put(:user_a, sender)
+                |> Map.put(:user_b, friend)
+            dchat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, dchat_map)
+                |> Changeset.put_assoc(:user_a, sender)
+                |> Changeset.put_assoc(:user_b, friend)
+            dchat = Repo.insert!(dchat_cs)
+        else
+            # updates existing chat
+            [[id]] = rows
+            odchat = DailyChat
+                |> Repo.get!(id)
+            old_msgs = odchat.messages
+            old_chats = Poison.decode!(old_msgs, as: %Chats{})
+            upd_chat_list = %Chats{chats: old_chats.chats ++ [ch]}
+            text = Poison.encode!(upd_chat_list)
+            upd_dchat_map = %{messages: text}
+                |> Map.put(:user_a, sender)
+                |> Map.put(:user_b, friend)
+
+            upd_dchat_cs = DailyChat.create_or_update_changeset(odchat, upd_dchat_map)
+            udchat = Repo.update!(upd_dchat_cs)
+        end
+
         ol_friend = OnlineUsersDb.select(friend_uname)
         cond do
             ol_friend != nil ->
-                send ol_friend.pid, {:p2p_msg, user.username, message}
+                send ol_friend.pid, {:p2p_msg, sender.username, message}
             true ->
                 :ignore
         end
@@ -166,5 +203,10 @@ defmodule Portal.UserProxy do
                 n_result = result ++ [%{id: id, username: username, name: name, online: true}]
                 _parse_friends(t, n_result)
         end
+    end
+
+    defp _get_time do
+        {_, {hh, mm, ss}} = :calendar.local_time
+        Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)
     end
 end

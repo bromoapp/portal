@@ -126,7 +126,7 @@ defmodule Portal.UserProxy do
             # creates new chat
             chats = %Chats{chats: [ch]}
             text = Poison.encode!(chats)
-            dchat_map = %{read: _is_friend_online(friend_uname), messages: text}
+            dchat_map = %{read: _is_friend_online?(friend_uname), messages: text}
                 |> Map.put(:user_a, sender)
                 |> Map.put(:user_b, friend)
             dchat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, dchat_map)
@@ -142,7 +142,7 @@ defmodule Portal.UserProxy do
             old_chats = Poison.decode!(old_msgs, as: %Chats{})
             upd_chat_list = %Chats{chats: old_chats.chats ++ [ch]}
             text = Poison.encode!(upd_chat_list)
-            upd_dchat_map = %{read: _is_friend_online(friend_uname), messages: text}
+            upd_dchat_map = %{read: _is_friend_online?(friend_uname), messages: text}
                 |> Map.put(:user_a, sender)
                 |> Map.put(:user_b, friend)
 

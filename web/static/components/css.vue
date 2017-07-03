@@ -1,5 +1,6 @@
 <template>
-    <div></div>
+    <div>
+    </div>
 </template>
 
 <script>
@@ -10,6 +11,7 @@ export default {
 
 <style>
 /************************** Common styles **************************/
+
 .container-lobby {
     margin-left: auto;
     margin-right: auto;
@@ -22,24 +24,33 @@ export default {
     max-width: 500px;
 }
 
+
+
 /************************** Main window styles **************************/
+
 .main-window {
     transition: 0.3s ease;
-    position: fixed; 
-    height: 100%; 
-    width: 100%; 
-    top: 0; 
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
     left: 0;
 }
 
+
+
 /************************** Webcam styles **************************/
+
 #cam_video {
     width: 280px;
     height: 210px;
     transition: 0.5s;
 }
 
+
+
 /************************** Float panel styles **************************/
+
 .float-panel {
     position: fixed;
     width: 0;
@@ -62,10 +73,13 @@ export default {
     transition: 0.3s ease;
 }
 
+
+
 /************************** Friend detail panel styles **************************/
+
 .friend-profile {
     margin-top: 25px;
-    padding: 10px; 
+    padding: 10px;
 }
 
 .friend-image {
@@ -74,23 +88,58 @@ export default {
 }
 
 .friend-details {
-    padding: 5px; 
+    padding: 5px;
 }
 
+
+
 /************************** Chat dialog styles **************************/
+
 .chat-dialog {
-    margin-top: 25px;
-    padding: 0px 10px 0px 10px;
+    margin: 6px 10px 10px 10px;
 }
 
 .chat-conversation {
-    background: #E0E0E0;
+    background: #d8d6d6;
+    width: 380px;
+    height: 300px;
     min-width: 380px;
     max-width: 380px;
     min-height: 300px;
-    max-height: 400px;
+    max-height: 300px;
     margin-bottom: 5px;
     color: black;
+    padding: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.chat-separator {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 1px solid #fff;
+    line-height: 0.1em;
+}
+
+.chat-separator span {
+    background:#d8d6d6; 
+    padding: 10px;
+}
+
+.chat-bubble {
+    border-radius: 5px;
+    border: 1px solid white;
+    background: white;
+    padding: 5px;
+}
+
+.chat-bubble-me {
+    border-radius: 5px;
+    border: 1px solid #455A64;
+    color: white;
+    background: #455A64;
+    padding: 5px;
 }
 
 .chat-message {
@@ -107,7 +156,10 @@ export default {
     max-height: 50px;
 }
 
+
+
 /************************** Sidebar styles **************************/
+
 .sidebar {
     height: 100%;
     width: 0;
@@ -178,7 +230,10 @@ export default {
     }
 }
 
+
+
 /************************** Navgroup styles **************************/
+
 .accordion {
     transition: 0.4s ease;
     border: none;
@@ -231,7 +286,10 @@ export default {
     margin-right: 20px;
 }
 
+
+
 /************************** Popup styles **************************/
+
 .popup-mask {
     position: fixed;
     z-index: 9998;
@@ -317,7 +375,10 @@ export default {
     padding: 0px 0px 0px 10px;
 }
 
+
+
 /************************** Color styles **************************/
+
 .bg-37474f-d {
     transition: 0.4s ease;
     color: white;
@@ -402,5 +463,4 @@ export default {
 .cl-f50057-d:hover {
     color: #fff;
 }
-
 </style>

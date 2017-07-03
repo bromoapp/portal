@@ -1,17 +1,19 @@
 <template>
     <div v-if="panel_visible">
         <div id="chat_dialog_panel_window" class="float-panel bg-455A64-s">
-            <span class="pull-right" style="margin: 8px 10px">
-                <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
-                    <i class="fa fa-close"></i>
-                </a>
-            </span>
             <div class="chat-dialog">
+                <div style="text-align: right">
+                    <span>
+                        <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
+                            <i class="fa fa-close"></i>
+                        </a>
+                    </span>
+                </div>
                 <div>
                     <label id="chat_to"></label>
                 </div>
                 <div>
-                    <div class="chat-conversation" disabled></div>
+                    <div id="messages" class="chat-conversation"></div>
                 </div>
                 <div class="inline">
                     <a href="javascript:" class="btn btn-sm bg-263238-d">Hello</a>
@@ -51,6 +53,7 @@ export default {
                     this._close()
                 } else {
                     this.currFriend = friend
+                    document.getElementById("messages").innerHTML = ""
                     document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
                     this.$events.$emit(this.GET_CHATS, this.currFriend)
                 }
@@ -60,7 +63,21 @@ export default {
             }
         })
         this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => {
-            console.log(">>> CHAT: ", chat)
+            let chats = chat.chats.chats
+            let old_conv = document.getElementById("messages").innerHTML
+            let conv = "<div>"
+            conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
+            for (let n = 0; n < chats.length; n++) {
+                let message = chats[n]
+                if (message.from == this.currFriend.username) {
+                    conv = conv + "<div style=\"margin-top: 15px\"><span class=\"chat-bubble\">" + message.message + "</span></div>"
+                } else {
+                    conv = conv + "<div style=\"margin-top: 15px; text-align: right\"><span class=\"chat-bubble-me\">" + message.message + "</span></div>"
+                }
+            }
+            conv = conv + "</div>"
+            conv = old_conv + conv
+            document.getElementById("messages").innerHTML = conv
         })
     },
     methods: {
@@ -104,5 +121,4 @@ export default {
 </script>
 
 <style>
-
 </style>

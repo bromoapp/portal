@@ -17,15 +17,15 @@ export default {
         this.tbl_chats = this.db.addCollection('chats')
 
         // Insert or update database events handlers
-        this.$events.$on(this.INITIAL_UPDATES, (updates) => {
-            for (let n = 0; n < updates.friends.length; n++) {
-                let friend = updates.friends[n]
+        this.$events.$on(this.INITIAL_UPDATES, (data) => {
+            for (let n = 0; n < data.friends.length; n++) {
+                let friend = data.friends[n]
                 this.tbl_friends.insert(friend)
             }
             this._updateFriendsList()
 
-            for (let n = 0; n < updates.chats.length; n++) {
-                let chat = updates.chats[n]
+            for (let n = 0; n < data.chats.length; n++) {
+                let chat = data.chats[n]
                 this.tbl_chats.insert(chat)
             }
             this._updateChatsList()
@@ -60,6 +60,12 @@ export default {
                 chat[0].date = data.date
                 this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat[0])
             }
+        })
+        this.$events.$on(this.P2P_MSG_NEW, (data) => {
+
+        })
+        this.$events.$on(this.P2P_MSG_IN, (data) => {
+
         })
     },
     methods: {

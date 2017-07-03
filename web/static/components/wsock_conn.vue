@@ -24,6 +24,7 @@ export default {
         this.proxyChannel.on(this.INITIAL_UPDATES, (updates) => { this._onInitialUpdates(updates) })
         this.proxyChannel.on(this.FRIEND_ONLINE, (friend) => { this._onFriendOnline(friend) })
         this.proxyChannel.on(this.FRIEND_OFFLINE, (friend) => { this._onFriendOffline(friend) })
+        this.proxyChannel.on(this.P2P_MSG_NEW, (msg) => { this._onP2pMsgNew(msg) })
         this.proxyChannel.on(this.P2P_MSG_IN, (msg) => { this._onP2pMsgIn(msg) })
         this.proxyChannel.join()
             .receive("ok", () => { /*console.log("Succeed to join proxy ch")*/ })
@@ -66,6 +67,10 @@ export default {
         },
         _onFriendOffline(friend) {
             this.$events.$emit(this.FRIEND_OFFLINE, friend)
+        },
+        _onP2pMsgNew(msg) {
+            console.log(">>> FRIEND MSG, FROM", msg)
+            this.$events.$emit(this.P2P_MSG_NEW, msg)
         },
         _onP2pMsgIn(msg) {
             console.log(">>> FRIEND MSG, FROM", msg)

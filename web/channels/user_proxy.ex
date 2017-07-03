@@ -16,6 +16,7 @@ defmodule Portal.UserProxy do
     @initial_updates "initial_updates"
     @friend_online "friend_online"
     @friend_offline "friend_offline"
+    @p2p_msg_new "p2p_msg_new"
     @p2p_msg_in "p2p_msg_in"
     @p2p_msg_out "p2p_msg_out"
     @query_chats "query_chats"
@@ -111,8 +112,13 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    def handle_info({:p2p_msg, from, message}, socket) do
+    def handle_info({:p2p_msg_in, from, message}, socket) do
         push socket, @p2p_msg_in, %{from: from, msg: message}
+        {:noreply, socket}
+    end
+
+    def handle_info({:p2p_msg_new, from, message}, socket) do
+        push socket, @p2p_msg_new, %{from: from, msg: message}
         {:noreply, socket}
     end
 
@@ -126,13 +132,22 @@ defmodule Portal.UserProxy do
             # creates new chat
             chats = %Chats{chats: [ch]}
             text = Poison.encode!(chats)
-            dchat_map = %{read: _is_friend_online?(friend_uname), messages: text}
+            online? = _is_friend_online?(friend_uname)
+            dchat_map = %{read: online?, messages: text}
                 |> Map.put(:user_a, sender)
                 |> Map.put(:user_b, friend)
             dchat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, dchat_map)
                 |> Changeset.put_assoc(:user_a, sender)
                 |> Changeset.put_assoc(:user_b, friend)
             dchat = Repo.insert!(dchat_cs)
+
+            cond do
+                online? == true ->
+                    ol_friend = OnlineUsersDb.select(friend_uname)
+                    send ol_friend.pid, {:p2p_msg_new, sender.username, message}
+                true ->
+                    :ignore
+            end
         else
             # updates existing chat
             [[id]] = rows
@@ -142,20 +157,21 @@ defmodule Portal.UserProxy do
             old_chats = Poison.decode!(old_msgs, as: %Chats{})
             upd_chat_list = %Chats{chats: old_chats.chats ++ [ch]}
             text = Poison.encode!(upd_chat_list)
-            upd_dchat_map = %{read: _is_friend_online?(friend_uname), messages: text}
+            online? = _is_friend_online?(friend_uname)
+            upd_dchat_map = %{read: online?, messages: text}
                 |> Map.put(:user_a, sender)
                 |> Map.put(:user_b, friend)
 
             upd_dchat_cs = DailyChat.create_or_update_changeset(odchat, upd_dchat_map)
             udchat = Repo.update!(upd_dchat_cs)
-        end
 
-        ol_friend = OnlineUsersDb.select(friend_uname)
-        cond do
-            ol_friend != nil ->
-                send ol_friend.pid, {:p2p_msg, sender.username, message}
-            true ->
-                :ignore
+            cond do
+                online? == true ->
+                    ol_friend = OnlineUsersDb.select(friend_uname)
+                    send ol_friend.pid, {:p2p_msg_in, sender.username, message}
+                true ->
+                    :ignore
+            end
         end
         {:noreply, socket}
     end

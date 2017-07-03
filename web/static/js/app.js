@@ -31,6 +31,7 @@ Vue.mixin({
             get INITIAL_UPDATES() { return "initial_updates" },
             get FRIEND_ONLINE() { return "friend_online" },
             get FRIEND_OFFLINE() { return "friend_offline" },
+            get P2P_MSG_NEW() { return "p2p_msg_new" },
             get P2P_MSG_IN() { return "p2p_msg_in" },
             get QUERY_CHATS() { return "query_chats" },
             

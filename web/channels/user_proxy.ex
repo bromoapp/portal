@@ -25,7 +25,7 @@ defmodule Portal.UserProxy do
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?)"
     @sql_friends_list "CALL `sp_friends_list`(?)"
     @sql_query_chats "SELECT a.id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?"
-    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE (DATE(a.updated_at) = CURDATE()) AND ((a.user_a_id = ? AND a.user_b_id = ?) OR (a.user_b_id = ? AND a.user_a_id = ?));"
+    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.updated_at) = CURDATE() AND a.user_a_id = ? AND a.user_b_id = ?;"
 
     def join("user_proxy:" <> username, _params, socket) do
         send self(), :after_join
@@ -125,57 +125,10 @@ defmodule Portal.UserProxy do
     def handle_in(@p2p_msg_out, %{"to" => friend_uname, "msg" => message}, socket) do
         sender = socket.assigns.user
         friend = Repo.get_by!(User, username: friend_uname)
-        ch = %Chat{from: sender.username, message: message, time: _format_time()}
+        chat = %Chat{from: sender.username, message: message, time: _format_time()}
+        _create_update_users_chat(sender, friend, chat)
+        _create_update_users_chat(friend, sender, chat)
         
-        %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [sender.id, friend.id, sender.id, friend.id])
-        if rows == [] do
-            # creates new chat
-            chats = %Chats{chats: [ch]}
-            text = Poison.encode!(chats)
-            online? = _is_friend_online?(friend_uname)
-            dchat_map = %{read: online?, messages: text}
-                |> Map.put(:user_a, sender)
-                |> Map.put(:user_b, friend)
-            dchat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, dchat_map)
-                |> Changeset.put_assoc(:user_a, sender)
-                |> Changeset.put_assoc(:user_b, friend)
-            dchat = Repo.insert!(dchat_cs)
-
-            cond do
-                online? == true ->
-                    raw = Poison.decode!(dchat.messages)
-                    ol_friend = OnlineUsersDb.select(friend_uname)
-                    json = %{rec_id: dchat.id, friend_id: sender.id, date: _format_date(dchat.inserted_at), 
-                        chats: raw["chats"], read: 1}
-                    send ol_friend.pid, {:p2p_msg_new, json}
-                true ->
-                    :ignore
-            end
-        else
-            # updates existing chat
-            [[id]] = rows
-            odchat = DailyChat
-                |> Repo.get!(id)
-            old_chats = Poison.decode!(odchat.messages, as: %Chats{})
-            upd_chat_list = %Chats{chats: old_chats.chats ++ [ch]}
-            text = Poison.encode!(upd_chat_list)
-            online? = _is_friend_online?(friend_uname)
-            upd_dchat_map = %{read: online?, messages: text}
-                |> Map.put(:user_a, sender)
-                |> Map.put(:user_b, friend)
-
-            upd_dchat_cs = DailyChat.create_or_update_changeset(odchat, upd_dchat_map)
-            udchat = Repo.update!(upd_dchat_cs)
-            
-            cond do
-                online? == true ->
-                    ol_friend = OnlineUsersDb.select(friend_uname)
-                    json = %{id: udchat.id, date: _format_date(udchat.updated_at), chats: [ch], read: 1}
-                    send ol_friend.pid, {:p2p_msg_in, json}
-                true ->
-                    :ignore
-            end
-        end
         {:noreply, socket}
     end
 
@@ -188,6 +141,58 @@ defmodule Portal.UserProxy do
             raw = Poison.decode!(messages)
             json = %{id: id, date: _format_date(date_time), chats: raw["chats"], read: read}
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
+        end
+    end
+
+    defp _create_update_users_chat(user_a, user_b, chat) do
+        %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [user_a.id, user_b.id])
+        if rows == [] do
+            # creates new chat for user_a
+            chats = %Chats{chats: [chat]}
+            text = Poison.encode!(chats)
+            online? = _is_friend_online?(user_b.username)
+            dchat_map = %{read: online?, messages: text}
+                |> Map.put(:user_a, user_a)
+                |> Map.put(:user_b, user_b)
+            dchat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, dchat_map)
+                |> Changeset.put_assoc(:user_a, user_a)
+                |> Changeset.put_assoc(:user_b, user_b)
+            dchat = Repo.insert!(dchat_cs)
+
+            cond do
+                online? == true ->
+                    raw = Poison.decode!(dchat.messages)
+                    ol_friend = OnlineUsersDb.select(user_b.username)
+                    json = %{rec_id: dchat.id, friend_id: user_a.id, date: _format_date(dchat.inserted_at), 
+                        chats: raw["chats"], read: 1}
+                    send ol_friend.pid, {:p2p_msg_new, json}
+                true ->
+                    :ignore
+            end
+        else
+            # updates existing chat
+            [[id]] = rows
+            odchat = DailyChat
+                |> Repo.get!(id)
+            old_chats = Poison.decode!(odchat.messages, as: %Chats{})
+            upd_chat_list = %Chats{chats: old_chats.chats ++ [chat]}
+            text = Poison.encode!(upd_chat_list)
+            online? = _is_friend_online?(user_b.username)
+            upd_dchat_map = %{read: online?, messages: text}
+                |> Map.put(:user_a, user_a)
+                |> Map.put(:user_b, user_b)
+
+            upd_dchat_cs = DailyChat.create_or_update_changeset(odchat, upd_dchat_map)
+            udchat = Repo.update!(upd_dchat_cs)
+            
+            cond do
+                online? == true ->
+                    ol_friend = OnlineUsersDb.select(user_b.username)
+                    json = %{id: udchat.id, date: _format_date(udchat.updated_at), chats: [chat], read: 1}
+                    send ol_friend.pid, {:p2p_msg_in, json}
+                true ->
+                    :ignore
+            end
         end
     end
 

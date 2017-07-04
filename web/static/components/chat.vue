@@ -63,17 +63,18 @@ export default {
             }
         })
         this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => {
+            console.log(">>> CHAT: ", chat)
             let chats = chat.chats
             let conv_div = document.getElementById("messages")
             let old_conv = conv_div.innerHTML
             let conv = "<div>"
             conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
             for (let n = 0; n < chats.length; n++) {
-                let message = chats[n]
-                if (message.from == this.currFriend.username) {
-                    conv = conv + "<div style=\"margin-top: 15px\"><span class=\"chat-bubble\">" + message.message + "</span></div>"
+                let obj = chats[n]
+                if (obj.from == this.currFriend.username) {
+                    conv = conv + "<div style=\"margin-top: 15px\"><span class=\"chat-bubble\">" + obj.message + "</span></div>"
                 } else {
-                    conv = conv + "<div style=\"margin-top: 15px; text-align: right\"><span class=\"chat-bubble-me\">" + message.message + "</span></div>"
+                    conv = conv + "<div style=\"margin-top: 15px; text-align: right\"><span class=\"chat-bubble-me\">" + obj.message + "</span></div>"
                 }
             }
             conv = conv + "</div>"

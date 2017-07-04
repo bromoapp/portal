@@ -62,7 +62,8 @@ export default {
             }
         })
         this.$events.$on(this.P2P_MSG_NEW, (data) => {
-            console.log(">>> CHAT NEW", data)
+            this.tbl_chats.insert(data)
+            this.$events.$emit(this.UPDATE_CHAT_DIALOG, data)
         })
         this.$events.$on(this.P2P_MSG_IN, (data) => {
             console.log(">>> CHAT IN", data)

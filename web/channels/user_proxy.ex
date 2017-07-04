@@ -144,7 +144,7 @@ defmodule Portal.UserProxy do
             cond do
                 online? == true ->
                     ol_friend = OnlineUsersDb.select(friend_uname)
-                    json = %{id: dchat.id, date: _format_date(dchat.inserted_at), chats: [dchat.messages], read: 1}
+                    json = %{rec_id: dchat.id, friend_id: sender.id, date: _format_date(dchat.inserted_at), chats: [dchat.messages], read: 1}
                     send ol_friend.pid, {:p2p_msg_new, json}
                 true ->
                     :ignore

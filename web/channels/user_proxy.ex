@@ -147,7 +147,7 @@ defmodule Portal.UserProxy do
     defp _create_update_users_chat(user_a, user_b, chat) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [user_a.id, user_b.id])
         if rows == [] do
-            # creates new chat for user_a
+            # creates new chat for user
             chats = %Chats{chats: [chat]}
             text = Poison.encode!(chats)
             online? = _is_friend_online?(user_b.username)

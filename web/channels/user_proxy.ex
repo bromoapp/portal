@@ -133,7 +133,6 @@ defmodule Portal.UserProxy do
             chats = %Chats{chats: [ch]}
             text = Poison.encode!(chats)
             online? = _is_friend_online?(friend_uname)
-            Logger.info(">>> CHAT NEW --> #{friend_uname} IS ONLINE? #{inspect online?}")
             dchat_map = %{read: online?, messages: text}
                 |> Map.put(:user_a, sender)
                 |> Map.put(:user_b, friend)
@@ -161,7 +160,6 @@ defmodule Portal.UserProxy do
             upd_chat_list = %Chats{chats: old_chats.chats ++ [ch]}
             text = Poison.encode!(upd_chat_list)
             online? = _is_friend_online?(friend_uname)
-            Logger.info(">>> CHAT IN --> #{friend_uname} IS ONLINE? #{inspect online?}")
             upd_dchat_map = %{read: online?, messages: text}
                 |> Map.put(:user_a, sender)
                 |> Map.put(:user_b, friend)

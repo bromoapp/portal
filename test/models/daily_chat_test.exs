@@ -4,6 +4,7 @@ defmodule Portal.DailyChatTest do
     alias Portal.User
     alias Portal.Chats
     alias Portal.Chat
+    alias Ecto.DateTime
 
     @user_a %{name: "my_name_a", username: "my_username_a", password: "my_password_a"}
     @user_b %{name: "my_name_b", username: "my_username_b", password: "my_password_b"}
@@ -35,6 +36,7 @@ defmodule Portal.DailyChatTest do
         chats = %Chats{chats: [ch1, ch2, ch3, ch4]}
 
         text = Poison.encode!(chats)
+        localtime = :calendar.local_time
         dchat_map = %{read: true, messages: text}
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)

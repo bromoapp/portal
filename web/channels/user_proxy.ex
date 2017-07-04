@@ -141,13 +141,16 @@ defmodule Portal.UserProxy do
                 |> Changeset.put_assoc(:user_b, friend)
             dchat = Repo.insert!(dchat_cs)
 
-            cond do
-                online? == true ->
-                    ol_friend = OnlineUsersDb.select(friend_uname)
-                    send ol_friend.pid, {:p2p_msg_new, sender.username, message}
-                true ->
-                    :ignore
-            end
+            Logger.info(">>> RUNTIME DATETIME #{inspect :calendar.local_time}")
+            Logger.info(">>> CHAT NEW = #{inspect dchat}")
+            #cond do
+            #    online? == true ->
+            #        ol_friend = OnlineUsersDb.select(friend_uname)
+            #        json = %{id: id, date: date, chats: Poison.decode!(messages), read: read}
+            #        send ol_friend.pid, {:p2p_msg_new, sender.username, message}
+            #    true ->
+            #        :ignore
+            #end
         else
             # updates existing chat
             [[id]] = rows
@@ -165,13 +168,14 @@ defmodule Portal.UserProxy do
             upd_dchat_cs = DailyChat.create_or_update_changeset(odchat, upd_dchat_map)
             udchat = Repo.update!(upd_dchat_cs)
 
-            cond do
-                online? == true ->
-                    ol_friend = OnlineUsersDb.select(friend_uname)
-                    send ol_friend.pid, {:p2p_msg_in, sender.username, message}
-                true ->
-                    :ignore
-            end
+            Logger.info(">>> CHAT IN = #{inspect udchat}")
+            #cond do
+            #    online? == true ->
+            #        ol_friend = OnlineUsersDb.select(friend_uname)
+            #        send ol_friend.pid, {:p2p_msg_in, sender.username, message}
+            #    true ->
+            #        :ignore
+            #end
         end
         {:noreply, socket}
     end

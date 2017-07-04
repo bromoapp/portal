@@ -69,11 +69,9 @@ export default {
             this.$events.$emit(this.FRIEND_OFFLINE, friend)
         },
         _onP2pMsgNew(msg) {
-            console.log(">>> FRIEND MSG, FROM", msg)
             this.$events.$emit(this.P2P_MSG_NEW, msg)
         },
         _onP2pMsgIn(msg) {
-            console.log(">>> FRIEND MSG, FROM", msg)
             this.$events.$emit(this.P2P_MSG_IN, msg)
         }
     }

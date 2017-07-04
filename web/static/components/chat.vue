@@ -63,7 +63,7 @@ export default {
             }
         })
         this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => {
-            let chats = chat.chats.chats
+            let chats = chat.chats
             let conv_div = document.getElementById("messages")
             let old_conv = conv_div.innerHTML
             let conv = "<div>"

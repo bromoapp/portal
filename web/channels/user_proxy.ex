@@ -112,13 +112,13 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    def handle_info({:p2p_msg_in, from, message}, socket) do
-        push socket, @p2p_msg_in, %{from: from, msg: message}
+    def handle_info({:p2p_msg_new, message}, socket) do
+        push socket, @p2p_msg_new, message
         {:noreply, socket}
     end
 
-    def handle_info({:p2p_msg_new, from, message}, socket) do
-        push socket, @p2p_msg_new, %{from: from, msg: message}
+    def handle_info({:p2p_msg_in, message}, socket) do
+        push socket, @p2p_msg_in, message
         {:noreply, socket}
     end
 
@@ -141,23 +141,20 @@ defmodule Portal.UserProxy do
                 |> Changeset.put_assoc(:user_b, friend)
             dchat = Repo.insert!(dchat_cs)
 
-            Logger.info(">>> RUNTIME DATETIME #{inspect :calendar.local_time}")
-            Logger.info(">>> CHAT NEW = #{inspect dchat}")
-            #cond do
-            #    online? == true ->
-            #        ol_friend = OnlineUsersDb.select(friend_uname)
-            #        json = %{id: id, date: date, chats: Poison.decode!(messages), read: read}
-            #        send ol_friend.pid, {:p2p_msg_new, sender.username, message}
-            #    true ->
-            #        :ignore
-            #end
+            cond do
+                online? == true ->
+                    ol_friend = OnlineUsersDb.select(friend_uname)
+                    json = %{id: dchat.id, date: _format_date(dchat.inserted_at), chats: [dchat.messages], read: 1}
+                    send ol_friend.pid, {:p2p_msg_new, json}
+                true ->
+                    :ignore
+            end
         else
             # updates existing chat
             [[id]] = rows
             odchat = DailyChat
                 |> Repo.get!(id)
-            old_msgs = odchat.messages
-            old_chats = Poison.decode!(old_msgs, as: %Chats{})
+            old_chats = Poison.decode!(odchat.messages, as: %Chats{})
             upd_chat_list = %Chats{chats: old_chats.chats ++ [ch]}
             text = Poison.encode!(upd_chat_list)
             online? = _is_friend_online?(friend_uname)
@@ -167,24 +164,24 @@ defmodule Portal.UserProxy do
 
             upd_dchat_cs = DailyChat.create_or_update_changeset(odchat, upd_dchat_map)
             udchat = Repo.update!(upd_dchat_cs)
-
-            Logger.info(">>> CHAT IN = #{inspect udchat}")
-            #cond do
-            #    online? == true ->
-            #        ol_friend = OnlineUsersDb.select(friend_uname)
-            #        send ol_friend.pid, {:p2p_msg_in, sender.username, message}
-            #    true ->
-            #        :ignore
-            #end
+            
+            cond do
+                online? == true ->
+                    ol_friend = OnlineUsersDb.select(friend_uname)
+                    json = %{id: udchat.id, date: _format_date(udchat.updated_at), chats: [ch], read: 1}
+                    send ol_friend.pid, {:p2p_msg_in, json}
+                true ->
+                    :ignore
+            end
         end
         {:noreply, socket}
     end
 
     def handle_in(@query_chats, %{"rec_id" => rec_id}, socket) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_query_chats, [rec_id])
-        [[id, messages, {{yyyy, mm, dd}, _}, read]] = rows
-        date = Integer.to_string(yyyy) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(dd)
-        json = %{id: id, date: date, chats: Poison.decode!(messages), read: read}
+        [[id, messages, date_time, read]] = rows
+        raw = Poison.decode!(messages)
+        json = %{id: id, date: _format_date(date_time), chats: raw["chats"], read: read}
         {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
     end
 
@@ -238,5 +235,14 @@ defmodule Portal.UserProxy do
     defp _format_time do
         {_, {hh, mm, ss}} = :calendar.local_time
         Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)
+    end
+
+    defp _format_date({{yyyy, mm, dd}, _}) do
+        Integer.to_string(yyyy) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(dd)
+    end
+
+    defp _format_date(ecto_date) do
+        {{yyyy, mm, dd}, _} = Ecto.DateTime.to_erl(ecto_date)
+        Integer.to_string(yyyy) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(dd)
     end
 end

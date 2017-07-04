@@ -47,14 +47,14 @@ export default {
                 if (chat.chats == null) {
                     this.$events.$emit(this.QUERY_CHATS, chat)
                 } else {
-                    console.log(">>> GET FROM LOCAL")
                     this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                 }
             }
         })
         this.$events.$on(this.UPDATE_CHAT_DATA, (data) => {
+            console.log(">>> CHAT QUERY", data)
             let chat = this.tbl_chats.find({ 'rec_id': data.id })
-            if (chat.length > 0) {
+            if (chat[0]) {
                 chat[0].chats = data.chats
                 chat[0].read = data.read
                 chat[0].date = data.date
@@ -62,10 +62,10 @@ export default {
             }
         })
         this.$events.$on(this.P2P_MSG_NEW, (data) => {
-
+            console.log(">>> CHAT NEW", data)
         })
         this.$events.$on(this.P2P_MSG_IN, (data) => {
-
+            console.log(">>> CHAT IN", data)
         })
     },
     methods: {

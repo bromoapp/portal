@@ -63,7 +63,8 @@ export default {
         })
         this.$events.$on(this.P2P_MSG_NEW, (data) => {
             this.tbl_chats.insert(data)
-            this.$events.$emit(this.UPDATE_CHAT_DIALOG, data)
+            let chat = this.tbl_chats.find({ 'rec_id': data.id })
+            this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat[0])
         })
         this.$events.$on(this.P2P_MSG_IN, (data) => {
             console.log(">>> CHAT IN", data)

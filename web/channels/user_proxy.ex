@@ -179,10 +179,16 @@ defmodule Portal.UserProxy do
 
     def handle_in(@query_chats, %{"rec_id" => rec_id}, socket) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_query_chats, [rec_id])
-        [[id, messages, date_time, read]] = rows
-        raw = Poison.decode!(messages)
-        json = %{id: id, date: _format_date(date_time), chats: raw["chats"], read: read}
-        {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
+        if rows == [] do
+            [[id, messages, date_time, read]] = rows
+            raw = Poison.decode!(messages)
+            {:reply, {:ok, %{"query_chats_resp" => %{}}}, socket}
+        else
+            [[id, messages, date_time, read]] = rows
+            raw = Poison.decode!(messages)
+            json = %{id: id, date: _format_date(date_time), chats: raw["chats"], read: read}
+            {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
+        end
     end
 
     defp _get_ongoing_chats({user, struct}) do

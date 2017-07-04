@@ -133,6 +133,7 @@ defmodule Portal.UserProxy do
             chats = %Chats{chats: [ch]}
             text = Poison.encode!(chats)
             online? = _is_friend_online?(friend_uname)
+            Logger.info(">>> CHAT NEW --> #{friend_uname} IS ONLINE? #{inspect online?}")
             dchat_map = %{read: online?, messages: text}
                 |> Map.put(:user_a, sender)
                 |> Map.put(:user_b, friend)
@@ -143,8 +144,10 @@ defmodule Portal.UserProxy do
 
             cond do
                 online? == true ->
+                    raw = Poison.decode!(dchat.messages)
                     ol_friend = OnlineUsersDb.select(friend_uname)
-                    json = %{rec_id: dchat.id, friend_id: sender.id, date: _format_date(dchat.inserted_at), chats: [dchat.messages], read: 1}
+                    json = %{rec_id: dchat.id, friend_id: sender.id, date: _format_date(dchat.inserted_at), 
+                        chats: raw["chats"], read: 1}
                     send ol_friend.pid, {:p2p_msg_new, json}
                 true ->
                     :ignore
@@ -158,6 +161,7 @@ defmodule Portal.UserProxy do
             upd_chat_list = %Chats{chats: old_chats.chats ++ [ch]}
             text = Poison.encode!(upd_chat_list)
             online? = _is_friend_online?(friend_uname)
+            Logger.info(">>> CHAT IN --> #{friend_uname} IS ONLINE? #{inspect online?}")
             upd_dchat_map = %{read: online?, messages: text}
                 |> Map.put(:user_a, sender)
                 |> Map.put(:user_b, friend)
@@ -180,8 +184,6 @@ defmodule Portal.UserProxy do
     def handle_in(@query_chats, %{"rec_id" => rec_id}, socket) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_query_chats, [rec_id])
         if rows == [] do
-            [[id, messages, date_time, read]] = rows
-            raw = Poison.decode!(messages)
             {:reply, {:ok, %{"query_chats_resp" => %{}}}, socket}
         else
             [[id, messages, date_time, read]] = rows

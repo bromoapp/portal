@@ -63,7 +63,7 @@ export default {
         })
         this.$events.$on(this.P2P_MSG_NEW, (data) => {
             this.tbl_chats.insert(data)
-            let chat = this.tbl_chats.find({ 'rec_id': data.id })
+            let chat = this.tbl_chats.find({ 'rec_id': data.rec_id })
             this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat[0])
         })
         this.$events.$on(this.P2P_MSG_IN, (data) => {
@@ -89,7 +89,7 @@ export default {
                 }
             }
             this.$events.$emit(this.UPDATE_CHATS_LIST, chats)
-        },
+        }
     }
 }
 </script>

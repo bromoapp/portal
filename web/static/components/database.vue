@@ -71,6 +71,7 @@ export default {
                 let chat = conv[(conv.length - 1)]
                 if (chat.chats) {
                     chat.chats.push(data.chats[0])
+                    this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                 }
             }
         })

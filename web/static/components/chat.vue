@@ -66,10 +66,15 @@ export default {
             console.log(">>> CHAT: ", chat)
             if (this.panel_visible) {
                 if (this.currFriend.id == chat.friend_id) {
+                    let oldConvDiv = document.getElementById(chat.date)
+                    if (oldConvDiv) {
+                        var parent = oldConvDiv.parentNode
+                        parent.removeChild(oldConvDiv)
+                    }
                     let chats = chat.chats
                     let conv_div = document.getElementById("messages")
                     let old_conv = conv_div.innerHTML
-                    let conv = "<div>"
+                    let conv = "<div id=\"" + chat.date + "\">"
                     conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
                     for (let n = 0; n < chats.length; n++) {
                         let obj = chats[n]

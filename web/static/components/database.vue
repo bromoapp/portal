@@ -52,8 +52,7 @@ export default {
             }
         })
         this.$events.$on(this.UPDATE_CHAT_DATA, (data) => {
-            console.log(">>> CHAT QUERY", data)
-            let chat = this.tbl_chats.find({ 'rec_id': data.id })
+            let chat = this.tbl_chats.find({ 'rec_id': data.rec_id })
             if (chat[0]) {
                 chat[0].chats = data.chats
                 chat[0].read = data.read
@@ -67,7 +66,13 @@ export default {
             this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat[0])
         })
         this.$events.$on(this.P2P_MSG_IN, (data) => {
-            console.log(">>> CHAT IN", data)
+            let conv = this.tbl_chats.find({ "friend_id": data.friend_id })
+            if (conv != null) {
+                let chat = conv[(conv.length - 1)]
+                if (chat.chats) {
+                    chat.chats.push(data.chats[0])
+                }
+            }
         })
     },
     methods: {

@@ -64,23 +64,31 @@ export default {
         })
         this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => {
             console.log(">>> CHAT: ", chat)
-            let chats = chat.chats
-            let conv_div = document.getElementById("messages")
-            let old_conv = conv_div.innerHTML
-            let conv = "<div>"
-            conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
-            for (let n = 0; n < chats.length; n++) {
-                let obj = chats[n]
-                if (obj.from == this.currFriend.username) {
-                    conv = conv + "<div style=\"margin-top: 15px\"><span class=\"chat-bubble\">" + obj.message + "</span></div>"
+            if (this.panel_visible) {
+                if (this.currFriend.id == chat.friend_id) {
+                    let chats = chat.chats
+                    let conv_div = document.getElementById("messages")
+                    let old_conv = conv_div.innerHTML
+                    let conv = "<div>"
+                    conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
+                    for (let n = 0; n < chats.length; n++) {
+                        let obj = chats[n]
+                        if (obj.from == this.currFriend.username) {
+                            conv = conv + "<div style=\"margin-top: 15px\"><span class=\"chat-bubble\">" + obj.message + "</span></div>"
+                        } else {
+                            conv = conv + "<div style=\"margin-top: 15px; text-align: right\"><span class=\"chat-bubble-me\">" + obj.message + "</span></div>"
+                        }
+                    }
+                    conv = conv + "</div>"
+                    conv = old_conv + conv
+                    conv_div.innerHTML = conv
+                    conv_div.scrollTop = conv_div.scrollHeight;
                 } else {
-                    conv = conv + "<div style=\"margin-top: 15px; text-align: right\"><span class=\"chat-bubble-me\">" + obj.message + "</span></div>"
+                    this.$events.$emit(this.NEW_P2P_MSG, chat)
                 }
+            } else {
+                this.$events.$emit(this.NEW_P2P_MSG, chat)
             }
-            conv = conv + "</div>"
-            conv = old_conv + conv
-            conv_div.innerHTML = conv
-            conv_div.scrollTop = conv_div.scrollHeight;
         })
     },
     methods: {
@@ -126,4 +134,5 @@ export default {
 </script>
 
 <style>
+
 </style>

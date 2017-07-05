@@ -24,7 +24,7 @@ defmodule Portal.UserProxy do
     # SQLs
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?)"
     @sql_friends_list "CALL `sp_friends_list`(?)"
-    @sql_query_chats "SELECT a.id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?"
+    @sql_query_chats "SELECT a.id, a.user_b_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?"
     @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.updated_at) = CURDATE() AND a.user_a_id = ? AND a.user_b_id = ?;"
 
     def join("user_proxy:" <> username, _params, socket) do
@@ -137,9 +137,9 @@ defmodule Portal.UserProxy do
         if rows == [] do
             {:reply, {:ok, %{"query_chats_resp" => %{}}}, socket}
         else
-            [[id, messages, date_time, read]] = rows
+            [[id, user_b_id, messages, date_time, read]] = rows
             raw = Poison.decode!(messages)
-            json = %{id: id, date: _format_date(date_time), chats: raw["chats"], read: read}
+            json = %{rec_id: id, friend_id: user_b_id, date: _format_date(date_time), chats: raw["chats"], read: read}
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
         end
     end
@@ -188,7 +188,7 @@ defmodule Portal.UserProxy do
             cond do
                 online? == true ->
                     ol_friend = OnlineUsersDb.select(user_b.username)
-                    json = %{id: udchat.id, date: _format_date(udchat.updated_at), chats: [chat], read: 1}
+                    json = %{rec_id: udchat.id, friend_id: user_a.id, date: _format_date(udchat.updated_at), chats: [chat], read: 1}
                     send ol_friend.pid, {:p2p_msg_in, json}
                 true ->
                     :ignore

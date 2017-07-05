@@ -103,6 +103,9 @@ export default {
         this.$events.$on(this.UPDATE_CHATS_LIST, (friends) => {
             this.friends = friends
         })
+        this.$events.$on(this.NEW_P2P_MSG, (chat) => {
+            console.log(">>> NEW CHAT MSG", chat)
+        })
     }
 }
 </script>

@@ -32,7 +32,7 @@ export default {
             navigator.getUserMedia = (navigator.getUserMedia
                 || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
                 || navigator.msGetUserMedia || navigator.oGetUserMedia)
-            navigator.getUserMedia({ video: true }, onSucceed, onFailed)
+            //navigator.getUserMedia({ video: true }, onSucceed, onFailed)
         }
     },
     methods: {

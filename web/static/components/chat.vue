@@ -42,27 +42,12 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => {
-            if (this.panel_visible) {
-                this._close()
-            }
-        })
-        this.$events.$on(this.SWITCH_CHAT, (friend) => {
-            if (this.panel_visible) {
-                if (this.currFriend == friend) {
-                    this._close()
-                } else {
-                    this.currFriend = friend
-                    document.getElementById("messages").innerHTML = ""
-                    document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
-                    this.$events.$emit(this.GET_CHATS, this.currFriend)
-                }
-            } else {
-                this.currFriend = friend
-                this._open()
-            }
-        })
-        this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => {
+        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.SWITCH_CHAT, (friend) => { this._switchChat(friend) })
+        this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => { this._updateChatDialog(chat) })
+    },
+    methods: {
+        _updateChatDialog(chat) {
             if (this.panel_visible) {
                 if (this.currFriend.id == chat.friend_id) {
                     let oldConvDiv = document.getElementById(chat.date)
@@ -93,14 +78,26 @@ export default {
             } else {
                 this.$events.$emit(this.NEW_P2P_MSG, chat)
             }
-        })
-    },
-    methods: {
-        sendMessage() {
-            let msg_form = document.getElementById("message")
-            let msg = msg_form.value
-            this.$events.$emit(this.P2P_MSG_OUT, this.currFriend, msg)
-            msg_form.value = ""
+        },
+        _switchChat(friend) {
+            if (this.panel_visible) {
+                if (this.currFriend == friend) {
+                    this._close()
+                } else {
+                    this.currFriend = friend
+                    document.getElementById("messages").innerHTML = ""
+                    document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
+                    this.$events.$emit(this.GET_CHATS, this.currFriend)
+                }
+            } else {
+                this.currFriend = friend
+                this._open()
+            }
+        },
+        _closePanel() {
+            if (this.panel_visible) {
+                this._close()
+            }
         },
         _close() {
             this.currFriend = null
@@ -132,6 +129,12 @@ export default {
 
                 this.$events.$emit(this.GET_CHATS, this.currFriend)
             }, 300)
+        },
+        sendMessage() {
+            let msg_form = document.getElementById("message")
+            let msg = msg_form.value
+            this.$events.$emit(this.P2P_MSG_OUT, this.currFriend, msg)
+            msg_form.value = ""
         },
     }
 }

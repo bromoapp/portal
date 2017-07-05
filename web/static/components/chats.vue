@@ -48,7 +48,27 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.OPEN_CHATS, (friend) => {
+        this.$events.$on(this.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
+        this.$events.$on(this.CLOSE_CHATS, () => { this._closeChatsList() })
+        this.$events.$on(this.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
+        this.$events.$on(this.NEW_P2P_MSG, (data) => { this._onNewP2pMsg(data) })
+    },
+    methods: {
+        _onNewP2pMsg(data) {
+            console.log(">>> NEW P2P MSG: ", data)
+        },
+        _updateChatsList(list) {
+            this.friends = list
+        },
+        _closeChatsList() {
+            let body = document.getElementById("chats_list")
+            body.style.maxHeight = "0px"
+            setTimeout(() => {
+                this.visible = false
+                this.form_visible = false
+            }, 300)
+        },
+        _openChatsList(friend) {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
@@ -59,23 +79,7 @@ export default {
                     }
                 }, 200)
             }, 300)
-        })
-        this.$events.$on(this.CLOSE_CHATS, () => {
-            let body = document.getElementById("chats_list")
-            body.style.maxHeight = "0px"
-            setTimeout(() => {
-                this.visible = false
-                this.form_visible = false
-            }, 300)
-        })
-        this.$events.$on(this.UPDATE_CHATS_LIST, (friends) => {
-            this.friends = friends
-        })
-        this.$events.$on(this.NEW_P2P_MSG, (chat) => {
-            console.log(">>> NEW CHAT MSG", chat)
-        })
-    },
-    methods: {
+        },
         onChatClicked(friend) {
             this.$events.$emit(this.SWITCH_CHAT, friend)
         },

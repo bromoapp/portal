@@ -44,7 +44,32 @@ export default {
             form_visible: false
         }
     },
+    created() {
+        this.$events.$on(this.OPEN_CHANNELS, () => { this._openChannelsList() })
+        this.$events.$on(this.CLOSE_CHANNELS, () => { this._closeChannelsList() })
+        this.$events.$on(this.UPDATE_CHANNELS_LIST, (list) => { this._updateChannelsList(list) })
+    },
     methods: {
+        _updateChannelsList(list) {
+            this.channels = list
+        },
+        _closeChannelsList() {
+            let body = document.getElementById("channels_list")
+            body.style.maxHeight = "0px"
+            setTimeout(() => {
+                this.visible = false
+                this.form_visible = false
+            }, 300)
+        },
+        _openChannelsList() {
+            setTimeout(() => {
+                this.visible = true
+                setTimeout(() => {
+                    let body = document.getElementById("channels_list")
+                    body.style.maxHeight = "500px"
+                }, 200)
+            }, 300)
+        },
         seekChannel() {
             if (this.form_visible) {
                 let div = document.getElementById("seek_channel")
@@ -72,28 +97,6 @@ export default {
                 }, 200)
             }
         }
-    },
-    created() {
-        this.$events.$on(this.OPEN_CHANNELS, () => {
-            setTimeout(() => {
-                this.visible = true
-                setTimeout(() => {
-                    let body = document.getElementById("channels_list")
-                    body.style.maxHeight = "500px"
-                }, 200)
-            }, 300)
-        })
-        this.$events.$on(this.CLOSE_CHANNELS, () => {
-            let body = document.getElementById("channels_list")
-            body.style.maxHeight = "0px"
-            setTimeout(() => {
-                this.visible = false
-                this.form_visible = false
-            }, 300)
-        })
-        this.$events.$on(this.UPDATE_CHANNELS_LIST, (channels) => {
-            this.channels = channels
-        })
     }
 }
 </script>

@@ -63,7 +63,6 @@ export default {
             }
         })
         this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => {
-            console.log(">>> CHAT: ", chat)
             if (this.panel_visible) {
                 if (this.currFriend.id == chat.friend_id) {
                     let oldConvDiv = document.getElementById(chat.date)
@@ -79,9 +78,9 @@ export default {
                     for (let n = 0; n < chats.length; n++) {
                         let obj = chats[n]
                         if (obj.from == this.currFriend.username) {
-                            conv = conv + "<div style=\"margin-top: 15px\"><span class=\"chat-bubble\">" + obj.message + "</span></div>"
+                            conv = conv + "<div style=\"margin: 8px 0px 8px 0px;\"><span class=\"chat-bubble\">" + obj.message + "</span></div>"
                         } else {
-                            conv = conv + "<div style=\"margin-top: 15px; text-align: right\"><span class=\"chat-bubble-me\">" + obj.message + "</span></div>"
+                            conv = conv + "<div style=\"margin: 8px 0px 8px 0px; text-align: right\"><span class=\"chat-bubble-me\">" + obj.message + "</span></div>"
                         }
                     }
                     conv = conv + "</div>"

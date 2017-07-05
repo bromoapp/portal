@@ -21,12 +21,8 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.PUSH_WINDOW, () => {
-            this._push()
-        })
-        this.$events.$on(this.PULL_WINDOW, () => {
-            this._pull()
-        })
+        this.$events.$on(this.PUSH_WINDOW, () => { this._push() })
+        this.$events.$on(this.PULL_WINDOW, () => { this._pull() })
     },
     methods: {
         _push() {

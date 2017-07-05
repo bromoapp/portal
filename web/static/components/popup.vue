@@ -55,7 +55,17 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.POP_QUESTION, (obj) => {
+        this.$events.$on(this.POP_QUESTION, (obj) => { this._popUpQuestion(obj) })
+        this.$events.$on(this.POP_INFO, (obj) => { this._popUpInfo(obj) })
+        this.$events.$on(this.POP_ERROR, (obj) => { this._popUpInfo(obj) })
+    },
+    methods: {
+        _popUpError(obj) {
+            this.visible = true
+            this.error = true
+            this.message = obj.msg
+        },
+        _popUpQuestion(obj) {
             this.visible = true
             this.question = true
             this.message = obj.msg
@@ -65,19 +75,12 @@ export default {
             if (obj.onNo) {
                 this.onNo = obj.onNo
             }
-        })
-        this.$events.$on(this.POP_INFO, (obj) => {
+        },
+        _popUpInfo(obj) {
             this.visible = true
             this.info = true
             this.message = obj.msg
-        })
-        this.$events.$on(this.POP_ERROR, (obj) => {
-            this.visible = true
-            this.error = true
-            this.message = obj.msg
-        })
-    },
-    methods: {
+        },
         close() {
             this.visible = false
             this.question = false

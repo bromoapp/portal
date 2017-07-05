@@ -47,38 +47,6 @@ export default {
             form_visible: false
         }
     },
-    methods: {
-        onChatClicked(friend) {
-            this.$events.$emit(this.SWITCH_CHAT, friend)
-        },
-        seekChat() {
-            if (this.form_visible) {
-                let div = document.getElementById("seek_chat")
-                div.style.maxHeight = "0px"
-                div.style.padding = "10px"
-                setTimeout(() => {
-                    this.form_visible = false
-                    let btn = document.getElementById("header_btn")
-                    btn.classList.remove("fa-chevron-up")
-                    btn.classList.add("fa-chevron-down")
-                }, 200)
-            } else {
-                this.form_visible = true
-                setTimeout(() => {
-                    let div = document.getElementById("seek_chat")
-                    div.style.maxHeight = "80px"
-                    div.style.padding = "10px"
-
-                    let btn = document.getElementById("header_btn")
-                    btn.classList.remove("fa-chevron-down")
-                    btn.classList.add("fa-chevron-up")
-
-                    let mail = document.getElementById("friend_name")
-                    mail.focus()
-                }, 200)
-            }
-        }
-    },
     created() {
         this.$events.$on(this.OPEN_CHATS, (friend) => {
             setTimeout(() => {
@@ -106,6 +74,38 @@ export default {
         this.$events.$on(this.NEW_P2P_MSG, (chat) => {
             console.log(">>> NEW CHAT MSG", chat)
         })
+    },
+    methods: {
+        onChatClicked(friend) {
+            this.$events.$emit(this.SWITCH_CHAT, friend)
+        },
+        seekChat() {
+            if (this.form_visible) {
+                let div = document.getElementById("seek_chat")
+                div.style.maxHeight = "0px"
+                div.style.padding = "10px"
+                setTimeout(() => {
+                    this.form_visible = false
+                    let btn = document.getElementById("header_btn")
+                    btn.classList.remove("fa-chevron-up")
+                    btn.classList.add("fa-chevron-down")
+                }, 200)
+            } else {
+                this.form_visible = true
+                setTimeout(() => {
+                    let div = document.getElementById("seek_chat")
+                    div.style.maxHeight = "80px"
+                    div.style.padding = "10px"
+
+                    let btn = document.getElementById("header_btn")
+                    btn.classList.remove("fa-chevron-down")
+                    btn.classList.add("fa-chevron-up")
+
+                    let mail = document.getElementById("search_args")
+                    mail.focus()
+                }, 200)
+            }
+        }
     }
 }
 </script>

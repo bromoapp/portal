@@ -38,25 +38,11 @@ export default {
         this.sharedChannels.push(this.roomChannel)
 
         // Logout event handling
-        this.$events.$on(this.SIGN_OUT, () => {
-            if (this.proxyChannel) {
-                this.proxyChannel.leave()
-            }
-            for (let x = 0; x < this.sharedChannels.length; x++) {
-                let ch = this.sharedChannels[x]
-                ch.leave()
-            }
-        })
+        this.$events.$on(this.SIGN_OUT, () => { this._onSignOut() })
 
         // P2p chat events handlers
-        this.$events.$on(this.QUERY_CHATS, (chat) => {
-            this.proxyChannel.push(this.QUERY_CHATS, { rec_id: chat.rec_id }).receive("ok", (resp) => {
-                this.$events.$emit(this.UPDATE_CHAT_DATA, resp.query_chats_resp)
-            })
-        })
-        this.$events.$on(this.P2P_MSG_OUT, (friend, message) => {
-            this.proxyChannel.push(this.P2P_MSG_OUT, { to: friend.username, msg: message })
-        })
+        this.$events.$on(this.QUERY_CHATS, (conv) => { this._onQueryChats(conv) })
+        this.$events.$on(this.P2P_MSG_OUT, (friend, message) => { _onP2pMsgOut(friend, message) })
     },
     methods: {
         _onInitialUpdates(updates) {
@@ -73,6 +59,23 @@ export default {
         },
         _onP2pMsgIn(msg) {
             this.$events.$emit(this.P2P_MSG_IN, msg)
+        },
+        _onSignOut() {
+            if (this.proxyChannel) {
+                this.proxyChannel.leave()
+            }
+            for (let x = 0; x < this.sharedChannels.length; x++) {
+                let ch = this.sharedChannels[x]
+                ch.leave()
+            }
+        },
+        _onQueryChats(conv) {
+            this.proxyChannel.push(this.QUERY_CHATS, { rec_id: conv.rec_id }).receive("ok", (resp) => {
+                this.$events.$emit(this.UPDATE_CHAT_DATA, resp.query_chats_resp)
+            })
+        },
+        _onP2pMsgOut(friend, message) {
+            this.proxyChannel.push(this.P2P_MSG_OUT, { to: friend.username, msg: message })
         }
     }
 }

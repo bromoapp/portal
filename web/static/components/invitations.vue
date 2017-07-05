@@ -44,7 +44,31 @@ export default {
             form_visible: false
         }
     },
+    created() {
+        this.$events.$on(this.OPEN_INVITATIONS, () => { this._openInvitationsList() })
+        this.$events.$on(this.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })
+        this.$events.$on(this.UPDATE_INVITATIONS_LIST, (list) => { this._updateInvitationsList(list) })
+    },
     methods: {
+        _updateInvitationsList(list) {
+            this.invitations = list
+        },
+        _openInvitationsList() {
+            setTimeout(() => {
+                this.visible = true
+                setTimeout(() => {
+                    let body = document.getElementById("invitations_list")
+                    body.style.maxHeight = "500px"
+                }, 200)
+            }, 300)
+        },
+        _closeInvitationsList() {
+            let body = document.getElementById("invitations_list")
+            body.style.maxHeight = "0px"
+            setTimeout(() => {
+                this.visible = false
+            }, 300)
+        },
         seekInvitation() {
             if (this.form_visible) {
                 let div = document.getElementById("seek_invitation")
@@ -72,27 +96,6 @@ export default {
                 }, 200)
             }
         }
-    },
-    created() {
-        this.$events.$on(this.OPEN_INVITATIONS, () => {
-            setTimeout(() => {
-                this.visible = true
-                setTimeout(() => {
-                    let body = document.getElementById("invitations_list")
-                    body.style.maxHeight = "500px"
-                }, 200)
-            }, 300)
-        })
-        this.$events.$on(this.CLOSE_INVITATIONS, () => {
-            let body = document.getElementById("invitations_list")
-            body.style.maxHeight = "0px"
-            setTimeout(() => {
-                this.visible = false
-            }, 300)
-        })
-        this.$events.$on(this.UPDATE_INVITATIONS_LIST, (invitations) => {
-            this.invitations = invitations
-        })
     }
 }
 </script>

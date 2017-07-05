@@ -48,12 +48,16 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => {
+        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.SWITCH_FRIEND_DETAIL, (friend) => { this._switchFriendDetail(friend) })
+    },
+    methods: {
+        _closePanel() {
             if (this.panel_visible) {
                 this._close()
             }
-        })
-        this.$events.$on(this.SWITCH_FRIEND_DETAIL, (friend) => {
+        },
+        _switchFriendDetail(friend) {
             if (this.panel_visible) {
                 if (this.currFriend == friend) {
                     this._close()
@@ -65,18 +69,6 @@ export default {
                 this.currFriend = friend
                 this._open()
             }
-        })
-    },
-    methods: {
-        startChat() {
-            document.getElementById("btn_start_chat").blur()
-            this.$events.$emit(this.START_CHAT, this.currFriend)
-        },
-        sendMessage() {
-            document.getElementById("btn_send_msg").blur()
-        },
-        inivite2Room() {
-            document.getElementById("btn_invite_2_room").blur()
         },
         _close() {
             this.currFriend = null
@@ -118,6 +110,16 @@ export default {
                 document.getElementById("online_friend_buttons").style.display = "none"
                 document.getElementById("offline_friend_buttons").style.display = "inline"
             }
+        },
+        startChat() {
+            document.getElementById("btn_start_chat").blur()
+            this.$events.$emit(this.START_CHAT, this.currFriend)
+        },
+        sendMessage() {
+            document.getElementById("btn_send_msg").blur()
+        },
+        inivite2Room() {
+            document.getElementById("btn_invite_2_room").blur()
         }
     }
 }

@@ -50,7 +50,32 @@ export default {
             detailPanelWidth: 300
         }
     },
+    created() {
+        this.$events.$on(this.OPEN_FRIENDS, () => { this._openFriendsList() })
+        this.$events.$on(this.CLOSE_FRIENDS, () => { this._closeFriendsList() })
+        this.$events.$on(this.UPDATE_FRIENDS_LIST, (list) => { this._updateFriendsList(list) })
+    },
     methods: {
+        _updateFriendsList(list) {
+            this.friends = list
+        },
+        _closeFriendsList() {
+            let body = document.getElementById("friends_list")
+            body.style.maxHeight = "0px"
+            setTimeout(() => {
+                this.visible = false
+                this.form_visible = false
+            }, 300)
+        },
+        _openFriendsList() {
+            setTimeout(() => {
+                this.visible = true
+                setTimeout(() => {
+                    let body = document.getElementById("friends_list")
+                    body.style.maxHeight = "500px"
+                }, 200)
+            }, 300)
+        },
         onFriendClicked(friend) {
             this.$events.$emit(this.SWITCH_FRIEND_DETAIL, friend)
         },
@@ -81,28 +106,6 @@ export default {
                 }, 200)
             }
         }
-    },
-    created() {
-        this.$events.$on(this.OPEN_FRIENDS, () => {
-            setTimeout(() => {
-                this.visible = true
-                setTimeout(() => {
-                    let body = document.getElementById("friends_list")
-                    body.style.maxHeight = "500px"
-                }, 200)
-            }, 300)
-        })
-        this.$events.$on(this.CLOSE_FRIENDS, () => {
-            let body = document.getElementById("friends_list")
-            body.style.maxHeight = "0px"
-            setTimeout(() => {
-                this.visible = false
-                this.form_visible = false
-            }, 300)
-        })
-        this.$events.$on(this.UPDATE_FRIENDS_LIST, (friends) => {
-            this.friends = friends
-        })
     }
 }
 </script>

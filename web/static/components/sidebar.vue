@@ -73,7 +73,42 @@ export default {
             closed: false
         }
     },
+    created() {
+        this.$events.$on(this.START_CHAT, (friend) => { this.openChats(friend) })
+    }, 
     methods: {
+        _close() {
+            this.$events.$emit(this.PULL_WINDOW)
+            document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
+            setTimeout(() => {
+                document.getElementById("switch").classList.add("fa", "fa-chevron-right")
+                document.getElementById("switch").classList.remove("fa-chevron-left")
+                document.getElementById("switch").blur()
+                document.getElementById("sidebar").style.width = this.minWidth + "px"
+                document.getElementById("sidebar_cover").style.width = this.minWidth + "px"
+            }, 300)
+
+            this.closed = true
+        },
+        _open() {
+            this.$events.$emit(this.PUSH_WINDOW)
+            document.getElementById("sidebar").style.width = this.maxWidth + "px"
+            document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
+            setTimeout(() => {
+                document.getElementById("switch").classList.add("fa", "fa-chevron-left")
+                document.getElementById("switch").classList.remove("fa-chevron-right")
+                document.getElementById("switch").blur()
+                document.getElementById("sidebar_cover").style.width = "0px"
+            }, 300);
+
+            this.closed = false
+        },
+        _closeSubPanel() {
+            if (this.closeCmd) {
+                this.$events.$emit(this.closeCmd)
+                this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+            }
+        },
         signout() {
             btnSignout.blur()
             let obj = {
@@ -120,44 +155,7 @@ export default {
             } else {
                 this._close()
             }
-        },
-        _close() {
-            this.$events.$emit(this.PULL_WINDOW)
-            document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
-            setTimeout(() => {
-                document.getElementById("switch").classList.add("fa", "fa-chevron-right")
-                document.getElementById("switch").classList.remove("fa-chevron-left")
-                document.getElementById("switch").blur()
-                document.getElementById("sidebar").style.width = this.minWidth + "px"
-                document.getElementById("sidebar_cover").style.width = this.minWidth + "px"
-            }, 300)
-
-            this.closed = true
-        },
-        _open() {
-            this.$events.$emit(this.PUSH_WINDOW)
-            document.getElementById("sidebar").style.width = this.maxWidth + "px"
-            document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
-            setTimeout(() => {
-                document.getElementById("switch").classList.add("fa", "fa-chevron-left")
-                document.getElementById("switch").classList.remove("fa-chevron-right")
-                document.getElementById("switch").blur()
-                document.getElementById("sidebar_cover").style.width = "0px"
-            }, 300);
-
-            this.closed = false
-        },
-        _closeSubPanel() {
-            if (this.closeCmd) {
-                this.$events.$emit(this.closeCmd)
-                this.$events.$emit(this.CLOSE_FLOAT_PANEL)
-            }
         }
-    },
-    created() {
-        this.$events.$on(this.START_CHAT, (friend) => {
-            this.openChats(friend)
-        })
     },
     mounted() {
         btnSignout = document.getElementById("btn_signout")

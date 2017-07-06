@@ -25,7 +25,8 @@ defmodule Portal.ChannelCase do
       import Ecto.Changeset
       import Ecto.Query
 
-
+      import Portal.TestHelpers
+      
       # The default endpoint for testing
       @endpoint Portal.Endpoint
     end

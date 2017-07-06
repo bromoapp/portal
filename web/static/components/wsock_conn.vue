@@ -21,13 +21,12 @@ export default {
         // Connecting to server
         this.socket.connect()
         this.proxyChannel = this.socket.channel(proxyChannelPrefix + this.user)
-        this.proxyChannel.on(this.INITIAL_UPDATES, (updates) => { this._onInitialUpdates(updates) })
         this.proxyChannel.on(this.FRIEND_ONLINE, (friend) => { this._onFriendOnline(friend) })
         this.proxyChannel.on(this.FRIEND_OFFLINE, (friend) => { this._onFriendOffline(friend) })
         this.proxyChannel.on(this.P2P_MSG_NEW, (msg) => { this._onP2pMsgNew(msg) })
         this.proxyChannel.on(this.P2P_MSG_IN, (msg) => { this._onP2pMsgIn(msg) })
         this.proxyChannel.join()
-            .receive("ok", () => { /*console.log("Succeed to join proxy ch")*/ })
+            .receive("ok", (updates) => { this._onInitialUpdates(updates) })
             .receive("error", () => { /*console.log("Failed to join proxy ch")*/ })
 
         this.roomChannel = this.socket.channel(roomChannelPrefix + this.user)

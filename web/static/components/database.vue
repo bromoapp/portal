@@ -40,6 +40,7 @@ export default {
             this.tbl_chats.insert(data)
             let conv = this.tbl_chats.find({ 'rec_id': data.rec_id })
             this.$events.$emit(this.UPDATE_CHAT_DIALOG, conv[0])
+            this._updateChatsList()
         },
         _onUpdateChatData(data) {
             let conv = this.tbl_chats.find({ 'rec_id': data.rec_id })

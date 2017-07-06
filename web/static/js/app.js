@@ -52,7 +52,6 @@ Vue.mixin({
             get POP_ERROR() { return "pop_error" },
             get SWITCH_FRIEND_DETAIL() { return "switch_friend_detail" },
             get SWITCH_CHAT() { return "switch_chat" },
-            get NEW_P2P_MSG() { return "new_p2p_msg" },
 
             // Component 2 component messages w/o args that triggers GUI component
             get SIGN_OUT() { return "sign_out" },

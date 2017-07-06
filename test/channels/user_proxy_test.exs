@@ -36,6 +36,5 @@ defmodule Portal.UserProxyTest do
     test "1. Join channel succeed", %{socket_a: socket, user_a: user} do
         {:ok, reply, _socket} = subscribe_and_join(socket, "user_proxy:my_username_a", %{})
         assert reply == %{}
-        
     end
 end

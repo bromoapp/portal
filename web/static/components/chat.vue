@@ -72,11 +72,7 @@ export default {
                     conv = old_conv + conv
                     conv_div.innerHTML = conv
                     conv_div.scrollTop = conv_div.scrollHeight;
-                } else {
-                    this.$events.$emit(this.NEW_P2P_MSG, chat)
                 }
-            } else {
-                this.$events.$emit(this.NEW_P2P_MSG, chat)
             }
         },
         _switchChat(friend) {

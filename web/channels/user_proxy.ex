@@ -13,7 +13,6 @@ defmodule Portal.UserProxy do
     require Logger
 
     # Event topics
-    @initial_updates "initial_updates"
     @friend_online "friend_online"
     @friend_offline "friend_offline"
     @p2p_msg_new "p2p_msg_new"
@@ -29,7 +28,11 @@ defmodule Portal.UserProxy do
 
     def join("user_proxy:" <> username, _params, socket) do
         send self(), :after_join
-        {:ok, socket}
+
+        {_user, updates} = {socket.assigns.user, %Updates{}}
+            |> _get_friends_list()
+            |> _get_ongoing_chats()
+        {:ok, updates, socket}
     end
     
     def terminate(_reason, socket) do
@@ -74,15 +77,11 @@ defmodule Portal.UserProxy do
             pid: self()
         }
         OnlineUsersDb.insert(ol_user)
-
-        # 3. Send initial updates for user on joined
+        
+        # 3. Informs user's friends that he/she is online
         {_user, updates} = {socket.assigns.user, %Updates{}}
             |> _get_friends_list()
-            |> _get_ongoing_chats()
-        
-        push socket, @initial_updates, updates
-        
-        # 4. Informs user's friends that he/she is online
+
         updates.friends |>
             Enum.each(fn(friend) ->
                 cond do

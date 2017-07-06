@@ -51,12 +51,8 @@ export default {
         this.$events.$on(this.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
         this.$events.$on(this.CLOSE_CHATS, () => { this._closeChatsList() })
         this.$events.$on(this.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
-        this.$events.$on(this.NEW_P2P_MSG, (data) => { this._onNewP2pMsg(data) })
     },
     methods: {
-        _onNewP2pMsg(data) {
-            console.log(">>> NEW P2P MSG: ", data)
-        },
         _updateChatsList(list) {
             this.friends = list
         },

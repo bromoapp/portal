@@ -38,7 +38,7 @@ export default {
             currFriend: null,
             height: "450px",
             maxWidth: "400px",
-            panel_visible: false
+            panel_visible: false,
         }
     },
     created() {

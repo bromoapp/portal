@@ -41,7 +41,7 @@ export default {
 
         // P2p chat events handlers
         this.$events.$on(this.QUERY_CHATS, (conv) => { this._onQueryChats(conv) })
-        this.$events.$on(this.P2P_MSG_OUT, (friend, message) => { _onP2pMsgOut(friend, message) })
+        this.$events.$on(this.P2P_MSG_OUT, (friend, message) => { this._onP2pMsgOut(friend, message) })
     },
     methods: {
         _onInitialUpdates(updates) {

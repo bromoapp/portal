@@ -1,5 +1,6 @@
 defmodule Portal.UserProxyTest do
     use Portal.ChannelCase
+    alias Phoenix.Token
     alias Portal.UserSocket
     alias Portal.UserProxy
     alias Portal.User
@@ -13,28 +14,22 @@ defmodule Portal.UserProxyTest do
         user_a = insert_user(@user_a)
         user_b = insert_user(@user_b)
 
-        # create relation changeset for inserting new relation
-        rel_map = %{tags: "#some_tag#"}
-            |> Map.put(:user_a, user_a)
-            |> Map.put(:user_b, user_b)
+        # create relation
+        insert_new_relation(user_a, user_b)
 
-        rel_cs = Relation.create_changeset(%Relation{}, rel_map)
-            |> put_assoc(:user_a, user_a)
-            |> put_assoc(:user_b, user_b)
-        assert rel_cs.valid?
-        rel = Repo.insert!(rel_cs)
-
-        token_a = Phoenix.Token.sign(socket(), "portal_salt", user_a)
+        token_a = Token.sign(socket(), "portal_salt", user_a)
         {:ok, socket_a} = connect(UserSocket, %{"token" => token_a})
         
-        token_b = Phoenix.Token.sign(socket(), "portal_salt", user_b)
+        token_b = Token.sign(socket(), "portal_salt", user_b)
         {:ok, socket_b} = connect(UserSocket, %{"token" => token_b})
 
         {:ok, socket_a: socket_a, user_a: user_a}
     end
 
-    test "1. Join channel succeed", %{socket_a: socket, user_a: user} do
-        {:ok, reply, _socket} = subscribe_and_join(socket, "user_proxy:my_username_a", %{})
-        assert reply == %{}
+    test "1. Join channel succeed and get initial updates", %{socket_a: socket, user_a: user} do
+        {:ok, reply, _socket} = subscribe_and_join(socket, "user_proxy:" <> @user_a.username, %{})
+        %Portal.Updates{chats: [], friends: [%{id: _id, name: f_name, online: false, username: f_uname}]} = reply
+        assert f_name == @user_b.name
+        assert f_uname == @user_b.username
     end
 end

@@ -40,6 +40,7 @@ Vue.mixin({
             get UPDATE_CHATS_LIST() { return "update_chats_list" },
             get UPDATE_CHANNELS_LIST() { return "update_channels_list" },
             get UPDATE_INVITATIONS_LIST() { return "update_invitations_list" },
+            get CHAT_DATA_UPDATED() { return "chat_data_updated" },
             get UPDATE_CHAT_DATA() { return "update_chat_data" },
             get UPDATE_CHAT_DIALOG() { return "update_chat_dialog" },
             get P2P_MSG_OUT() { return "p2p_msg_out" },
@@ -52,8 +53,10 @@ Vue.mixin({
             get POP_ERROR() { return "pop_error" },
             get SWITCH_FRIEND_DETAIL() { return "switch_friend_detail" },
             get SWITCH_CHAT() { return "switch_chat" },
+            get CHAT_DIALOG_OPENED() { return "chat_dialog_opened" },
 
             // Component 2 component messages w/o args that triggers GUI component
+            get CHAT_DIALOG_CLOSED() { return "chat_dialog_closed" },
             get SIGN_OUT() { return "sign_out" },
             get LOGIN_SUBMIT() { return "login_submit" },
             get LOGIN_CANCEL() { return "login_cancel" },

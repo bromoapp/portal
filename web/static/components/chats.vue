@@ -22,7 +22,7 @@
                 <ul>
                     <li v-for="friend in friends" v-bind:key="friend">
                         <div v-on:click="onChatClicked(friend)" class="accordion-btn bg-263238-d">
-                            <span>{{ friend.name }}</span>
+                            <span v-bind:id="friend.id">{{ friend.name }}</span>
                             <span v-if="friend.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-comment"></i>
                             </span>
@@ -42,17 +42,48 @@
 export default {
     data() {
         return {
+            currFriend: null,
             friends: [],
             visible: false,
             form_visible: false
         }
     },
     created() {
+        this.$events.$on(this.CHAT_DATA_UPDATED, (data) => this._onChatDataUpdated(data))
         this.$events.$on(this.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
         this.$events.$on(this.CLOSE_CHATS, () => { this._closeChatsList() })
+        this.$events.$on(this.CHAT_DIALOG_OPENED, (friend) => { this._onChatDialogOpened(friend) })
+        this.$events.$on(this.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
         this.$events.$on(this.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
     },
     methods: {
+        _onChatDataUpdated(chat) {
+            if (this.currFriend != null) {
+                if (this.currFriend.id == chat.friend_id) {
+                    this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
+                } else {
+                    setTimeout(() => {
+                        let el = document.getElementById(chat.friend_id)
+                        el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"fa fa-envelope\"></i>"
+                    }, 200);
+                }
+            } else {
+                setTimeout(() => {
+                    let el = document.getElementById(chat.friend_id)
+                    el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"fa fa-envelope\"></i>"
+                }, 200);
+            }
+        },
+        _onChatDialogOpened(friend) {
+            this.currFriend = friend
+            let el = document.getElementById(friend.id)
+            if (el) {
+                el.innerHTML = this._getFriendsName(friend.id)
+            }
+        },
+        _onChatDialogClosed() {
+            this.currFriend = null
+        },
         _updateChatsList(list) {
             this.friends = list
         },
@@ -75,6 +106,20 @@ export default {
                     }
                 }, 200)
             }, 300)
+        },
+        _getFriendsName(id) {
+            let friend = null
+            for (let n = 0; n < this.friends.length; n++) {
+                friend = this.friends[n]
+                if (friend.id == id) {
+                    break
+                }
+            }
+            if (friend) {
+                return friend.name
+            } else {
+                return ""
+            }
         },
         onChatClicked(friend) {
             this.$events.$emit(this.SWITCH_CHAT, friend)

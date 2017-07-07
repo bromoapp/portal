@@ -27,20 +27,23 @@ export default {
     },
     methods: {
         _onP2pMsgIn(data) {
-            let conv = this.tbl_chats.find({ "friend_id": data.friend_id })
-            if (conv != null) {
-                let chat = conv[(conv.length - 1)]
-                if (chat.chats) {
-                    chat.chats.push(data.chats[0])
-                    this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
+            let convs = this.tbl_chats.find({ "friend_id": data.friend_id })
+            if (convs != null) {
+                let conv = convs[0]
+                if (conv.chats) {
+                    conv.chats.push(data.chats[0])
+                    this._onChatDataUpdated(conv)
+                } else {
+                    conv.chats = [data.chats[0]]
+                    this._onChatDataUpdated(conv)
                 }
             }
         },
         _onP2pMsgNew(data) {
             this.tbl_chats.insert(data)
             let conv = this.tbl_chats.find({ 'rec_id': data.rec_id })
-            this.$events.$emit(this.UPDATE_CHAT_DIALOG, conv[0])
             this._updateChatsList()
+            this._onChatDataUpdated(conv[0])
         },
         _onUpdateChatData(data) {
             let conv = this.tbl_chats.find({ 'rec_id': data.rec_id })
@@ -48,17 +51,23 @@ export default {
                 conv[0].chats = data.chats
                 conv[0].read = data.read
                 conv[0].date = data.date
-                this.$events.$emit(this.UPDATE_CHAT_DIALOG, conv[0])
+                this._onChatDataUpdated(conv[0])
             }
         },
         _onGetChats(data) {
+            let requery = false
             let convs = this.tbl_chats.find({ 'friend_id': data.id })
             for (let n = 0; n < convs.length; n++) {
                 let conv = convs[n]
                 if (conv.chats == null) {
+                    requery = true
                     this.$events.$emit(this.QUERY_CHATS, conv)
                 } else {
-                    this.$events.$emit(this.UPDATE_CHAT_DIALOG, conv)
+                    if (requery) {
+                        this.$events.$emit(this.QUERY_CHATS, conv)
+                    } else {
+                        this._onChatDataUpdated(conv)
+                    }
                 }
             }
         },
@@ -103,6 +112,9 @@ export default {
                 }
             }
             this.$events.$emit(this.UPDATE_CHATS_LIST, chats)
+        },
+        _onChatDataUpdated(data) {
+            this.$events.$emit(this.CHAT_DATA_UPDATED, data)
         }
     }
 }

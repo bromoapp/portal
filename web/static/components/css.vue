@@ -11,7 +11,6 @@ export default {
 
 <style>
 /************************** Common styles **************************/
-
 .container-lobby {
     margin-left: auto;
     margin-right: auto;
@@ -24,11 +23,7 @@ export default {
     max-width: 500px;
 }
 
-
-
-
 /************************** Main window styles **************************/
-
 .main-window {
     transition: 0.3s ease;
     position: fixed;
@@ -38,22 +33,14 @@ export default {
     left: 0;
 }
 
-
-
-
 /************************** Webcam styles **************************/
-
 #cam_video {
     width: 280px;
     height: 210px;
     transition: 0.5s;
 }
 
-
-
-
 /************************** Float panel styles **************************/
-
 .float-panel {
     position: fixed;
     width: 0;
@@ -76,11 +63,7 @@ export default {
     transition: 0.3s ease;
 }
 
-
-
-
 /************************** Friend detail panel styles **************************/
-
 .friend-profile {
     margin-top: 25px;
     padding: 10px;
@@ -95,11 +78,7 @@ export default {
     padding: 5px;
 }
 
-
-
-
 /************************** Chat dialog styles **************************/
-
 .chat-dialog {
     margin: 6px 10px 10px 10px;
 }
@@ -171,9 +150,7 @@ export default {
     color: #ffb300;
 }
 
-
 /************************** Sidebar styles **************************/
-
 .sidebar {
     height: 100%;
     width: 0;
@@ -244,11 +221,7 @@ export default {
     }
 }
 
-
-
-
 /************************** Navgroup styles **************************/
-
 .accordion {
     transition: 0.4s ease;
     border: none;
@@ -301,11 +274,7 @@ export default {
     margin-right: 20px;
 }
 
-
-
-
 /************************** Popup styles **************************/
-
 .popup-mask {
     position: fixed;
     z-index: 9998;
@@ -391,11 +360,7 @@ export default {
     padding: 0px 0px 0px 10px;
 }
 
-
-
-
 /************************** Color styles **************************/
-
 .bg-37474f-d {
     transition: 0.4s ease;
     color: white;
@@ -405,6 +370,18 @@ export default {
 .bg-37474f-d:hover {
     color: black;
     background-color: #f50057;
+}
+
+.bg-highlight-d {
+    transition: 0.4s ease;
+    color: white;
+    background-color: #ffb300;
+}
+
+.bg-highlight-d:hover {
+    transition: 0.4s ease;
+    color: white;
+    background-color: #37474f;
 }
 
 .bg-37474f-s {

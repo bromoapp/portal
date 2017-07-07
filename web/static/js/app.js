@@ -78,6 +78,7 @@ Vue.mixin({
             get PUSH_WINDOW() { return "push_window" },
             get PULL_WINDOW() { return "pull_window" },
             get SWITCH_SETTINGS() { return "switch_settings" },
+            get HIGHLIGHT_CHATS_BTN() { return "highlight_chats_btn" }
         }
     }
 })

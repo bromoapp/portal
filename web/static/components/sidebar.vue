@@ -70,13 +70,24 @@ export default {
             minWidth: this.$parent.minWidth,
             wsocket: this.$parent.wsocket,
             closeCmd: null,
-            closed: false
+            closed: false,
         }
     },
     created() {
         this.$events.$on(this.START_CHAT, (friend) => { this.openChats(friend) })
-    }, 
+        this.$events.$on(this.HIGHLIGHT_CHATS_BTN, () => this._switchChatsBtn(true))
+    },
     methods: {
+        _switchChatsBtn(mode) {
+            let btn = document.getElementById("btn_chats")
+            if (mode) {
+                btn.classList.remove("bg-37474f-d")
+                btn.classList.add("bg-highlight-d")
+            } else {
+                btn.classList.remove("bg-highlight-d")
+                btn.classList.add("bg-37474f-d")
+            }
+        },
         _close() {
             this.$events.$emit(this.PULL_WINDOW)
             document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
@@ -136,6 +147,7 @@ export default {
         openChats(friend) {
             btnChats.blur()
             if (this.closeCmd != this.CLOSE_CHATS) {
+                this._switchChatsBtn(false)
                 this._closeSubPanel()
                 this.$events.$emit(this.OPEN_CHATS, friend)
                 this.closeCmd = this.CLOSE_CHATS

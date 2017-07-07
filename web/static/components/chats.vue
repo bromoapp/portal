@@ -59,22 +59,31 @@ export default {
     },
     methods: {
         _showUnreads(list) {
-            setTimeout(() => {
-                if (list.length > 0) {
-                    for (let n = 0; n < list.length; n++) {
-                        this._setItemToUnread(list[n].id)
+            if (this.visible) {
+                setTimeout(() => {
+                    if (list.length > 0) {
+                        for (let n = 0; n < list.length; n++) {
+                            this._setItemToUnread(list[n].id)
+                        }
                     }
-                }
-            }, 200);
+                }, 200);
+            } else {
+                this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
+            }
         },
         _onChatDataUpdated(chat) {
-            if (this.currFriend != null) {
-                if (this.currFriend.id == chat.friend_id) {
-                    this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
+            if (this.visible) {
+                if (this.currFriend != null) {
+                    if (this.currFriend.id == chat.friend_id) {
+                        this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
+                    } else {
+                        this._setItemToUnread(chat.friend_id)
+                    }
                 } else {
                     this._setItemToUnread(chat.friend_id)
                 }
-            } else {
+            } else { 
+                this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
                 this._setItemToUnread(chat.friend_id)
             }
         },
@@ -107,6 +116,7 @@ export default {
             setTimeout(() => {
                 this.visible = false
                 this.form_visible = false
+                this.$events.$emit(this.GET_UNREADS)
             }, 300)
         },
         _openChatsList(friend) {

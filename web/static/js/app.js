@@ -45,8 +45,12 @@ Vue.mixin({
             get UPDATE_CHAT_DIALOG() { return "update_chat_dialog" },
             get P2P_MSG_OUT() { return "p2p_msg_out" },
             get GET_CHATS() { return "get_chats" },
+            get GET_UNREADS() { return "get_unreads" },
+            get ADD_UNREAD() { return "add_unread" },
+            get DEL_UNREAD() { return "del_unread" },
 
             // Component 2 component messages with args that triggers GUI component
+            get SHOW_UNREADS() { return "show_unreads" },
             get START_CHAT() { return "start_chat" },
             get POP_QUESTION() { return "pop_question" },
             get POP_INFO() { return "pop_info" },

@@ -55,23 +55,27 @@ export default {
         this.$events.$on(this.CHAT_DIALOG_OPENED, (friend) => { this._onChatDialogOpened(friend) })
         this.$events.$on(this.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
         this.$events.$on(this.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
+        this.$events.$on(this.SHOW_UNREADS, (list) => { this._showUnreads(list) })
     },
     methods: {
+        _showUnreads(list) {
+            setTimeout(() => {
+                if (list.length > 0) {
+                    for (let n = 0; n < list.length; n++) {
+                        this._setItemToUnread(list[n].id)
+                    }
+                }
+            }, 200);
+        },
         _onChatDataUpdated(chat) {
             if (this.currFriend != null) {
                 if (this.currFriend.id == chat.friend_id) {
                     this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                 } else {
-                    let el = document.getElementById(chat.friend_id)
-                    if (el) {
-                        el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
-                    }
+                    this._setItemToUnread(chat.friend_id)
                 }
             } else {
-                let el = document.getElementById(chat.friend_id)
-                if (el) {
-                    el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
-                }
+                this._setItemToUnread(chat.friend_id)
             }
         },
         _onChatDialogOpened(friend) {
@@ -79,10 +83,20 @@ export default {
             let el = document.getElementById(friend.id)
             if (el) {
                 el.innerHTML = this._getFriendsName(friend.id)
+                this.$events.$emit(this.DEL_UNREAD, friend.id)
             }
         },
         _onChatDialogClosed() {
             this.currFriend = null
+        },
+        _setItemToUnread(id) {
+            setTimeout(() => {
+                this.$events.$emit(this.ADD_UNREAD, id)
+                let el = document.getElementById(id)
+                if (el) {
+                    el.innerHTML = this._getFriendsName(id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                }
+            }, 200);
         },
         _updateChatsList(list) {
             this.friends = list
@@ -105,6 +119,7 @@ export default {
                         this.$events.$emit(this.SWITCH_CHAT, friend)
                     }
                 }, 200)
+                this.$events.$emit(this.GET_UNREADS)
             }, 300)
         },
         _getFriendsName(id) {

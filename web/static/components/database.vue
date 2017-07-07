@@ -9,12 +9,14 @@ export default {
         return {
             db: this.$parent.db,
             tbl_friends: null,
-            tbl_chats: null
+            tbl_chats: null,
+            tbl_unreads: null,
         }
     },
     created() {
         this.tbl_friends = this.db.addCollection('friends')
         this.tbl_chats = this.db.addCollection('chats')
+        this.tbl_unreads = this.db.addCollection('unreads')
 
         // Insert or update database events handlers
         this.$events.$on(this.INITIAL_UPDATES, (data) => { this._onInitialUpdates(data) })
@@ -24,8 +26,26 @@ export default {
         this.$events.$on(this.UPDATE_CHAT_DATA, (data) => { this._onUpdateChatData(data) })
         this.$events.$on(this.P2P_MSG_NEW, (data) => { this._onP2pMsgNew(data) })
         this.$events.$on(this.P2P_MSG_IN, (data) => { this._onP2pMsgIn(data) })
+        this.$events.$on(this.ADD_UNREAD, (data) => { this._onAddUnread(data) })
+        this.$events.$on(this.GET_UNREADS, () => { this._onGetUnreads() })
+        this.$events.$on(this.DEL_UNREAD, (data) => { this._onDelUnread(data) })
     },
     methods: {
+        _onDelUnread(data) {
+            this.tbl_unreads.findAndRemove({ "id": data })
+        },
+        _onGetUnreads() {
+            let list = this.tbl_unreads.find({})
+            if (list.length > 0) {
+                this.$events.$emit(this.SHOW_UNREADS, list)
+            }
+        },
+        _onAddUnread(data) {
+            let list = this.tbl_unreads.find({ "id": data })
+            if (list.length == 0) {
+                this.tbl_unreads.insert({ id: data })
+            }
+        },
         _onP2pMsgIn(data) {
             let convs = this.tbl_chats.find({ "friend_id": data.friend_id })
             if (convs != null) {

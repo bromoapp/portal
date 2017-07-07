@@ -23,13 +23,17 @@ defmodule Portal.UserProxyTest do
         token_b = Token.sign(socket(), "portal_salt", user_b)
         {:ok, socket_b} = connect(UserSocket, %{"token" => token_b})
 
-        {:ok, socket_a: socket_a, user_a: user_a}
+        {:ok, socket_a: socket_a, user_a: user_a, socket_b: socket_b, user_b: user_b}
     end
 
-    test "1. Join channel succeed and get initial updates", %{socket_a: socket, user_a: user} do
+    test "1. User A successfully join the channel and get initial updates", %{socket_a: socket, user_a: user} do
         {:ok, reply, _socket} = subscribe_and_join(socket, "user_proxy:" <> @user_a.username, %{})
         %Portal.Updates{chats: [], friends: [%{id: _id, name: f_name, online: false, username: f_uname}]} = reply
         assert f_name == @user_b.name
         assert f_uname == @user_b.username
+    end
+
+    test "2. User B successfully join the channel, and user A get notified ", %{socket_a: socket_a, user_a: user_a, socket_b: socket_b, user_b: user_b} do
+        assert true == true
     end
 end

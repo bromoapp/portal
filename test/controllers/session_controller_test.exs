@@ -20,7 +20,7 @@ defmodule Portal.SessionControllerTest do
         assert html_response(conn, 200)
     end
 
-    test "2. Create method returns redirect to lobby page on a valid credential", %{conn: conn, valid_credential: credential} do
+    test "2. Create method returns redirect to the lobby page on a valid credential", %{conn: conn, valid_credential: credential} do
         conn = post(conn, session_path(conn, :create), credential)
         assert redirected_to(conn) == page_path(conn, :lobby)
     end

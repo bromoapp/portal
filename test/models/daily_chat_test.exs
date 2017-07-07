@@ -27,7 +27,7 @@ defmodule Portal.DailyChatTest do
         {:ok, user_1: user_a, user_2: user_b}
     end
 
-    test "1. Insert new daily chat success when all input params are correct", %{user_1: user_a, user_2: user_b} do
+    test "1. Success on inserting new daily chat when all input params are correct", %{user_1: user_a, user_2: user_b} do
         # create daily chat
         ch1 = %Chat{from: "B", message: "Hello A", time: _get_time()}
         ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time()}
@@ -56,7 +56,7 @@ defmodule Portal.DailyChatTest do
         assert dchat.user_b.id == user_b.id
     end
 
-    test "2. Update a daily chat success when all input params are correct", %{user_1: user_a, user_2: user_b} do
+    test "2. Success in updating a daily chat when all input params are correct", %{user_1: user_a, user_2: user_b} do
         # create first daily chat
         ch1 = %Chat{from: "B", message: "Hello A", time: _get_time()}
         ch2 = %Chat{from: "A", message: "Hello B how are you", time: _get_time()}

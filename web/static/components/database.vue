@@ -59,7 +59,7 @@ export default {
             let convs = this.tbl_chats.find({ 'friend_id': data.id })
             for (let n = 0; n < convs.length; n++) {
                 let conv = convs[n]
-                if (conv.chats == null) {
+                if (conv.chats == null || conv.date == null) {
                     requery = true
                     this.$events.$emit(this.QUERY_CHATS, conv)
                 } else {

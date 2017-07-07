@@ -156,7 +156,9 @@ export default {
     max-height: 50px;
 }
 
-
+.chat-new-msg {
+    color: #ffb300;
+}
 
 /************************** Sidebar styles **************************/
 

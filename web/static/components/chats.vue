@@ -64,13 +64,17 @@ export default {
                 } else {
                     setTimeout(() => {
                         let el = document.getElementById(chat.friend_id)
-                        el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"fa fa-envelope\"></i>"
+                        if (el) {
+                            el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                        }
                     }, 200);
                 }
             } else {
                 setTimeout(() => {
                     let el = document.getElementById(chat.friend_id)
-                    el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"fa fa-envelope\"></i>"
+                    if (el) {
+                        el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                    }
                 }, 200);
             }
         },

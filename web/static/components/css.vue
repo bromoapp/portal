@@ -26,6 +26,7 @@ export default {
 
 
 
+
 /************************** Main window styles **************************/
 
 .main-window {
@@ -39,6 +40,7 @@ export default {
 
 
 
+
 /************************** Webcam styles **************************/
 
 #cam_video {
@@ -46,6 +48,7 @@ export default {
     height: 210px;
     transition: 0.5s;
 }
+
 
 
 
@@ -75,6 +78,7 @@ export default {
 
 
 
+
 /************************** Friend detail panel styles **************************/
 
 .friend-profile {
@@ -90,6 +94,7 @@ export default {
 .friend-details {
     padding: 5px;
 }
+
 
 
 
@@ -123,7 +128,7 @@ export default {
 }
 
 .chat-separator span {
-    background:#d8d6d6; 
+    background: #d8d6d6;
     padding: 10px;
 }
 
@@ -132,6 +137,8 @@ export default {
     border: 1px solid white;
     background: white;
     padding: 5px;
+    display: inline-block;
+    max-width: 260px;
 }
 
 .chat-bubble-me {
@@ -140,6 +147,10 @@ export default {
     color: white;
     background: #455A64;
     padding: 5px;
+    display: inline-block;
+    max-width: 260px;
+    margin-left: auto;
+    margin-right: 0;
 }
 
 .chat-message {
@@ -159,6 +170,7 @@ export default {
 .chat-new-msg {
     color: #ffb300;
 }
+
 
 /************************** Sidebar styles **************************/
 
@@ -234,6 +246,7 @@ export default {
 
 
 
+
 /************************** Navgroup styles **************************/
 
 .accordion {
@@ -287,6 +300,7 @@ export default {
 .accordion-btn .icon {
     margin-right: 20px;
 }
+
 
 
 
@@ -376,6 +390,7 @@ export default {
     max-height: 0;
     padding: 0px 0px 0px 10px;
 }
+
 
 
 

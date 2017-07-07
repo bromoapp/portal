@@ -63,9 +63,9 @@ export default {
                     for (let n = 0; n < chats.length; n++) {
                         let obj = chats[n]
                         if (obj.from == this.currFriend.username) {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\"><span class=\"chat-bubble\">" + obj.message + "</span></div>"
+                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\"><div class=\"chat-bubble\" style=\"text-align: left\">" + obj.message + "</div></div>"
                         } else {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\"><span class=\"chat-bubble-me\">" + obj.message + "</span></div>"
+                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\"><div class=\"chat-bubble-me\" style=\"text-align: left\">" + obj.message + "</div></div>"
                         }
                     }
                     conv = conv + "</div>"

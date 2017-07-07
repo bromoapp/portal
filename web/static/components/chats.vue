@@ -62,20 +62,16 @@ export default {
                 if (this.currFriend.id == chat.friend_id) {
                     this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                 } else {
-                    setTimeout(() => {
-                        let el = document.getElementById(chat.friend_id)
-                        if (el) {
-                            el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
-                        }
-                    }, 200);
-                }
-            } else {
-                setTimeout(() => {
                     let el = document.getElementById(chat.friend_id)
                     if (el) {
                         el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
                     }
-                }, 200);
+                }
+            } else {
+                let el = document.getElementById(chat.friend_id)
+                if (el) {
+                    el.innerHTML = this._getFriendsName(chat.friend_id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                }
             }
         },
         _onChatDialogOpened(friend) {

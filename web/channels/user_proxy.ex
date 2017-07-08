@@ -162,8 +162,7 @@ defmodule Portal.UserProxy do
                 online? == true ->
                     raw = Poison.decode!(dchat.messages)
                     ol_friend = OnlineUsersDb.select(user_b.username)
-                    json = %{rec_id: dchat.id, friend_id: user_a.id, date: _format_date(dchat.inserted_at), 
-                        chats: raw["chats"], read: 1}
+                    json = %{rec_id: dchat.id, friend_id: user_a.id, date: _format_date(dchat.inserted_at), chats: raw["chats"], read: 1}
                     send ol_friend.pid, {:p2p_msg_new, json}
                 true ->
                     :ignore
@@ -187,7 +186,9 @@ defmodule Portal.UserProxy do
             cond do
                 online? == true ->
                     ol_friend = OnlineUsersDb.select(user_b.username)
-                    json = %{rec_id: udchat.id, friend_id: user_a.id, date: _format_date(udchat.updated_at), chats: [chat], read: 1}
+                    %Portal.Chat{from: _, message: message, time: time} = chat
+                    nchat = %{"from" => user_a.username, "message" => message, "time" => time}
+                    json = %{rec_id: udchat.id, friend_id: user_a.id, date: _format_date(udchat.updated_at), chats: [nchat], read: 1}
                     send ol_friend.pid, {:p2p_msg_in, json}
                 true ->
                     :ignore

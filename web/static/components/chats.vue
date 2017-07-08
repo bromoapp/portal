@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div id="chats_list" class="accordion-body">
+            <div id="items_list" class="accordion-body">
                 <ul>
                     <li v-for="friend in friends" v-bind:key="friend">
                         <div v-on:click="onChatClicked(friend)" class="accordion-btn bg-263238-d">
@@ -31,6 +31,7 @@
                             </span>
                         </div>
                     </li>
+                    <li><div class="accordion-btn bg-263238-s">&nbsp;</div></li>
                 </ul>
             </div>
         </div>
@@ -49,6 +50,7 @@ export default {
         }
     },
     created() {
+        this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
         this.$events.$on(this.CHAT_DATA_UPDATED, (data) => this._onChatDataUpdated(data))
         this.$events.$on(this.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
         this.$events.$on(this.CLOSE_CHATS, () => { this._closeChatsList() })
@@ -58,6 +60,15 @@ export default {
         this.$events.$on(this.SHOW_UNREADS, (list) => { this._showUnreads(list) })
     },
     methods: {
+        _onWindowResizing() {
+            let body = document.getElementById("items_list")
+            body.style.display = "none"
+            setTimeout(() => {
+                body.style.height = (window.innerHeight - this.TOP_MARGIN) + "px"
+                body.style.overflowY = "auto"
+                body.style.display = "block"
+            }, 200)
+        },
         _showUnreads(list) {
             if (this.visible) {
                 setTimeout(() => {
@@ -111,7 +122,7 @@ export default {
             this.friends = list
         },
         _closeChatsList() {
-            let body = document.getElementById("chats_list")
+            let body = document.getElementById("items_list")
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
@@ -123,8 +134,8 @@ export default {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
-                    let body = document.getElementById("chats_list")
-                    body.style.maxHeight = "500px"
+                    let body = document.getElementById("items_list")
+                    body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
                     if (friend && friend.target == null) {
                         this.$events.$emit(this.SWITCH_CHAT, friend)
                     }

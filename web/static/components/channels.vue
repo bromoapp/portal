@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div id="channels_list" class="accordion-body">
+            <div id="items_list" class="accordion-body">
                 <ul>
                     <li v-for="ch in channels" v-bind:key="ch">
                         <div class="accordion-btn bg-263238-d">
@@ -27,6 +27,9 @@
                                 <i class="fa fa-window-maximize"></i>
                             </span>
                         </div>
+                    </li>
+                    <li>
+                        <div class="accordion-btn bg-263238-s">&nbsp;</div>
                     </li>
                 </ul>
             </div>
@@ -39,22 +42,35 @@
 export default {
     data() {
         return {
-            channels: ["Classic 90's Songs", "Classic Balads", "Tiesto Concert", "Double Six Bali"],
+            channels: ["Classic 90's Songs",
+                "Classic Balads", "Tiesto Concert",
+                "Double Six Bali", "Ex Komplek Zeni",
+                "Jakarta Indie TV", "Keluarga Sarya"],
             visible: false,
             form_visible: false
         }
     },
     created() {
+        this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
         this.$events.$on(this.OPEN_CHANNELS, () => { this._openChannelsList() })
         this.$events.$on(this.CLOSE_CHANNELS, () => { this._closeChannelsList() })
         this.$events.$on(this.UPDATE_CHANNELS_LIST, (list) => { this._updateChannelsList(list) })
     },
     methods: {
+        _onWindowResizing() {
+            let body = document.getElementById("items_list")
+            body.style.display = "none"
+            setTimeout(() => {
+                body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
+                body.style.overflowY = "auto"
+                body.style.display = "block"
+            }, 200)
+        },
         _updateChannelsList(list) {
             this.channels = list
         },
         _closeChannelsList() {
-            let body = document.getElementById("channels_list")
+            let body = document.getElementById("items_list")
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
@@ -65,8 +81,8 @@ export default {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
-                    let body = document.getElementById("channels_list")
-                    body.style.maxHeight = "500px"
+                    let body = document.getElementById("items_list")
+                    body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
                 }, 200)
             }, 300)
         },

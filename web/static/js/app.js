@@ -23,6 +23,9 @@ import lobby from "./lobby"
 import login from "./login"
 import register from "./register"
 import Vue from 'vue'
+import VueEvents from 'vue-events'
+
+Vue.use(VueEvents)
 
 Vue.mixin({
     data: function () {
@@ -34,7 +37,7 @@ Vue.mixin({
             get P2P_MSG_NEW() { return "p2p_msg_new" },
             get P2P_MSG_IN() { return "p2p_msg_in" },
             get QUERY_CHATS() { return "query_chats" },
-            
+
             // Component 2 component messages with args
             get UPDATE_FRIENDS_LIST() { return "update_friends_list" },
             get UPDATE_CHATS_LIST() { return "update_chats_list" },
@@ -78,7 +81,11 @@ Vue.mixin({
             get PUSH_WINDOW() { return "push_window" },
             get PULL_WINDOW() { return "pull_window" },
             get SWITCH_SETTINGS() { return "switch_settings" },
-            get HIGHLIGHT_CHATS_BTN() { return "highlight_chats_btn" }
+            get HIGHLIGHT_CHATS_BTN() { return "highlight_chats_btn" },
+            get WINDOW_RESIZING() { return "window_risizing" },
+
+            // Constant values
+            get TOP_MARGIN() { return 310 }
         }
     }
 })
@@ -86,3 +93,11 @@ Vue.mixin({
 login.init(document.getElementById("login_form"))
 register.init(document.getElementById("register_form"))
 lobby.init(socket, document.getElementById("lobby_div"))
+
+new Vue({
+    created() {
+        window.onresize = () => {
+            this.$events.$emit(this.WINDOW_RESIZING)
+        }
+    }
+})

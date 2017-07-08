@@ -19,12 +19,14 @@ defmodule Portal.UserProxy do
     @p2p_msg_in "p2p_msg_in"
     @p2p_msg_out "p2p_msg_out"
     @query_chats "query_chats"
+    @search_friend "search_friend"
 
     # SQLs
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?)"
     @sql_friends_list "CALL `sp_friends_list`(?)"
     @sql_query_chats "SELECT a.id, a.user_b_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?"
     @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.updated_at) = CURDATE() AND a.user_a_id = ? AND a.user_b_id = ?;"
+    @sql_src_friend "SELECT a.username FROM users AS a WHERE a.username LIKE ?"
 
     def join("user_proxy:" <> username, _params, socket) do
         send self(), :after_join
@@ -141,6 +143,12 @@ defmodule Portal.UserProxy do
             json = %{rec_id: id, friend_id: user_b_id, date: _format_date(date_time), chats: raw["chats"], read: read}
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
         end
+    end
+
+    def handle_in(@search_friend, %{"src_friend" => args}, socket) do
+        %Result{rows: rows} = SQL.query!(Repo, @sql_src_friend, [args <> "%"])
+        Logger.info(">>> RES: #{inspect rows}")
+        {:reply, :ok, socket}
     end
 
     defp _create_update_users_chat(user_a, user_b, chat) do

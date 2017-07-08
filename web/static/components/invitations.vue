@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div id="invitations_list" class="accordion-body">
+            <div id="items_list" class="accordion-body">
                 <ul>
                     <li v-for="invit in invitations" v-bind:key="invit">
                         <div class="accordion-btn bg-263238-d">
@@ -28,6 +28,7 @@
                             </span>
                         </div>
                     </li>
+                    <li><div class="accordion-btn bg-263238-s">&nbsp;</div></li>
                 </ul>
             </div>
         </div>
@@ -45,11 +46,21 @@ export default {
         }
     },
     created() {
+        this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
         this.$events.$on(this.OPEN_INVITATIONS, () => { this._openInvitationsList() })
         this.$events.$on(this.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })
         this.$events.$on(this.UPDATE_INVITATIONS_LIST, (list) => { this._updateInvitationsList(list) })
     },
     methods: {
+        _onWindowResizing() {
+            let body = document.getElementById("items_list")
+            body.style.display = "none"
+            setTimeout(() => {
+                body.style.height = (window.innerHeight - this.TOP_MARGIN) + "px"
+                body.style.overflowY = "auto"
+                body.style.display = "block"
+            }, 200)
+        },
         _updateInvitationsList(list) {
             this.invitations = list
         },
@@ -57,13 +68,13 @@ export default {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
-                    let body = document.getElementById("invitations_list")
-                    body.style.maxHeight = "500px"
+                    let body = document.getElementById("items_list")
+                    body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
                 }, 200)
             }, 300)
         },
         _closeInvitationsList() {
-            let body = document.getElementById("invitations_list")
+            let body = document.getElementById("items_list")
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false

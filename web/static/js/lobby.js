@@ -7,8 +7,6 @@ import MainWindow from "../components/main_window.vue"
 import Sidebar from "../components/sidebar.vue"
 import Popup from "../components/popup.vue"
 
-Vue.use(VueEvents)
-
 let lobby = {
     init(socket, element) {
         if (!element) {

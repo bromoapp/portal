@@ -1,5 +1,5 @@
 <template>
-    <div id="main_window" class="main-window lobby-body">
+    <div id="main_window" class="main-window lobby-body" v-on:click="closeAll">
         <chat></chat>
         <friend-detail></friend-detail>
     </div>
@@ -25,6 +25,9 @@ export default {
         this.$events.$on(this.PULL_WINDOW, () => { this._pull() })
     },
     methods: {
+        closeAll() {
+            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+        },
         _push() {
             document.getElementById("main_window").style.marginLeft = this.maxLeftMargin + "px"
         },

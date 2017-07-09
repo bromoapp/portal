@@ -232,7 +232,6 @@ export default {
 .accordion-header {
     transition: 0.4s ease;
     border-radius: 0;
-    cursor: pointer;
     color: black;
     font-size: 16px;
     font-weight: bold;

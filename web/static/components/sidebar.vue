@@ -179,7 +179,7 @@ export default {
         setTimeout(() => {
             this._open()
             setTimeout(() => {
-                this.openFriends()
+                this.openChannels()
             }, 500)
         }, 100)
     }

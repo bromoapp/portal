@@ -89,7 +89,8 @@ export default {
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
-                this.form_visible = false
+                this.search_form_visible = false
+                this.add_form_visible = false
             }, 300)
         },
         _openFriendsList() {

@@ -239,7 +239,7 @@ export default {
     position: relative;
 }
 
-.accordion-header a {
+.accordion-header-btns {
     font-weight: normal;
     position: absolute;
     top: 3px;

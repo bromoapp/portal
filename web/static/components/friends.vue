@@ -1,19 +1,30 @@
 <template>
     <div v-if="visible">
         <div class="panel accordion">
-            <div class="panel-heading accordion-header bg-37474f-d" v-on:click="seekFriend">
+            <div class="panel-heading accordion-header bg-37474f-s">
                 Friends
-                <a href="javascript:" style="color: white" class="btn">
-                    <i id="header_btn" class="fa fa-chevron-down"></i>
-                </a>
+                <div class="accordion-header-btns">
+                    <a title="Add new friend" id="add_friend_btn" href="javascript:" v-on:click="addFriend" class="btn bg-37474f-d">
+                        <i id="header_btn" class="fa fa-user-plus"></i>
+                    </a>
+                    <a title="Search friend" id="src_friend_btn" href="javascript:" v-on:click="seekFriend" class="btn bg-37474f-d">
+                        <i id="header_btn" class="fa fa-search"></i>
+                    </a>
+                </div>
             </div>
-            <div v-if="form_visible" id="seek_friend" class="bg-212121-s slide-in">
-                <div style="margin: 0px 15px 0px 15px">
-                    <span style="color: white">Search:</span>
+            <div v-if="search_form_visible" id="seek_friend" class="bg-212121-s slide-in">
+                <div style="margin: 0px 19px 0px 19px; padding: 10px 15px 10px 0px">
+                    <span style="color: white">Search friend:</span>
+                    <input id="search_args" class="form-control" type="text" placeholder="Name">
+                </div>
+            </div>
+            <div v-if="add_form_visible" id="add_friend" class="bg-212121-s slide-in">
+                <div style="margin: 0px 15px 0px 19px; padding: 10px 15px 10px 0px">
+                    <span style="color: white">Friend's email:</span>
                     <div class="form-inline">
-                        <input id="search_args" class="form-control" type="text" placeholder="Name or email">
-                        <a title="Invite" class="btn bg-1976D2-d">
-                            <i class="fa fa-search"></i>
+                        <input id="invite_args" class="form-control" type="text" placeholder="Email">
+                        <a title="Send invitation" v-on:click="sendInvitation" class="btn bg-1976D2-d">
+                            <i class="fa fa-send"></i>
                         </a>
                     </div>
                 </div>
@@ -49,7 +60,8 @@ export default {
         return {
             friends: [],
             visible: false,
-            form_visible: false,
+            search_form_visible: false,
+            add_form_visible: false,
             detailPanelWidth: 300
         }
     },
@@ -90,33 +102,59 @@ export default {
             }, 300)
         },
         onFriendClicked(friend) {
+            this.seekFriend()
             this.$events.$emit(this.SWITCH_FRIEND_DETAIL, friend)
         },
-        seekFriend() {
-            if (this.form_visible) {
-                let div = document.getElementById("seek_friend")
+        addFriend() {
+            document.getElementById("add_friend_btn").blur()
+            if (this.add_form_visible) {
+                let div = document.getElementById("add_friend")
                 div.style.maxHeight = "0px"
-                div.style.padding = "10px"
                 setTimeout(() => {
-                    this.form_visible = false
-                    let btn = document.getElementById("header_btn")
-                    btn.classList.remove("fa-chevron-up")
-                    btn.classList.add("fa-chevron-down")
+                    this.add_form_visible = false
                 }, 200)
             } else {
-                this.form_visible = true
+                if (this.search_form_visible) {
+                    this.seekFriend()
+                }
                 setTimeout(() => {
-                    let div = document.getElementById("seek_friend")
-                    div.style.maxHeight = "80px"
-                    div.style.padding = "10px"
+                    this.add_form_visible = true
+                    setTimeout(() => {
+                        let div = document.getElementById("add_friend")
+                        div.style.maxHeight = "100px"
 
-                    let btn = document.getElementById("header_btn")
-                    btn.classList.remove("fa-chevron-down")
-                    btn.classList.add("fa-chevron-up")
-
-                    let inputEl = document.getElementById("search_args")
-                    inputEl.focus()
+                        let inputEl = document.getElementById("invite_args")
+                        inputEl.focus()
+                    }, 150)
+                }, 150);
+            }
+        },
+        sendInvitation() {
+            document.getElementById("invite_args").value = ""
+            this.addFriend()
+        },
+        seekFriend() {
+            document.getElementById("src_friend_btn").blur()
+            if (this.search_form_visible) {
+                let div = document.getElementById("seek_friend")
+                div.style.maxHeight = "0px"
+                setTimeout(() => {
+                    this.search_form_visible = false
                 }, 200)
+            } else {
+                if (this.add_form_visible) {
+                    this.addFriend()
+                }
+                setTimeout(() => {
+                    this.search_form_visible = true
+                    setTimeout(() => {
+                        let div = document.getElementById("seek_friend")
+                        div.style.maxHeight = "100px"
+
+                        let inputEl = document.getElementById("search_args")
+                        inputEl.focus()
+                    }, 150)
+                }, 150);
             }
         }
     }

@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div v-if="search_form_visible" id="seek_friend" class="bg-212121-s slide-in">
-                <div style="margin: 0px 19px 0px 19px; padding: 10px 15px 10px 0px">
+                <div style="margin: 0px 17px 0px 19px; padding: 10px 15px 10px 0px">
                     <span style="color: white">Search friend:</span>
                     <input id="search_args" class="form-control" type="text" placeholder="Name">
                 </div>
@@ -102,7 +102,9 @@ export default {
             }, 300)
         },
         onFriendClicked(friend) {
-            this.seekFriend()
+            if (this.search_form_visible) {
+                this.seekFriend()
+            }
             this.$events.$emit(this.SWITCH_FRIEND_DETAIL, friend)
         },
         addFriend() {

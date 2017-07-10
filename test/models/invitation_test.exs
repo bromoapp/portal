@@ -2,6 +2,7 @@ defmodule Portal.InvitationTest do
     use Portal.ModelCase
     alias Portal.Invitation
     alias Portal.User
+    require Logger
 
     @user_a %{name: "my_name_a", username: "my_username_a", password: "my_password_a"}
     @user_b %{name: "my_name_b", username: "my_username_b", password: "my_password_b"}
@@ -25,6 +26,23 @@ defmodule Portal.InvitationTest do
     end
 
     test "1. User A invites user B", %{from: from, to: to} do
+        invit = _create_invitation(from, to)
+
+        assert invit.from.id == from.id
+        assert invit.to.id == to.id
+        assert invit.invit_type == "FRIENDSHIP"
+        assert invit.invit_msg == "Hi this is A"
+        assert invit.status == "WAIT"
+    end
+
+    test "2. User B response on A's invitation", %{from: from, to: to} do
+        invit = _create_invitation(from, to)
+        Logger.warn(">>> #{inspect invit}")
+
+        assert true == true
+    end
+
+    defp _create_invitation(from, to) do
         invit_map = %{invit_type: "FRIENDSHIP", invit_msg: "Hi this is A"}
             |> Map.put(:from, from)
             |> Map.put(:to, to)
@@ -38,12 +56,6 @@ defmodule Portal.InvitationTest do
             |> Repo.get!(invit.id)
             |> Repo.preload(:from)
             |> Repo.preload(:to)
-
-        assert latest_invit.from.id == from.id
-        assert latest_invit.to.id == to.id
-        assert latest_invit.invit_type == "FRIENDSHIP"
-        assert latest_invit.invit_msg == "Hi this is A"
-        assert latest_invit.status == "WAIT"
     end
 
 end

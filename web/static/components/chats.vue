@@ -157,7 +157,9 @@ export default {
             }
         },
         onChatClicked(friend) {
-            this.seekChat()
+            if (this.form_visible) {
+                this.seekChat()
+            }
             this.$events.$emit(this.SWITCH_CHAT, friend)
         },
         seekChat() {

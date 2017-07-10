@@ -179,7 +179,7 @@ export default {
         setTimeout(() => {
             this._open()
             setTimeout(() => {
-                this.openChannels()
+                this.openChats()
             }, 500)
         }, 100)
     }

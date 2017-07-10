@@ -2,11 +2,11 @@ defmodule Portal.Invitation do
     use Portal.Web, :model
 
     schema "invitations" do
-        belongs_to :from_id, Portal.User
-        belongs_to :to_id, Portal.User
+        belongs_to :from, Portal.User
+        belongs_to :to, Portal.User
         field :invit_type, :string
         field :invit_msg, :string
-        field :status, :string
+        field :status, :string, default: "WAIT"
 
         timestamps()
     end

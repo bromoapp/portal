@@ -51,6 +51,8 @@ Vue.mixin({
             get GET_UNREADS() { return "get_unreads" },
             get ADD_UNREAD() { return "add_unread" },
             get DEL_UNREAD() { return "del_unread" },
+            get ADD_FRIEND_OUT() { return "add_friend_out" },
+            get ADD_FRIEND_IN() { return "add_friend_in" },
 
             // Component 2 component messages with args that triggers GUI component
             get SHOW_UNREADS() { return "show_unreads" },

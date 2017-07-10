@@ -23,7 +23,7 @@
                     <span style="color: white">Friend's email:</span>
                     <div class="form-inline">
                         <input id="invite_args" class="form-control" type="text" placeholder="Email">
-                        <a title="Send invitation" v-on:click="sendInvitation" class="btn bg-1976D2-d">
+                        <a id="send_invit_btn" title="Send invitation" v-on:click="sendInvitation" class="btn bg-1976D2-d">
                             <i class="fa fa-send"></i>
                         </a>
                     </div>
@@ -102,6 +102,10 @@ export default {
                 }, 200)
             }, 300)
         },
+        _isFormatCorrect(data) {
+            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(data);
+        },
         onFriendClicked(friend) {
             if (this.search_form_visible) {
                 this.seekFriend()
@@ -133,8 +137,21 @@ export default {
             }
         },
         sendInvitation() {
-            document.getElementById("invite_args").value = ""
-            this.addFriend()
+            document.getElementById("send_invit_btn").blur()
+            let el = document.getElementById("invite_args")
+            let email = el.value
+            if (this._isFormatCorrect(email)) {
+                this.$events.$emit(this.ADD_FRIEND_OUT, email)
+                setTimeout(() => {
+                    this.addFriend()
+                    el.value = ""
+                }, 500);
+            } else {
+                let obj = {
+                    msg: "Invalid email format!",
+                }
+                this.$events.$emit(this.POP_ERROR, obj)
+            }
         },
         seekFriend() {
             document.getElementById("src_friend_btn").blur()

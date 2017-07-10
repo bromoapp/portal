@@ -2,7 +2,6 @@ defmodule Portal.InvitationTest do
     use Portal.ModelCase
     alias Portal.Invitation
     alias Portal.User
-    require Logger
 
     @user_a %{name: "my_name_a", username: "my_username_a", password: "my_password_a"}
     @user_b %{name: "my_name_b", username: "my_username_b", password: "my_password_b"}

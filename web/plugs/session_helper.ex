@@ -29,12 +29,12 @@ defmodule Portal.SessionHelper do
     def logout(conn) do
         # Invalidate user session
         conn
-            |> Guardian.Plug.sign_out()
+            |> sign_out()
             |> configure_session(drop: true)
     end
 
     def is_web_req_authorized?(conn, _opts) do
-        if conn.assigns.current_user do
+        if current_resource(conn) do
             conn
         else
             conn
@@ -45,7 +45,7 @@ defmodule Portal.SessionHelper do
     end
 
     def is_api_req_authorized?(conn, _opts) do
-        if conn.assigns.current_user do
+        if current_resource(conn) do
             conn
         else
             conn
@@ -61,7 +61,7 @@ defmodule Portal.SessionHelper do
 
         conn
             |> assign(:current_user, user)
-            |> Guardian.Plug.sign_in(user)
+            |> sign_in(user)
             |> assign(:access_token, token)
     end
 end

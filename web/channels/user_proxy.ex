@@ -22,9 +22,10 @@ defmodule Portal.UserProxy do
     @query_chats "query_chats"
 
     # SQLs
-    @sql_ongoing_chats "CALL `sp_ongoing_chats`(?)"
-    @sql_friends_list "CALL `sp_friends_list`(?)"
-    @sql_query_chats "SELECT a.id, a.user_b_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?"
+    @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"
+    @sql_friends_list "CALL `sp_friends_list`(?);"
+    @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` != 'IGNORED'"
+    @sql_query_chats "SELECT a.id, a.user_b_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?;"
     @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.updated_at) = CURDATE() AND a.user_a_id = ? AND a.user_b_id = ?;"
 
     def join("user_proxy:" <> username, _params, socket) do
@@ -33,6 +34,7 @@ defmodule Portal.UserProxy do
         {_user, updates} = {socket.assigns.user, %Updates{}}
         |> _get_friends_list()
         |> _get_ongoing_chats()
+        |> _get_invitations_list()
         {:ok, updates, socket}
     end
     
@@ -124,29 +126,40 @@ defmodule Portal.UserProxy do
 
     def handle_in(@p2p_msg_out, %{"to" => friend_uname, "msg" => message}, socket) do
         sender = socket.assigns.user
-        friend = Repo.get_by!(User, username: friend_uname)
-        chat = %Chat{from: sender.username, message: message, time: _format_time()}
-        _create_update_users_chat(sender, friend, chat)
-        _create_update_users_chat(friend, sender, chat)
-        
-        {:noreply, socket}
+        receiver = Repo.get_by(User, username: friend_uname)
+        if (receiver != nil) do
+            chat = %Chat{from: sender.username, message: message, time: _format_time()}
+            _create_update_users_chat(sender, receiver, chat)
+            _create_update_users_chat(receiver, sender, chat)
+
+            {:noreply, socket}
+        else
+            {:reply, {:error, %{"msg" => "Email not found!"}}, socket}
+        end
     end
 
-    def handle_in(@query_chats, %{"rec_id" => rec_id}, socket) do
-        %Result{rows: rows} = SQL.query!(Repo, @sql_query_chats, [rec_id])
+    def handle_in(@query_chats, %{"id" => id}, socket) do
+        %Result{rows: rows} = SQL.query!(Repo, @sql_query_chats, [id])
         if rows == [] do
             {:reply, {:ok, %{"query_chats_resp" => %{}}}, socket}
         else
             [[id, user_b_id, messages, date_time, read]] = rows
             raw = Poison.decode!(messages)
-            json = %{rec_id: id, friend_id: user_b_id, date: _format_date(date_time), chats: raw["chats"], read: read}
+            json = %{id: id, friend_id: user_b_id, date: _format_date(date_time), chats: raw["chats"], read: read}
+
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
         end
     end
 
     def handle_in(@add_friend_out, %{"email" => email}, socket) do
-        Logger.info(">>> EMAIL: #{inspect email}")
-        {:reply, :ok, socket}
+        sender = socket.assigns.user
+        receiver = Repo.get_by(User, username: email)
+        if (receiver != nil) do
+
+            {:reply, :ok, socket}
+        else
+            {:reply, {:error, %{"msg" => "Email not found!"}}, socket}
+        end
     end
 
     defp _create_update_users_chat(user_a, user_b, chat) do
@@ -168,7 +181,7 @@ defmodule Portal.UserProxy do
                 online? == true ->
                     raw = Poison.decode!(dchat.messages)
                     ol_friend = OnlineUsersDb.select(user_b.username)
-                    json = %{rec_id: dchat.id, friend_id: user_a.id, date: _format_date(dchat.inserted_at), chats: raw["chats"], read: 1}
+                    json = %{id: dchat.id, friend_id: user_a.id, date: _format_date(dchat.inserted_at), chats: raw["chats"], read: 1}
                     send ol_friend.pid, {:p2p_msg_new, json}
                 true ->
                     :ignore
@@ -176,8 +189,7 @@ defmodule Portal.UserProxy do
         else
             # updates existing chat
             [[id]] = rows
-            odchat = DailyChat
-            |> Repo.get!(id)
+            odchat = DailyChat |> Repo.get!(id)
             old_chats = Poison.decode!(odchat.messages, as: %Chats{})
             upd_chat_list = %Chats{chats: old_chats.chats ++ [chat]}
             text = Poison.encode!(upd_chat_list)
@@ -194,7 +206,7 @@ defmodule Portal.UserProxy do
                     ol_friend = OnlineUsersDb.select(user_b.username)
                     %Portal.Chat{from: uname, message: message, time: time} = chat
                     nchat = %{"from" => uname, "message" => message, "time" => time}
-                    json = %{rec_id: udchat.id, friend_id: user_a.id, date: _format_date(udchat.updated_at), chats: [nchat], read: 1}
+                    json = %{id: udchat.id, friend_id: user_a.id, date: _format_date(udchat.updated_at), chats: [nchat], read: 1}
                     send ol_friend.pid, {:p2p_msg_in, json}
                 true ->
                     :ignore
@@ -202,10 +214,33 @@ defmodule Portal.UserProxy do
         end
     end
 
+    defp _get_invitations_list({user, struct}) do
+        %Result{rows: rows} = SQL.query!(Repo, @sql_invitations_list, [user.id])
+        if rows == [] do
+            {user, %Updates{struct | invits: []}}
+        else
+            {user, %Updates{struct | invits: _parse_invits(rows, [])}}
+        end
+    end
+
+    defp _parse_invits([], result) do
+        result
+    end
+
+    defp _parse_invits([h|t], result) do
+        [id, from_id, to, type, message, status, _, _] = h
+        friend = User |> Repo.get!(from_id)
+        nresult = result ++ [%{id: id, from_id: from_id, from_name: friend.name, type: type, msg: message}]
+        _parse_invits(t, nresult)
+    end
+
     defp _get_ongoing_chats({user, struct}) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_ongoing_chats, [user.id])
-        chats = _parse_chats(rows, [])
-        {user, %Updates{struct | chats: chats}}
+        if rows == [] do
+            {user, %Updates{struct | chats: []}}
+        else
+            {user, %Updates{struct | chats: _parse_chats(rows, [])}}
+        end
     end
 
     defp _parse_chats([], result) do
@@ -213,14 +248,18 @@ defmodule Portal.UserProxy do
     end
 
     defp _parse_chats([h|t], result) do
-        [friend_id, rec_id] = h
-        nresult = result ++ [%{rec_id: rec_id, friend_id: friend_id, chats: nil, date: nil, read: nil}]
+        [friend_id, id] = h
+        nresult = result ++ [%{id: id, friend_id: friend_id, chats: nil, date: nil, read: nil}]
         _parse_chats(t, nresult)
     end
 
     defp _get_friends_list({user, struct}) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_friends_list, [user.id])
-        {user, %Updates{struct | friends: _parse_friends(rows, [])}}
+        if rows == [] do
+            {user, %Updates{struct | friends: []}}
+        else
+            {user, %Updates{struct | friends: _parse_friends(rows, [])}}
+        end
     end
 
     defp _parse_friends([], result) do

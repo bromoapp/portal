@@ -47,6 +47,18 @@ export default {
     methods: {
         _onAddFriendOut(email) {
             this.proxyChannel.push(this.ADD_FRIEND_OUT, { email: email })
+                .receive("ok", () => {
+                    let obj = {
+                        msg: "Invitation sent!"
+                    }
+                    this.$events.$emit(this.POP_INFO, obj)
+                })
+                .receive("error", (data) => {
+                    let obj = {
+                        msg: data.msg
+                    }
+                    this.$events.$emit(this.POP_ERROR, obj)
+                })
         },
         _onInitialUpdates(updates) {
             this.$events.$emit(this.INITIAL_UPDATES, updates)
@@ -73,12 +85,17 @@ export default {
             }
         },
         _onQueryChats(conv) {
-            this.proxyChannel.push(this.QUERY_CHATS, { rec_id: conv.rec_id }).receive("ok", (resp) => {
+            this.proxyChannel.push(this.QUERY_CHATS, { id: conv.id }).receive("ok", (resp) => {
                 this.$events.$emit(this.UPDATE_CHAT_DATA, resp.query_chats_resp)
             })
         },
         _onP2pMsgOut(friend, message) {
-            this.proxyChannel.push(this.P2P_MSG_OUT, { to: friend.username, msg: message })
+            this.proxyChannel.push(this.P2P_MSG_OUT, { to: friend.username, msg: message }).receive("error", (data) => {
+                let obj = {
+                    msg: data.msg
+                }
+                this.$events.$emit(this.POP_ERROR, obj)
+            })
         }
     }
 }

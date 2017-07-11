@@ -151,7 +151,9 @@ export default {
             }
         },
         onChannelClicked(ch) {
-            this.seekChannel()
+            if (this.search_form_visible) {
+                this.seekChannel()
+            }
         }
     }
 }

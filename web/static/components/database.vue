@@ -8,14 +8,16 @@ export default {
     data() {
         return {
             db: this.$parent.db,
-            tbl_friends: null,
             tbl_chats: null,
+            tbl_invits: null,
+            tbl_friends: null,
             tbl_unreads: null,
         }
     },
     created() {
-        this.tbl_friends = this.db.addCollection('friends')
         this.tbl_chats = this.db.addCollection('chats')
+        this.tbl_invits = this.db.addCollection('invits')
+        this.tbl_friends = this.db.addCollection('friends')
         this.tbl_unreads = this.db.addCollection('unreads')
 
         // Insert or update database events handlers
@@ -61,12 +63,12 @@ export default {
         },
         _onP2pMsgNew(data) {
             this.tbl_chats.insert(data)
-            let conv = this.tbl_chats.find({ 'rec_id': data.rec_id })
+            let conv = this.tbl_chats.find({ 'id': data.id })
             this._updateChatsList()
             this._onChatDataUpdated(conv[0])
         },
         _onUpdateChatData(data) {
-            let conv = this.tbl_chats.find({ 'rec_id': data.rec_id })
+            let conv = this.tbl_chats.find({ 'id': data.id })
             if (conv[0]) {
                 conv[0].chats = data.chats
                 conv[0].read = data.read
@@ -102,6 +104,7 @@ export default {
             this._updateFriendsList()
         },
         _onInitialUpdates(data) {
+            console.log(">>> UPDATES", data)
             for (let n = 0; n < data.friends.length; n++) {
                 let friend = data.friends[n]
                 this.tbl_friends.insert(friend)
@@ -113,6 +116,12 @@ export default {
                 this.tbl_chats.insert(chat)
             }
             this._updateChatsList()
+
+            for (let n = 0; n < data.invits.length; n++) {
+                let invit = data.invits[n]
+                this.tbl_invits.insert(invit)
+            }
+            this._updateInvitsList()
         },
         _updateFriendsList() {
             let friends = this.tbl_friends.where((o) => {
@@ -132,6 +141,12 @@ export default {
                 }
             }
             this.$events.$emit(this.UPDATE_CHATS_LIST, chats)
+        },
+        _updateInvitsList() {
+            let invits = this.tbl_invits.where((o) => {
+                return o.from_name != null
+            })
+            this.$events.$emit(this.UPDATE_INVITATIONS_LIST, invits)
         },
         _onChatDataUpdated(data) {
             this.$events.$emit(this.CHAT_DATA_UPDATED, data)

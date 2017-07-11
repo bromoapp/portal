@@ -27,8 +27,8 @@ defmodule Portal.SessionController do
     def delete(conn, _args) do
         user = Guardian.Plug.current_resource(conn)
         conn
-            |> logout()
-            |> put_flash(:info, "See you later #{user.name}")
-            |> redirect(to: page_path(conn, :home))
+        |> logout()
+        |> put_flash(:info, "See you later #{user.name}")
+        |> redirect(to: page_path(conn, :home))
     end
 end

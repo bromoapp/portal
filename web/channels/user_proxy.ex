@@ -31,8 +31,8 @@ defmodule Portal.UserProxy do
         send self(), :after_join
 
         {_user, updates} = {socket.assigns.user, %Updates{}}
-            |> _get_friends_list()
-            |> _get_ongoing_chats()
+        |> _get_friends_list()
+        |> _get_ongoing_chats()
         {:ok, updates, socket}
     end
     
@@ -81,7 +81,7 @@ defmodule Portal.UserProxy do
         
         # 3. Informs user's friends that he/she is online
         {_user, updates} = {socket.assigns.user, %Updates{}}
-            |> _get_friends_list()
+        |> _get_friends_list()
 
         updates.friends |>
             Enum.each(fn(friend) ->
@@ -157,11 +157,11 @@ defmodule Portal.UserProxy do
             text = Poison.encode!(chats)
             online? = _is_friend_online?(user_b.username)
             dchat_map = %{read: online?, messages: text}
-                |> Map.put(:user_a, user_a)
-                |> Map.put(:user_b, user_b)
+            |> Map.put(:user_a, user_a)
+            |> Map.put(:user_b, user_b)
             dchat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, dchat_map)
-                |> Changeset.put_assoc(:user_a, user_a)
-                |> Changeset.put_assoc(:user_b, user_b)
+            |> Changeset.put_assoc(:user_a, user_a)
+            |> Changeset.put_assoc(:user_b, user_b)
             dchat = Repo.insert!(dchat_cs)
 
             cond do
@@ -177,14 +177,14 @@ defmodule Portal.UserProxy do
             # updates existing chat
             [[id]] = rows
             odchat = DailyChat
-                |> Repo.get!(id)
+            |> Repo.get!(id)
             old_chats = Poison.decode!(odchat.messages, as: %Chats{})
             upd_chat_list = %Chats{chats: old_chats.chats ++ [chat]}
             text = Poison.encode!(upd_chat_list)
             online? = _is_friend_online?(user_b.username)
             upd_dchat_map = %{read: online?, messages: text}
-                |> Map.put(:user_a, user_a)
-                |> Map.put(:user_b, user_b)
+            |> Map.put(:user_a, user_a)
+            |> Map.put(:user_b, user_b)
 
             upd_dchat_cs = DailyChat.create_or_update_changeset(odchat, upd_dchat_map)
             udchat = Repo.update!(upd_dchat_cs)

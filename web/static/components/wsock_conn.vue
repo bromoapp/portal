@@ -42,11 +42,11 @@ export default {
         // P2p chat events handlers
         this.$events.$on(this.QUERY_CHATS, (conv) => { this._onQueryChats(conv) })
         this.$events.$on(this.P2P_MSG_OUT, (friend, message) => { this._onP2pMsgOut(friend, message) })
-        this.$events.$on(this.ADD_FRIEND_OUT, (email) => { this._onAddFriendOut(email) })
+        this.$events.$on(this.ADD_FRIEND_OUT, (invit) => { this._onAddFriendOut(invit) })
     },
     methods: {
-        _onAddFriendOut(email) {
-            this.proxyChannel.push(this.ADD_FRIEND_OUT, { email: email })
+        _onAddFriendOut(invit) {
+            this.proxyChannel.push(this.ADD_FRIEND_OUT, { email: invit.email, msg: invit.msg })
                 .receive("ok", () => {
                     let obj = {
                         msg: "Invitation sent!"

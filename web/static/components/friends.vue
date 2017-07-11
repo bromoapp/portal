@@ -27,6 +27,10 @@
                             <i class="fa fa-send"></i>
                         </a>
                     </div>
+                    <span style="color: white;">Message:</span>
+                    <div>
+                        <textarea id="invite_msg" style="width: 220px; resize: none" rows="2" class="form-control" v-model="invit_msg"></textarea>
+                    </div>
                 </div>
             </div>
             <div id="items_list" class="accordion-body">
@@ -60,6 +64,7 @@ export default {
         return {
             friends: [],
             visible: false,
+            invit_msg: "Hi, Can I be your friend?",
             search_form_visible: false,
             add_form_visible: false,
             detailPanelWidth: 300
@@ -128,7 +133,7 @@ export default {
                     this.add_form_visible = true
                     setTimeout(() => {
                         let div = document.getElementById("add_friend")
-                        div.style.maxHeight = "100px"
+                        div.style.maxHeight = "200px"
 
                         let inputEl = document.getElementById("invite_args")
                         inputEl.focus()
@@ -138,13 +143,15 @@ export default {
         },
         sendInvitation() {
             document.getElementById("send_invit_btn").blur()
-            let el = document.getElementById("invite_args")
-            let email = el.value
-            if (this._isFormatCorrect(email)) {
-                this.$events.$emit(this.ADD_FRIEND_OUT, email)
+            let mailEL = document.getElementById("invite_args")
+            let msgEl = document.getElementById("invite_msg")
+            let invit = { email: mailEL.value, msg: msgEl.value }
+            if (this._isFormatCorrect(invit.email)) {
+                this.$events.$emit(this.ADD_FRIEND_OUT, invit)
                 setTimeout(() => {
                     this.addFriend()
-                    el.value = ""
+                    mailEL.value = ""
+                    msgEl.value = this.invit_msg
                 }, 500);
             } else {
                 let obj = {

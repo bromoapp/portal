@@ -11,8 +11,8 @@ defmodule Portal.TestHelpers do
             password: "supersecret"
         }, attrs)
 
-        %Portal.User{}
-        |> Portal.User.create_changeset(changes)
+        %User{}
+        |> User.create_changeset(changes)
         |> Repo.insert!()
     end
 
@@ -24,7 +24,7 @@ defmodule Portal.TestHelpers do
         rel_cs = Relation.create_changeset(%Relation{}, rel_map)
             |> put_assoc(:user_a, user_a)
             |> put_assoc(:user_b, user_b)
-        rel = Repo.insert!(rel_cs)
+        Repo.insert!(rel_cs)
     end
     
 end

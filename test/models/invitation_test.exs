@@ -37,7 +37,6 @@ defmodule Portal.InvitationTest do
 
     test "2. User B response on A's invitation", %{from: from, to: to} do
         invit = _create_invitation(from, to)
-        Logger.warn(">>> #{inspect invit}")
 
         assert true == true
     end

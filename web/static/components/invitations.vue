@@ -39,7 +39,7 @@
 export default {
     data() {
         return {
-            invitations: ["Mulan Jameela", "Finka Ludianti", "Trianto Herhusodo", "Denis Hartanto", "Seno Partono"],
+            invitations: [],
             visible: false,
             form_visible: false
         }

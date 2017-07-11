@@ -73,7 +73,7 @@ defmodule Portal.UserProxyTest do
         
         # User B receives new conversation msg from A
         assert_push("p2p_msg_new", p2p_msg_new, 1000)
-        %{chats: [%{"from" => sender_a, "message" => msg_a, "time" => _}], date: _, friend_id: _, read: _, rec_id: _} = p2p_msg_new 
+        %{chats: [%{"from" => sender_a, "message" => msg_a, "time" => _}], date: _, friend_id: _, id: _, read: _} = p2p_msg_new 
 
         assert sender_a == @user_a.username
         assert msg_a == "Hello B"
@@ -83,13 +83,13 @@ defmodule Portal.UserProxyTest do
 
         # User A receives reply msg from B
         assert_push("p2p_msg_in", p2p_msg_in, 1000)
-        %{chats: [%{"from" => sender_b, "message" => msg_b, "time" => _}], date: _, friend_id: _, read: _, rec_id: rec_id} = p2p_msg_in 
+        %{chats: [%{"from" => sender_b, "message" => msg_b, "time" => _}], date: _, friend_id: _, id: id, read: _} = p2p_msg_in 
         
         assert sender_b == @user_b.username
         assert msg_b == "Hello A"
 
         # User B queries his chats from server
-        ref = push(socket_b, "query_chats", %{"rec_id" => rec_id})
+        ref = push(socket_b, "query_chats", %{"id" => id})
         assert_reply(ref, :ok,%{"query_chats_resp" => result}, 1000)
         
         assert length(result.chats) == 2

@@ -1,5 +1,8 @@
 defmodule Portal.UserProxy do
     use Portal.Web, :channel
+    alias Ecto.Changeset
+    alias Ecto.Adapters.SQL
+    alias Mariaex.Result
     alias Portal.ProxyPresence
     alias Portal.Relation
     alias Portal.Updates
@@ -7,17 +10,16 @@ defmodule Portal.UserProxy do
     alias Portal.DailyChat
     alias Portal.Chats
     alias Portal.Chat
-    alias Ecto.Changeset
-    alias Ecto.Adapters.SQL
-    alias Mariaex.Result
+    alias Portal.Invitation
     require Logger
 
     # Event topics
     @friend_online "friend_online"
     @friend_offline "friend_offline"
-    @p2p_msg_new "p2p_msg_new"
     @p2p_msg_in "p2p_msg_in"
     @p2p_msg_out "p2p_msg_out"
+    @p2p_msg_new "p2p_msg_new"
+    @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
     @query_chats "query_chats"
 
@@ -124,6 +126,11 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
+    def handle_info({:add_friend_in, invit}, socket) do
+        push socket, @add_friend_in, invit
+        {:noreply, socket}
+    end
+
     def handle_in(@p2p_msg_out, %{"to" => friend_uname, "msg" => message}, socket) do
         sender = socket.assigns.user
         receiver = Repo.get_by(User, username: friend_uname)
@@ -151,11 +158,28 @@ defmodule Portal.UserProxy do
         end
     end
 
-    def handle_in(@add_friend_out, %{"email" => email}, socket) do
+    def handle_in(@add_friend_out, %{"email" => email, "msg" => message}, socket) do
         sender = socket.assigns.user
         receiver = Repo.get_by(User, username: email)
         if (receiver != nil) do
+            invit_map = %{invit_type: "FRIENDSHIP", invit_msg: message, status: "WAITING"}
+            |> Map.put(:from, sender)
+            |> Map.put(:to, receiver)
+            invit_cs = Invitation.create_changeset(%Invitation{}, invit_map)
+            |> Changeset.put_assoc(:from, sender)
+            |> Changeset.put_assoc(:to, receiver)
+            invit = Repo.insert!(invit_cs)
 
+            online? = _is_friend_online?(receiver.username)
+            cond do
+                online? == true ->
+                    ol_friend = OnlineUsersDb.select(receiver.username)
+                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, status: invit.status, type: invit.type, msg: message}
+                    send ol_friend.pid, {:add_friend_in, json}
+                true ->
+                    :ignore
+            end
+            
             {:reply, :ok, socket}
         else
             {:reply, {:error, %{"msg" => "Email not found!"}}, socket}
@@ -228,9 +252,9 @@ defmodule Portal.UserProxy do
     end
 
     defp _parse_invits([h|t], result) do
-        [id, from_id, to, type, message, status, _, _] = h
+        [id, from_id, _to, type, message, status, _, _] = h
         friend = User |> Repo.get!(from_id)
-        nresult = result ++ [%{id: id, from_id: from_id, from_name: friend.name, type: type, msg: message}]
+        nresult = result ++ [%{id: id, from_id: from_id, from_name: friend.name, type: type, status: status, msg: message}]
         _parse_invits(t, nresult)
     end
 

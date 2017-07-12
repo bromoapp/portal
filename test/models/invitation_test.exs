@@ -38,7 +38,14 @@ defmodule Portal.InvitationTest do
     test "2. User B response on A's invitation", %{from: from, to: to} do
         invit = _create_invitation(from, to)
 
-        assert true == true
+        oinvit = Invitation |> Repo.get(invit.id)
+        assert oinvit.status == "WAIT"
+
+        upd_cs = Invitation.create_changeset(oinvit, %{status: "APPROVED"})
+        Repo.update(upd_cs)
+
+        linvit = Invitation |> Repo.get(invit.id)
+        assert linvit.status == "APPROVED"
     end
 
     defp _create_invitation(from, to) do

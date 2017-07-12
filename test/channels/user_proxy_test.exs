@@ -94,4 +94,19 @@ defmodule Portal.UserProxyTest do
         
         assert length(result.chats) == 2
     end
+
+    test "5. User A will send invitation to B, and B reveives it", %{socket_a: socket_a, user_a: user_a, 
+        socket_b: socket_b, user_b: user_b} do
+        
+        # Both users are join the channel
+        {:ok, _reply, socket_a} = subscribe_and_join(socket_a, "user_proxy:" <> user_a.username, %{})
+        {:ok, _reply, _socket} = subscribe_and_join(socket_b, "user_proxy:" <> user_b.username, %{})
+
+        # User A send invitation to B
+        push(socket_a, "add_friend_out", %{"email" => user_b.username, "msg" => "Let me be your friend"})
+
+        # User B received A's invitation
+        assert_push("add_friend_in", add_friend_in, 1000)
+        assert add_friend_in.msg == "Let me be your friend"
+    end
 end

@@ -21,6 +21,7 @@ defmodule Portal.UserProxy do
     @p2p_msg_new "p2p_msg_new"
     @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
+    @add_friend_rsp "add_friend_rsp"
     @query_chats "query_chats"
 
     # SQLs
@@ -299,7 +300,7 @@ defmodule Portal.UserProxy do
             cond do
                 online? == true ->
                     ol_friend = OnlineUsersDb.select(receiver.username)
-                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, status: invit.status, type: invit.type, msg: message}
+                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, status: invit.status, type: invit.invit_type, msg: message}
                     send ol_friend.pid, {:add_friend_in, json}
                 true ->
                     :ignore
@@ -309,6 +310,10 @@ defmodule Portal.UserProxy do
         else
             {:reply, {:error, %{"msg" => "Email not found!"}}, socket}
         end
+    end
+
+    def handle_in(@add_friend_rsp, %{"id" => id, "resp" => resp}, socket) do
+        {:noreply, socket}
     end
 
     #=================================================================================================

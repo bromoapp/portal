@@ -40,7 +40,7 @@
                         </div>
                     </li>
                     <li v-if="channels.length > 0">
-                        <div class="accordion-btn bg-263238-s">&nbsp;</div>
+                        <div class="accordion-btn bg-212121-s">&nbsp;</div>
                     </li>
                 </ul>
             </div>

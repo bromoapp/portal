@@ -4,7 +4,10 @@
             <div class="panel-heading accordion-header bg-37474f-s">
                 Chats
                 <div class="accordion-header-btns">
-                    <a title="Search chat" id="src_chat_btn" href="javascript:" v-on:click="seekChat" class="btn bg-37474f-d">
+                    <a v-if="friends.length == 0" title="Search chat" id="src_chat_btn" href="javascript:" class="btn bg-37474f-d">
+                        <i id="header_btn" class="fa fa-search"></i>
+                    </a>
+                    <a v-else title="Search chat" id="src_chat_btn" href="javascript:" v-on:click="seekChat" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
                 </div>
@@ -29,7 +32,7 @@
                         </div>
                     </li>
                     <li v-if="friends.length > 0">
-                        <div id="form_cover" class="accordion-btn bg-263238-s">&nbsp;</div>
+                        <div id="form_cover" class="accordion-btn bg-212121-s">&nbsp;</div>
                     </li>
                 </ul>
             </div>

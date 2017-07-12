@@ -7,7 +7,10 @@
                     <a title="Add new friend" id="add_friend_btn" href="javascript:" v-on:click="addFriend" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-user-plus"></i>
                     </a>
-                    <a title="Search friend" id="src_friend_btn" href="javascript:" v-on:click="seekFriend" class="btn bg-37474f-d">
+                    <a v-if="friends.length == 0" title="Search friend" id="src_friend_btn" href="javascript:" class="btn bg-37474f-d">
+                        <i id="header_btn" class="fa fa-search"></i>
+                    </a>
+                    <a v-else title="Search friend" id="src_friend_btn" href="javascript:" v-on:click="seekFriend" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
                 </div>
@@ -21,13 +24,13 @@
             <div v-if="add_form_visible" id="add_friend" class="bg-212121-s slide-in">
                 <div style="margin: 0px 15px 0px 19px; padding: 10px 15px 10px 0px">
                     <span style="color: white">Friend's email:</span>
-                    <div class="form-inline">
+                    <div class="form-inline" style="margin-bottom: 10px">
                         <input id="invite_args" class="form-control" type="text" placeholder="Email">
                         <a id="send_invit_btn" title="Send invitation" v-on:click="sendInvitation" class="btn bg-1976D2-d">
                             <i class="fa fa-send"></i>
                         </a>
                     </div>
-                    <span style="color: white;">Message:</span>
+                    <span style="margin: 10px 0px; color: white;">Message:</span>
                     <div>
                         <textarea id="invite_msg" style="width: 220px; resize: none" rows="2" class="form-control" v-model="invit_msg"></textarea>
                     </div>
@@ -47,7 +50,7 @@
                         </div>
                     </li>
                     <li v-if="friends.length > 0">
-                        <div class="accordion-btn bg-263238-s">&nbsp;</div>
+                        <div class="accordion-btn bg-212121-s">&nbsp;</div>
                     </li>
                 </ul>
             </div>

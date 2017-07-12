@@ -9,7 +9,7 @@
                     </a>
                 </div>
             </div>
-            <div v-if="form_visible" id="seek_invitation" class="bg-212121-s slide-in">
+            <div v-if="src_form_visible" id="seek_invitation" class="bg-212121-s slide-in">
                 <div style="margin: 0px 17px 0px 19px; padding: 10px 15px 10px 0px">
                     <span style="color: white">Name:</span>
                     <input id="search_args" class="form-control" type="text" placeholder="Name">
@@ -25,7 +25,7 @@
                             </span>
                         </div>
                     </li>
-                    <li>
+                    <li v-if="invitations.length > 0">
                         <div class="accordion-btn bg-263238-s">&nbsp;</div>
                     </li>
                 </ul>
@@ -41,7 +41,7 @@ export default {
         return {
             invitations: [],
             visible: false,
-            form_visible: false
+            src_form_visible: false
         }
     },
     created() {
@@ -80,14 +80,14 @@ export default {
             }, 300)
         },
         seekInvitation() {
-            if (this.form_visible) {
+            if (this.src_form_visible) {
                 let div = document.getElementById("seek_invitation")
                 div.style.maxHeight = "0px"
                 setTimeout(() => {
-                    this.form_visible = false
+                    this.src_form_visible = false
                 }, 200)
             } else {
-                this.form_visible = true
+                this.src_form_visible = true
                 setTimeout(() => {
                     let div = document.getElementById("seek_invitation")
                     div.style.maxHeight = "100px"

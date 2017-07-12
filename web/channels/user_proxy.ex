@@ -21,7 +21,7 @@ defmodule Portal.UserProxy do
     @p2p_msg_new "p2p_msg_new"
     @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
-    @add_friend_rsp "add_friend_rsp"
+    @add_friend_resp "add_friend_resp"
     @query_chats "query_chats"
 
     # SQLs
@@ -312,7 +312,9 @@ defmodule Portal.UserProxy do
         end
     end
 
-    def handle_in(@add_friend_rsp, %{"id" => id, "resp" => resp}, socket) do
+    def handle_in(@add_friend_resp, %{"id" => id, "resp" => resp}, socket) do
+        invit = Invitation |> Repo.get(id)
+        Logger.info("#{inspect invit}")
         {:noreply, socket}
     end
 

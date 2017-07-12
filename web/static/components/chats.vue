@@ -9,7 +9,7 @@
                     </a>
                 </div>
             </div>
-            <div v-if="form_visible" id="seek_chat" class="bg-212121-s slide-in">
+            <div v-if="src_form_visible" id="seek_chat" class="bg-212121-s slide-in">
                 <div style="margin: 0px 17px 0px 19px; padding: 10px 15px 10px 0px">
                     <span style="color: white">Search chat:</span>
                     <input id="search_args" class="form-control" type="text" placeholder="Name">
@@ -28,8 +28,8 @@
                             </span>
                         </div>
                     </li>
-                    <li>
-                        <div class="accordion-btn bg-263238-s">&nbsp;</div>
+                    <li v-if="friends.length > 0">
+                        <div id="form_cover" class="accordion-btn bg-263238-s">&nbsp;</div>
                     </li>
                 </ul>
             </div>
@@ -45,7 +45,7 @@ export default {
             currFriend: null,
             friends: [],
             visible: false,
-            form_visible: false
+            src_form_visible: false
         }
     },
     created() {
@@ -125,7 +125,7 @@ export default {
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
-                this.form_visible = false
+                this.src_form_visible = false
                 this.$events.$emit(this.GET_UNREADS)
             }, 300)
         },
@@ -157,21 +157,21 @@ export default {
             }
         },
         onChatClicked(friend) {
-            if (this.form_visible) {
+            if (this.src_form_visible) {
                 this.seekChat()
             }
             this.$events.$emit(this.SWITCH_CHAT, friend)
         },
         seekChat() {
             document.getElementById("src_chat_btn").blur()
-            if (this.form_visible) {
+            if (this.src_form_visible) {
                 let div = document.getElementById("seek_chat")
                 div.style.maxHeight = "0px"
                 setTimeout(() => {
-                    this.form_visible = false
+                    this.src_form_visible = false
                 }, 200)
             } else {
-                this.form_visible = true
+                this.src_form_visible = true
                 setTimeout(() => {
                     let div = document.getElementById("seek_chat")
                     div.style.maxHeight = "100px"
@@ -181,6 +181,9 @@ export default {
                 }, 200)
             }
         }
+    },
+    mounted() {
+        console.log(">>> MOUNTED...")
     }
 }
 </script>

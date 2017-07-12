@@ -11,14 +11,16 @@ export default {
             tbl_chats: null,
             tbl_invits: null,
             tbl_friends: null,
-            tbl_unreads: null,
+            tbl_unread: null,
+            tbl_unopened: null,
         }
     },
     created() {
         this.tbl_chats = this.db.addCollection('chats')
         this.tbl_invits = this.db.addCollection('invits')
         this.tbl_friends = this.db.addCollection('friends')
-        this.tbl_unreads = this.db.addCollection('unreads')
+        this.tbl_unread = this.db.addCollection('unread')
+        this.tbl_unopened = this.db.addCollection("unopened")
 
         // Insert or update database events handlers
         this.$events.$on(this.INITIAL_UPDATES, (data) => { this._onInitialUpdates(data) })
@@ -29,23 +31,48 @@ export default {
         this.$events.$on(this.P2P_MSG_NEW, (data) => { this._onP2pMsgNew(data) })
         this.$events.$on(this.P2P_MSG_IN, (data) => { this._onP2pMsgIn(data) })
         this.$events.$on(this.ADD_UNREAD, (data) => { this._onAddUnread(data) })
-        this.$events.$on(this.GET_UNREADS, () => { this._onGetUnreads() })
+        this.$events.$on(this.GET_UNREAD, () => { this._onGetUnread() })
         this.$events.$on(this.DEL_UNREAD, (data) => { this._onDelUnread(data) })
+        this.$events.$on(this.ADD_FRIEND_IN, (data) => { this._onAddFriendIn(data) })
+        this.$events.$on(this.ADD_UNOPENED, (data) => { this._onAddUnopened(data) })
+        this.$events.$on(this.GET_UNOPENED, () => { this._onGetUnopened() })
+        this.$events.$on(this.DEL_UNOPENED, (data) => { this._onDelUnopened(data) })
     },
     methods: {
-        _onDelUnread(data) {
-            this.tbl_unreads.findAndRemove({ "id": data })
+        _onAddUnopened(data) {
+            let list = this.tbl_unopened.find({ "id": data })
+            if (list.length == 0) {
+                this.tbl_unopened.insert({ id: data })
+            }
         },
-        _onGetUnreads() {
-            let list = this.tbl_unreads.find({})
+        _onDelUnopened(data) {
+            this.tbl_unopened.findAndRemove({ "id": data })
+            this.$events.$emit(this.DEL_UNOPENED_REC, data)
+        },
+        _onGetUnopened() {
+            let list = this.tbl_unopened.find({})
             if (list.length > 0) {
-                this.$events.$emit(this.SHOW_UNREADS, list)
+                this.$events.$emit(this.SHOW_UNOPENED, list)
+            }
+        },
+        _onAddFriendIn(data) {
+            this.tbl_invits.insert(data)
+            this._updateInvitsList()
+        },
+        _onDelUnread(data) {
+            this.tbl_unread.findAndRemove({ "id": data })
+            this.$events.$emit(this.DEL_UNREAD_REC, data)
+        },
+        _onGetUnread() {
+            let list = this.tbl_unread.find({})
+            if (list.length > 0) {
+                this.$events.$emit(this.SHOW_UNREAD, list)
             }
         },
         _onAddUnread(data) {
-            let list = this.tbl_unreads.find({ "id": data })
+            let list = this.tbl_unread.find({ "id": data })
             if (list.length == 0) {
-                this.tbl_unreads.insert({ id: data })
+                this.tbl_unread.insert({ id: data })
             }
         },
         _onP2pMsgIn(data) {

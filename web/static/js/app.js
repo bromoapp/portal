@@ -37,6 +37,8 @@ Vue.mixin({
             get P2P_MSG_NEW() { return "p2p_msg_new" },
             get P2P_MSG_IN() { return "p2p_msg_in" },
             get QUERY_CHATS() { return "query_chats" },
+            get P2P_MSG_READ() { return "p2p_msg_read" },
+            get ADD_FRIEND_OPENED() { return "add_friend_opened" },
 
             // Component 2 component messages with args
             get UPDATE_FRIENDS_LIST() { return "update_friends_list" },
@@ -48,14 +50,20 @@ Vue.mixin({
             get UPDATE_CHAT_DIALOG() { return "update_chat_dialog" },
             get P2P_MSG_OUT() { return "p2p_msg_out" },
             get GET_CHATS() { return "get_chats" },
-            get GET_UNREADS() { return "get_unreads" },
+            get GET_UNREAD() { return "get_unread" },
             get ADD_UNREAD() { return "add_unread" },
             get DEL_UNREAD() { return "del_unread" },
+            get DEL_UNREAD_REC() { return "del_unread_rec" },
             get ADD_FRIEND_OUT() { return "add_friend_out" },
             get ADD_FRIEND_IN() { return "add_friend_in" },
+            get GET_UNOPENED() { return "get_unopened" },
+            get ADD_UNOPENED() { return "add_unopened" },
+            get DEL_UNOPENED() { return "del_unopened" },
+            get DEL_UNOPENED_REC() { return "del_unopened_rec" },
 
             // Component 2 component messages with args that triggers GUI component
-            get SHOW_UNREADS() { return "show_unreads" },
+            get SHOW_UNREAD() { return "show_unread" },
+            get SHOW_UNOPENED() { return "show_unopened" },
             get START_CHAT() { return "start_chat" },
             get POP_QUESTION() { return "pop_question" },
             get POP_INFO() { return "pop_info" },

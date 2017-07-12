@@ -19,9 +19,11 @@ defmodule Portal.UserProxy do
     @p2p_msg_in "p2p_msg_in"
     @p2p_msg_out "p2p_msg_out"
     @p2p_msg_new "p2p_msg_new"
+    @p2p_msg_read "p2p_msg_read"
     @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
+    @add_friend_opened "add_friend_opened"
     @query_chats "query_chats"
 
     # SQLs
@@ -224,6 +226,11 @@ defmodule Portal.UserProxy do
         end
     end
 
+    def handle_in(@p2p_msg_read, %{"id" => id}, socket) do
+
+        {:noreply, socket}
+    end
+
     defp _create_update_users_chat(user_a, user_b, chat) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [user_a.id, user_b.id])
         if rows == [] do
@@ -300,7 +307,7 @@ defmodule Portal.UserProxy do
             cond do
                 online? == true ->
                     ol_friend = OnlineUsersDb.select(receiver.username)
-                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, status: invit.status, type: invit.invit_type, msg: message}
+                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, type: invit.invit_type, status: invit.status, msg: message}
                     send ol_friend.pid, {:add_friend_in, json}
                 true ->
                     :ignore
@@ -315,6 +322,10 @@ defmodule Portal.UserProxy do
     def handle_in(@add_friend_resp, %{"id" => id, "resp" => resp}, socket) do
         invit = Invitation |> Repo.get(id)
         Logger.info("#{inspect invit}")
+        {:noreply, socket}
+    end
+
+    def handle_in(@add_friend_opened, %{"id" => id}, socket) do
         {:noreply, socket}
     end
 

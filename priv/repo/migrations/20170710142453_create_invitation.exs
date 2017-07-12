@@ -8,6 +8,7 @@ defmodule Portal.Repo.Migrations.CreateInvitation do
       add :invit_type, :string
       add :invit_msg, :string
       add :status, :string
+      add :opened, :boolean
 
       timestamps()
     end

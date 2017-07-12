@@ -18,13 +18,15 @@ export default {
         }
     },
     created() {
-        // Connecting to server
         this.socket.connect()
         this.proxyChannel = this.socket.channel(proxyChannelPrefix + this.user)
-        this.proxyChannel.on(this.FRIEND_ONLINE, (friend) => { this._onFriendOnline(friend) })
-        this.proxyChannel.on(this.FRIEND_OFFLINE, (friend) => { this._onFriendOffline(friend) })
-        this.proxyChannel.on(this.P2P_MSG_NEW, (msg) => { this._onP2pMsgNew(msg) })
-        this.proxyChannel.on(this.P2P_MSG_IN, (msg) => { this._onP2pMsgIn(msg) })
+
+        // Events to/from server
+        this.proxyChannel.on(this.FRIEND_ONLINE, (data) => { this._onFriendOnline(data) })
+        this.proxyChannel.on(this.FRIEND_OFFLINE, (data) => { this._onFriendOffline(data) })
+        this.proxyChannel.on(this.P2P_MSG_NEW, (data) => { this._onP2pMsgNew(data) })
+        this.proxyChannel.on(this.P2P_MSG_IN, (data) => { this._onP2pMsgIn(data) })
+        this.proxyChannel.on(this.ADD_FRIEND_IN, (data) => { this._onAddFriendIn(data) })
         this.proxyChannel.join()
             .receive("ok", (updates) => { this._onInitialUpdates(updates) })
             .receive("error", () => { /*console.log("Failed to join proxy ch")*/ })
@@ -43,8 +45,21 @@ export default {
         this.$events.$on(this.QUERY_CHATS, (conv) => { this._onQueryChats(conv) })
         this.$events.$on(this.P2P_MSG_OUT, (friend, message) => { this._onP2pMsgOut(friend, message) })
         this.$events.$on(this.ADD_FRIEND_OUT, (invit) => { this._onAddFriendOut(invit) })
+
+        // Add friend events handlers
+        this.$events.$on(this.DEL_UNREAD_REC, (id) => { this._onDelUnreadRec(id) })
+        this.$events.$on(this.DEL_UNOPENED_REC, (id) => { this._onDelUnopenedRec(id) })
     },
     methods: {
+        _onDelUnreadRec(id) {
+            this.proxyChannel.push(this.P2P_MSG_READ, { id: id })
+        },
+        _onDelUnopenedRec(id) {
+            this.proxyChannel.push(this.ADD_FRIEND_OPENED, { id: id })
+        },
+        _onAddFriendIn(invit) {
+            this.$events.$emit(this.ADD_FRIEND_IN, invit)
+        },
         _onAddFriendOut(invit) {
             this.proxyChannel.push(this.ADD_FRIEND_OUT, { email: invit.email, msg: invit.msg })
                 .receive("ok", () => {

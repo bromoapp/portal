@@ -59,7 +59,7 @@ export default {
         this.$events.$on(this.CHAT_DIALOG_OPENED, (friend) => { this._onChatDialogOpened(friend) })
         this.$events.$on(this.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
         this.$events.$on(this.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
-        this.$events.$on(this.SHOW_UNREADS, (list) => { this._showUnreads(list) })
+        this.$events.$on(this.SHOW_UNREAD, (list) => { this._showUnread(list) })
     },
     methods: {
         _onWindowResizing() {
@@ -71,7 +71,7 @@ export default {
                 body.style.display = "block"
             }, 200)
         },
-        _showUnreads(list) {
+        _showUnread(list) {
             if (this.visible) {
                 setTimeout(() => {
                     if (list.length > 0) {
@@ -129,7 +129,7 @@ export default {
             setTimeout(() => {
                 this.visible = false
                 this.src_form_visible = false
-                this.$events.$emit(this.GET_UNREADS)
+                this.$events.$emit(this.GET_UNREAD)
             }, 300)
         },
         _openChatsList(friend) {
@@ -142,7 +142,7 @@ export default {
                         this.$events.$emit(this.SWITCH_CHAT, friend)
                     }
                 }, 200)
-                this.$events.$emit(this.GET_UNREADS)
+                this.$events.$emit(this.GET_UNREAD)
             }, 300)
         },
         _getFriendsName(id) {
@@ -184,9 +184,6 @@ export default {
                 }, 200)
             }
         }
-    },
-    mounted() {
-        console.log(">>> MOUNTED...")
     }
 }
 </script>

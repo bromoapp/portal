@@ -7,6 +7,7 @@ defmodule Portal.Invitation do
         field :invit_type, :string
         field :invit_msg, :string
         field :status, :string, default: "WAIT"
+        field :opened, :boolean, default: false
 
         timestamps()
     end

@@ -61,7 +61,7 @@ export default {
         },
         _onDelUnread(data) {
             this.tbl_unread.findAndRemove({ "id": data })
-            this.$events.$emit(this.DEL_UNREAD_REC, data)
+            //this.$events.$emit(this.DEL_UNREAD_REC, data)
         },
         _onGetUnread() {
             let list = this.tbl_unread.find({})
@@ -75,8 +75,15 @@ export default {
                 this.tbl_unread.insert({ id: data })
             }
         },
+        _onP2pMsgNew(data) {
+            this.tbl_chats.insert(data)
+            let conv = this.tbl_chats.find({ 'id': data.id })
+            this._updateChatsList()
+            this._onChatDataUpdated(conv[0])
+        },
         _onP2pMsgIn(data) {
-            let convs = this.tbl_chats.find({ "friend_id": data.friend_id })
+            let table = this.tbl_chats.find({})
+            let convs = this.tbl_chats.find({ 'id': data.id })
             if (convs != null) {
                 let conv = convs[0]
                 if (conv.chats) {
@@ -87,12 +94,6 @@ export default {
                     this._onChatDataUpdated(conv)
                 }
             }
-        },
-        _onP2pMsgNew(data) {
-            this.tbl_chats.insert(data)
-            let conv = this.tbl_chats.find({ 'id': data.id })
-            this._updateChatsList()
-            this._onChatDataUpdated(conv[0])
         },
         _onUpdateChatData(data) {
             let conv = this.tbl_chats.find({ 'id': data.id })
@@ -131,7 +132,6 @@ export default {
             this._updateFriendsList()
         },
         _onInitialUpdates(data) {
-            console.log(">>> UPDATES", data)
             for (let n = 0; n < data.friends.length; n++) {
                 let friend = data.friends[n]
                 this.tbl_friends.insert(friend)
@@ -140,6 +140,7 @@ export default {
 
             for (let n = 0; n < data.chats.length; n++) {
                 let chat = data.chats[n]
+                console.log(">>> CHAT ID: " + chat.id)
                 this.tbl_chats.insert(chat)
             }
             this._updateChatsList()
@@ -162,7 +163,8 @@ export default {
             })
             let chats = []
             for (let n = 0; n < raw.length; n++) {
-                let friend = this.tbl_friends.find({ 'id': raw[n].friend_id })
+                let fid = raw[n].friend_id
+                let friend = this.tbl_friends.find({ 'id': fid })
                 if (!chats.includes(friend[0])) {
                     chats.push(friend[0])
                 }

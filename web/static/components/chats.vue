@@ -22,7 +22,7 @@
                 <ul>
                     <li v-for="friend in friends" v-bind:key="friend">
                         <div v-on:click="onChatClicked(friend)" class="accordion-btn bg-263238-d">
-                            <span v-bind:id="friend.id">{{ friend.name }}</span>
+                            <span v-bind:id="'fid_' + friend.id">{{ friend.name }}</span>
                             <span v-if="friend.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-comment"></i>
                             </span>
@@ -90,14 +90,14 @@ export default {
                     if (this.currFriend.id == chat.friend_id) {
                         this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                     } else {
-                        this._setItemToUnread(chat.friend_id)
+                        this._setItemToUnread(chat.friend_id, chat.id)
                     }
                 } else {
-                    this._setItemToUnread(chat.friend_id)
+                    this._setItemToUnread(chat.friend_id, chat.id)
                 }
             } else {
                 this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
-                this._setItemToUnread(chat.friend_id)
+                this._setItemToUnread(chat.friend_id, chat.id)
             }
         },
         _onChatDialogOpened(friend) {
@@ -111,16 +111,17 @@ export default {
         _onChatDialogClosed() {
             this.currFriend = null
         },
-        _setItemToUnread(id) {
+        _setItemToUnread(fid, id) {
             setTimeout(() => {
-                this.$events.$emit(this.ADD_UNREAD, id)
-                let el = document.getElementById(id)
+                this.$events.$emit(this.ADD_UNREAD, fid)
+                let el = document.getElementById('fid_' + fid)
                 if (el) {
-                    el.innerHTML = this._getFriendsName(id) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                    el.innerHTML = this._getFriendsName(fid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
                 }
             }, 200);
         },
         _updateChatsList(list) {
+            console.log(">>> LIST", list)
             this.friends = list
         },
         _closeChatsList() {

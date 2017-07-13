@@ -76,6 +76,7 @@ export default {
                 })
         },
         _onInitialUpdates(updates) {
+            console.log(">>> UPDATES", updates)
             this.$events.$emit(this.INITIAL_UPDATES, updates)
         },
         _onFriendOnline(friend) {

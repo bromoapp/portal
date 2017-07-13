@@ -52,7 +52,6 @@ export default {
     },
     methods: {
         _onDelUnreadRec(id) {
-            console.log(">>> DEL UNREAD ID " + id)
             this.proxyChannel.push(this.P2P_MSG_READ, { id: id })
         },
         _onDelUnopenedRec(id) {

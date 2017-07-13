@@ -72,7 +72,6 @@ export default {
             }, 200)
         },
         _showUnread(list) {
-            console.log(">>> SHOW UNREAD ", list)
             if (this.visible) {
                 setTimeout(() => {
                     if (list.length > 0) {
@@ -90,6 +89,7 @@ export default {
                 if (this.currFriend != null) {
                     if (this.currFriend.id == chat.friend_id) {
                         this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
+                        this.$events.$emit(this.DEL_UNREAD_REC, chat.id)
                     } else {
                         this._setItemToUnread(chat.id, chat.friend_id)
                     }

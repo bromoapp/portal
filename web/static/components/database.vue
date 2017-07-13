@@ -74,6 +74,7 @@ export default {
         _onDelUnread(fid) {
             let unreads = this.tbl_unread.find({ "fid": fid })
             if (unreads.length > 0) {
+                console.log(">>> FOUND!!!")
                 this.tbl_unread.findAndRemove({ "fid": fid })
                 this.$events.$emit(this.DEL_UNREAD_REC, unreads[0].id)
             }
@@ -143,7 +144,6 @@ export default {
 
             for (let n = 0; n < data.chats.length; n++) {
                 let chat = data.chats[n]
-                console.log(">>> CHAT ID: " + chat.id)
                 this.tbl_chats.insert(chat)
             }
             this._updateChatsList()

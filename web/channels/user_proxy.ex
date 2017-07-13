@@ -205,8 +205,8 @@ defmodule Portal.UserProxy do
         receiver = Repo.get_by(User, username: friend_uname)
         if (receiver != nil) do
             chat = %Chat{from: sender.username, message: message, time: _format_time()}
-            {mode1, json1} = _create_update_users_chat(sender, receiver, chat)
-            {mode2, json2} = _create_update_users_chat(receiver, sender, chat)
+            {mode1, json1} = _create_update_users_chat(sender, receiver, chat, :sender)
+            {mode2, json2} = _create_update_users_chat(receiver, sender, chat, :receiver)
 
             cond do
                 mode1 == :p2p_msg_new ->
@@ -238,25 +238,36 @@ defmodule Portal.UserProxy do
         else
             [[id, user_b_id, messages, date_time, read]] = rows
             raw = Poison.decode!(messages)
-            json = %{id: id, friend_id: user_b_id, date: _format_date(date_time), chats: raw["chats"], read: read}
+            Logger.info(">>> CHAT ID: #{inspect id} -> READ? #{inspect read}")
+            if read == 0 do
+                chat = DailyChat |> Repo.get!(id)
+                upd_chat_map = %{read: true}
+                upd_chat_cs = DailyChat.create_or_update_changeset(chat, upd_chat_map)
+                Repo.update(upd_chat_cs)
+            end
+
+            json = %{id: id, friend_id: user_b_id, date: _format_date(date_time), chats: raw["chats"], read: 1}
 
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
         end
     end
 
     def handle_in(@p2p_msg_read, %{"id" => id}, socket) do
-        Logger.info(">>> READ CHAT ID: #{inspect id}")
+        chat = DailyChat |> Repo.get!(id)
+        upd_chat_map = %{read: true}
+        upd_chat_cs = DailyChat.create_or_update_changeset(chat, upd_chat_map)
+        Repo.update(upd_chat_cs)
         {:noreply, socket}
     end
 
-    defp _create_update_users_chat(user_a, user_b, chat) do
+    defp _create_update_users_chat(user_a, user_b, chat, mode) do
         #Logger.info(">>> USER A = #{inspect user_a.username}")
         %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [user_a.id, user_b.id])
         if rows == [] do
             # creates new chat for user
             chats = %Chats{chats: [chat]}
             text = Poison.encode!(chats)
-            user_a_chat_map = %{read: false, messages: text}
+            user_a_chat_map = %{read: _parse_read_val(mode), messages: text}
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
             user_a_chat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, user_a_chat_map)
@@ -265,7 +276,7 @@ defmodule Portal.UserProxy do
             user_a_chat = Repo.insert!(user_a_chat_cs)
 
             raw = Poison.decode!(user_a_chat.messages)
-            json = %{id: user_a_chat.id, friend_id: user_b.id, date: _format_date(user_a_chat.inserted_at), chats: raw["chats"], read: 1}
+            json = %{id: user_a_chat.id, friend_id: user_b.id, date: _format_date(user_a_chat.inserted_at), chats: raw["chats"], read: 0}
             {:p2p_msg_new, json}
         else
             # updates existing chat
@@ -274,16 +285,16 @@ defmodule Portal.UserProxy do
             old_user_a_chats = Poison.decode!(user_a_chat.messages, as: %Chats{})
             upd_user_a_chat_list = %Chats{chats: old_user_a_chats.chats ++ [chat]}
             text = Poison.encode!(upd_user_a_chat_list)
-            upd_user_a_chat_map = %{read: false, messages: text}
+            upd_user_a_chat_map = %{read: _parse_read_val(mode), messages: text}
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
 
             upd_user_a_chat_cs = DailyChat.create_or_update_changeset(user_a_chat, upd_user_a_chat_map)
             upd_user_a_chat = Repo.update!(upd_user_a_chat_cs)
             
-            %Portal.Chat{from: uname, message: message, time: time} = chat
+            %Chat{from: uname, message: message, time: time} = chat
             nchat = %{"from" => uname, "message" => message, "time" => time}
-            json = %{id: upd_user_a_chat.id, friend_id: user_b.id, date: _format_date(upd_user_a_chat.updated_at), chats: [nchat], read: 1}
+            json = %{id: upd_user_a_chat.id, friend_id: user_b.id, date: _format_date(upd_user_a_chat.updated_at), chats: [nchat], read: 0}
             {:p2p_msg_in, json}
         end
     end
@@ -337,6 +348,15 @@ defmodule Portal.UserProxy do
     #=================================================================================================
     # Helper functions
     #=================================================================================================
+    defp _parse_read_val(mode) do
+        cond do
+            mode == :sender ->
+                true
+            true ->
+                false
+        end
+    end
+
     defp _is_friend_online?(uname) do
         ol_friend = OnlineUsersDb.select(uname)
         cond do

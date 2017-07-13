@@ -3,7 +3,7 @@ defmodule Portal.DailyChat do
     alias Ecto.DateTime
 
     schema "daily_chats" do
-        field :read, :boolean
+        field :read, :boolean, default: false
         field :messages, :string
         field :inserted_at, DateTime, default: DateTime.from_erl(:calendar.local_time)
         field :updated_at, DateTime, default: DateTime.from_erl(:calendar.local_time)

@@ -245,11 +245,12 @@ defmodule Portal.UserProxy do
     end
 
     def handle_in(@p2p_msg_read, %{"id" => id}, socket) do
+        Logger.info(">>> READ CHAT ID: #{inspect id}")
         {:noreply, socket}
     end
 
     defp _create_update_users_chat(user_a, user_b, chat) do
-        Logger.info(">>> USER A = #{inspect user_a.username}")
+        #Logger.info(">>> USER A = #{inspect user_a.username}")
         %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [user_a.id, user_b.id])
         if rows == [] do
             # creates new chat for user

@@ -39,6 +39,10 @@ export default {
         this.$events.$on(this.DEL_UNOPENED, (data) => { this._onDelUnopened(data) })
     },
     methods: {
+        _onAddFriendIn(data) {
+            this.tbl_invits.insert(data)
+            this._updateInvitsList()
+        },
         _onAddUnopened(data) {
             let list = this.tbl_unopened.find({ "id": data })
             if (list.length == 0) {
@@ -55,13 +59,11 @@ export default {
                 this.$events.$emit(this.SHOW_UNOPENED, list)
             }
         },
-        _onAddFriendIn(data) {
-            this.tbl_invits.insert(data)
-            this._updateInvitsList()
-        },
-        _onDelUnread(data) {
-            this.tbl_unread.findAndRemove({ "id": data })
-            //this.$events.$emit(this.DEL_UNREAD_REC, data)
+        _onAddUnread(data) {
+            let list = this.tbl_unread.find({ "id": data.id })
+            if (list.length == 0) {
+                this.tbl_unread.insert(data)
+            }
         },
         _onGetUnread() {
             let list = this.tbl_unread.find({})
@@ -69,10 +71,11 @@ export default {
                 this.$events.$emit(this.SHOW_UNREAD, list)
             }
         },
-        _onAddUnread(data) {
-            let list = this.tbl_unread.find({ "id": data })
-            if (list.length == 0) {
-                this.tbl_unread.insert({ id: data })
+        _onDelUnread(fid) {
+            let unreads = this.tbl_unread.find({ "fid": fid })
+            if (unreads.length > 0) {
+                this.tbl_unread.findAndRemove({ "fid": fid })
+                this.$events.$emit(this.DEL_UNREAD_REC, unreads[0].id)
             }
         },
         _onP2pMsgNew(data) {

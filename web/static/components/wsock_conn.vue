@@ -52,6 +52,7 @@ export default {
     },
     methods: {
         _onDelUnreadRec(id) {
+            console.log(">>> DEL UNREAD ID " + id)
             this.proxyChannel.push(this.P2P_MSG_READ, { id: id })
         },
         _onDelUnopenedRec(id) {
@@ -76,7 +77,6 @@ export default {
                 })
         },
         _onInitialUpdates(updates) {
-            console.log(">>> UPDATES", updates)
             this.$events.$emit(this.INITIAL_UPDATES, updates)
         },
         _onFriendOnline(friend) {

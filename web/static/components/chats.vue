@@ -72,11 +72,12 @@ export default {
             }, 200)
         },
         _showUnread(list) {
+            console.log(">>> SHOW UNREAD ", list)
             if (this.visible) {
                 setTimeout(() => {
                     if (list.length > 0) {
                         for (let n = 0; n < list.length; n++) {
-                            this._setItemToUnread(list[n].id)
+                            this._setItemToUnread(list[n].id, list[n].fid)
                         }
                     }
                 }, 200);
@@ -90,19 +91,19 @@ export default {
                     if (this.currFriend.id == chat.friend_id) {
                         this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                     } else {
-                        this._setItemToUnread(chat.friend_id, chat.id)
+                        this._setItemToUnread(chat.id, chat.friend_id)
                     }
                 } else {
-                    this._setItemToUnread(chat.friend_id, chat.id)
+                    this._setItemToUnread(chat.id, chat.friend_id)
                 }
             } else {
                 this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
-                this._setItemToUnread(chat.friend_id, chat.id)
+                this._setItemToUnread(chat.id, chat.friend_id)
             }
         },
         _onChatDialogOpened(friend) {
             this.currFriend = friend
-            let el = document.getElementById(friend.id)
+            let el = document.getElementById('fid_' + friend.id)
             if (el) {
                 el.innerHTML = this._getFriendsName(friend.id)
                 this.$events.$emit(this.DEL_UNREAD, friend.id)
@@ -111,9 +112,9 @@ export default {
         _onChatDialogClosed() {
             this.currFriend = null
         },
-        _setItemToUnread(fid, id) {
+        _setItemToUnread(id, fid) {
             setTimeout(() => {
-                this.$events.$emit(this.ADD_UNREAD, fid)
+                this.$events.$emit(this.ADD_UNREAD, { id: id, fid: fid })
                 let el = document.getElementById('fid_' + fid)
                 if (el) {
                     el.innerHTML = this._getFriendsName(fid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"

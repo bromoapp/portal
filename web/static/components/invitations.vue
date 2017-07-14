@@ -22,7 +22,7 @@
                 <ul>
                     <li v-for="invit in invitations" v-bind:key="invit">
                         <div v-on:click="onInvitClicked(invit)" class="accordion-btn bg-263238-d">
-                            <span>{{ invit.from_name }}</span>
+                            <span v-bind:id="'inv_' + invit.id">{{ invit.from_name }}</span>
                             <span class="pull-right icon">
                                 <i class="fa fa-envelope-o"></i>
                             </span>
@@ -62,6 +62,9 @@ export default {
                 body.style.overflowY = "auto"
                 body.style.display = "block"
             }, 200)
+        },
+        _showUnopened(list) {
+            
         },
         _updateInvitationsList(list) {
             this.invitations = list

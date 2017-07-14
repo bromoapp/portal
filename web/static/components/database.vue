@@ -153,12 +153,16 @@ export default {
 
             for (let n = 0; n < data.invits.length; n++) {
                 let invit = data.invits[n]
+                if (invit.opened == 0) {
+                    this.tbl_unopened.insert({ id: invit.id, fid: invit.from_id })
+                }
                 this.tbl_invits.insert(invit)
             }
             this._updateInvitsList()
 
             // Force to shows unread chats
             this._onGetUnread()
+            this._onGetUnopened()
         },
         _updateFriendsList() {
             let friends = this.tbl_friends.where((o) => {

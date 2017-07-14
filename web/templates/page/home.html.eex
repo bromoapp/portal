@@ -3,4 +3,5 @@
     <p class="lead">This is web chat application similar to the Whatsapp Web,
     and it's still under heavy development. The purpose of this project is to 
     shows my skill in using <b>Elixir Phoenix</b> and <b>Vuejs</b>.</p>
+    <p>Source: <a href="https://github.com/bromoapp/portal" target="blank">github</a></p>
 </div>

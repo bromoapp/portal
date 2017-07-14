@@ -1,4 +1,6 @@
 <div class="jumbotron">
-    <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
-    <p class="lead">With Chrome browser you will get up to 25fps<br />while others may only get around 10fps.</p>
+    <h2><%= gettext "Welcome to %{name}", name: "Bromo's Demo App" %></h2>
+    <p class="lead">This is web chat application similar to the Whatsapp Web,
+    and it's still under heavy development. The purpose of this project is to 
+    shows my skill in using <b>Elixir Phoenix</b> and <b>Vuejs</b>.</p>
 </div>

@@ -135,6 +135,7 @@ export default {
             this._updateFriendsList()
         },
         _onInitialUpdates(data) {
+            console.log(data)
             for (let n = 0; n < data.friends.length; n++) {
                 let friend = data.friends[n]
                 this.tbl_friends.insert(friend)

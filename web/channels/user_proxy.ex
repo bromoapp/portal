@@ -137,9 +137,9 @@ defmodule Portal.UserProxy do
     end
 
     defp _parse_invits([h|t], result) do
-        [id, from_id, _to, type, message, status, _, _] = h
+        [id, from_id, _to, type, message, status, opened, _, _] = h
         friend = User |> Repo.get!(from_id)
-        nresult = result ++ [%{id: id, from_id: from_id, from_name: friend.name, type: type, status: status, msg: message}]
+        nresult = result ++ [%{id: id, from_id: from_id, from_name: friend.name, type: type, status: status, msg: message, opened: opened}]
         _parse_invits(t, nresult)
     end
 

@@ -1,7 +1,7 @@
 <template>
     <div v-if="panel_visible">
         <div id="friend_detail_panel_window" class="float-panel bg-455A64-s">
-            <span class="pull-right" style="margin: 8px 10px">
+            <span class="pull-right" style="margin: 6px 10px">
                 <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
                     <i class="fa fa-close"></i>
                 </a>
@@ -22,12 +22,12 @@
                     </div>
                 </div>
                 <div style="text-align: center">
-                    <div id="offline_friend_buttons">
-                        <button id="btn_send_msg" class="btn bg-263238-d" v-on:click="sendMessage">Send Message</button>
-                    </div>
-                    <div id="online_friend_buttons">
+                    <div v-if="currFriend && currFriend.online">
                         <button id="btn_start_chat" class="btn bg-263238-d" v-on:click="startChat">Start Chat</button>
                         <button id="btn_invite_2_room" class="btn bg-263238-d" v-on:click="inivite2Room">Invite to Room</button>
+                    </div>
+                    <div v-else>
+                        <button id="btn_send_msg" class="btn bg-263238-d" v-on:click="sendMessage">Send Message</button>
                     </div>
                 </div>
             </div>
@@ -103,13 +103,6 @@ export default {
         _showDetails() {
             document.getElementById("friend_name").innerHTML = this.currFriend.name
             document.getElementById("friend_status").innerHTML = "Hi, this is my status and the only status that deserve tobe appreciate by anyone here :P"
-            if (this.currFriend.online) {
-                document.getElementById("online_friend_buttons").style.display = "inline"
-                document.getElementById("offline_friend_buttons").style.display = "none"
-            } else {
-                document.getElementById("online_friend_buttons").style.display = "none"
-                document.getElementById("offline_friend_buttons").style.display = "inline"
-            }
         },
         startChat() {
             document.getElementById("btn_start_chat").blur()

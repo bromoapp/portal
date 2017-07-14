@@ -2,16 +2,19 @@
     <div id="main_window" class="main-window" style="background-color: #E0E0E0" v-on:click="closeAll">
         <chat></chat>
         <friend-detail></friend-detail>
+        <invitation></invitation>
     </div>
 </template>
 
 <script>
 import FriendDetail from "./friend_detail.vue"
+import Invitation from "./invitation.vue"
 import Chat from "./chat.vue"
 
 export default {
     components: {
         FriendDetail,
+        Invitation,
         Chat
     },
     data() {

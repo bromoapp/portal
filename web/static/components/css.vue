@@ -83,6 +83,17 @@ export default {
     margin: 6px 10px 10px 10px;
 }
 
+/************************** Friend detail panel styles **************************/
+.invit-detail {
+    margin-top: 25px;
+    padding: 10px;
+}
+
+.invit-details {
+    padding: 5px;
+    height: 118px;
+}
+
 .chat-conversation {
     background: #d8d6d6;
     width: 380px;

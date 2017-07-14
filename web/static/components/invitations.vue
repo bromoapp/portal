@@ -21,7 +21,7 @@
             <div id="items_list" class="accordion-body">
                 <ul>
                     <li v-for="invit in invitations" v-bind:key="invit">
-                        <div class="accordion-btn bg-263238-d">
+                        <div v-on:click="onInvitClicked(invit)" class="accordion-btn bg-263238-d">
                             <span>{{ invit.from_name }}</span>
                             <span class="pull-right icon">
                                 <i class="fa fa-envelope-o"></i>
@@ -99,6 +99,12 @@ export default {
                     name.focus()
                 }, 200)
             }
+        },
+        onInvitClicked(invit) {
+            if (this.src_form_visible) {
+                this.seekInvitation()
+            }
+            this.$events.$emit(this.SWITCH_INVIT_DETAIL, invit)
         }
     }
 }

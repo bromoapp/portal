@@ -69,6 +69,7 @@ Vue.mixin({
             get POP_INFO() { return "pop_info" },
             get POP_ERROR() { return "pop_error" },
             get SWITCH_FRIEND_DETAIL() { return "switch_friend_detail" },
+            get SWITCH_INVIT_DETAIL() { return "switch_invit_detail" },
             get SWITCH_CHAT() { return "switch_chat" },
             get CHAT_DIALOG_OPENED() { return "chat_dialog_opened" },
 

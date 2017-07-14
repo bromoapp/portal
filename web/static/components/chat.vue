@@ -135,7 +135,9 @@ export default {
         sendMessage() {
             let msg_form = document.getElementById("message")
             let msg = msg_form.value
-            this.$events.$emit(this.P2P_MSG_OUT, this.currFriend, msg)
+            if (msg.trim().length > 0) {
+                this.$events.$emit(this.P2P_MSG_OUT, this.currFriend, msg)
+            }
             msg_form.value = ""
         },
     }

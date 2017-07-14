@@ -8,11 +8,13 @@ defmodule Portal.Repo.Migrations.SpLastChats do
         DECLARE _username VARCHAR(255);
         DECLARE _friend_id, __friend_id BIGINT;
         DECLARE _rec_id BIGINT;
+        DECLARE _read TINYINT;
         
         DROP TEMPORARY TABLE IF EXISTS temp_last_chats;
         CREATE TEMPORARY TABLE IF NOT EXISTS temp_last_chats (
           friend_id BIGINT,
-          rec_id BIGINT
+          rec_id BIGINT,
+          `read` TINYINT
         );
         
         BLOCK1: BEGIN
@@ -29,17 +31,17 @@ defmodule Portal.Repo.Migrations.SpLastChats do
 
             BLOCK4: BEGIN
               DECLARE on_finished2 BIGINT;
-              DECLARE cur2 CURSOR FOR SELECT a.user_b_id AS 'friend_id', a.id FROM daily_chats AS a WHERE a.user_b_id = _friend_id AND a.user_a_id = uid;
+              DECLARE cur2 CURSOR FOR SELECT a.user_b_id AS 'friend_id', a.id, a.`read` FROM daily_chats AS a WHERE a.user_b_id = _friend_id AND a.user_a_id = uid;
               DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished2 = 1;
               
               OPEN cur2;
               loop2 : LOOP
-                FETCH cur2 INTO __friend_id, _rec_id;
+                FETCH cur2 INTO __friend_id, _rec_id, _read;
                 IF on_finished2 = 1 THEN
                   LEAVE loop2;
                 END IF;
                 
-                INSERT INTO temp_last_chats(friend_id, rec_id) VALUES (__friend_id, _rec_id);
+                INSERT INTO temp_last_chats(friend_id, rec_id, `read`) VALUES (__friend_id, _rec_id, _read);
               END LOOP loop2;
               CLOSE cur2;
             END BLOCK4;

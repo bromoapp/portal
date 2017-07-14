@@ -157,8 +157,8 @@ defmodule Portal.UserProxy do
     end
 
     defp _parse_chats([h|t], result) do
-        [friend_id, id] = h
-        nresult = result ++ [%{id: id, friend_id: friend_id, chats: nil, date: nil, read: nil}]
+        [friend_id, id, read] = h
+        nresult = result ++ [%{id: id, friend_id: friend_id, chats: nil, date: nil, read: read}]
         _parse_chats(t, nresult)
     end
 

@@ -1,5 +1,5 @@
 <template>
-    <div id="main_window" class="main-window lobby-body" v-on:click="closeAll">
+    <div id="main_window" class="main-window" style="background-color: #E0E0E0" v-on:click="closeAll">
         <chat></chat>
         <friend-detail></friend-detail>
     </div>

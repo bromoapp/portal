@@ -117,6 +117,7 @@ export default {
         },
         sendMessage() {
             document.getElementById("btn_send_msg").blur()
+            this.$events.$emit(this.START_CHAT, this.currFriend)
         },
         inivite2Room() {
             document.getElementById("btn_invite_2_room").blur()

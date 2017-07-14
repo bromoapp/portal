@@ -122,7 +122,6 @@ export default {
             }, 200);
         },
         _updateChatsList(list) {
-            console.log(">>> LIST", list)
             this.friends = list
         },
         _closeChatsList() {

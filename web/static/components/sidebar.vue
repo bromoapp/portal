@@ -179,6 +179,7 @@ export default {
         setTimeout(() => {
             this._open()
             setTimeout(() => {
+                // Open default panel
                 this.openChats()
             }, 500)
         }, 100)

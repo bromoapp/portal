@@ -143,7 +143,7 @@ export default {
 
                     if (friend && friend.target == null) {
                         this.currFriend = friend
-                        this.$events.$emit(this.SWITCH_CHAT, friend)
+                        this.$events.$emit(this.SWITCH_CHAT, this.currFriend)
                     }
                 }, 200)
             }, 300)

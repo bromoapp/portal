@@ -54,7 +54,6 @@ export default {
     },
     methods: {
         _onAddFriendResp(data) {
-            console.log(">>> ID: " + data.id + " RESP: " + data.resp)
             this.proxyChannel.push(this.ADD_FRIEND_RESP, { id: data.id, resp: data.resp })
         },
         _onDelUnreadRec(id) {

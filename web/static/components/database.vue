@@ -35,12 +35,18 @@ export default {
         this.$events.$on(this.GET_UNREAD, () => { this._onGetUnread() })
         this.$events.$on(this.DEL_UNREAD, (data) => { this._onDelUnread(data) })
         this.$events.$on(this.ADD_FRIEND_IN, (data) => { this._onAddFriendIn(data) })
-        
+        this.$events.$on(this.ADD_FRIEND_RESP, (data) => { this._onAddFriendResp(data) })
+
         this.$events.$on(this.ADD_UNOPENED, (data) => { this._onAddUnopened(data) })
         this.$events.$on(this.GET_UNOPENED, () => { this._onGetUnopened() })
         this.$events.$on(this.DEL_UNOPENED, (data) => { this._onDelUnopened(data) })
     },
     methods: {
+        _onAddFriendResp(invit) {
+            this.tbl_invits.findAndRemove({id: invit.id})
+            this._updateInvitsList()
+            this._onGetUnopened()
+        },
         _onAddFriendIn(invit) {
             this.tbl_invits.insert(invit)
             this._onAddUnopened(invit.id)
@@ -135,7 +141,7 @@ export default {
             this._updateFriendsList()
         },
         _onFriendNew(data) {
-            this.tbl_friends.insert(friend)
+            this.tbl_friends.insert(data)
             this._updateFriendsList()
         },
         _onFriendOnline(data) {

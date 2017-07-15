@@ -383,7 +383,7 @@ defmodule Portal.UserProxy do
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @accepted})
                 Repo.update(upd_invit_cs)
 
-                rel_map = %{tags: "#some_tag#"}
+                rel_map = %{tags: invit.invit_type}
                 |> Map.put(:user_a, user_a)
                 |> Map.put(:user_b, user_b)
 

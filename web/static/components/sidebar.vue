@@ -4,27 +4,27 @@
         <div>
             <div class="sidebar-toolbar">
                 <div class="inline">
-                    <button title="Signout" id="btn_signout" class="btn bg-37474f-d" v-on:click="signout">
+                    <button class="btn bg-37474f-d" title="Signout" id="btn_signout" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>
                     </button>
                 </div>
                 <div class="inline">
-                    <button title="Channels" id="btn_channels" class="btn bg-37474f-d" v-on:click="openChannels">
+                    <button class="btn bg-37474f-d" title="Channels" id="btn_channels" v-on:click="openChannels">
                         <i class="fa fa-window-restore"></i>
                     </button>
                 </div>
                 <div class="inline">
-                    <button title="Friends" id="btn_friends" class="btn bg-37474f-d" v-on:click="openFriends">
+                    <button class="btn bg-37474f-d" title="Friends" id="btn_friends" v-on:click="openFriends">
                         <i class="fa fa-users"></i>
                     </button>
                 </div>
                 <div class="inline">
-                    <button title="Chats" id="btn_chats" class="btn bg-37474f-d" v-on:click="openChats">
+                    <button class="btn bg-37474f-d" title="Chats" id="btn_chats" v-on:click="openChats">
                         <i class="fa fa-comments-o"></i>
                     </button>
                 </div>
                 <div class="inline">
-                    <button title="Invitations" id="btn_inivitations" class="btn bg-37474f-d" v-on:click="openInvitations">
+                    <button class="btn bg-37474f-d" title="Invitations" id="btn_inivitations" v-on:click="openInvitations">
                         <i class="fa fa-envelope-o"></i>
                     </button>
                 </div>
@@ -192,8 +192,8 @@ export default {
             this._open()
             setTimeout(() => {
                 // Open default panel
-                this.openInvitations()
-            }, 500)
+                this.openChats()
+            }, 200)
         }, 100)
     }
 }

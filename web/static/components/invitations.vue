@@ -51,7 +51,7 @@ export default {
         this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
         this.$events.$on(this.OPEN_INVITATIONS, () => { this._openInvitationsList() })
         this.$events.$on(this.SHOW_UNOPENED, (list) => { this._showUnopened(list) })
-        this.$events.$on(this.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })        
+        this.$events.$on(this.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })
         this.$events.$on(this.UPDATE_INVITATIONS_LIST, (list) => { this._updateInvitationsList(list) })
     },
     methods: {
@@ -65,17 +65,17 @@ export default {
             }, 200)
         },
         _showUnopened(list) {
-            if (this.visible) {
-                setTimeout(() => {
+            setTimeout(() => {
+                if (this.visible) {
                     if (list.length > 0) {
                         for (let n = 0; n < list.length; n++) {
                             this._setItemToUnopened(list[n].id)
                         }
                     }
-                }, 200);
-            } else {
-                this.$events.$emit(this.HIGHLIGHT_INVITS_BTN)
-            }
+                } else {
+                    this.$events.$emit(this.HIGHLIGHT_INVITS_BTN)
+                }
+            }, 300);
         },
         _setItemToUnopened(id) {
             setTimeout(() => {
@@ -90,16 +90,6 @@ export default {
         _updateInvitationsList(list) {
             this.invitations = list
         },
-        _openInvitationsList() {
-            setTimeout(() => {
-                this.visible = true
-                setTimeout(() => {
-                    let body = document.getElementById("items_list")
-                    body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
-                }, 200)
-                this.$events.$emit(this.GET_UNOPENED)
-            }, 300)
-        },
         _closeInvitationsList() {
             let body = document.getElementById("items_list")
             body.style.maxHeight = "0px"
@@ -107,6 +97,16 @@ export default {
                 this.visible = false
                 this.src_form_visible = false
                 this.$events.$emit(this.GET_UNOPENED)
+            }, 300)
+        },
+        _openInvitationsList() {
+            setTimeout(() => {
+                this.visible = true
+                setTimeout(() => {
+                    let body = document.getElementById("items_list")
+                    body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
+                    this.$events.$emit(this.GET_UNOPENED)
+                }, 200)
             }, 300)
         },
         seekInvitation() {

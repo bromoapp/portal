@@ -72,17 +72,17 @@ export default {
             }, 200)
         },
         _showUnread(list) {
-            if (this.visible) {
-                setTimeout(() => {
+            setTimeout(() => {
+                if (this.visible) {
                     if (list.length > 0) {
                         for (let n = 0; n < list.length; n++) {
                             this._setItemToUnread(list[n].id, list[n].fid)
                         }
                     }
-                }, 200);
-            } else {
-                this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
-            }
+                } else {
+                    this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
+                }
+            }, 300);
         },
         _onChatDataUpdated(chat) {
             if (this.visible) {
@@ -139,11 +139,12 @@ export default {
                 setTimeout(() => {
                     let body = document.getElementById("items_list")
                     body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
+                    this.$events.$emit(this.GET_UNREAD)
+
                     if (friend && friend.target == null) {
                         this.$events.$emit(this.SWITCH_CHAT, friend)
                     }
                 }, 200)
-                this.$events.$emit(this.GET_UNREAD)
             }, 300)
         },
         _getFriendsName(id) {

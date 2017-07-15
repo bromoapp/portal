@@ -51,7 +51,6 @@ export default {
             if (this.panel_visible) {
                 if (this.currFriend.id == chat.friend_id) {
                     let oldConvDiv = document.getElementById("cid_" + chat.id)
-                    //console.log(">>> OLD CONV DIV", oldConvDiv)
                     if (oldConvDiv) {
                         var parent = oldConvDiv.parentNode
                         parent.removeChild(oldConvDiv)
@@ -59,7 +58,6 @@ export default {
                     let chats = chat.chats
                     let conv_div = document.getElementById("messages")
                     let old_conv = conv_div.innerHTML
-                    //console.log(">>> OLD CONV", old_conv)
                     let conv = "<div id=\"cid_" + chat.id + "\">"
                     conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
                     for (let n = 0; n < chats.length; n++) {
@@ -72,7 +70,6 @@ export default {
                     }
                     conv = conv + "</div>"
                     let new_conv = old_conv + conv
-                    //console.log(">>> NEW CONV", new_conv)
                     conv_div.innerHTML = new_conv
                     conv_div.scrollTop = conv_div.scrollHeight;
                 }

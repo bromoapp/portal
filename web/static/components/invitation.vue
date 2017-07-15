@@ -56,6 +56,7 @@ export default {
                     this._close()
                 } else {
                     this.currInvit = invit
+                    this.$events.$emit(this.INVIT_DIALOG_OPENED, this.currInvit)
                     this._showDetails()
                 }
             } else {
@@ -74,6 +75,7 @@ export default {
                 cover.style.width = "0px"
                 setTimeout(() => {
                     this.panel_visible = false
+                    this.$events.$emit(this.INVIT_DIALOG_CLOSED)
                 }, 300)
             }, 300)
         },
@@ -91,6 +93,8 @@ export default {
                 setTimeout(() => {
                     cover.style.width = "0px"
                 }, 300);
+
+                this.$events.$emit(this.INVIT_DIALOG_OPENED, this.currInvit)
             }, 300)
         },
         _showDetails() {

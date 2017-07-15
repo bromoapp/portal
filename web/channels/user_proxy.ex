@@ -24,6 +24,7 @@ defmodule Portal.UserProxy do
     @ignored "IGNORED"
 
     # Event topics
+    @friend_new "friend_new"
     @friend_online "friend_online"
     @friend_offline "friend_offline"
     @query_chats "query_chats"
@@ -335,6 +336,11 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
+    def handle_info({:friend_new, json}, socket) do
+        push socket, @friend_new, json
+        {:noreply, socket}
+    end
+
     def handle_in(@add_friend_out, %{"email" => email, "msg" => message}, socket) do
         sender = socket.assigns.user
         receiver = Repo.get_by(User, username: email)
@@ -365,7 +371,6 @@ defmodule Portal.UserProxy do
     end
 
     def handle_in(@add_friend_resp, %{"id" => id, "resp" => resp}, socket) do
-        Logger.info(">>> RESP: #{inspect id} - #{inspect resp}")
         invit = Invitation 
         |> Repo.get(id)
         |> Repo.preload(:from)
@@ -373,8 +378,6 @@ defmodule Portal.UserProxy do
 
         user_a = invit.from
         user_b = invit.to
-        Logger.info(">>> USER_A #{inspect user_a}")
-        Logger.info(">>> USER_B #{inspect user_b}")
         cond do
             resp == @accepted ->
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @accepted})
@@ -389,7 +392,23 @@ defmodule Portal.UserProxy do
                 |> Changeset.put_assoc(:user_b, user_b)
                 rel = Repo.insert(rel_cs)
 
-                
+                json1 = %{id: user_a.id, username: user_a.username, name: user_a.name, online: _is_friend_online?(user_a.username)}
+                push socket, @friend_new, json1
+
+                online? = _is_friend_online?(user_a.username)
+                cond do
+                    online? == true ->
+                        ol_friend = OnlineUsersDb.select(user_a.username)
+                        json2 = %{id: user_b.id, username: user_b.username, name: user_b.name, online: _is_friend_online?(user_b.username)}
+                        send ol_friend.pid, {:friend_new, json2}
+                        
+                        # Inform each side that his/her new friend is online
+                        :timer.sleep(500)
+                        send ol_friend.pid, {:friend_online, user_b}
+                        send self(), {:friend_online, user_a}
+                    true ->
+                        :ignore
+                end
             resp == @rejected ->
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @rejected})
                 Repo.update(upd_invit_cs)

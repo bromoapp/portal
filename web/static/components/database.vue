@@ -24,6 +24,7 @@ export default {
 
         // Insert or update database events handlers
         this.$events.$on(this.INITIAL_UPDATES, (data) => { this._onInitialUpdates(data) })
+        this.$events.$on(this.FRIEND_NEW, (data) => { this._onFriendNew(data) })
         this.$events.$on(this.FRIEND_ONLINE, (data) => { this._onFriendOnline(data) })
         this.$events.$on(this.FRIEND_OFFLINE, (data) => { this._onFriendOffline(data) })
         this.$events.$on(this.GET_CHATS, (data) => { this._onGetChats(data) })
@@ -131,6 +132,10 @@ export default {
         _onFriendOffline(data) {
             let friend = this.tbl_friends.find({ 'id': data.id })
             friend[0].online = false
+            this._updateFriendsList()
+        },
+        _onFriendNew(data) {
+            this.tbl_friends.insert(friend)
             this._updateFriendsList()
         },
         _onFriendOnline(data) {

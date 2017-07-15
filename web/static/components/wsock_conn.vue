@@ -22,6 +22,7 @@ export default {
         this.proxyChannel = this.socket.channel(proxyChannelPrefix + this.user)
 
         // Events to/from server
+        this.proxyChannel.on(this.FRIEND_NEW, (data) => { this._onFriendNew(data) })
         this.proxyChannel.on(this.FRIEND_ONLINE, (data) => { this._onFriendOnline(data) })
         this.proxyChannel.on(this.FRIEND_OFFLINE, (data) => { this._onFriendOffline(data) })
         this.proxyChannel.on(this.P2P_MSG_NEW, (data) => { this._onP2pMsgNew(data) })
@@ -82,6 +83,9 @@ export default {
         },
         _onInitialUpdates(updates) {
             this.$events.$emit(this.INITIAL_UPDATES, updates)
+        },
+        _onFriendNew(friend) {
+            this.$events.$emit(this.FRIEND_NEW, friend)
         },
         _onFriendOnline(friend) {
             this.$events.$emit(this.FRIEND_ONLINE, friend)

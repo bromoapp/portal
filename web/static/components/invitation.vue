@@ -74,7 +74,6 @@ export default {
                 cover.style.width = "0px"
                 setTimeout(() => {
                     this.panel_visible = false
-                    this.$events.$emit(this.INVIT_DIALOG_CLOSED)
                 }, 300)
             }, 300)
         },

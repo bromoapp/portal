@@ -42,7 +42,6 @@
 export default {
     data() {
         return {
-            currInvit: null,
             invitations: [],
             visible: false,
             src_form_visible: false

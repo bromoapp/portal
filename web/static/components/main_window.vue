@@ -29,7 +29,7 @@ export default {
     },
     methods: {
         closeAll() {
-            
+            //this.$events.$emit(this.CLOSE_FLOAT_PANEL)
         },
         _push() {
             document.getElementById("main_window").style.marginLeft = this.maxLeftMargin + "px"

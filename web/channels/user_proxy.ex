@@ -16,6 +16,7 @@ defmodule Portal.UserProxy do
     # Event topics
     @friend_online "friend_online"
     @friend_offline "friend_offline"
+    @query_chats "query_chats"
     @p2p_msg_in "p2p_msg_in"
     @p2p_msg_out "p2p_msg_out"
     @p2p_msg_new "p2p_msg_new"
@@ -24,7 +25,6 @@ defmodule Portal.UserProxy do
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
     @add_friend_opened "add_friend_opened"
-    @query_chats "query_chats"
 
     # SQLs
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"
@@ -314,7 +314,7 @@ defmodule Portal.UserProxy do
             invit_map = %{invit_type: "FRIENDSHIP", invit_msg: message, status: "WAITING"}
             |> Map.put(:from, sender)
             |> Map.put(:to, receiver)
-            invit_cs = Invitation.create_changeset(%Invitation{}, invit_map)
+            invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
             |> Changeset.put_assoc(:from, sender)
             |> Changeset.put_assoc(:to, receiver)
             invit = Repo.insert!(invit_cs)
@@ -342,6 +342,10 @@ defmodule Portal.UserProxy do
     end
 
     def handle_in(@add_friend_opened, %{"id" => id}, socket) do
+        invit = Invitation |> Repo.get!(id)
+        upd_invit_map = %{opened: true}
+        upd_invit_cs = Invitation.create_or_update_changeset(chat, upd_invit_map)
+        Repo.update(upd_invit_cs)
         {:noreply, socket}
     end
 

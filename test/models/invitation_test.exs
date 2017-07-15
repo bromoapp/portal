@@ -41,7 +41,7 @@ defmodule Portal.InvitationTest do
         oinvit = Invitation |> Repo.get(invit.id)
         assert oinvit.status == "WAIT"
 
-        upd_cs = Invitation.create_changeset(oinvit, %{status: "APPROVED"})
+        upd_cs = Invitation.create_or_update_changeset(oinvit, %{status: "APPROVED"})
         Repo.update(upd_cs)
 
         linvit = Invitation |> Repo.get(invit.id)
@@ -52,7 +52,7 @@ defmodule Portal.InvitationTest do
         invit_map = %{invit_type: "FRIENDSHIP", invit_msg: "Hi this is A"}
             |> Map.put(:from, from)
             |> Map.put(:to, to)
-        invit_cs = Invitation.create_changeset(%Invitation{}, invit_map)
+        invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
             |> put_assoc(:from, from)
             |> put_assoc(:to, to)
         assert invit_cs.valid?

@@ -12,7 +12,7 @@ defmodule Portal.Invitation do
         timestamps()
     end
 
-    def create_changeset(struct, params) do
+    def create_or_update_changeset(struct, params) do
         struct
         |> cast(params, [:invit_type, :invit_msg, :status])
         |> validate_required([:invit_type])

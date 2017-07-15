@@ -2,7 +2,7 @@
     <div v-if="panel_visible">
         <div id="invit_detail_panel_window" class="float-panel bg-455A64-s">
             <span class="pull-right" style="margin: 6px 10px">
-                <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
+                <a href="javascript:" class="cl-ffffff-d" v-on:click="ignoreInvit">
                     <i class="fa fa-close"></i>
                 </a>
             </span>
@@ -22,7 +22,7 @@
                 </div>
                 <div style="text-align: center">
                     <button id="btn_accept_inv" class="btn bg-263238-d" v-on:click="acceptInvit">Accept</button>
-                    <button id="btn_ignore_inv" class="btn bg-263238-d" v-on:click="ignoreInvit">Ignore</button>
+                    <button id="btn_ignore_inv" class="btn bg-263238-d" v-on:click="rejectInvit">Reject</button>
                 </div>
             </div>
         </div>
@@ -100,6 +100,10 @@ export default {
         acceptInvit() {
             this._close()
             console.log(">>> ACCEPT...")
+        },
+        rejectInvit() {
+            this._close()
+            console.log(">>> REJECT...")
         },
         ignoreInvit() {
             this._close()

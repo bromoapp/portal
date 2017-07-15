@@ -39,19 +39,21 @@ export default {
         this.$events.$on(this.DEL_UNOPENED, (data) => { this._onDelUnopened(data) })
     },
     methods: {
-        _onAddFriendIn(data) {
-            this.tbl_invits.insert(data)
+        _onAddFriendIn(invit) {
+            this.tbl_invits.insert(invit)
+            this._onAddUnopened(invit.id)
             this._updateInvitsList()
+            this._onGetUnopened()
         },
-        _onAddUnopened(data) {
-            let list = this.tbl_unopened.find({ "id": data })
+        _onAddUnopened(id) {
+            let list = this.tbl_unopened.find({ "id": id })
             if (list.length == 0) {
-                this.tbl_unopened.insert({ id: data })
+                this.tbl_unopened.insert({ id: id })
             }
         },
-        _onDelUnopened(data) {
-            this.tbl_unopened.findAndRemove({ "id": data })
-            this.$events.$emit(this.DEL_UNOPENED_REC, data)
+        _onDelUnopened(id) {
+            this.tbl_unopened.findAndRemove({ "id": id })
+            this.$events.$emit(this.DEL_UNOPENED_REC, id)
         },
         _onGetUnopened() {
             let list = this.tbl_unopened.find({})

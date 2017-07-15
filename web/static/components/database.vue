@@ -34,6 +34,7 @@ export default {
         this.$events.$on(this.GET_UNREAD, () => { this._onGetUnread() })
         this.$events.$on(this.DEL_UNREAD, (data) => { this._onDelUnread(data) })
         this.$events.$on(this.ADD_FRIEND_IN, (data) => { this._onAddFriendIn(data) })
+        
         this.$events.$on(this.ADD_UNOPENED, (data) => { this._onAddUnopened(data) })
         this.$events.$on(this.GET_UNOPENED, () => { this._onGetUnopened() })
         this.$events.$on(this.DEL_UNOPENED, (data) => { this._onDelUnopened(data) })

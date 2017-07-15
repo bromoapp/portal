@@ -13,6 +13,16 @@ defmodule Portal.UserProxy do
     alias Portal.Invitation
     require Logger
 
+    # Message
+    @email_not_found "Email not found!"
+
+    # Constant
+    @friendship "FRIENDSHIP"
+    @waiting "WAITING"
+    @accepted "ACCEPTED"
+    @rejected "REJECTED"
+    @ignored "IGNORED"
+
     # Event topics
     @friend_online "friend_online"
     @friend_offline "friend_offline"
@@ -29,7 +39,7 @@ defmodule Portal.UserProxy do
     # SQLs
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"
     @sql_friends_list "CALL `sp_friends_list`(?);"
-    @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` != 'IGNORED'"
+    @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` = 'WAITING'"
     @sql_query_chats "SELECT a.id, a.user_b_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?;"
     @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.updated_at) = CURDATE() AND a.user_a_id = ? AND a.user_b_id = ?;"
 
@@ -38,7 +48,6 @@ defmodule Portal.UserProxy do
     #=================================================================================================
     def join("user_proxy:" <> username, _params, socket) do
         send self(), :after_join
-        Logger.info(">>> JOIN #{inspect username} IN #{inspect self()}")
 
         {_user, updates} = {socket.assigns.user, %Updates{}}
         |> _get_friends_list()
@@ -227,7 +236,7 @@ defmodule Portal.UserProxy do
             end
             {:noreply, socket}
         else
-            {:reply, {:error, %{"msg" => "Email not found!"}}, socket}
+            {:reply, {:error, %{"msg" => @email_not_found}}, socket}
         end
     end
 
@@ -238,7 +247,6 @@ defmodule Portal.UserProxy do
         else
             [[id, user_b_id, messages, date_time, read]] = rows
             raw = Poison.decode!(messages)
-            Logger.info(">>> CHAT ID: #{inspect id} -> READ? #{inspect read}")
             if read == 0 do
                 chat = DailyChat |> Repo.get!(id)
                 upd_chat_map = %{read: true}
@@ -331,7 +339,7 @@ defmodule Portal.UserProxy do
         sender = socket.assigns.user
         receiver = Repo.get_by(User, username: email)
         if (receiver != nil) do
-            invit_map = %{invit_type: "FRIENDSHIP", invit_msg: message, status: "WAITING"}
+            invit_map = %{invit_type: @friendship, invit_msg: message, status: @waiting}
             |> Map.put(:from, sender)
             |> Map.put(:to, receiver)
             invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
@@ -343,7 +351,8 @@ defmodule Portal.UserProxy do
             cond do
                 online? == true ->
                     ol_friend = OnlineUsersDb.select(receiver.username)
-                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, type: invit.invit_type, status: invit.status, msg: message}
+                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, 
+                        type: invit.invit_type, status: invit.status, msg: message}
                     send ol_friend.pid, {:add_friend_in, json}
                 true ->
                     :ignore
@@ -351,20 +360,29 @@ defmodule Portal.UserProxy do
             
             {:reply, :ok, socket}
         else
-            {:reply, {:error, %{"msg" => "Email not found!"}}, socket}
+            {:reply, {:error, %{"msg" => @email_not_found}}, socket}
         end
     end
 
     def handle_in(@add_friend_resp, %{"id" => id, "resp" => resp}, socket) do
+        Logger.info(">>> RESP: #{inspect id} - #{inspect resp}")
         invit = Invitation |> Repo.get(id)
-        Logger.info("#{inspect invit}")
+        cond do
+            resp == @accepted ->
+                Logger.info(">>> ACCEPTED YAY!!!")
+            resp == @rejected ->
+                Logger.info(">>> REJECTED SHIT!!!")
+            resp == @ignored ->
+                Logger.info(">>> IGNORED HA HA!!!")
+            true ->
+                Logger.info(">>> IGNORED HA HA!!!")
+        end
         {:noreply, socket}
     end
 
     def handle_in(@add_friend_opened, %{"id" => id}, socket) do
         invit = Invitation |> Repo.get!(id)
-        upd_invit_map = %{opened: true}
-        upd_invit_cs = Invitation.create_or_update_changeset(invit, upd_invit_map)
+        upd_invit_cs = Invitation.create_or_update_changeset(invit, %{opened: true})
         Repo.update(upd_invit_cs)
         {:noreply, socket}
     end

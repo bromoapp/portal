@@ -33,9 +33,9 @@ Vue.mixin({
             // Constants
             get Constant() {
                 return {
-                    get INVIT_ACCEPT() { return "ACCEPT" },
-                    get INVIT_REJECT() { return "REJECT" },
-                    get INVIT_IGNORE() { return "IGNORE" }
+                    get INVIT_ACCEPT() { return "ACCEPTED" },
+                    get INVIT_REJECT() { return "REJECTED" },
+                    get INVIT_IGNORE() { return "IGNORED" }
                 }
             },
 

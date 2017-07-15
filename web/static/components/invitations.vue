@@ -113,6 +113,11 @@ export default {
             if (this.src_form_visible) {
                 this.seekInvitation()
             }
+            let el = document.getElementById('inv_' + invit.id)
+            if (el) {
+                el.innerHTML = invit.from_name
+                this.$events.$emit(this.DEL_UNOPENED, invit.id)
+            }
             this.$events.$emit(this.SWITCH_INVIT_DETAIL, invit)
         },
         seekInvitation() {

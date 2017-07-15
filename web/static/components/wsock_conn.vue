@@ -49,8 +49,13 @@ export default {
         // Add friend events handlers
         this.$events.$on(this.DEL_UNREAD_REC, (id) => { this._onDelUnreadRec(id) })
         this.$events.$on(this.DEL_UNOPENED_REC, (id) => { this._onDelUnopenedRec(id) })
+        this.$events.$on(this.ADD_FRIEND_RESP, (data) => { this._onAddFriendResp(data) })
     },
     methods: {
+        _onAddFriendResp(data) {
+            console.log(">>> ID: " + data.id + " RESP: " + data.resp)
+            this.proxyChannel.push(this.ADD_FRIEND_RESP, { id: data.id, resp: data.resp })
+        },
         _onDelUnreadRec(id) {
             this.proxyChannel.push(this.P2P_MSG_READ, { id: id })
         },

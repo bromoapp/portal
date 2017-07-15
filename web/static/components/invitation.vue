@@ -2,7 +2,7 @@
     <div v-if="panel_visible">
         <div id="invit_detail_panel_window" class="float-panel bg-455A64-s">
             <span class="pull-right" style="margin: 6px 10px">
-                <a href="javascript:" class="cl-ffffff-d" v-on:click="ignoreInvit">
+                <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
                     <i class="fa fa-close"></i>
                 </a>
             </span>
@@ -99,18 +99,11 @@ export default {
             document.getElementById("friend_message").innerHTML = this.currInvit.msg
         },
         acceptInvit() {
-            console.log(">>> ID: " + this.currInvit.id + "ACCEPT...")
             this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
             this._close()
         },
         rejectInvit() {
-            console.log(">>> ID: " + this.currInvit.id + "REJECT...")
             this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
-            this._close()
-        },
-        ignoreInvit() {
-            console.log(">>> ID: " + this.currInvit.id + "IGNORE...")
-            this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_IGNORE })
             this._close()
         }
     }

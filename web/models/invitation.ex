@@ -14,7 +14,7 @@ defmodule Portal.Invitation do
 
     def create_or_update_changeset(struct, params) do
         struct
-        |> cast(params, [:invit_type, :invit_msg, :status])
+        |> cast(params, [:invit_type, :invit_msg, :status, :opened])
         |> validate_required([:invit_type])
         |> foreign_key_constraint(:from_id)
         |> foreign_key_constraint(:to_id)

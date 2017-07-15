@@ -56,7 +56,6 @@ export default {
         this.$events.$on(this.CHAT_DATA_UPDATED, (data) => this._onChatDataUpdated(data))
         this.$events.$on(this.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
         this.$events.$on(this.CLOSE_CHATS, () => { this._closeChatsList() })
-        this.$events.$on(this.CHAT_DIALOG_OPENED, (friend) => { this._onChatDialogOpened(friend) })
         this.$events.$on(this.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
         this.$events.$on(this.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
         this.$events.$on(this.SHOW_UNREAD, (list) => { this._showUnread(list) })
@@ -99,14 +98,6 @@ export default {
             } else {
                 this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
                 this._setItemToUnread(chat.id, chat.friend_id)
-            }
-        },
-        _onChatDialogOpened(friend) {
-            this.currFriend = friend
-            let el = document.getElementById('fid_' + friend.id)
-            if (el) {
-                el.innerHTML = this._getFriendsName(friend.id)
-                this.$events.$emit(this.DEL_UNREAD, friend.id)
             }
         },
         _onChatDialogClosed() {
@@ -165,6 +156,12 @@ export default {
         onChatClicked(friend) {
             if (this.src_form_visible) {
                 this.seekChat()
+            }
+            this.currFriend = friend
+            let el = document.getElementById('fid_' + friend.id)
+            if (el) {
+                el.innerHTML = this._getFriendsName(friend.id)
+                this.$events.$emit(this.DEL_UNREAD, friend.id)
             }
             this.$events.$emit(this.SWITCH_CHAT, friend)
         },

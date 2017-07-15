@@ -83,7 +83,6 @@ export default {
                     this.currFriend = friend
                     document.getElementById("messages").innerHTML = ""
                     document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
-                    this.$events.$emit(this.CHAT_DIALOG_OPENED, this.currFriend)
                     this.$events.$emit(this.GET_CHATS, this.currFriend)
                 }
             } else {
@@ -125,7 +124,6 @@ export default {
                     cover.style.width = "0px"
                 }, 300);
 
-                this.$events.$emit(this.CHAT_DIALOG_OPENED, this.currFriend)
                 this.$events.$emit(this.GET_CHATS, this.currFriend)
             }, 300)
         },

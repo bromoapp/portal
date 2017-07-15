@@ -54,8 +54,6 @@ export default {
         this.$events.$on(this.SHOW_UNOPENED, (list) => { this._showUnopened(list) })
         this.$events.$on(this.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })
         this.$events.$on(this.UPDATE_INVITATIONS_LIST, (list) => { this._updateInvitationsList(list) })
-        this.$events.$on(this.INVIT_DIALOG_OPENED, (invit) => { this._onInvitDialogOpened(invit) })
-        this.$events.$on(this.INVIT_DIALOG_CLOSED, () => { this._onInvitDialogClosed() })
     },
     methods: {
         _onWindowResizing() {
@@ -79,12 +77,6 @@ export default {
                     this.$events.$emit(this.HIGHLIGHT_INVITS_BTN)
                 }
             }, 300);
-        },
-        _onInvitDialogOpened(invit) {
-            console.log(">>> INVIT DIAG OPENED")
-        },
-        _onInvitDialogClosed() {
-            console.log(">>> INVIT DIAG CLOSED")
         },
         _setItemToUnopened(id) {
             setTimeout(() => {

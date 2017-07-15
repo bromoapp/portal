@@ -79,6 +79,7 @@ export default {
             }
         },
         _onP2pMsgNew(data) {
+            console.log(">>> NEW P2P", data)
             this.tbl_chats.insert(data)
             let conv = this.tbl_chats.find({ 'id': data.id })
             this._updateChatsList()

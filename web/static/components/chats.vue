@@ -142,6 +142,7 @@ export default {
                     this.$events.$emit(this.GET_UNREAD)
 
                     if (friend && friend.target == null) {
+                        this.currFriend = friend
                         this.$events.$emit(this.SWITCH_CHAT, friend)
                     }
                 }, 200)

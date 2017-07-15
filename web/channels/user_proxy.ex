@@ -276,7 +276,8 @@ defmodule Portal.UserProxy do
             user_a_chat = Repo.insert!(user_a_chat_cs)
 
             raw = Poison.decode!(user_a_chat.messages)
-            json = %{id: user_a_chat.id, friend_id: user_b.id, date: _format_date(user_a_chat.inserted_at), chats: raw["chats"], read: 0}
+            json = %{id: user_a_chat.id, friend_id: user_b.id, date: _format_date(user_a_chat.inserted_at), 
+                chats: raw["chats"], read: _parse_bool_val(user_a_chat.read)}
             {:p2p_msg_new, json}
         else
             # updates existing chat
@@ -294,8 +295,27 @@ defmodule Portal.UserProxy do
             
             %Chat{from: uname, message: message, time: time} = chat
             nchat = %{"from" => uname, "message" => message, "time" => time}
-            json = %{id: upd_user_a_chat.id, friend_id: user_b.id, date: _format_date(upd_user_a_chat.updated_at), chats: [nchat], read: 0}
+            json = %{id: upd_user_a_chat.id, friend_id: user_b.id, date: _format_date(upd_user_a_chat.updated_at), 
+                chats: [nchat], read: _parse_bool_val(upd_user_a_chat.read)}
             {:p2p_msg_in, json}
+        end
+    end
+    
+    defp _parse_read_val(mode) do
+        cond do
+            mode == :sender ->
+                true
+            true ->
+                false
+        end
+    end
+
+    defp _parse_bool_val(bool) do
+        cond do
+            bool == true ->
+                1
+            true ->
+                0
         end
     end
 
@@ -344,7 +364,7 @@ defmodule Portal.UserProxy do
     def handle_in(@add_friend_opened, %{"id" => id}, socket) do
         invit = Invitation |> Repo.get!(id)
         upd_invit_map = %{opened: true}
-        upd_invit_cs = Invitation.create_or_update_changeset(chat, upd_invit_map)
+        upd_invit_cs = Invitation.create_or_update_changeset(invit, upd_invit_map)
         Repo.update(upd_invit_cs)
         {:noreply, socket}
     end
@@ -352,15 +372,6 @@ defmodule Portal.UserProxy do
     #=================================================================================================
     # Helper functions
     #=================================================================================================
-    defp _parse_read_val(mode) do
-        cond do
-            mode == :sender ->
-                true
-            true ->
-                false
-        end
-    end
-
     defp _is_friend_online?(uname) do
         ol_friend = OnlineUsersDb.select(uname)
         cond do

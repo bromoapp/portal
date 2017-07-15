@@ -118,6 +118,12 @@ export default {
                 }, 200)
             }, 300)
         },
+        onInvitClicked(invit) {
+            if (this.src_form_visible) {
+                this.seekInvitation()
+            }
+            this.$events.$emit(this.SWITCH_INVIT_DETAIL, invit)
+        },
         seekInvitation() {
             if (this.src_form_visible) {
                 let div = document.getElementById("seek_invitation")
@@ -135,12 +141,6 @@ export default {
                     name.focus()
                 }, 200)
             }
-        },
-        onInvitClicked(invit) {
-            if (this.src_form_visible) {
-                this.seekInvitation()
-            }
-            this.$events.$emit(this.SWITCH_INVIT_DETAIL, invit)
         }
     }
 }

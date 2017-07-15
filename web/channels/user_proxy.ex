@@ -366,16 +366,39 @@ defmodule Portal.UserProxy do
 
     def handle_in(@add_friend_resp, %{"id" => id, "resp" => resp}, socket) do
         Logger.info(">>> RESP: #{inspect id} - #{inspect resp}")
-        invit = Invitation |> Repo.get(id)
+        invit = Invitation 
+        |> Repo.get(id)
+        |> Repo.preload(:from)
+        |> Repo.preload(:to)
+
+        user_a = invit.from
+        user_b = invit.to
+        Logger.info(">>> USER_A #{inspect user_a}")
+        Logger.info(">>> USER_B #{inspect user_b}")
         cond do
             resp == @accepted ->
-                Logger.info(">>> ACCEPTED YAY!!!")
+                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @accepted})
+                Repo.update(upd_invit_cs)
+
+                rel_map = %{tags: "#some_tag#"}
+                |> Map.put(:user_a, user_a)
+                |> Map.put(:user_b, user_b)
+
+                rel_cs = Relation.create_changeset(%Relation{}, rel_map)
+                |> Changeset.put_assoc(:user_a, user_a)
+                |> Changeset.put_assoc(:user_b, user_b)
+                rel = Repo.insert(rel_cs)
+
+                
             resp == @rejected ->
-                Logger.info(">>> REJECTED SHIT!!!")
+                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @rejected})
+                Repo.update(upd_invit_cs)
             resp == @ignored ->
-                Logger.info(">>> IGNORED HA HA!!!")
+                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
+                Repo.update(upd_invit_cs)                
             true ->
-                Logger.info(">>> IGNORED HA HA!!!")
+                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
+                Repo.update(upd_invit_cs)
         end
         {:noreply, socket}
     end

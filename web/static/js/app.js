@@ -30,6 +30,15 @@ Vue.use(VueEvents)
 Vue.mixin({
     data: function () {
         return {
+            // Constants
+            get Constant() {
+                return {
+                    get INVIT_ACCEPT() { return "ACCEPT" },
+                    get INVIT_REJECT() { return "REJECT" },
+                    get INVIT_IGNORE() { return "IGNORE" }
+                }
+            },
+
             // Client server messages
             get INITIAL_UPDATES() { return "initial_updates" },
             get FRIEND_ONLINE() { return "friend_online" },
@@ -56,6 +65,7 @@ Vue.mixin({
             get DEL_UNREAD_REC() { return "del_unread_rec" },
             get ADD_FRIEND_OUT() { return "add_friend_out" },
             get ADD_FRIEND_IN() { return "add_friend_in" },
+            get ADD_FRIEND_RESP() { return "add_friend_resp" },
             get GET_UNOPENED() { return "get_unopened" },
             get ADD_UNOPENED() { return "add_unopened" },
             get DEL_UNOPENED() { return "del_unopened" },

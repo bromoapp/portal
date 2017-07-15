@@ -51,6 +51,7 @@ export default {
             }
         },
         _switchInvitDetail(invit) {
+            console.log(invit)
             if (this.panel_visible) {
                 if (this.currInvit == invit) {
                     this._close()
@@ -98,16 +99,19 @@ export default {
             document.getElementById("friend_message").innerHTML = this.currInvit.msg
         },
         acceptInvit() {
+            console.log(">>> ID: " + this.currInvit.id + "ACCEPT...")
+            this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
             this._close()
-            console.log(">>> ACCEPT...")
         },
         rejectInvit() {
+            console.log(">>> ID: " + this.currInvit.id + "REJECT...")
+            this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
             this._close()
-            console.log(">>> REJECT...")
         },
         ignoreInvit() {
+            console.log(">>> ID: " + this.currInvit.id + "IGNORE...")
+            this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_IGNORE })
             this._close()
-            console.log(">>> IGNORE...")
         }
     }
 }

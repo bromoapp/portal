@@ -93,6 +93,7 @@ Vue.mixin({
             get PULL_WINDOW() { return "pull_window" },
             get SWITCH_SETTINGS() { return "switch_settings" },
             get HIGHLIGHT_CHATS_BTN() { return "highlight_chats_btn" },
+            get HIGHLIGHT_INVITS_BTN() { return "highlight_invits_btn" },
             get WINDOW_RESIZING() { return "window_risizing" },
 
             // Constant values

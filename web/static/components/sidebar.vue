@@ -76,8 +76,19 @@ export default {
     created() {
         this.$events.$on(this.START_CHAT, (friend) => { this.openChats(friend) })
         this.$events.$on(this.HIGHLIGHT_CHATS_BTN, () => this._switchChatsBtn(true))
+        this.$events.$on(this.HIGHLIGHT_INVITS_BTN, () => this._switchInvitsBtn(true))
     },
     methods: {
+        _switchInvitsBtn(mode) {
+            let btn = document.getElementById("btn_inivitations")
+            if (mode) {
+                btn.classList.remove("bg-37474f-d")
+                btn.classList.add("bg-highlight-d")
+            } else {
+                btn.classList.remove("bg-highlight-d")
+                btn.classList.add("bg-37474f-d")
+            }
+        },
         _switchChatsBtn(mode) {
             let btn = document.getElementById("btn_chats")
             if (mode) {
@@ -156,6 +167,7 @@ export default {
         openInvitations() {
             btnInvitations.blur()
             if (this.closeCmd != this.CLOSE_INVITATIONS) {
+                this._switchInvitsBtn(false)
                 this._closeSubPanel()
                 this.$events.$emit(this.OPEN_INVITATIONS)
                 this.closeCmd = this.CLOSE_INVITATIONS

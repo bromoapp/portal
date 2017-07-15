@@ -50,7 +50,8 @@ export default {
     created() {
         this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
         this.$events.$on(this.OPEN_INVITATIONS, () => { this._openInvitationsList() })
-        this.$events.$on(this.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })
+        this.$events.$on(this.SHOW_UNOPENED, (list) => { this._showUnopened(list) })
+        this.$events.$on(this.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })        
         this.$events.$on(this.UPDATE_INVITATIONS_LIST, (list) => { this._updateInvitationsList(list) })
     },
     methods: {
@@ -64,7 +65,27 @@ export default {
             }, 200)
         },
         _showUnopened(list) {
-            
+            if (this.visible) {
+                setTimeout(() => {
+                    if (list.length > 0) {
+                        for (let n = 0; n < list.length; n++) {
+                            this._setItemToUnopened(list[n].id)
+                        }
+                    }
+                }, 200);
+            } else {
+                this.$events.$emit(this.HIGHLIGHT_INVITS_BTN)
+            }
+        },
+        _setItemToUnopened(id) {
+            setTimeout(() => {
+                this.$events.$emit(this.ADD_UNOPENED, id)
+                let el = document.getElementById('inv_' + id)
+                if (el) {
+                    let oldval = el.innerHTML
+                    el.innerHTML = oldval + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                }
+            }, 200);
         },
         _updateInvitationsList(list) {
             this.invitations = list
@@ -76,6 +97,7 @@ export default {
                     let body = document.getElementById("items_list")
                     body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
                 }, 200)
+                this.$events.$emit(this.GET_UNOPENED)
             }, 300)
         },
         _closeInvitationsList() {
@@ -83,6 +105,8 @@ export default {
             body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
+                this.src_form_visible = false
+                this.$events.$emit(this.GET_UNOPENED)
             }, 300)
         },
         seekInvitation() {

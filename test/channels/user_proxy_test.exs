@@ -7,6 +7,22 @@ defmodule Portal.UserProxyTest do
     @user_a %{name: "my_name_a", username: "my_username_a", password: "my_password"}
     @user_b %{name: "my_name_b", username: "my_username_b", password: "my_password"}
 
+    # Constant
+    @accepted "ACCEPTED"
+
+    # Event topics
+    @friend_new "friend_new"
+    @friend_online "friend_online"
+    @query_chats "query_chats"
+    @p2p_msg_in "p2p_msg_in"
+    @p2p_msg_out "p2p_msg_out"
+    @p2p_msg_new "p2p_msg_new"
+    @p2p_msg_read "p2p_msg_read"
+    @add_friend_in "add_friend_in"
+    @add_friend_out "add_friend_out"
+    @add_friend_resp "add_friend_resp"
+    @add_friend_opened "add_friend_opened"
+
     setup do
         # create users
         user_a = insert_user(@user_a)
@@ -57,7 +73,7 @@ defmodule Portal.UserProxyTest do
         {:ok, _reply, _socket} = subscribe_and_join(socket_b, "user_proxy:" <> user_b.username, %{})
 
         # User A receives notification, that user B is just online
-        assert_push("friend_online", data, 1000)
+        assert_push(@friend_online, data, 1000)
         assert data == %{id: user_b.id, name: @user_b.name, online: true, username: @user_b.username}
     end
 
@@ -69,30 +85,50 @@ defmodule Portal.UserProxyTest do
         {:ok, _reply, socket_b} = subscribe_and_join(socket_b, "user_proxy:" <> user_b.username, %{})
 
         # User A send message to B
-        push(socket_a, "p2p_msg_out", %{"to" => @user_b.username, "msg" => "Hello B"})
+        push(socket_a, @p2p_msg_out, %{"to" => @user_b.username, "msg" => "Hello B"})
         
         # User B receives new conversation msg from A
-        assert_push("p2p_msg_new", p2p_msg_new, 1000)
-        %{chats: [%{"from" => sender_a, "message" => msg_a, "time" => _}], date: _, friend_id: _, id: _, read: _} = p2p_msg_new 
+        assert_push(@p2p_msg_new, p2p_msg_new, 1000)
+        %{chats: [%{"from" => sender_a, "message" => msg_a, "time" => _}], date: _, friend_id: _, id: a_p2p_msg_id, read: _} = p2p_msg_new 
+
+        # User B notify the server that received p2p msg from A has read
+        push(socket_b, @p2p_msg_read, %{"id" => a_p2p_msg_id})
 
         assert sender_a == @user_a.username
         assert msg_a == "Hello B"
 
         # User B send reply to A
-        push(socket_b, "p2p_msg_out", %{"to" => @user_a.username, "msg" => "Hello A"})
+        push(socket_b, @p2p_msg_out, %{"to" => @user_a.username, "msg" => "Hello A"})
 
         # User A receives reply msg from B
-        assert_push("p2p_msg_in", p2p_msg_in, 1000)
-        %{chats: [%{"from" => sender_b, "message" => msg_b, "time" => _}], date: _, friend_id: _, id: id, read: _} = p2p_msg_in 
+        assert_push(@p2p_msg_in, p2p_msg_in, 1000)
+        %{chats: [%{"from" => sender_b, "message" => msg_b, "time" => _}], date: _, friend_id: _, id: b_p2p_msg_id, read: _} = p2p_msg_in 
         
+        # User A notify the server that received p2p msg from B has read
+        push(socket_b, @p2p_msg_read, %{"id" => b_p2p_msg_id})
+
         assert sender_b == @user_b.username
         assert msg_b == "Hello A"
 
-        # User B queries his chats from server
-        ref = push(socket_b, "query_chats", %{"id" => id})
-        assert_reply(ref, :ok,%{"query_chats_resp" => result}, 1000)
+        # User A queries his chats from server
+        a_ref = push(socket_a, @query_chats, %{"id" => a_p2p_msg_id})
+        assert_reply(a_ref, :ok,%{"query_chats_resp" => a_result}, 1000)
         
-        assert length(result.chats) == 2
+        # Check that the read status already equals to true
+        assert a_result.read == 1
+
+        # Check that the total chats in this conversation is 2
+        assert length(a_result.chats) == 2
+
+        # User B queries his chats from server
+        b_ref = push(socket_b, @query_chats, %{"id" => b_p2p_msg_id})
+        assert_reply(b_ref, :ok,%{"query_chats_resp" => b_result}, 1000)
+        
+        # Check that the read status already equals to true
+        assert b_result.read == 1
+
+        # Check that the total chats in this conversation is 2
+        assert length(b_result.chats) == 2
     end
 
     test "5. User A will send invitation to B, and B reveives it", %{socket_a: socket_a, user_a: user_a, 
@@ -100,13 +136,24 @@ defmodule Portal.UserProxyTest do
         
         # Both users are join the channel
         {:ok, _reply, socket_a} = subscribe_and_join(socket_a, "user_proxy:" <> user_a.username, %{})
-        {:ok, _reply, _socket} = subscribe_and_join(socket_b, "user_proxy:" <> user_b.username, %{})
+        {:ok, _reply, socket_b} = subscribe_and_join(socket_b, "user_proxy:" <> user_b.username, %{})
 
         # User A send invitation to B
-        push(socket_a, "add_friend_out", %{"email" => user_b.username, "msg" => "Let me be your friend"})
+        push(socket_a, @add_friend_out, %{"email" => user_b.username, "msg" => "Let me be your friend"})
 
         # User B received A's invitation
-        assert_push("add_friend_in", add_friend_in, 1000)
+        assert_push(@add_friend_in, add_friend_in, 1000)
         assert add_friend_in.msg == "Let me be your friend"
+
+        # User B notify the server that received inivitation has opened
+        push(socket_b, @add_friend_opened, %{"id" => add_friend_in.id})
+
+        # User B accept friend request inivit
+        push(socket_b, @add_friend_resp, %{"id" => add_friend_in.id, "resp" => @accepted})
+        
+        assert_push(@friend_new, friend_new, 1000)
+        %{id: _, name: a_name, online: _, username: a_username} = friend_new
+        assert a_name = @user_a.name
+        assert a_username = @user_a.username
     end
 end

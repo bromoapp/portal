@@ -40,7 +40,10 @@ defmodule Portal.Mixfile do
      {:cowboy, "~> 1.0"},
      {:guardian, "~> 0.14.2"},
      {:message_pack, "~> 0.2.0"},
-     {:lbm_kv, "~> 0.0.2"}]
+     {:lbm_kv, "~> 0.0.2"},
+     {:ueberauth, "~> 0.4"},
+     {:ueberauth_google, "~> 0.5"},
+     {:ja_serializer, "~> 0.12.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

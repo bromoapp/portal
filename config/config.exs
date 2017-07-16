@@ -31,6 +31,15 @@ config :guardian, Guardian,
   secret_key: "BDjxhdF0yOf5c2eXa7KY2PwRLvTHkC/yktktEFzrkWtzqiLGmwLZY+Ohd/cYKnVX",
   serializer: Portal.GuardianSerializer
 
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {Ueberauth.Strategy.Google, [default_scope: ""]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

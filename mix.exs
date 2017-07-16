@@ -18,8 +18,9 @@ defmodule Portal.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Portal, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :mariaex, :guardian, :lbm_kv]]
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, 
+                    :logger, :gettext, :phoenix_ecto, :mariaex, :guardian, 
+                    :ueberauth, :ueberauth_google, :lbm_kv]]
   end
 
   # Specifies which paths to compile per environment.

@@ -5,7 +5,7 @@
                 Friends
                 <div class="accordion-header-btns">
                     <a title="Add new friend" id="add_friend_btn" href="javascript:" v-on:click="addFriend" class="btn bg-37474f-d">
-                        <i id="header_btn" class="fa fa-user-plus"></i>
+                        <i id="header_btn" class="fa  fa-plus"></i>
                     </a>
                     <a v-if="friends.length == 0" title="Search friend" id="src_friend_btn" href="javascript:" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
@@ -67,7 +67,7 @@ export default {
         return {
             friends: [],
             visible: false,
-            invit_msg: "Hi, Can I be your friend?",
+            invit_msg: "Hi, can I be your friend?",
             src_form_visible: false,
             add_form_visible: false,
             detailPanelWidth: 300

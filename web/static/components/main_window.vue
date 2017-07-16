@@ -28,8 +28,10 @@ export default {
         this.$events.$on(this.PULL_WINDOW, () => { this._pull() })
     },
     methods: {
-        closeAll() {
-            //this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+        closeAll(event) {
+            if (event.target.id == "main_window") {
+                this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+            }
         },
         _push() {
             document.getElementById("main_window").style.marginLeft = this.maxLeftMargin + "px"

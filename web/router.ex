@@ -30,4 +30,11 @@ defmodule Portal.Router do
         resources "/users", WebUserController, only: [:new, :create, :delete]
     end
 
+    scope "/auth", Portal do
+        pipe_through [:browser, :authenticated]
+
+        get "/:provider", AuthController, :request
+        get "/:provider/callback", AuthController, :new
+    end
+
 end

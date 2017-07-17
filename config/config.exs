@@ -4,6 +4,7 @@
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
 use Mix.Config
+import_config "env.local.exs"
 
 # General application configuration
 config :portal,
@@ -33,7 +34,7 @@ config :guardian, Guardian,
 
 config :ueberauth, Ueberauth,
   providers: [
-    google: {Ueberauth.Strategy.Google, [default_scope: ""]}
+    google: {Ueberauth.Strategy.Google, [default_scope: "emails profile plus.me"]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,

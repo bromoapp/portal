@@ -36,7 +36,7 @@ defmodule Portal.Web do
 
             import Portal.Router.Helpers
             import Portal.Gettext
-            import Portal.SessionHelper, only: [is_web_req_authorized?: 2, is_api_req_authorized?: 2, login: 2, logout: 1]
+            import Portal.SessionHelper, only: [is_web_req_authorized?: 2, login: 2, logout: 1]
         end
     end
 

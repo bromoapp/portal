@@ -9,12 +9,6 @@ defmodule Portal.Router do
         plug :put_secure_browser_headers
     end
 
-    pipeline :api do
-        plug :accepts, ["json"]
-        plug :fetch_session
-        plug :fetch_flash
-    end
-
     pipeline :authenticated do
         plug Guardian.Plug.VerifySession
         plug Guardian.Plug.LoadResource
@@ -34,14 +28,6 @@ defmodule Portal.Router do
         get "/lobby", PageController, :lobby
         resources "/sessions", SessionController, only: [:new, :create, :delete]
         resources "/users", WebUserController, only: [:new, :create, :delete]
-    end
-
-    scope "/api", Portal do
-        pipe_through [:api, :authenticated]
-
-        get "/unauthorized", ApiUnauthorizedController, :show
-        get "/user/show", ApiUserController, :show
-        put "/user/update", ApiUserController, :update
     end
 
 end

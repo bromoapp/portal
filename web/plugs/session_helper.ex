@@ -44,17 +44,6 @@ defmodule Portal.SessionHelper do
         end
     end
 
-    def is_api_req_authorized?(conn, _opts) do
-        if current_resource(conn) do
-            conn
-        else
-            conn
-            |> configure_session(drop: true)
-            |> redirect(to: Helpers.api_unauthorized_path(conn, :show))
-            |> halt
-        end
-    end
-
     defp sign_in_user(conn, user) do
         # Add access_token to Plug.Conn so it will accessible from view
         token = Phoenix.Token.sign(conn, "portal_salt", user)

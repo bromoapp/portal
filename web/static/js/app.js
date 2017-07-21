@@ -20,8 +20,6 @@
 import "phoenix_html"
 import socket from "./socket"
 import lobby from "./lobby"
-import login from "./login"
-import register from "./register"
 import Vue from 'vue'
 import VueEvents from 'vue-events'
 
@@ -112,8 +110,6 @@ Vue.mixin({
     }
 })
 
-login.init(document.getElementById("login_form"))
-register.init(document.getElementById("register_form"))
 lobby.init(socket, document.getElementById("lobby_div"))
 
 new Vue({

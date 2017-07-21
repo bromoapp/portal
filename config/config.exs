@@ -36,11 +36,7 @@ config :portal, :google,
     client_id: System.get_env("GOOGLE_CLIENT_ID"), 
     client_secret: System.get_env("GOOGLE_CLIENT_SECRET"), 
     redirect_url: System.get_env("GOOGLE_REDIRECT_URI"), 
-    scopes: ["email", "profile", "https://www.googleapis.com/auth/drive"], 
-    auth_url: "https://accounts.google.com/o/oauth2/auth",
-    token_url: "https://accounts.google.com/o/oauth2/token",
-    client_id_varname: "client_id",
-    response_type: "code"
+    scopes: ["email", "profile", "https://www.googleapis.com/auth/drive"]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

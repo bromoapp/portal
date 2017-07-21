@@ -17,8 +17,8 @@ defmodule Portal.User do
       struct
       |> cast(params, [:name, :username, :password])
       |> validate_required([:name, :username, :password])
-      |> validate_length(:username, min: 5, max: 20)
-      |> validate_length(:password, min: 6, max: 15)
+      |> validate_length(:username, min: 5, max: 255)
+      |> validate_length(:password, min: 6, max: 255)
       |> unique_constraint(:username)
   end
 
@@ -31,8 +31,8 @@ defmodule Portal.User do
   def update_changeset(struct, params) do
       struct
       |> cast(params, [:name, :username, :password])
-      |> validate_length(:username, min: 5, max: 20)
-      |> validate_length(:password, min: 6, max: 15)
+      |> validate_length(:username, min: 5, max: 255)
+      |> validate_length(:password, min: 6, max: 255)
       |> unique_constraint(:username)
       |> set_password_hash()
   end

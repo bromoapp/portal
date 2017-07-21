@@ -26,7 +26,7 @@ defmodule Portal.Router do
 
         get "/", PageController, :home
         get "/lobby", PageController, :lobby
-        resources "/sessions", SessionController, only: [:new, :create, :delete]
+        resources "/sessions", SessionController, only: [:delete]
         resources "/users", WebUserController, only: [:new, :create, :delete]
     end
 

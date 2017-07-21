@@ -1,7 +1,0 @@
-<form id="register_form" accept-charset="UTF-8" action="/web/users" method="post">
-    <input name="_csrf_token" value="<%= get_csrf_token() %>" type="hidden">
-    <input name="_utf8" value="✓" type="hidden">
-    <div id="register_form_group">
-        <register></register>
-    </div>
-</form>

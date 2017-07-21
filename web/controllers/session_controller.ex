@@ -5,25 +5,6 @@ defmodule Portal.SessionController do
 
     plug :is_web_req_authorized? when action in [:delete]
 
-    def new(conn, _params) do
-        render(conn, "new.html", [])
-    end
-
-    def create(conn, %{"session" => %{"username" => uname, "password" => pass}}) do
-        user = Repo.get_by(User, username: uname)
-        passwd = :crypto.hash(:sha256, pass) |> Base.encode16
-        cond do
-            user && passwd == user.password_hash ->
-                conn
-                |> login(user)
-                |> redirect(to: page_path(conn, :lobby))
-            true ->
-                conn
-                |> put_flash(:error, "Invalid username/password combination!")
-                |> redirect(to: session_path(conn, :new)) 
-        end
-    end
-
     def delete(conn, _args) do
         user = Guardian.Plug.current_resource(conn)
         conn

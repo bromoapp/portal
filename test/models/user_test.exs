@@ -33,10 +33,5 @@ defmodule Portal.UserTest do
         changeset = User.create_changeset(%User{}, @invalid_input_passwd_less_than_6)
         refute changeset.valid?
     end
-
-    test "5. User.create_changeset returns valid == false, when username bigger than 20 chars" do
-        changeset = User.create_changeset(%User{}, @invalid_input_uname_bigger_than_20)
-        refute changeset.valid?
-    end
     
 end

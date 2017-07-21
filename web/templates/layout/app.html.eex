@@ -22,14 +22,6 @@
         <% else %>
         <div class="container">
             <header class="header">
-                <nav role="navigation">
-                    <ul class="nav nav-pills pull-right top-nav">
-                        <li><%= link "Sign in", to: session_path(@conn, :new, []), 
-                            class: "btn btn-warning" %></li>
-                        <li><%= link "Sign up", to: web_user_path(@conn, :new, []), 
-                            class: "btn btn-default" %></li>
-                    </ul>
-                </nav>
                 <span class="logo"></span>
             </header>
         <% end %>

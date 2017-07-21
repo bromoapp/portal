@@ -20,7 +20,7 @@ defmodule Portal.Mixfile do
     [mod: {Portal, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, 
                     :logger, :gettext, :phoenix_ecto, :mariaex, :guardian, 
-                    :lbm_kv, :oauth2]]
+                    :lbm_kv]]
   end
 
   # Specifies which paths to compile per environment.
@@ -40,8 +40,7 @@ defmodule Portal.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:guardian, "~> 0.14.2"},
-     {:lbm_kv, "~> 0.0.2"},
-     {:oauth2, "~> 0.9"}]
+     {:lbm_kv, "~> 0.0.2"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

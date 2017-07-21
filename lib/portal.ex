@@ -24,7 +24,8 @@ defmodule Portal do
           supervisor(Portal.ProxyPresence, []),
           supervisor(Portal.RoomPresence, []),
           supervisor(Portal.OnlineUsersDb, [join_addr]),
-          supervisor(Portal.PublicRoomsDb, [join_addr])
+          supervisor(Portal.PublicRoomsDb, [join_addr]),
+          supervisor(Portal.GoogleOauth2, [])
         ]
 
         # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

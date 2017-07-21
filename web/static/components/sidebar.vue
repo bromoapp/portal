@@ -192,7 +192,7 @@ export default {
             this._open()
             setTimeout(() => {
                 // Open default panel
-                this.openInvitations()
+                this.openChats()
             }, 200)
         }, 100)
     }

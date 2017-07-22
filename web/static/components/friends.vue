@@ -2,7 +2,7 @@
     <div v-if="visible">
         <div class="panel accordion">
             <div class="panel-heading accordion-header bg-37474f-s">
-                Friends
+                Groups &amp; Friends
                 <div class="accordion-header-btns">
                     <a title="Add new friend" id="add_friend_btn" href="javascript:" v-on:click="addFriend" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa  fa-plus"></i>

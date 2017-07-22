@@ -16,9 +16,12 @@
                     <div id="messages" class="chat-conversation"></div>
                 </div>
                 <div class="inline">
-                    <a href="javascript:" class="btn btn-sm bg-263238-d">Hello</a>
-                    <a href="javascript:" class="btn btn-sm bg-263238-d">Hello</a>
-                    <a href="javascript:" class="btn btn-sm bg-263238-d">Hello</a>
+                    <a title="Smiley" href="javascript:" class="btn btn-sm bg-263238-d" v-on:click="onSmiley">
+                        <i class="fa fa-smile-o"></i>
+                    </a>
+                    <a title="Attachment" href="javascript:" class="btn btn-sm bg-263238-d" v-on:click="onAttachment">
+                        <i class="fa fa-paperclip"></i>
+                    </a>
                 </div>
                 <div class="form-inline">
                     <textarea id="message" class="chat-message form-control"></textarea>
@@ -136,6 +139,12 @@ export default {
             }
             msg_form.value = ""
         },
+        onSmiley(event) {
+            event.target.blur()
+        },
+        onAttachment(event) {
+            event.target.blur()
+        }
     }
 }
 </script>

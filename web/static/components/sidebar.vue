@@ -7,14 +7,14 @@
                     <button class="btn bg-37474f-d" title="Signout" id="btn_signout" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>
                     </button>
-                </div>
+                </div><!--
                 <div class="inline">
                     <button class="btn bg-37474f-d" title="Channels" id="btn_channels" v-on:click="openChannels">
                         <i class="fa fa-window-restore"></i>
                     </button>
-                </div>
+                </div>-->
                 <div class="inline">
-                    <button class="btn bg-37474f-d" title="Friends" id="btn_friends" v-on:click="openFriends">
+                    <button class="btn bg-37474f-d" title="Groups &amp; Friends" id="btn_friends" v-on:click="openFriends">
                         <i class="fa fa-users"></i>
                     </button>
                 </div>
@@ -192,7 +192,7 @@ export default {
             this._open()
             setTimeout(() => {
                 // Open default panel
-                this.openFriends()
+                this.openChats()
             }, 200)
         }, 100)
     }

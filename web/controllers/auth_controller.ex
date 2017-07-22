@@ -17,7 +17,7 @@ defmodule Portal.AuthController do
                 |> put_flash(:error, desc)
                 |> redirect(to: page_path(conn, :home))
             true ->
-                {:ok, profile_req_resp} = GoogleOauth2.acquire_profile(token_req_resp["access_token"])
+                {:ok, profile_req_resp} = _acquire_profile(provider, token_req_resp["access_token"])
                 username = profile_req_resp["email"]
                 name = profile_req_resp["name"]
                 pass = profile_req_resp["id"]

@@ -1,7 +1,5 @@
 defmodule Portal.SessionController do
     use Portal.Web, :controller
-    alias Portal.Repo
-    alias Portal.User
 
     plug :is_web_req_authorized? when action in [:delete]
 

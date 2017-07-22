@@ -390,7 +390,7 @@ defmodule Portal.UserProxy do
                 rel_cs = Relation.create_changeset(%Relation{}, rel_map)
                 |> Changeset.put_assoc(:user_a, user_a)
                 |> Changeset.put_assoc(:user_b, user_b)
-                rel = Repo.insert(rel_cs)
+                Repo.insert(rel_cs)
 
                 json1 = %{id: user_a.id, username: user_a.username, name: user_a.name, online: _is_friend_online?(user_a.username)}
                 push socket, @friend_new, json1

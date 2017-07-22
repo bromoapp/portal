@@ -127,7 +127,8 @@ export default {
                 this.$events.$emit(this.GET_CHATS, this.currFriend)
             }, 300)
         },
-        sendMessage() {
+        sendMessage(event) {
+            event.target.blur()
             let msg_form = document.getElementById("message")
             let msg = msg_form.value
             if (msg.trim().length > 0) {

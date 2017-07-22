@@ -39,8 +39,11 @@
                             </span>
                         </div>
                     </li>
-                    <li v-if="channels.length > 0">
+                    <li v-if="channels.length > 2">
                         <div class="accordion-btn bg-212121-s">&nbsp;</div>
+                    </li>
+                    <li v-else>
+                        <div style="height: 150px;" class="accordion-btn bg-212121-s">&nbsp;</div>
                     </li>
                 </ul>
             </div>

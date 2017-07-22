@@ -29,7 +29,7 @@
                     </button>
                 </div>
             </div>
-            <button id="switch" class="btn bg-f50057-d sidebar-close" v-on:click="changeMode">
+            <button id="switch" class="btn bg-f50057-d sidebar-close-btn" v-on:click="changeMode">
                 <i class=""></i>
             </button>
         </div>
@@ -192,7 +192,7 @@ export default {
             this._open()
             setTimeout(() => {
                 // Open default panel
-                this.openChats()
+                this.openFriends()
             }, 200)
         }, 100)
     }

@@ -179,7 +179,7 @@ export default {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 3;
+    z-index: 4;
     top: 0;
     left: 0;
     overflow-x: hidden;
@@ -188,8 +188,8 @@ export default {
     transition: 0.3s ease;
 }
 
-.sidebar-close {
-    z-index: 4;
+.sidebar-close-btn {
+    z-index: 5;
     position: absolute;
     top: 8px;
     right: 8px;
@@ -271,6 +271,7 @@ export default {
 }
 
 .accordion-btn {
+    z-index: 3;
     cursor: pointer;
     transition: 0.4s ease;
     border-top: 1px solid black;

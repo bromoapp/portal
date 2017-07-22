@@ -24,6 +24,7 @@ defmodule Portal.AuthController do
 
                 user = Repo.get_by(User, username: username)
                 if user == nil do
+                    # Creates a new user
                     user_params = %{name: name, username: username, password: pass}
                     changeset = User.create_changeset(%User{}, user_params)
                     if changeset.valid? do
@@ -43,6 +44,7 @@ defmodule Portal.AuthController do
                         |> redirect(to: page_path(conn, :home))
                     end
                 else
+                    # Validates newly logged in user
                     passwd = :crypto.hash(:sha256, pass) |> Base.encode16
                     cond do
                         user && passwd == user.password_hash ->

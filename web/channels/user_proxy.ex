@@ -42,7 +42,7 @@ defmodule Portal.UserProxy do
     @sql_friends_list "CALL `sp_friends_list`(?);"
     @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` = 'WAITING'"
     @sql_query_chats "SELECT a.id, a.user_b_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?;"
-    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.updated_at) = CURDATE() AND a.user_a_id = ? AND a.user_b_id = ?;"
+    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.updated_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_a_id = ? AND a.user_b_id = ?;"
 
     #=================================================================================================
     # Functions related to user connections and presences
@@ -271,7 +271,7 @@ defmodule Portal.UserProxy do
 
     defp _create_update_users_chat(user_a, user_b, chat, mode) do
         #Logger.info(">>> USER A = #{inspect user_a.username}")
-        %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [user_a.id, user_b.id])
+        %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [_format_date(:calendar.universal_time), user_a.id, user_b.id])
         if rows == [] do
             # creates new chat for user
             chats = %Chats{chats: [chat]}
@@ -448,11 +448,17 @@ defmodule Portal.UserProxy do
     end
 
     defp _format_date({{yyyy, mm, dd}, _}) do
-        Integer.to_string(yyyy) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(dd)
+        Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
     end
 
-    defp _format_date(ecto_date) do
-        {{yyyy, mm, dd}, _} = Ecto.DateTime.to_erl(ecto_date)
-        Integer.to_string(yyyy) <> "/" <> Integer.to_string(mm) <> "/" <> Integer.to_string(dd)
+    defp _format_date(universal_time) do
+        {{yyyy, mm, dd}, _} = Ecto.DateTime.to_erl(universal_time)
+        Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
     end
+
+    defp _to_mysql_date(universal_time) do
+        {{yyyy, mm, dd}, _} = universal_time
+        Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
+    end
+
 end

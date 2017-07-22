@@ -5,8 +5,8 @@ defmodule Portal.DailyChat do
     schema "daily_chats" do
         field :read, :boolean, default: false
         field :messages, :string
-        field :inserted_at, DateTime, default: DateTime.from_erl(:calendar.local_time)
-        field :updated_at, DateTime, default: DateTime.from_erl(:calendar.local_time)
+        field :inserted_at, DateTime, default: DateTime.from_erl(:calendar.universal_time)
+        field :updated_at, DateTime, default: DateTime.from_erl(:calendar.universal_time)
         belongs_to :user_a, Portal.User
         belongs_to :user_b, Portal.User
     end

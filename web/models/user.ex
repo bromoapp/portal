@@ -6,6 +6,7 @@ defmodule Portal.User do
       field :username, :string
       field :password, :string, virtual: true
       field :password_hash, :string
+      field :credits, :integer, default: 0
       
       timestamps()
   end
@@ -15,8 +16,8 @@ defmodule Portal.User do
   """
   def new_changeset(struct, params \\ :invalid) do
       struct
-      |> cast(params, [:name, :username, :password])
-      |> validate_required([:name, :username, :password])
+      |> cast(params, [:name, :username, :password, :credits])
+      |> validate_required([:name, :username, :password, :credits])
       |> validate_length(:username, min: 5, max: 255)
       |> validate_length(:password, min: 6, max: 255)
       |> unique_constraint(:username)
@@ -30,7 +31,8 @@ defmodule Portal.User do
 
   def update_changeset(struct, params) do
       struct
-      |> cast(params, [:name, :username, :password])
+      |> cast(params, [:name, :username, :password, :credits])
+      |> validate_required([:name, :username, :password, :credits])
       |> validate_length(:username, min: 5, max: 255)
       |> validate_length(:password, min: 6, max: 255)
       |> unique_constraint(:username)

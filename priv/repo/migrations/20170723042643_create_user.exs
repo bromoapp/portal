@@ -6,6 +6,7 @@ defmodule Portal.Repo.Migrations.CreateUser do
       add :name, :string
       add :username, :string
       add :password_hash, :string
+      add :credits, :integer
 
       timestamps()
     end

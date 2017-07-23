@@ -251,7 +251,7 @@ defmodule Portal.UserProxy do
             if read == 0 do
                 chat = DailyChat |> Repo.get!(id)
                 upd_chat_map = %{read: true}
-                upd_chat_cs = DailyChat.create_or_update_changeset(chat, upd_chat_map)
+                upd_chat_cs = DailyChat.create_or_update_p2p_changeset(chat, upd_chat_map)
                 Repo.update(upd_chat_cs)
             end
 
@@ -264,7 +264,7 @@ defmodule Portal.UserProxy do
     def handle_in(@p2p_msg_read, %{"id" => id}, socket) do
         chat = DailyChat |> Repo.get!(id)
         upd_chat_map = %{read: true}
-        upd_chat_cs = DailyChat.create_or_update_changeset(chat, upd_chat_map)
+        upd_chat_cs = DailyChat.create_or_update_p2p_changeset(chat, upd_chat_map)
         Repo.update(upd_chat_cs)
         {:noreply, socket}
     end
@@ -279,7 +279,7 @@ defmodule Portal.UserProxy do
             user_a_chat_map = %{read: _parse_read_val(mode), messages: text}
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
-            user_a_chat_cs = DailyChat.create_or_update_changeset(%DailyChat{}, user_a_chat_map)
+            user_a_chat_cs = DailyChat.create_or_update_p2p_changeset(%DailyChat{}, user_a_chat_map)
             |> Changeset.put_assoc(:user_a, user_a)
             |> Changeset.put_assoc(:user_b, user_b)
             user_a_chat = Repo.insert!(user_a_chat_cs)
@@ -299,7 +299,7 @@ defmodule Portal.UserProxy do
             |> Map.put(:user_a, user_a)
             |> Map.put(:user_b, user_b)
 
-            upd_user_a_chat_cs = DailyChat.create_or_update_changeset(user_a_chat, upd_user_a_chat_map)
+            upd_user_a_chat_cs = DailyChat.create_or_update_p2p_changeset(user_a_chat, upd_user_a_chat_map)
             upd_user_a_chat = Repo.update!(upd_user_a_chat_cs)
             
             %Chat{from: uname, message: message, time: time} = chat

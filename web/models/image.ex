@@ -3,6 +3,7 @@ defmodule Portal.Image do
 
     schema "images" do
         field :owner_id, :binary_id
+        field :owner, :string
         field :tag, :string
         field :name, :string
         field :ext, :string

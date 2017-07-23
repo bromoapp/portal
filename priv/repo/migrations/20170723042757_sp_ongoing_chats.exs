@@ -1,4 +1,4 @@
-defmodule Portal.Repo.Migrations.SpLastChats do
+defmodule Portal.Repo.Migrations.SpOngoingChats do
   use Ecto.Migration
 
   def up do

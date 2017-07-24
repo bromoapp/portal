@@ -4,14 +4,14 @@
             <div class="panel-heading accordion-header bg-37474f-s">
                 Groups &amp; Friends
                 <div class="accordion-header-btns">
-                    <a title="Add new friend" id="add_friend_btn" href="javascript:" v-on:click="addFriend" class="btn bg-37474f-d">
-                        <i id="header_btn" class="fa  fa-plus"></i>
-                    </a>
                     <a v-if="friends.length == 0" title="Search friend" id="src_friend_btn" href="javascript:" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
                     <a v-else title="Search friend" id="src_friend_btn" href="javascript:" v-on:click="seekFriend" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
+                    </a>
+                    <a title="Add new friend" id="add_friend_btn" href="javascript:" v-on:click="addFriend" class="btn bg-37474f-d">
+                        <i id="header_btn" class="fa  fa-plus"></i>
                     </a>
                 </div>
             </div>

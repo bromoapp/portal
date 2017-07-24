@@ -456,9 +456,4 @@ defmodule Portal.UserProxy do
         Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
     end
 
-    defp _to_mysql_date(universal_time) do
-        {{yyyy, mm, dd}, _} = universal_time
-        Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
-    end
-
 end

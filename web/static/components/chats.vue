@@ -10,6 +10,9 @@
                     <a v-else title="Search chat" id="src_chat_btn" href="javascript:" v-on:click="seekChat" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
+                    <a title="Add new friend" id="add_chat_btn" href="javascript:" v-on:click="addChat" class="btn bg-37474f-d">
+                        <i id="header_btn" class="fa  fa-plus"></i>
+                    </a>                    
                 </div>
             </div>
             <div v-if="src_form_visible" id="seek_chat" class="bg-212121-s slide-in">
@@ -186,6 +189,9 @@ export default {
                     mail.focus()
                 }, 200)
             }
+        },
+        addChat() {
+            document.getElementById("add_chat_btn").blur()
         }
     }
 }

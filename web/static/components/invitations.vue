@@ -2,7 +2,7 @@
     <div v-if="visible">
         <div class="panel accordion">
             <div class="panel-heading accordion-header bg-37474f-s">
-                Invitations
+                Notifications
                 <div class="accordion-header-btns">
                     <a v-if="invitations.length == 0" href="javascript:" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>

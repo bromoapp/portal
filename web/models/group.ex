@@ -5,7 +5,6 @@ defmodule Portal.Group do
         field :name, :string
         field :members, :string
         field :admins, :string
-        belongs_to :creator, Portal.User
 
         timestamps()
     end

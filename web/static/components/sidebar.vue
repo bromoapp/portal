@@ -7,12 +7,13 @@
                     <button class="btn bg-37474f-d" title="Signout" id="btn_signout" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>
                     </button>
-                </div><!--
-                <div class="inline">
-                    <button class="btn bg-37474f-d" title="Channels" id="btn_channels" v-on:click="openChannels">
-                        <i class="fa fa-window-restore"></i>
-                    </button>
-                </div>-->
+                </div>
+                <!--
+                    <div class="inline">
+                        <button class="btn bg-37474f-d" title="Channels" id="btn_channels" v-on:click="openChannels">
+                            <i class="fa fa-window-restore"></i>
+                        </button>
+                    </div>-->
                 <div class="inline">
                     <button class="btn bg-37474f-d" title="Groups &amp; Friends" id="btn_friends" v-on:click="openFriends">
                         <i class="fa fa-users"></i>
@@ -24,13 +25,12 @@
                     </button>
                 </div>
                 <div class="inline">
-                    <button class="btn bg-37474f-d" title="Invitations" id="btn_inivitations" v-on:click="openInvitations">
+                    <button class="btn bg-37474f-d" title="Notifications" id="btn_inivitations" v-on:click="openInvitations">
                         <i class="fa fa-envelope-o"></i>
                     </button>
                 </div>
             </div>
-            <button id="switch" class="btn bg-f50057-d sidebar-close-btn" v-on:click="changeMode">
-                <i class=""></i>
+            <button id="switch" class="btn bg-f50057-d sidebar-close-btn" v-on:click="openMenu">
             </button>
         </div>
         <div id="video_cam" class="video-cam">
@@ -104,7 +104,7 @@ export default {
             document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-right")
-                document.getElementById("switch").classList.remove("fa-chevron-left")
+                document.getElementById("switch").classList.remove("fa-bars")
                 document.getElementById("switch").blur()
                 document.getElementById("sidebar").style.width = this.minWidth + "px"
                 document.getElementById("sidebar_cover").style.width = this.minWidth + "px"
@@ -117,7 +117,7 @@ export default {
             document.getElementById("sidebar").style.width = this.maxWidth + "px"
             document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
-                document.getElementById("switch").classList.add("fa", "fa-chevron-left")
+                document.getElementById("switch").classList.add("fa", "fa-bars")
                 document.getElementById("switch").classList.remove("fa-chevron-right")
                 document.getElementById("switch").blur()
                 document.getElementById("sidebar_cover").style.width = "0px"
@@ -179,6 +179,9 @@ export default {
             } else {
                 this._close()
             }
+        },
+        openMenu() {
+
         }
     },
     mounted() {
@@ -192,7 +195,7 @@ export default {
             this._open()
             setTimeout(() => {
                 // Open default panel
-                this.openChats()
+                this.openFriends()
             }, 200)
         }, 100)
     }

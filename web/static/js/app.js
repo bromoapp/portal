@@ -103,6 +103,8 @@ Vue.mixin({
             get HIGHLIGHT_CHATS_BTN() { return "highlight_chats_btn" },
             get HIGHLIGHT_INVITS_BTN() { return "highlight_invits_btn" },
             get WINDOW_RESIZING() { return "window_risizing" },
+            get SWITCH_MENU() { return "switch_menu" },
+            get MINIMIZE() { return "minimize" },
 
             // Constant values
             get TOP_MARGIN() { return 310 }

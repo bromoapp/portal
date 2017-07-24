@@ -3,17 +3,17 @@
         <logout></logout>
         <div>
             <div class="sidebar-toolbar">
+                <!--
                 <div class="inline">
                     <button class="btn bg-37474f-d" title="Signout" id="btn_signout" v-on:click="signout">
                         <i class="fa fa-sign-out"></i>
                     </button>
-                </div>
-                <!--
-                    <div class="inline">
-                        <button class="btn bg-37474f-d" title="Channels" id="btn_channels" v-on:click="openChannels">
-                            <i class="fa fa-window-restore"></i>
-                        </button>
-                    </div>-->
+                </div>    
+                <div class="inline">
+                    <button class="btn bg-37474f-d" title="Channels" id="btn_channels" v-on:click="openChannels">
+                        <i class="fa fa-window-restore"></i>
+                    </button>
+                </div>-->
                 <div class="inline">
                     <button class="btn bg-37474f-d" title="Groups &amp; Friends" id="btn_friends" v-on:click="openFriends">
                         <i class="fa fa-users"></i>
@@ -77,6 +77,7 @@ export default {
         this.$events.$on(this.START_CHAT, (friend) => { this.openChats(friend) })
         this.$events.$on(this.HIGHLIGHT_CHATS_BTN, () => this._switchChatsBtn(true))
         this.$events.$on(this.HIGHLIGHT_INVITS_BTN, () => this._switchInvitsBtn(true))
+        this.$events.$on(this.MINIMIZE, () => this._close())
     },
     methods: {
         _switchInvitsBtn(mode) {
@@ -181,7 +182,12 @@ export default {
             }
         },
         openMenu() {
-
+            document.getElementById("switch").blur()
+            if (!this.closed) {
+                this.$events.$emit(this.SWITCH_MENU)
+            } else {
+                this._open()
+            }
         }
     },
     mounted() {
@@ -195,7 +201,7 @@ export default {
             this._open()
             setTimeout(() => {
                 // Open default panel
-                this.openFriends()
+                this.openChats()
             }, 200)
         }, 100)
     }

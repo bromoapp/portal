@@ -2,20 +2,23 @@
     <div v-if="panel_visible">
         <div id="menu_panel_window" class="float-panel bg-455A64-s">
             <ul style="margin: 0; padding: 0; list-style: none;">
-                <li>
-                    <div class="accordion-btn bg-263238-d">New chat</div>
+                <li v-on:click="newChat">
+                    <div class="accordion-btn bg-37474f-d">New chat</div>
                 </li>
-                <li>
-                    <div class="accordion-btn bg-263238-d">New friend</div>
+                <li v-on:click="newFriend">
+                    <div class="accordion-btn bg-37474f-d">New friend</div>
                 </li>
-                <li>
-                    <div class="accordion-btn bg-263238-d">New group</div>
+                <li v-on:click="newGroup">
+                    <div class="accordion-btn bg-37474f-d">New group</div>
                 </li>
-                <li style="margin-top: 2px;" v-on:click="minimize">
-                    <div class="accordion-btn bg-263238-d">Minimize</div>
+                <li style="margin-top: 2px;" v-on:click="settings">
+                    <div class="accordion-btn bg-37474f-d">Settings</div>
+                </li>
+                <li v-on:click="minimize">
+                    <div class="accordion-btn bg-37474f-d">Minimize</div>
                 </li>
                 <li v-on:click="signout">
-                    <div class="accordion-btn bg-263238-d">Sign out</div>
+                    <div class="accordion-btn bg-37474f-d">Sign out</div>
                 </li>
             </ul>
         </div>
@@ -28,7 +31,7 @@ export default {
     data() {
         return {
             currFriend: null,
-            height: "158px",
+            height: "190px",
             maxWidth: "150px",
             panel_visible: false
         }
@@ -51,20 +54,10 @@ export default {
             }
         },
         _close() {
-            this.currFriend = null
-            let cover = document.getElementById("menu_panel_cover")
-            cover.style.width = this.maxWidth
-
-            setTimeout(() => {
-                let panel = document.getElementById("menu_panel_window")
-                panel.style.width = "0px"
-                cover.style.width = "0px"
-                setTimeout(() => {
-                    this.panel_visible = false
-                }, 300)
-            }, 300)
+            this.panel_visible = false
         },
         _open() {
+            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
                 let panel = document.getElementById("menu_panel_window")
@@ -79,6 +72,7 @@ export default {
             }, 300)
         },
         signout() {
+            this.panel_visible = false
             let obj = {
                 msg: "Do you really want to exit?",
                 onYes: this.SIGN_OUT
@@ -86,8 +80,20 @@ export default {
             this.$events.$emit(this.POP_QUESTION, obj)
         },
         minimize() {
-            this._close()
+            this.panel_visible = false
             this.$events.$emit(this.MINIMIZE)
+        },
+        settings() {
+            this.panel_visible = false
+        },
+        newChat() { 
+            this.panel_visible = false
+        },
+        newFriend() { 
+            this.panel_visible = false
+        },
+        newGroup() { 
+            this.panel_visible = false
         }
     }
 }

@@ -2,7 +2,7 @@
     <div v-if="panel_visible">
         <div id="friend_detail_panel_window" class="float-panel bg-455A64-s">
             <span class="pull-right" style="margin: 6px 10px">
-                <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
+                <a href="javascript:" class="cl-ffffff-d" v-on:click="onClose">
                     <i class="fa fa-close"></i>
                 </a>
             </span>
@@ -72,17 +72,7 @@ export default {
         },
         _close() {
             this.currFriend = null
-            let cover = document.getElementById("friend_detail_panel_cover")
-            cover.style.width = this.maxWidth
-
-            setTimeout(() => {
-                let panel = document.getElementById("friend_detail_panel_window")
-                panel.style.width = "0px"
-                cover.style.width = "0px"
-                setTimeout(() => {
-                    this.panel_visible = false
-                }, 300)
-            }, 300)
+            this.panel_visible = false
         },
         _open() {
             this.panel_visible = true

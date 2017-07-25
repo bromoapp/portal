@@ -3,9 +3,6 @@
         <div>
             <video id="cam_video" autoplay="true"></video>
             <div class="overlay-buttons">
-                <a id="open_settings_btn" title="Settings" href="javascript:" class="cl-f50057-d" v-on:click="openSettings">
-                    <i class="fa fa-gear"></i>
-                </a>
                 <a id="switch_video_btn" title="Video" href="javascript:" class="cl-f50057-d" v-on:click="switchVideo">
                     <i class="fa fa-video-camera"></i>
                 </a>

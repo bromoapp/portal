@@ -4,7 +4,7 @@
             <div class="chat-dialog">
                 <div style="text-align: right">
                     <span>
-                        <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
+                        <a href="javascript:" class="cl-ffffff-d" v-on:click="onClose">
                             <i class="fa fa-close"></i>
                         </a>
                     </span>
@@ -99,19 +99,8 @@ export default {
             }
         },
         _close() {
-            this.currFriend = null
-            let cover = document.getElementById("chat_dialog_panel_cover")
-            cover.style.width = this.maxWidth
-
-            setTimeout(() => {
-                let panel = document.getElementById("chat_dialog_panel_window")
-                panel.style.width = "0px"
-                cover.style.width = "0px"
-                setTimeout(() => {
-                    this.panel_visible = false
-                    this.$events.$emit(this.CHAT_DIALOG_CLOSED)
-                }, 300)
-            }, 300)
+            this.$events.$emit(this.CHAT_DIALOG_CLOSED)
+            this.panel_visible = false
         },
         _open() {
             this.panel_visible = true
@@ -144,6 +133,9 @@ export default {
         },
         onAttachment(event) {
             event.target.blur()
+        },
+        onClose() {
+            this.panel_visible = false
         }
     }
 }

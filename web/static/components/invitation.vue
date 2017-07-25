@@ -66,17 +66,7 @@ export default {
         },
         _close() {
             this.currInvit = null
-            let cover = document.getElementById("invit_detail_panel_cover")
-            cover.style.width = this.maxWidth
-
-            setTimeout(() => {
-                let panel = document.getElementById("invit_detail_panel_window")
-                panel.style.width = "0px"
-                cover.style.width = "0px"
-                setTimeout(() => {
-                    this.panel_visible = false
-                }, 300)
-            }, 300)
+            this.panel_visible = false
         },
         _open() {
             this.panel_visible = true

@@ -2,7 +2,8 @@
     <h2><%= gettext "Welcome to %{name}", name: "Bromo's Demo App" %></h2>
     <p class="lead">This is web chat application similar to the Whatsapp Web,
     and it's still under heavy development. The purpose of this project is to 
-    shows my skill in using <b>Elixir Phoenix</b> and <b>Vuejs</b>.</p>
+    shows my skill in using <b>Elixir Phoenix</b> and <b>Vuejs</b>. It's not
+    mobile friendly :P</p>
     <p>Source: <a href="https://github.com/bromoapp/portal" target="blank">github</a></p>
     <a href="http://localhost:4000/auth/google" class="btn bg-37474f-d">
         <img src="/images/google.png"><span style="position: relative; top: 3px"> Signed in with Google</span>

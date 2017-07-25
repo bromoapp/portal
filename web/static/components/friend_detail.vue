@@ -2,7 +2,7 @@
     <div v-if="panel_visible">
         <div id="friend_detail_panel_window" class="float-panel bg-455A64-s">
             <span class="pull-right" style="margin: 6px 10px">
-                <a href="javascript:" class="cl-ffffff-d" v-on:click="onClose">
+                <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
                     <i class="fa fa-close"></i>
                 </a>
             </span>
@@ -75,6 +75,7 @@ export default {
             this.panel_visible = false
         },
         _open() {
+            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
                 this._showDetails()

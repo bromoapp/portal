@@ -104,6 +104,7 @@ Vue.mixin({
             get HIGHLIGHT_INVITS_BTN() { return "highlight_invits_btn" },
             get WINDOW_RESIZING() { return "window_risizing" },
             get SWITCH_MENU() { return "switch_menu" },
+            get SWITCH_ADD_FRIEND() { return "switch_add_friend" },
             get MINIMIZE() { return "minimize" },
 
             // Constant values

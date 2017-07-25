@@ -4,7 +4,7 @@
             <div class="chat-dialog">
                 <div style="text-align: right">
                     <span>
-                        <a href="javascript:" class="cl-ffffff-d" v-on:click="onClose">
+                        <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
                             <i class="fa fa-close"></i>
                         </a>
                     </span>
@@ -103,6 +103,7 @@ export default {
             this.panel_visible = false
         },
         _open() {
+            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
                 document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
@@ -133,9 +134,6 @@ export default {
         },
         onAttachment(event) {
             event.target.blur()
-        },
-        onClose() {
-            this.panel_visible = false
         }
     }
 }

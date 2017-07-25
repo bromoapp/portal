@@ -91,6 +91,7 @@ export default {
         },
         newFriend() { 
             this.panel_visible = false
+            this.$events.$emit(this.SWITCH_ADD_FRIEND)
         },
         newGroup() { 
             this.panel_visible = false

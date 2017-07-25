@@ -10,30 +10,12 @@
                     <a v-else title="Search friend" id="src_friend_btn" href="javascript:" v-on:click="seekFriend" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
-                    <a title="Add new friend" id="add_friend_btn" href="javascript:" v-on:click="addFriend" class="btn bg-37474f-d">
-                        <i id="header_btn" class="fa  fa-plus"></i>
-                    </a>
                 </div>
             </div>
             <div v-if="src_form_visible" id="seek_friend" class="bg-212121-s slide-in">
                 <div style="margin: 0px 17px 0px 19px; padding: 10px 15px 10px 0px">
                     <span style="color: white">Search friend:</span>
                     <input id="search_args" class="form-control" type="text" placeholder="Name">
-                </div>
-            </div>
-            <div v-if="add_form_visible" id="add_friend" class="bg-212121-s slide-in">
-                <div style="margin: 0px 15px 0px 19px; padding: 10px 15px 10px 0px">
-                    <span style="color: white">Friend's email:</span>
-                    <div class="form-inline" style="margin-bottom: 10px">
-                        <input id="invite_args" class="form-control" type="text" placeholder="Email">
-                        <a id="send_invit_btn" title="Send invitation" v-on:click="sendInvitation" class="btn bg-1976D2-d">
-                            <i class="fa fa-send"></i>
-                        </a>
-                    </div>
-                    <span style="margin: 10px 0px; color: white;">Message:</span>
-                    <div>
-                        <textarea id="invite_msg" style="width: 220px; resize: none" rows="2" class="form-control" v-model="invit_msg"></textarea>
-                    </div>
                 </div>
             </div>
             <div id="items_list" class="accordion-body">
@@ -113,58 +95,11 @@ export default {
                 }, 200)
             }, 300)
         },
-        _isFormatCorrect(data) {
-            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(data);
-        },
         onFriendClicked(friend) {
             if (this.src_form_visible) {
                 this.seekFriend()
             }
             this.$events.$emit(this.SWITCH_FRIEND_DETAIL, friend)
-        },
-        addFriend() {
-            document.getElementById("add_friend_btn").blur()
-            if (this.add_form_visible) {
-                let div = document.getElementById("add_friend")
-                div.style.maxHeight = "0px"
-                setTimeout(() => {
-                    this.add_form_visible = false
-                }, 200)
-            } else {
-                if (this.src_form_visible) {
-                    this.seekFriend()
-                }
-                setTimeout(() => {
-                    this.add_form_visible = true
-                    setTimeout(() => {
-                        let div = document.getElementById("add_friend")
-                        div.style.maxHeight = "200px"
-
-                        let inputEl = document.getElementById("invite_args")
-                        inputEl.focus()
-                    }, 150)
-                }, 150);
-            }
-        },
-        sendInvitation() {
-            document.getElementById("send_invit_btn").blur()
-            let mailEL = document.getElementById("invite_args")
-            let msgEl = document.getElementById("invite_msg")
-            let invit = { email: mailEL.value, msg: msgEl.value }
-            if (this._isFormatCorrect(invit.email)) {
-                this.$events.$emit(this.ADD_FRIEND_OUT, invit)
-                setTimeout(() => {
-                    this.addFriend()
-                    mailEL.value = ""
-                    msgEl.value = this.invit_msg
-                }, 500);
-            } else {
-                let obj = {
-                    msg: "Invalid email format!",
-                }
-                this.$events.$emit(this.POP_ERROR, obj)
-            }
         },
         seekFriend() {
             document.getElementById("src_friend_btn").blur()

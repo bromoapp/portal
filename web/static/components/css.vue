@@ -274,7 +274,7 @@ export default {
     z-index: 3;
     cursor: pointer;
     transition: 0.4s ease;
-    border-top: 1px solid black;
+    border-top: 1px solid #29343a;
     color: white;
     margin-left: 0px;
     padding: 5px 0px 5px 10px;

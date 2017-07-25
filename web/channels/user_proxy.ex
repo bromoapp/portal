@@ -270,7 +270,6 @@ defmodule Portal.UserProxy do
     end
 
     defp _create_update_users_chat(user_a, user_b, chat, mode) do
-        #Logger.info(">>> USER A = #{inspect user_a.username}")
         %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [_format_date(:calendar.universal_time), user_a.id, user_b.id])
         if rows == [] do
             # creates new chat for user

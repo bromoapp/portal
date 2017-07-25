@@ -38,6 +38,7 @@ defmodule Portal.UserProxy do
     @add_friend_opened "add_friend_opened"
 
     # SQLs
+    @sql_is_invit_exists "CALL `sp_is_invit_exists`(?, ?);"
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"
     @sql_friends_list "CALL `sp_friends_list`(?);"
     @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` = 'WAITING'"
@@ -344,25 +345,31 @@ defmodule Portal.UserProxy do
         sender = socket.assigns.user
         receiver = Repo.get_by(User, username: email)
         if (receiver != nil) do
-            invit_map = %{invit_type: @friendship, invit_msg: message, status: @waiting}
-            |> Map.put(:from, sender)
-            |> Map.put(:to, receiver)
-            invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
-            |> Changeset.put_assoc(:from, sender)
-            |> Changeset.put_assoc(:to, receiver)
-            invit = Repo.insert!(invit_cs)
-
-            online? = _is_friend_online?(receiver.username)
+            %Result{rows: rows} = SQL.query!(Repo, @sql_is_invit_exists, [sender.id, receiver.id])
+            [[total]] = rows
             cond do
-                online? == true ->
-                    ol_friend = OnlineUsersDb.select(receiver.username)
-                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, 
-                        type: invit.invit_type, status: invit.status, msg: message}
-                    send ol_friend.pid, {:add_friend_in, json}
+                total == 0 ->
+                    invit_map = %{invit_type: @friendship, invit_msg: message, status: @waiting}
+                    |> Map.put(:from, sender)
+                    |> Map.put(:to, receiver)
+                    invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
+                    |> Changeset.put_assoc(:from, sender)
+                    |> Changeset.put_assoc(:to, receiver)
+                    invit = Repo.insert!(invit_cs)
+
+                    online? = _is_friend_online?(receiver.username)
+                    cond do
+                        online? == true ->
+                            ol_friend = OnlineUsersDb.select(receiver.username)
+                            json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, 
+                                type: invit.invit_type, status: invit.status, msg: message}
+                            send ol_friend.pid, {:add_friend_in, json}
+                        true ->
+                            :ignore
+                    end
                 true ->
                     :ignore
             end
-            
             {:reply, :ok, socket}
         else
             {:reply, {:error, %{"msg" => @email_not_found}}, socket}

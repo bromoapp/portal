@@ -85,8 +85,6 @@ export default {
             this.channels = list
         },
         _closeChannelsList() {
-            let body = document.getElementById("items_list")
-            body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
                 this.src_form_visible = false

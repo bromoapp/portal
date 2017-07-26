@@ -94,8 +94,6 @@ export default {
             this.invitations = list
         },
         _closeInvitationsList() {
-            let body = document.getElementById("items_list")
-            body.style.maxHeight = "0px"
             setTimeout(() => {
                 this.visible = false
                 this.src_form_visible = false

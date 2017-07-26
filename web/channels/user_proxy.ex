@@ -453,7 +453,8 @@ defmodule Portal.UserProxy do
         Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)
     end
 
-    defp _format_date({{yyyy, mm, dd}, _}) do
+    defp _format_date(date) when is_tuple(date) do
+        {{yyyy, mm, dd}, _} = date
         Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
     end
 

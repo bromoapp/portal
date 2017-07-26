@@ -43,7 +43,7 @@ export default {
     },
     methods: {
         _onAddFriendResp(invit) {
-            this.tbl_invits.findAndRemove({id: invit.id})
+            this.tbl_invits.findAndRemove({ id: invit.id })
             this._updateInvitsList()
             this._onGetUnopened()
         },
@@ -150,7 +150,6 @@ export default {
             this._updateFriendsList()
         },
         _onInitialUpdates(data) {
-            console.log(data)
             for (let n = 0; n < data.friends.length; n++) {
                 let friend = data.friends[n]
                 this.tbl_friends.insert(friend)
@@ -175,9 +174,11 @@ export default {
             }
             this._updateInvitsList()
 
-            // Force to shows unread chats
-            this._onGetUnread()
-            this._onGetUnopened()
+            // Force to shows unread or unopened data
+            setTimeout(() => {
+                this._onGetUnread()
+                this._onGetUnopened()
+            }, 500);
         },
         _updateFriendsList() {
             let friends = this.tbl_friends.where((o) => {

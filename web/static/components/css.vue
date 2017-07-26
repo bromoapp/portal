@@ -64,7 +64,7 @@ export default {
 }
 
 /************************** Friend detail panel styles **************************/
-.friend-profile {
+.float-panel-form {
     margin-top: 25px;
     padding: 10px;
 }

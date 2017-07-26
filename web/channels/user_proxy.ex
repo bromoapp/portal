@@ -449,8 +449,9 @@ defmodule Portal.UserProxy do
     end
 
     defp _format_time do
-        {_, {hh, mm, ss}} = :calendar.local_time
-        Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)
+        {{year, month, date}, {hh, mm, ss}} = :calendar.universal_time
+        Integer.to_string(year) <> "/" <> Integer.to_string(month) <> "/" <> Integer.to_string(date)
+        <> " " <> Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)
     end
 
     defp _format_date(date) when is_tuple(date) do

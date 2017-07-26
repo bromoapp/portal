@@ -6,7 +6,7 @@
                     <i class="fa fa-close"></i>
                 </a>
             </span>
-            <div class="friend-profile">
+            <div class="float-panel-form">
                 <div style="background: black; width: 100%">
                     <div class="friend-image">
                         <img src="/images/profile.png">

@@ -6,7 +6,7 @@
                     <i class="fa fa-close"></i>
                 </a>
             </span>
-            <div class="friend-profile">
+            <div class="float-panel-form">
                 <div>
                     <span style="color: white">Friend's email:</span>
                     <input id="invite_args" class="form-control" type="text" placeholder="Email" style="margin-bottom: 10px">

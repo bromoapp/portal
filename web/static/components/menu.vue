@@ -95,6 +95,7 @@ export default {
         },
         newGroup() { 
             this.panel_visible = false
+            this.$events.$emit(this.SWITCH_ADD_GROUP)
         }
     }
 }

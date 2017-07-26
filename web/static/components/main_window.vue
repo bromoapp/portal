@@ -3,6 +3,7 @@
         <friend-detail></friend-detail>
         <invitation></invitation>
         <add-friend></add-friend>
+        <add-group></add-group>
         <main-menu></main-menu>
         <chat></chat>
     </div>
@@ -12,6 +13,7 @@
 import FriendDetail from "./friend_detail.vue"
 import Invitation from "./invitation.vue"
 import AddFriend from "./add_friend.vue"
+import AddGroup from "./add_group.vue"
 import MainMenu from "./menu.vue"
 import Chat from "./chat.vue"
 
@@ -20,6 +22,7 @@ export default {
         FriendDetail,
         Invitation,
         AddFriend,
+        AddGroup,
         MainMenu,
         Chat
     },

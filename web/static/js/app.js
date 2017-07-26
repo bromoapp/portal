@@ -80,6 +80,7 @@ Vue.mixin({
             get SWITCH_FRIEND_DETAIL() { return "switch_friend_detail" },
             get SWITCH_INVIT_DETAIL() { return "switch_invit_detail" },
             get SWITCH_CHAT() { return "switch_chat" },
+            get SWITCH_ADD_GROUP() { return "switch_add_group" },
 
             // Component 2 component messages w/o args that triggers GUI component
             get CHAT_DIALOG_CLOSED() { return "chat_dialog_closed" },

@@ -2,18 +2,12 @@
     <div id="sidebar" class="sidebar bg-212121-s">
         <logout></logout>
         <div>
-            <div class="sidebar-toolbar">
-                <!--
-                <div class="inline">
-                    <button class="btn bg-37474f-d" title="Signout" id="btn_signout" v-on:click="signout">
-                        <i class="fa fa-sign-out"></i>
-                    </button>
-                </div> -->
+            <div class="sidebar-toolbar"><!--
                 <div class="inline">
                     <button class="btn bg-37474f-d" title="Channels" id="btn_channels" v-on:click="openChannels">
                         <i class="fa fa-window-restore"></i>
                     </button>
-                </div>
+                </div>-->
                 <div class="inline">
                     <button class="btn bg-37474f-d" title="Groups &amp; Friends" id="btn_friends" v-on:click="openFriends">
                         <i class="fa fa-users"></i>
@@ -132,14 +126,6 @@ export default {
                 this.$events.$emit(this.CLOSE_FLOAT_PANEL)
             }
         },
-        signout() {
-            btnSignout.blur()
-            let obj = {
-                msg: "Do you really want to exit?",
-                onYes: this.SIGN_OUT
-            }
-            this.$events.$emit(this.POP_QUESTION, obj)
-        },
         openChannels() {
             btnChannels.blur()
             if (this.closeCmd != this.CLOSE_CHANNELS) {
@@ -191,7 +177,6 @@ export default {
         }
     },
     mounted() {
-        btnSignout = document.getElementById("btn_signout")
         btnChannels = document.getElementById("btn_channels")
         btnFriends = document.getElementById("btn_friends")
         btnChats = document.getElementById("btn_chats")

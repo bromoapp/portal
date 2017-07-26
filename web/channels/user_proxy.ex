@@ -458,7 +458,7 @@ defmodule Portal.UserProxy do
     end
 
     defp _format_date(universal_time) do
-        {{yyyy, mm, dd}, _} = Ecto.DateTime.to_erl(universal_time)
+        {{yyyy, mm, dd}, _} = NaiveDateTime.to_erl(universal_time)
         Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
     end
 

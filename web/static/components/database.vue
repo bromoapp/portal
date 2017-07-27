@@ -40,8 +40,12 @@ export default {
         this.$events.$on(this.ADD_UNOPENED, (data) => { this._onAddUnopened(data) })
         this.$events.$on(this.GET_UNOPENED, () => { this._onGetUnopened() })
         this.$events.$on(this.DEL_UNOPENED, (data) => { this._onDelUnopened(data) })
+        this.$events.$on(this.GET_FRIENDS_LIST, () => { this._onGetFriendsList() })
     },
     methods: {
+        _onGetFriendsList() {
+            
+        },
         _onAddFriendResp(invit) {
             this.tbl_invits.findAndRemove({ id: invit.id })
             this._updateInvitsList()

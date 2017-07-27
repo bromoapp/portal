@@ -107,6 +107,7 @@ Vue.mixin({
             get SWITCH_MENU() { return "switch_menu" },
             get SWITCH_ADD_FRIEND() { return "switch_add_friend" },
             get MINIMIZE() { return "minimize" },
+            get GET_FRIENDS_LIST() { return "get_friends_list" },
 
             // Constant values
             get TOP_MARGIN() { return 310 }

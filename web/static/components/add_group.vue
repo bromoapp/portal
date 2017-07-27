@@ -84,6 +84,7 @@ export default {
                 list.style.maxHeight = this.listHeight
                 setTimeout(() => {
                     cover.style.width = "0px"
+                    this.$events.$emit(this.GET_FRIENDS_LIST)
                 }, 300);
             }, 300)
         },

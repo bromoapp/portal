@@ -8,8 +8,26 @@
             </span>
             <div>
                 <div class="float-panel-form">
-                    <span style="color: white">Group's name:</span>
-                    <input id="invite_args" class="form-control" type="text" placeholder="Group" style="margin-bottom: 10px">
+                    <span style="color: white; font-weight: bold">Group's name:</span>
+                    <input id="invite_args" class="form-control" type="text" placeholder="Group" style="margin-top: 3px; margin-bottom: 10px">
+                    <span style="margin: 10px 0px; color: white; font-weight: bold">Members:</span>
+                    <div id="names_list" style="margin-top: 3px; margin-bottom: 10px" class="accordion-body">
+                        <ul style="margin: 0; padding: 0; list-style: none;">
+                            <li v-for="friend in friends" v-bind:key="friend">
+                                <div class="accordion-btn bg-37474f-d">
+                                    <span>{{ friend }}</span>
+                                    <span class="pull-right" style="margin-right: 10px;">
+                                        <input type="checkbox">
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="text-align: center">
+                        <a id="create_grp_btn" title="Create" v-on:click="createGroup" class="btn bg-263238-d">
+                            Create
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -21,9 +39,14 @@
 export default {
     data() {
         return {
-            height: "100%",
+            friends: [
+                "Bromo Kunto Adji", "Bromo Kunto Adji", "Bromo Kunto Adji",
+                "Bromo Kunto Adji", "Bromo Kunto Adji", "Bromo Kunto Adji",
+            ],
+            height: "520px",
             maxWidth: "250px",
             panel_visible: false,
+            listHeight: "341px"
         }
     },
     created() {
@@ -52,10 +75,13 @@ export default {
             setTimeout(() => {
                 let panel = document.getElementById("add_group_panel_window")
                 let cover = document.getElementById("add_group_panel_cover")
+                let list = document.getElementById("names_list")
                 panel.style.width = this.maxWidth
                 cover.style.width = this.maxWidth
                 panel.style.height = this.height
                 cover.style.height = this.height
+                list.style.height = this.listHeight
+                list.style.maxHeight = this.listHeight
                 setTimeout(() => {
                     cover.style.width = "0px"
                 }, 300);

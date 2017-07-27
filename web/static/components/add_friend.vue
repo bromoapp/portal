@@ -8,10 +8,10 @@
             </span>
             <div class="float-panel-form">
                 <div>
-                    <span style="color: white">Friend's email:</span>
-                    <input id="invite_args" class="form-control" type="text" placeholder="Email" style="margin-bottom: 10px">
-                    <span style="margin: 10px 0px; color: white;">Message:</span>
-                    <div style="margin-bottom: 10px">
+                    <span style="color: white; font-weight: bold">Friend's email:</span>
+                    <input id="invite_args" class="form-control" type="text" placeholder="Email" style="margin-top: 3px; margin-bottom: 10px">
+                    <span style="margin: 10px 0px; color: white; font-weight: bold">Message:</span>
+                    <div style="margin-top: 3px; margin-bottom: 10px">
                         <textarea id="invite_msg" style="width: 230px; height: 50px; resize: none" rows="1" class="form-control" v-model="invit_msg"></textarea>
                     </div>
                     <div style="text-align: center">

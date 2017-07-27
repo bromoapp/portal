@@ -257,7 +257,6 @@ export default {
 }
 
 .accordion-body {
-    max-height: 0;
     overflow-y: auto;
     overflow-wrap: hidden;
     background-color: #212121;

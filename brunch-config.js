@@ -3,11 +3,6 @@ exports.config = {
   files: {
     javascripts: {
       joinTo: "js/app.js",
-      order: {
-        after: [
-          "web/static/vendor/js/pixi.min.js"
-        ]
-      }
 
       // To use a separate vendor.js bundle, specify two files path
       // http://brunch.io/docs/config#-files-

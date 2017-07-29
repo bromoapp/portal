@@ -46,6 +46,7 @@ export default {
         this.$events.$on(this.QUERY_CHATS, (conv) => { this._onQueryChats(conv) })
         this.$events.$on(this.P2P_MSG_OUT, (friend, message) => { this._onP2pMsgOut(friend, message) })
         this.$events.$on(this.ADD_FRIEND_OUT, (invit) => { this._onAddFriendOut(invit) })
+        this.$events.$on(this.ADD_GROUP_OUT, (group) => { this._addGroupOut(group) })
 
         // Add friend events handlers
         this.$events.$on(this.DEL_UNREAD_REC, (id) => { this._onDelUnreadRec(id) })
@@ -53,6 +54,9 @@ export default {
         this.$events.$on(this.ADD_FRIEND_RESP, (data) => { this._onAddFriendResp(data) })
     },
     methods: {
+        _addGroupOut(group) {
+            this.proxyChannel.push(this.ADD_GROUP_OUT, group)
+        },
         _onAddFriendResp(data) {
             this.proxyChannel.push(this.ADD_FRIEND_RESP, { id: data.id, resp: data.resp })
         },
@@ -66,7 +70,7 @@ export default {
             this.$events.$emit(this.ADD_FRIEND_IN, invit)
         },
         _onAddFriendOut(invit) {
-            this.proxyChannel.push(this.ADD_FRIEND_OUT, { email: invit.email, msg: invit.msg })
+            this.proxyChannel.push(this.ADD_FRIEND_OUT, invit)
                 .receive("ok", () => {
                     let obj = {
                         msg: "Invitation sent!"

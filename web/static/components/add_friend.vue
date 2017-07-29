@@ -85,19 +85,18 @@ export default {
                     this.$events.$emit(this.ADD_FRIEND_OUT, invit)
                     this._close()
                     setTimeout(() => {
-                        this.addFriend()
                         mailEL.value = ""
                         msgEl.value = this.invit_msg
                     }, 500);
                 } else {
                     let obj = {
-                        msg: "Invalid email format!",
+                        msg: this.ERROR_WRONG_EMAIL_FORMAT,
                     }
                     this.$events.$emit(this.POP_ERROR, obj)
                 }
             } else {
                 let obj = {
-                    msg: "Email cannot be empty!",
+                    msg: this.ERROR_EMAIL_EMPTY,
                 }
                 this.$events.$emit(this.POP_ERROR, obj)
             }

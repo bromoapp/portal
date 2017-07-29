@@ -44,7 +44,10 @@ export default {
     },
     methods: {
         _onGetFriendsList() {
-            
+            let friends = this.tbl_friends.where((o) => {
+                return o.name != null
+            })
+            this.$events.$emit(this.SHOW_FRIENDS_LIST, friends)
         },
         _onAddFriendResp(invit) {
             this.tbl_invits.findAndRemove({ id: invit.id })

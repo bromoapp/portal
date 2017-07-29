@@ -69,6 +69,7 @@ Vue.mixin({
             get ADD_UNOPENED() { return "add_unopened" },
             get DEL_UNOPENED() { return "del_unopened" },
             get DEL_UNOPENED_REC() { return "del_unopened_rec" },
+            get ADD_GROUP_OUT() { return "add_group_out" },
 
             // Component 2 component messages with args that triggers GUI component
             get SHOW_UNREAD() { return "show_unread" },
@@ -81,6 +82,7 @@ Vue.mixin({
             get SWITCH_INVIT_DETAIL() { return "switch_invit_detail" },
             get SWITCH_CHAT() { return "switch_chat" },
             get SWITCH_ADD_GROUP() { return "switch_add_group" },
+            get SHOW_FRIENDS_LIST() { return "show_friends_list" },
 
             // Component 2 component messages w/o args that triggers GUI component
             get CHAT_DIALOG_CLOSED() { return "chat_dialog_closed" },
@@ -110,7 +112,13 @@ Vue.mixin({
             get GET_FRIENDS_LIST() { return "get_friends_list" },
 
             // Constant values
-            get TOP_MARGIN() { return 310 }
+            get TOP_MARGIN() { return 310 },
+
+            // Default messages
+            get ERROR_GROUP_NAME_EMPTY() { return "You must provide a name for a group!" },
+            get ERROR_GROUP_MEMBERS_EMPTY() { return "You must have more than 1 member in a group beside you!" },
+            get ERROR_WRONG_EMAIL_FORMAT() { return "Invalid email format!" },
+            get ERROR_EMAIL_EMPTY() { return "Email cannot be empty!" },
         }
     }
 })

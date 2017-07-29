@@ -43,7 +43,7 @@ defmodule Portal.UserProxy do
     @sql_friends_list "CALL `sp_friends_list`(?);"
     @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` = 'WAITING'"
     @sql_query_chats "SELECT a.id, a.user_b_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?;"
-    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.updated_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_a_id = ? AND a.user_b_id = ?;"
+    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.inserted_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_a_id = ? AND a.user_b_id = ?;"
 
     #=================================================================================================
     # Functions related to user connections and presences

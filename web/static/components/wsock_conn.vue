@@ -72,15 +72,11 @@ export default {
         _onAddFriendOut(invit) {
             this.proxyChannel.push(this.ADD_FRIEND_OUT, invit)
                 .receive("ok", () => {
-                    let obj = {
-                        msg: "Invitation sent!"
-                    }
+                    let obj = { msg: this.NOTIF_INVITATION_SENT }
                     this.$events.$emit(this.POP_INFO, obj)
                 })
                 .receive("error", (data) => {
-                    let obj = {
-                        msg: data.msg
-                    }
+                    let obj = { msg: data.msg }
                     this.$events.$emit(this.POP_ERROR, obj)
                 })
         },

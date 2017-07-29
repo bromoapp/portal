@@ -115,6 +115,7 @@ Vue.mixin({
             get TOP_MARGIN() { return 310 },
 
             // Default messages
+            get NOTIF_INVITATION_SENT() { return "Invitation sent!" },
             get ERROR_GROUP_NAME_EMPTY() { return "You must provide a name for a group!" },
             get ERROR_GROUP_MEMBERS_EMPTY() { return "You must have more than 1 member in a group beside you!" },
             get ERROR_WRONG_EMAIL_FORMAT() { return "Invalid email format!" },

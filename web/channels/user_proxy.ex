@@ -36,6 +36,7 @@ defmodule Portal.UserProxy do
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
     @add_friend_opened "add_friend_opened"
+    @add_group_out "add_group_out"
 
     # SQLs
     @sql_is_invit_exists "CALL `sp_is_invit_exists`(?, ?);"
@@ -432,6 +433,14 @@ defmodule Portal.UserProxy do
         invit = Invitation |> Repo.get!(id)
         upd_invit_cs = Invitation.create_or_update_changeset(invit, %{opened: true})
         Repo.update(upd_invit_cs)
+        {:noreply, socket}
+    end
+
+    #=================================================================================================
+    # Functions related to group
+    #=================================================================================================
+    def handle_in(@add_group_out, %{"name" => name, "members" => members}, socket) do
+        Logger.info(">>> NEW GROUP NAME: #{name}, MEMBERS: #{inspect members}")
         {:noreply, socket}
     end
 

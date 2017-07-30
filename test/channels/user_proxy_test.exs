@@ -102,7 +102,8 @@ defmodule Portal.UserProxyTest do
 
         # User A receives reply msg from B
         assert_push(@p2p_msg_in, p2p_msg_in, 1000)
-        %{chats: [%{"from" => sender_b, "message" => msg_b, "time" => _}], date: _, friend_id: _, id: b_p2p_msg_id, read: _} = p2p_msg_in 
+        %{chats: [%{"from" => sender_b, "message" => msg_b, "time" => _}], date: _, friend_id: _, id: b_p2p_msg_id, read: _} = p2p_msg_in
+        Logger.warn("FROM B: #{inspect p2p_msg_in}") 
         
         # User A notify the server that received p2p msg from B has read
         push(socket_b, @p2p_msg_read, %{"id" => b_p2p_msg_id})
@@ -118,6 +119,7 @@ defmodule Portal.UserProxyTest do
         assert a_result.read == 1
 
         # Check that the total chats in this conversation is 2
+        # Logger.warn(">>> CHATS: #{inspect a_result.chats}")
         assert length(a_result.chats) == 2
 
         # User B queries his chats from server

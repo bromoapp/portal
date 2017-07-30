@@ -4,13 +4,14 @@ defmodule Portal.UserProxy do
     alias Ecto.Adapters.SQL
     alias Mariaex.Result
     alias Portal.ProxyPresence
+    alias Portal.Invitation
+    alias Portal.DailyChat
     alias Portal.Relation
     alias Portal.Updates
-    alias Portal.User
-    alias Portal.DailyChat
+    alias Portal.Group
     alias Portal.Chats
+    alias Portal.User
     alias Portal.Chat
-    alias Portal.Invitation
     require Logger
 
     # Message
@@ -229,25 +230,33 @@ defmodule Portal.UserProxy do
         receiver = Repo.get_by(User, username: friend_uname)
         if (receiver != nil) do
             chat = %Chat{from: sender.username, message: message, time: _format_time()}
-            {mode1, json1} = _create_update_users_chat(sender, receiver, chat, :sender)
-            {mode2, json2} = _create_update_users_chat(receiver, sender, chat, :receiver)
 
-            cond do
-                mode1 == :p2p_msg_new ->
-                    push socket, @p2p_msg_new, json1
-                true ->
-                    push socket, @p2p_msg_in, json1
-            end 
+            case _create_update_users_chat(sender, receiver, chat, :sender) do
+                {:error, changeset} ->
+                    Logger.error(">>> ERROR #{inspect changeset}")
+                {mode1, json1} ->
+                    cond do
+                        mode1 == :p2p_msg_new ->
+                            push socket, @p2p_msg_new, json1
+                        true ->
+                            push socket, @p2p_msg_in, json1
+                    end 
+            end
 
-            receiver_online? = _is_friend_online?(receiver.username)
-            if receiver_online? == true do
-                ol_friend = OnlineUsersDb.select(receiver.username)
-                cond do
-                    mode2 == :p2p_msg_new ->
-                        send ol_friend.pid, {:p2p_msg_new, json2}
-                    true ->
-                        send ol_friend.pid, {:p2p_msg_in, json2}
-                end
+            case _create_update_users_chat(receiver, sender, chat, :receiver) do
+                {:error, changeset} ->
+                    Logger.error(">>> ERROR #{inspect changeset}")
+                {mode2, json2} ->
+                    receiver_online? = _is_friend_online?(receiver.username)
+                    if receiver_online? == true do
+                        ol_friend = OnlineUsersDb.select(receiver.username)
+                        cond do
+                            mode2 == :p2p_msg_new ->
+                                send ol_friend.pid, {:p2p_msg_new, json2}
+                            true ->
+                                send ol_friend.pid, {:p2p_msg_in, json2}
+                        end
+                    end
             end
             {:noreply, socket}
         else
@@ -266,11 +275,15 @@ defmodule Portal.UserProxy do
                 chat = DailyChat |> Repo.get!(id)
                 upd_chat_map = %{read: true}
                 upd_chat_cs = DailyChat.create_or_update_p2p_changeset(chat, upd_chat_map)
-                Repo.update(upd_chat_cs)
+                case Repo.update(upd_chat_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
             end
 
             json = %{id: id, friend_id: user_b_id, date: _format_date(date_time), chats: raw["chats"], read: 1}
-
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
         end
     end
@@ -279,7 +292,12 @@ defmodule Portal.UserProxy do
         chat = DailyChat |> Repo.get!(id)
         upd_chat_map = %{read: true}
         upd_chat_cs = DailyChat.create_or_update_p2p_changeset(chat, upd_chat_map)
-        Repo.update(upd_chat_cs)
+        case Repo.update(upd_chat_cs) do
+            {:ok, _} ->
+                :ignore
+            {:error, changeset} ->
+                Logger.error(">>> ERROR #{inspect changeset}")
+        end
         {:noreply, socket}
     end
 
@@ -295,12 +313,16 @@ defmodule Portal.UserProxy do
             user_a_chat_cs = DailyChat.create_or_update_p2p_changeset(%DailyChat{}, user_a_chat_map)
             |> Changeset.put_assoc(:user_a, user_a)
             |> Changeset.put_assoc(:user_b, user_b)
-            user_a_chat = Repo.insert!(user_a_chat_cs)
 
-            raw = Poison.decode!(user_a_chat.messages)
-            json = %{id: user_a_chat.id, friend_id: user_b.id, date: _format_date(user_a_chat.inserted_at), 
-                chats: raw["chats"], read: _parse_bool_val(user_a_chat.read)}
-            {:p2p_msg_new, json}
+            case Repo.insert(user_a_chat_cs) do
+                {:ok, user_a_chat} ->
+                    raw = Poison.decode!(user_a_chat.messages)
+                    json = %{id: user_a_chat.id, friend_id: user_b.id, date: _format_date(user_a_chat.inserted_at), 
+                        chats: raw["chats"], read: _parse_bool_val(user_a_chat.read)}
+                    {:p2p_msg_new, json}
+                {:error, changeset} ->
+                    {:error, changeset}
+            end
         else
             # updates existing chat
             [[id]] = rows
@@ -313,13 +335,16 @@ defmodule Portal.UserProxy do
             |> Map.put(:user_b, user_b)
 
             upd_user_a_chat_cs = DailyChat.create_or_update_p2p_changeset(user_a_chat, upd_user_a_chat_map)
-            upd_user_a_chat = Repo.update!(upd_user_a_chat_cs)
-            
-            %Chat{from: uname, message: message, time: time} = chat
-            nchat = %{"from" => uname, "message" => message, "time" => time}
-            json = %{id: upd_user_a_chat.id, friend_id: user_b.id, date: _format_date(upd_user_a_chat.updated_at), 
-                chats: [nchat], read: _parse_bool_val(upd_user_a_chat.read)}
-            {:p2p_msg_in, json}
+            case Repo.update(upd_user_a_chat_cs) do
+                {:ok, upd_user_a_chat} ->
+                    %Chat{from: uname, message: message, time: time} = chat
+                    nchat = %{"from" => uname, "message" => message, "time" => time}
+                    json = %{id: upd_user_a_chat.id, friend_id: user_b.id, date: _format_date(upd_user_a_chat.updated_at), 
+                        chats: [nchat], read: _parse_bool_val(upd_user_a_chat.read)}
+                    {:p2p_msg_in, json}
+                {:error, changeset} ->
+                    {:error, changeset}
+            end           
         end
     end
     
@@ -366,17 +391,20 @@ defmodule Portal.UserProxy do
                     |> Map.put(:to, receiver)
                     invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
                     |> Changeset.put_assoc(:to, receiver)
-                    invit = Repo.insert!(invit_cs)
-
-                    online? = _is_friend_online?(receiver.username)
-                    cond do
-                        online? == true ->
-                            ol_friend = OnlineUsersDb.select(receiver.username)
-                            json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, 
-                                type: invit.invit_type, status: invit.status, msg: message}
-                            send ol_friend.pid, {:add_friend_in, json}
-                        true ->
-                            :ignore
+                    case Repo.insert(invit_cs) do
+                        {:ok, invit} ->
+                            online? = _is_friend_online?(receiver.username)
+                            cond do
+                                online? == true ->
+                                    ol_friend = OnlineUsersDb.select(receiver.username)
+                                    json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, 
+                                        type: invit.invit_type, status: invit.status, msg: message}
+                                    send ol_friend.pid, {:add_friend_in, json}
+                                true ->
+                                    :ignore
+                            end
+                        {:error, changeset} ->
+                            Logger.error(">>> ERROR #{inspect changeset}")
                     end
                 true ->
                     :ignore
@@ -397,43 +425,66 @@ defmodule Portal.UserProxy do
         cond do
             resp == @accepted ->
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @accepted})
-                Repo.update(upd_invit_cs)
+                case Repo.update(upd_invit_cs) do
+                    {:ok, _} ->
+                        rel_map = %{tags: invit.invit_type}
+                        |> Map.put(:user_a, user_a)
+                        |> Map.put(:user_b, user_b)
 
-                rel_map = %{tags: invit.invit_type}
-                |> Map.put(:user_a, user_a)
-                |> Map.put(:user_b, user_b)
+                        rel_cs = Relation.create_changeset(%Relation{}, rel_map)
+                        |> Changeset.put_assoc(:user_a, user_a)
+                        |> Changeset.put_assoc(:user_b, user_b)
+                        case Repo.insert(rel_cs) do
+                            {:ok, _} ->
+                                :ignore
+                            {:error, changeset} ->
+                                Logger.error(">>> ERROR #{inspect changeset}")
+                        end
 
-                rel_cs = Relation.create_changeset(%Relation{}, rel_map)
-                |> Changeset.put_assoc(:user_a, user_a)
-                |> Changeset.put_assoc(:user_b, user_b)
-                Repo.insert(rel_cs)
+                        json1 = %{id: user_a.id, username: user_a.username, name: user_a.name, online: _is_friend_online?(user_a.username)}
+                        push socket, @friend_new, json1
 
-                json1 = %{id: user_a.id, username: user_a.username, name: user_a.name, online: _is_friend_online?(user_a.username)}
-                push socket, @friend_new, json1
-
-                online? = _is_friend_online?(user_a.username)
-                cond do
-                    online? == true ->
-                        ol_friend = OnlineUsersDb.select(user_a.username)
-                        json2 = %{id: user_b.id, username: user_b.username, name: user_b.name, online: _is_friend_online?(user_b.username)}
-                        send ol_friend.pid, {:friend_new, json2}
-                        
-                        # Inform each side that his/her new friend is online
-                        :timer.sleep(500)
-                        send ol_friend.pid, {:friend_online, user_b}
-                        send self(), {:friend_online, user_a}
-                    true ->
-                        :ignore
+                        online? = _is_friend_online?(user_a.username)
+                        cond do
+                            online? == true ->
+                                ol_friend = OnlineUsersDb.select(user_a.username)
+                                json2 = %{id: user_b.id, username: user_b.username, name: user_b.name, online: _is_friend_online?(user_b.username)}
+                                send ol_friend.pid, {:friend_new, json2}
+                                
+                                # Inform each side that his/her new friend is online
+                                :timer.sleep(500)
+                                send ol_friend.pid, {:friend_online, user_b}
+                                send self(), {:friend_online, user_a}
+                            true ->
+                                :ignore
+                        end
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
                 end
             resp == @rejected ->
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @rejected})
-                Repo.update(upd_invit_cs)
+                case Repo.update(upd_invit_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
             resp == @ignored ->
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
-                Repo.update(upd_invit_cs)                
+                case Repo.update(upd_invit_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
             true ->
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
-                Repo.update(upd_invit_cs)
+                case Repo.update(upd_invit_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
         end
         {:noreply, socket}
     end
@@ -441,16 +492,47 @@ defmodule Portal.UserProxy do
     def handle_in(@add_friend_opened, %{"id" => id}, socket) do
         invit = Invitation |> Repo.get!(id)
         upd_invit_cs = Invitation.create_or_update_changeset(invit, %{opened: true})
-        Repo.update(upd_invit_cs)
+        case Repo.update(upd_invit_cs) do
+            {:ok, _} ->
+                :ignore
+            {:error, changeset} ->
+                Logger.error(">>> ERROR #{inspect changeset}")
+        end
         {:noreply, socket}
     end
 
     #=================================================================================================
     # Functions related to group
     #=================================================================================================
-    def handle_in(@add_group_out, %{"name" => name, "members" => members}, socket) do
-        Logger.info(">>> NEW GROUP NAME: #{name}, MEMBERS: #{inspect members}")
+    def handle_in(@add_group_out, %{"name" => name, "members" => friends}, socket) do
+        admin = socket.assigns.user
+        admins = "#" <> Integer.to_string(admin.id) <> "#"
+        users = friends |> Enum.map(fn(x) -> Repo.get(User, String.to_integer(x)) end)
+        members = _combine_users_ids(users, "")
+
+        group_map = %{name: name, admins: admins, members: members}
+        group_cs = Group.create_or_update_changeset(%Group{}, group_map)
+        case Repo.insert(group_cs) do
+            {:ok, group} ->
+                :ignore
+            {:error, changeset} ->
+                Logger.error(">>> ERROR #{inspect changeset}")
+        end
         {:noreply, socket}
+    end
+
+    defp _combine_users_ids([], result) do
+        result
+    end
+
+    defp _combine_users_ids([user|t], result) do
+        nresult = result <> "#" <> Integer.to_string(user.id) <> "#"
+        if t == [] do
+            _combine_users_ids(t, nresult)
+        else
+            nnresult = nresult <> ","
+            _combine_users_ids(t, nnresult)
+        end
     end
 
     #=================================================================================================

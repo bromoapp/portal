@@ -3,7 +3,7 @@ defmodule Portal.Repo.Migrations.CreateImage do
 
   def change do
     create table(:images) do
-      add :owner_id, :binary_id
+      add :owner_id, :id
       add :owner, :string
       add :tag, :string
       add :name, :string

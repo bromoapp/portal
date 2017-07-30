@@ -32,7 +32,7 @@ defmodule Portal.InvitationTest do
     test "1. User A invites user B", %{from: from, to: to} do
         invit = _create_friendship_invitation(from, to)
 
-        assert invit.from.id == from.id
+        assert invit.from_id == from.id
         assert invit.to.id == to.id
         assert invit.invit_type == @friendship
         assert invit.invit_msg == "Hi this is A"
@@ -53,18 +53,15 @@ defmodule Portal.InvitationTest do
     end
 
     defp _create_friendship_invitation(from, to) do
-        invit_map = %{invit_type: @friendship, invit_msg: "Hi this is A"}
-            |> Map.put(:from, from)
+        invit_map = %{from_id: from.id, invit_type: @friendship, invit_msg: "Hi this is A"}
             |> Map.put(:to, to)
         invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
-            |> put_assoc(:from, from)
             |> put_assoc(:to, to)
         assert invit_cs.valid?
         invit = Repo.insert!(invit_cs)
 
         latest_invit = Invitation
             |> Repo.get!(invit.id)
-            |> Repo.preload(:from)
             |> Repo.preload(:to)
     end
 

@@ -362,11 +362,9 @@ defmodule Portal.UserProxy do
             [[total]] = rows
             cond do
                 total == 0 ->
-                    invit_map = %{invit_type: @friendship, invit_msg: message, status: @waiting}
-                    |> Map.put(:from, sender)
+                    invit_map = %{from_id: sender.id, invit_type: @friendship, invit_msg: message, status: @waiting}
                     |> Map.put(:to, receiver)
                     invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
-                    |> Changeset.put_assoc(:from, sender)
                     |> Changeset.put_assoc(:to, receiver)
                     invit = Repo.insert!(invit_cs)
 
@@ -392,10 +390,9 @@ defmodule Portal.UserProxy do
     def handle_in(@add_friend_resp, %{"id" => id, "resp" => resp}, socket) do
         invit = Invitation 
         |> Repo.get(id)
-        |> Repo.preload(:from)
         |> Repo.preload(:to)
 
-        user_a = invit.from
+        user_a = Repo.get(User, invit.from_id)
         user_b = invit.to
         cond do
             resp == @accepted ->

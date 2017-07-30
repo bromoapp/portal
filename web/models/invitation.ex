@@ -4,8 +4,8 @@ defmodule Portal.Invitation do
     @default_status "WAITING"
 
     schema "invitations" do
-        belongs_to :from, Portal.User
         belongs_to :to, Portal.User
+        field :from_id, :id
         field :invit_type, :string
         field :invit_msg, :string
         field :status, :string, default: @default_status
@@ -16,9 +16,8 @@ defmodule Portal.Invitation do
 
     def create_or_update_changeset(struct, params) do
         struct
-        |> cast(params, [:invit_type, :invit_msg, :status, :opened])
-        |> validate_required([:invit_type])
-        |> foreign_key_constraint(:from)
+        |> cast(params, [:from_id, :invit_type, :invit_msg, :status, :opened])
+        |> validate_required([:from_id, :invit_type])
         |> foreign_key_constraint(:to)
     end
 end

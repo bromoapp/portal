@@ -5,7 +5,7 @@ defmodule Portal.Invitation do
 
     schema "invitations" do
         belongs_to :to, Portal.User
-        field :from_id, :id
+        field :from_id, :integer
         field :invit_type, :string
         field :invit_msg, :string
         field :status, :string, default: @default_status

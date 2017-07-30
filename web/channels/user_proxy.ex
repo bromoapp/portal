@@ -18,6 +18,7 @@ defmodule Portal.UserProxy do
 
     # Constant
     @friendship "FRIENDSHIP"
+    @membership "MEMBERSHIP"
     @waiting "WAITING"
     @accepted "ACCEPTED"
     @rejected "REJECTED"
@@ -28,15 +29,26 @@ defmodule Portal.UserProxy do
     @friend_online "friend_online"
     @friend_offline "friend_offline"
     @query_chats "query_chats"
+
     @p2p_msg_in "p2p_msg_in"
     @p2p_msg_out "p2p_msg_out"
     @p2p_msg_new "p2p_msg_new"
     @p2p_msg_read "p2p_msg_read"
+    
     @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
     @add_friend_opened "add_friend_opened"
+
+    @add_group_in "add_group_in"
     @add_group_out "add_group_out"
+    @add_group_resp "add_group_resp"
+    @add_group_opened "add_group_opened"
+
+    @p2g_msg_in "p2g_msg_in"
+    @p2g_msg_out "p2g_msg_out"
+    @p2g_msg_new "p2g_msg_new"
+    @p2g_msg_read "p2g_msg_read"
 
     # SQLs
     @sql_is_invit_exists "CALL `sp_is_invit_exists`(?, ?);"

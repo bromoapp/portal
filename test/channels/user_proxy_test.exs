@@ -157,7 +157,4 @@ defmodule Portal.UserProxyTest do
         assert a_username = @user_a.username
     end
 
-    test "6. User A create a new group and invites B and C as members" do
-        assert true == false
-    end
 end

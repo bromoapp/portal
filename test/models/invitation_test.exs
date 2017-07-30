@@ -4,6 +4,10 @@ defmodule Portal.InvitationTest do
     alias Portal.User
     require Logger
 
+    @friendship "FRIENDSHIP"
+    @membership "MEMBERSHIP"
+    @waiting "WAITING"
+    @approved "APPROVED"
     @user_a %{name: "my_name_a", username: "my_username_a", password: "my_password_a"}
     @user_b %{name: "my_name_b", username: "my_username_b", password: "my_password_b"}
 
@@ -26,30 +30,30 @@ defmodule Portal.InvitationTest do
     end
 
     test "1. User A invites user B", %{from: from, to: to} do
-        invit = _create_invitation(from, to)
+        invit = _create_friendship_invitation(from, to)
 
         assert invit.from.id == from.id
         assert invit.to.id == to.id
-        assert invit.invit_type == "FRIENDSHIP"
+        assert invit.invit_type == @friendship
         assert invit.invit_msg == "Hi this is A"
-        assert invit.status == "WAIT"
+        assert invit.status == @waiting
     end
 
     test "2. User B response on A's invitation", %{from: from, to: to} do
-        invit = _create_invitation(from, to)
+        invit = _create_friendship_invitation(from, to)
 
         oinvit = Invitation |> Repo.get(invit.id)
-        assert oinvit.status == "WAIT"
+        assert oinvit.status == @waiting
 
-        upd_cs = Invitation.create_or_update_changeset(oinvit, %{status: "APPROVED"})
+        upd_cs = Invitation.create_or_update_changeset(oinvit, %{status: @approved})
         Repo.update(upd_cs)
 
         linvit = Invitation |> Repo.get(invit.id)
-        assert linvit.status == "APPROVED"
+        assert linvit.status == @approved
     end
 
-    defp _create_invitation(from, to) do
-        invit_map = %{invit_type: "FRIENDSHIP", invit_msg: "Hi this is A"}
+    defp _create_friendship_invitation(from, to) do
+        invit_map = %{invit_type: @friendship, invit_msg: "Hi this is A"}
             |> Map.put(:from, from)
             |> Map.put(:to, to)
         invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)

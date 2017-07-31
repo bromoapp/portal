@@ -31,7 +31,8 @@
                 <div style="text-align: center" v-else>
                     <div class="membership-invit-details">
                         <div>
-                            <p>Would you like to join <b>{{ currInvit.from_name }}</b> group?</p>
+                            <p>Would you like to join
+                                <b>{{ currInvit.from_name }}</b> group?</p>
                         </div>
                     </div>
                     <div style="text-align: center">
@@ -104,11 +105,19 @@ export default {
             }, 300)
         },
         acceptInvit() {
-            this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
+            if (this.currInvit.type == 'FRIENDSHIP') {
+                this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
+            } else {
+                this.$events.$emit(this.ADD_GROUP_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
+            }
             this._close()
         },
         rejectInvit() {
-            this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
+            if (this.currInvit.type == 'FRIENDSHIP') {
+                this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
+            } else {
+                this.$events.$emit(this.ADD_GROUP_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
+            }
             this._close()
         }
     }

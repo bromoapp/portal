@@ -553,6 +553,50 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
+    def handle_in(@add_group_resp, %{"id" => id, "resp" => resp}, socket) do
+        invit = Invitation 
+        |> Repo.get(id)
+        |> Repo.preload(:to)
+
+        group = Repo.get(Group, invit.from_id)
+        user = invit.to
+        cond do
+            resp == @accepted ->
+                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @accepted})
+                case Repo.update(upd_invit_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
+            resp == @rejected ->
+                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @rejected})
+                case Repo.update(upd_invit_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
+            resp == @ignored ->
+                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
+                case Repo.update(upd_invit_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
+            true ->
+                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
+                case Repo.update(upd_invit_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
+        end
+        {:noreply, socket}
+    end
+
     #=================================================================================================
     # Helper functions
     #=================================================================================================

@@ -53,8 +53,12 @@ export default {
         this.$events.$on(this.DEL_UNREAD_REC, (id) => { this._onDelUnreadRec(id) })
         this.$events.$on(this.DEL_UNOPENED_REC, (id) => { this._onDelUnopenedRec(id) })
         this.$events.$on(this.ADD_FRIEND_RESP, (data) => { this._onAddFriendResp(data) })
+        this.$events.$on(this.ADD_GROUP_RESP, (data) => { this._onAddGroupResp(data) })
     },
     methods: {
+        _onAddGroupResp(data) {
+            this.proxyChannel.push(this.ADD_GROUP_RESP, { id: data.id, resp: data.resp })
+        },
         _onAddGroupIn(invit) {
             this.$events.$emit(this.ADD_GROUP_IN, invit)
         },

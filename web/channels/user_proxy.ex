@@ -163,9 +163,16 @@ defmodule Portal.UserProxy do
 
     defp _parse_invits([h|t], result) do
         [id, from_id, _to, type, message, status, opened, _, _] = h
-        friend = User |> Repo.get!(from_id)
-        nresult = result ++ [%{id: id, from_id: from_id, from_name: friend.name, type: type, status: status, msg: message, opened: opened}]
-        _parse_invits(t, nresult)
+        case type do
+            @friendship ->
+                friend = User |> Repo.get!(from_id)
+                nresult = result ++ [%{id: id, from_id: from_id, from_name: friend.name, type: type, status: status, msg: message, opened: opened}]
+                _parse_invits(t, nresult)
+            @membership ->
+                group = Group |> Repo.get!(from_id)
+                nresult = result ++ [%{id: id, from_id: from_id, from_name: group.name, type: type, status: status, msg: message, opened: opened}]
+                _parse_invits(t, nresult)
+        end
     end
 
     defp _get_ongoing_chats({user, struct}) do
@@ -507,32 +514,38 @@ defmodule Portal.UserProxy do
     def handle_in(@add_group_out, %{"name" => name, "members" => friends}, socket) do
         admin = socket.assigns.user
         admins = "#" <> Integer.to_string(admin.id) <> "#"
-        users = friends |> Enum.map(fn(x) -> Repo.get(User, String.to_integer(x)) end)
-        members = _combine_users_ids(users, "")
 
-        group_map = %{name: name, admins: admins, members: members}
+        group_map = %{name: name, admins: admins, members: nil}
         group_cs = Group.create_or_update_changeset(%Group{}, group_map)
         case Repo.insert(group_cs) do
             {:ok, group} ->
-                :ignore
+                friends 
+                |> Enum.map(fn(x) -> Repo.get(User, String.to_integer(x)) end)
+                |> Enum.each(fn(receiver) ->
+                    invit_map = %{from_id: group.id, invit_type: @membership, invit_msg: nil, status: @waiting} 
+                    |> Map.put(:to, receiver)
+                    invit_cs = Invitation.create_or_update_changeset(%Invitation{}, invit_map)
+                    |> Changeset.put_assoc(:to, receiver)
+                    case Repo.insert(invit_cs) do
+                        {:ok, invit} ->
+                            online? = _is_friend_online?(receiver.username)
+                            cond do
+                                online? == true ->
+                                    ol_friend = OnlineUsersDb.select(receiver.username)
+                                    json = %{id: invit.id, from_id: invit.from_id, from_name: group.name, 
+                                        type: invit.invit_type, status: invit.status, msg: nil}
+                                    send ol_friend.pid, {:add_friend_in, json}
+                                true ->
+                                    :ignore
+                            end
+                        {:error, changeset} ->
+                            Logger.error(">>> ERROR #{inspect changeset}")
+                    end
+                end)
             {:error, changeset} ->
                 Logger.error(">>> ERROR #{inspect changeset}")
         end
         {:noreply, socket}
-    end
-
-    defp _combine_users_ids([], result) do
-        result
-    end
-
-    defp _combine_users_ids([user|t], result) do
-        nresult = result <> "#" <> Integer.to_string(user.id) <> "#"
-        if t == [] do
-            _combine_users_ids(t, nresult)
-        else
-            nnresult = nresult <> ","
-            _combine_users_ids(t, nnresult)
-        end
     end
 
     #=================================================================================================

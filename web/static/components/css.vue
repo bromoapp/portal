@@ -89,9 +89,14 @@ export default {
     padding: 10px;
 }
 
-.invit-details {
+.friendship-invit-details {
     padding: 5px;
     height: 118px;
+}
+
+.membership-invit-details {
+    padding: 5px;
+    height: 60px;
 }
 
 .chat-conversation {

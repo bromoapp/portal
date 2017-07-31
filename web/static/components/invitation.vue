@@ -7,22 +7,37 @@
                 </a>
             </span>
             <div class="invit-detail">
-                <div style="background: black; width: 100%">
-                    <div class="friend-image">
-                        <img src="/images/profile.png">
+                <div v-if="currInvit.type == 'FRIENDSHIP'">
+                    <div style="background: black; width: 100%">
+                        <div class="friend-image">
+                            <img src="/images/profile.png">
+                        </div>
+                    </div>
+                    <div class="friendship-invit-details">
+                        <div>
+                            <span style="font-weight: bold">
+                                {{ currInvit.from_name }}
+                            </span>
+                        </div>
+                        <div class="friend-status">
+                            <p>{{ currInvit.msg }}</p>
+                        </div>
+                    </div>
+                    <div style="text-align: center">
+                        <button id="btn_accept_inv" class="btn bg-263238-d" v-on:click="acceptInvit">Accept</button>
+                        <button id="btn_ignore_inv" class="btn bg-263238-d" v-on:click="rejectInvit">Reject</button>
                     </div>
                 </div>
-                <div class="invit-details">
-                    <div>
-                        <label id="friend_name"></label>
+                <div style="text-align: center" v-else>
+                    <div class="membership-invit-details">
+                        <div>
+                            <p>Would you like to join <b>{{ currInvit.from_name }}</b> group?</p>
+                        </div>
                     </div>
-                    <div class="friend-status">
-                        <p id="friend_message"></p>
+                    <div style="text-align: center">
+                        <button id="btn_accept_inv" class="btn bg-263238-d" v-on:click="acceptInvit">Yes</button>
+                        <button id="btn_ignore_inv" class="btn bg-263238-d" v-on:click="rejectInvit">No</button>
                     </div>
-                </div>
-                <div style="text-align: center">
-                    <button id="btn_accept_inv" class="btn bg-263238-d" v-on:click="acceptInvit">Accept</button>
-                    <button id="btn_ignore_inv" class="btn bg-263238-d" v-on:click="rejectInvit">Reject</button>
                 </div>
             </div>
         </div>
@@ -35,7 +50,8 @@ export default {
     data() {
         return {
             currInvit: null,
-            height: "350px",
+            friendInvitHeight: "350px",
+            memberInvitHeight: "140px",
             maxWidth: "250px",
             panel_visible: false,
         }
@@ -57,7 +73,7 @@ export default {
                     this._close()
                 } else {
                     this.currInvit = invit
-                    this._showDetails()
+                    this._showFriendInvitDetails()
                 }
             } else {
                 this.currInvit = invit
@@ -71,22 +87,21 @@ export default {
         _open() {
             this.panel_visible = true
             setTimeout(() => {
-                this._showDetails()
-
                 let panel = document.getElementById("invit_detail_panel_window")
                 let cover = document.getElementById("invit_detail_panel_cover")
                 panel.style.width = this.maxWidth
                 cover.style.width = this.maxWidth
-                panel.style.height = this.height
-                cover.style.height = this.height
+                if (this.currInvit.type == 'FRIENDSHIP') {
+                    panel.style.height = this.friendInvitHeight
+                    cover.style.height = this.friendInvitHeight
+                } else {
+                    panel.style.height = this.memberInvitHeight
+                    cover.style.height = this.memberInvitHeight
+                }
                 setTimeout(() => {
                     cover.style.width = "0px"
                 }, 300);
             }, 300)
-        },
-        _showDetails() {
-            document.getElementById("friend_name").innerHTML = this.currInvit.from_name
-            document.getElementById("friend_message").innerHTML = this.currInvit.msg
         },
         acceptInvit() {
             this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })

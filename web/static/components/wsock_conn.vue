@@ -28,6 +28,7 @@ export default {
         this.proxyChannel.on(this.P2P_MSG_NEW, (data) => { this._onP2pMsgNew(data) })
         this.proxyChannel.on(this.P2P_MSG_IN, (data) => { this._onP2pMsgIn(data) })
         this.proxyChannel.on(this.ADD_FRIEND_IN, (data) => { this._onAddFriendIn(data) })
+        this.proxyChannel.on(this.ADD_GROUP_IN, (data) => { this._onAddGroupIn(data) })
         this.proxyChannel.join()
             .receive("ok", (updates) => { this._onInitialUpdates(updates) })
             .receive("error", () => { /*console.log("Failed to join proxy ch")*/ })
@@ -54,6 +55,9 @@ export default {
         this.$events.$on(this.ADD_FRIEND_RESP, (data) => { this._onAddFriendResp(data) })
     },
     methods: {
+        _onAddGroupIn(invit) {
+            this.$events.$emit(this.ADD_GROUP_IN, invit)
+        },
         _addGroupOut(group) {
             this.proxyChannel.push(this.ADD_GROUP_OUT, group)
         },

@@ -35,6 +35,7 @@ export default {
         this.$events.$on(this.GET_UNREAD, () => { this._onGetUnread() })
         this.$events.$on(this.DEL_UNREAD, (data) => { this._onDelUnread(data) })
         this.$events.$on(this.ADD_FRIEND_IN, (data) => { this._onAddFriendIn(data) })
+        this.$events.$on(this.ADD_GROUP_IN, (data) => { this._onAddGroupIn(data) })
         this.$events.$on(this.ADD_FRIEND_RESP, (data) => { this._onAddFriendResp(data) })
 
         this.$events.$on(this.ADD_UNOPENED, (data) => { this._onAddUnopened(data) })
@@ -43,6 +44,9 @@ export default {
         this.$events.$on(this.GET_FRIENDS_LIST, () => { this._onGetFriendsList() })
     },
     methods: {
+        _onAddGroupIn(invit) {
+            this._onAddFriendIn(invit)
+        },
         _onGetFriendsList() {
             let friends = this.tbl_friends.where((o) => {
                 return o.name != null

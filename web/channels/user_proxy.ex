@@ -511,6 +511,11 @@ defmodule Portal.UserProxy do
     #=================================================================================================
     # Functions related to group
     #=================================================================================================
+    def handle_info({:add_group_in, invit}, socket) do
+        push socket, @add_group_in, invit
+        {:noreply, socket}
+    end
+
     def handle_in(@add_group_out, %{"name" => name, "members" => friends}, socket) do
         admin = socket.assigns.user
         admins = "#" <> Integer.to_string(admin.id) <> "#"
@@ -534,7 +539,7 @@ defmodule Portal.UserProxy do
                                     ol_friend = OnlineUsersDb.select(receiver.username)
                                     json = %{id: invit.id, from_id: invit.from_id, from_name: group.name, 
                                         type: invit.invit_type, status: invit.status, msg: nil}
-                                    send ol_friend.pid, {:add_friend_in, json}
+                                    send ol_friend.pid, {:add_group_in, json}
                                 true ->
                                     :ignore
                             end

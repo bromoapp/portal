@@ -70,6 +70,7 @@ Vue.mixin({
             get DEL_UNOPENED() { return "del_unopened" },
             get DEL_UNOPENED_REC() { return "del_unopened_rec" },
             get ADD_GROUP_OUT() { return "add_group_out" },
+            get ADD_GROUP_IN() { return "add_group_in" },
 
             // Component 2 component messages with args that triggers GUI component
             get SHOW_UNREAD() { return "show_unread" },

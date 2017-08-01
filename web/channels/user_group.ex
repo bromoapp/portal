@@ -1,4 +1,4 @@
-defmodule Portal.UserRoom do
+defmodule Portal.UserGroup do
     use Portal.Web, :channel
     require Logger
 

@@ -13,7 +13,7 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
         
         DROP TEMPORARY TABLE IF EXISTS temp_last_chats;
         CREATE TEMPORARY TABLE IF NOT EXISTS temp_last_chats (
-          friend_id BIGINT,
+          counter_id BIGINT,
           rec_id BIGINT,
           `read` TINYINT,
           `type` VARCHAR(20)
@@ -43,7 +43,7 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
                   LEAVE loop2;
                 END IF;
                 
-                INSERT INTO temp_last_chats(friend_id, rec_id, `read`, `type`) VALUES (__counter_id, _rec_id, _read, _type);
+                INSERT INTO temp_last_chats(counter_id, rec_id, `read`, `type`) VALUES (__counter_id, _rec_id, _read, _type);
               END LOOP loop2;
               CLOSE cur2;
             END BLOCK4;

@@ -3,7 +3,7 @@ defmodule Portal.UserSocket do
 
     ## Channels
     channel "user_proxy:*", Portal.UserProxy
-    channel "user_room:*", Portal.UserRoom
+    channel "user_group:*", Portal.UserGroup
 
     ## Transports
     transport :websocket, Phoenix.Transports.WebSocket

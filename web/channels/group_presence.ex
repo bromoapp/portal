@@ -1,4 +1,4 @@
-defmodule Portal.RoomPresence do
+defmodule Portal.GroupPresence do
   @moduledoc """
   Provides presence tracking to channels and processes.
 

@@ -22,7 +22,7 @@ defmodule Portal do
           # worker(Portal.Worker, [arg1, arg2, arg3]),
 
           supervisor(Portal.ProxyPresence, []),
-          supervisor(Portal.RoomPresence, []),
+          supervisor(Portal.GroupPresence, []),
           supervisor(Portal.OnlineUsersDb, [join_addr]),
           supervisor(Portal.PublicRoomsDb, [join_addr]),
           supervisor(Portal.GoogleOauth2, [])

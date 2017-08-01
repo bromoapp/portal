@@ -5,7 +5,7 @@
 
 <script>
 const proxyChannelPrefix = "user_proxy:"
-const roomChannelPrefix = "user_room:"
+const groupChannelPrefix = "user_group:"
 
 export default {
     data() {
@@ -32,11 +32,6 @@ export default {
         this.proxyChannel.join()
             .receive("ok", (updates) => { this._onInitialUpdates(updates) })
             .receive("error", () => { /*console.log("Failed to join proxy ch")*/ })
-
-        this.roomChannel = this.socket.channel(roomChannelPrefix + this.user)
-        this.roomChannel.join()
-            .receive("ok", () => { /*console.log("Succeed to join room ch")*/ })
-            .receive("error", () => { /*console.log("Failed to join room ch")*/ })
 
         this.sharedChannels.push(this.roomChannel)
 

@@ -38,7 +38,7 @@
 export default {
     data() {
         return {
-            currFriend: null,
+            currCounterpart: null,
             height: "450px",
             maxWidth: "400px",
             panel_visible: false,
@@ -52,7 +52,7 @@ export default {
     methods: {
         _updateChatDialog(chat) {
             if (this.panel_visible) {
-                if (this.currFriend.id == chat.friend_id) {
+                if (this.currCounterpart.id == chat.counter_id) {
                     let oldConvDiv = document.getElementById("cid_" + chat.id)
                     if (oldConvDiv) {
                         var parent = oldConvDiv.parentNode
@@ -65,7 +65,7 @@ export default {
                     conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
                     for (let n = 0; n < chats.length; n++) {
                         let obj = chats[n]
-                        if (obj.from == this.currFriend.username) {
+                        if (obj.from == this.currCounterpart.username) {
                             conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\"><div class=\"chat-bubble\" style=\"text-align: left\">" + obj.message + "</div></div>"
                         } else {
                             conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\"><div class=\"chat-bubble-me\" style=\"text-align: left\">" + obj.message + "</div></div>"
@@ -80,16 +80,16 @@ export default {
         },
         _switchChat(friend) {
             if (this.panel_visible) {
-                if (this.currFriend == friend) {
+                if (this.currCounterpart == friend) {
                     this._close()
                 } else {
-                    this.currFriend = friend
+                    this.currCounterpart = friend
                     document.getElementById("messages").innerHTML = ""
-                    document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
-                    this.$events.$emit(this.GET_CHATS, this.currFriend)
+                    document.getElementById("chat_to").innerHTML = "To: " + this.currCounterpart.name
+                    this.$events.$emit(this.GET_CHATS, this.currCounterpart)
                 }
             } else {
-                this.currFriend = friend
+                this.currCounterpart = friend
                 this._open()
             }
         },
@@ -106,7 +106,7 @@ export default {
             this.$events.$emit(this.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
-                document.getElementById("chat_to").innerHTML = "To: " + this.currFriend.name
+                document.getElementById("chat_to").innerHTML = "To: " + this.currCounterpart.name
                 let panel = document.getElementById("chat_dialog_panel_window")
                 let cover = document.getElementById("chat_dialog_panel_cover")
                 panel.style.width = this.maxWidth
@@ -117,7 +117,7 @@ export default {
                     cover.style.width = "0px"
                 }, 300);
 
-                this.$events.$emit(this.GET_CHATS, this.currFriend)
+                this.$events.$emit(this.GET_CHATS, this.currCounterpart)
             }, 300)
         },
         sendMessage(event) {
@@ -125,7 +125,7 @@ export default {
             let msg_form = document.getElementById("message")
             let msg = msg_form.value
             if (msg.trim().length > 0) {
-                this.$events.$emit(this.P2P_MSG_OUT, this.currFriend, msg)
+                this.$events.$emit(this.P2P_MSG_OUT, this.currCounterpart, msg)
             }
             msg_form.value = ""
         },

@@ -4,7 +4,7 @@
             <div class="panel-heading accordion-header bg-37474f-s">
                 Groups &amp; Friends
                 <div class="accordion-header-btns">
-                    <a v-if="friends.length == 0" title="Search friend" id="src_friend_btn" href="javascript:" class="btn bg-37474f-d">
+                    <a v-if="counterparts.length == 0" title="Search friend" id="src_friend_btn" href="javascript:" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
                     <a v-else title="Search friend" id="src_friend_btn" href="javascript:" v-on:click="seekFriend" class="btn bg-37474f-d">
@@ -20,10 +20,10 @@
             </div>
             <div id="items_list" class="accordion-body">
                 <ul>
-                    <li v-for="friend in friends" v-bind:key="friend">
-                        <div v-on:click="onFriendClicked(friend)" class="accordion-btn bg-263238-d">
-                            <span>{{ friend.name }}</span>
-                            <span v-if="friend.online" style="color: #ffb300" class="pull-right icon">
+                    <li v-for="counterpart in counterparts" v-bind:key="counterpart">
+                        <div v-on:click="onFriendClicked(counterpart)" class="accordion-btn bg-263238-d">
+                            <span>{{ counterpart.name }}</span>
+                            <span v-if="counterpart.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-user"></i>
                             </span>
                             <span v-else style="color: #000" class="pull-right icon">
@@ -31,7 +31,7 @@
                             </span>
                         </div>
                     </li>
-                    <li v-if="friends.length > 6">
+                    <li v-if="counterparts.length > 6">
                         <div class="accordion-btn bg-212121-s">&nbsp;</div>
                     </li>
                     <li v-else>
@@ -50,7 +50,7 @@ let closed = true
 export default {
     data() {
         return {
-            friends: [],
+            counterparts: [],
             visible: false,
             invit_msg: "Hi, can I be your friend?",
             src_form_visible: false,
@@ -75,7 +75,7 @@ export default {
             }, 200)
         },
         _updateFriendsList(list) {
-            this.friends = list
+            this.counterparts = list
         },
         _closeFriendsList() {
             setTimeout(() => {

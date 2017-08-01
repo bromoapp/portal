@@ -121,17 +121,19 @@ export default {
             }
         },
         _onUpdateChatData(data) {
+            console.log(">>> UPD CHATS: ", data)
             let conv = this.tbl_chats.find({ 'id': data.id })
             if (conv[0]) {
                 conv[0].chats = data.chats
                 conv[0].read = data.read
                 conv[0].date = data.date
+                conv[0].type = data.type
                 this._onChatDataUpdated(conv[0])
             }
         },
         _onGetChats(data) {
             let requery = false
-            let convs = this.tbl_chats.find({ 'friend_id': data.id })
+            let convs = this.tbl_chats.find({ 'counter_id': data.id })
             for (let n = 0; n < convs.length; n++) {
                 let conv = convs[n]
                 if (conv.chats == null || conv.date == null) {
@@ -170,7 +172,7 @@ export default {
             for (let n = 0; n < data.chats.length; n++) {
                 let chat = data.chats[n]
                 if (chat.read == 0) {
-                    this.tbl_unread.insert({ id: chat.id, fid: chat.friend_id })
+                    this.tbl_unread.insert({ id: chat.id, fid: chat.counter_id })
                 }
                 this.tbl_chats.insert(chat)
             }
@@ -199,11 +201,11 @@ export default {
         },
         _updateChatsList() {
             let raw = this.tbl_chats.where((o) => {
-                return o.friend_id != null
+                return o.counter_id != null
             })
             let chats = []
             for (let n = 0; n < raw.length; n++) {
-                let fid = raw[n].friend_id
+                let fid = raw[n].counter_id
                 let friend = this.tbl_friends.find({ 'id': fid })
                 if (!chats.includes(friend[0])) {
                     chats.push(friend[0])

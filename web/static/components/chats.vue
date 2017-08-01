@@ -48,7 +48,7 @@
 export default {
     data() {
         return {
-            currFriend: null,
+            currCounterpart: null,
             friends: [],
             visible: false,
             src_form_visible: false
@@ -88,23 +88,23 @@ export default {
         },
         _onChatDataUpdated(chat) {
             if (this.visible) {
-                if (this.currFriend != null) {
-                    if (this.currFriend.id == chat.friend_id) {
+                if (this.currCounterpart != null) {
+                    if (this.currCounterpart.id == chat.counter_id) {
                         this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
                         this.$events.$emit(this.DEL_UNREAD_REC, chat.id)
                     } else {
-                        this._setItemToUnread(chat.id, chat.friend_id)
+                        this._setItemToUnread(chat.id, chat.counter_id)
                     }
                 } else {
-                    this._setItemToUnread(chat.id, chat.friend_id)
+                    this._setItemToUnread(chat.id, chat.counter_id)
                 }
             } else {
                 this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
-                this._setItemToUnread(chat.id, chat.friend_id)
+                this._setItemToUnread(chat.id, chat.counter_id)
             }
         },
         _onChatDialogClosed() {
-            this.currFriend = null
+            this.currCounterpart = null
         },
         _setItemToUnread(id, fid) {
             setTimeout(() => {
@@ -134,8 +134,8 @@ export default {
                     this.$events.$emit(this.GET_UNREAD)
 
                     if (friend && friend.target == null) {
-                        this.currFriend = friend
-                        this.$events.$emit(this.SWITCH_CHAT, this.currFriend)
+                        this.currCounterpart = friend
+                        this.$events.$emit(this.SWITCH_CHAT, this.currCounterpart)
                     }
                 }, 200)
             }, 300)
@@ -158,7 +158,7 @@ export default {
             if (this.src_form_visible) {
                 this.seekChat()
             }
-            this.currFriend = friend
+            this.currCounterpart = friend
             let el = document.getElementById('fid_' + friend.id)
             if (el) {
                 el.innerHTML = this._getFriendsName(friend.id)

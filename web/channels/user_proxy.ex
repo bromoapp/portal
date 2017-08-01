@@ -57,10 +57,10 @@ defmodule Portal.UserProxy do
 
     # SQLs
     @sql_is_invit_exists "CALL `sp_is_invit_exists`(?, ?);"
-    @sql_ongoing_chats "CALL `sp_ongoing_p2p_chats`(?);"
+    @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"
     @sql_friends_list "CALL `sp_friends_list`(?);"
     @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` = 'WAITING'"
-    @sql_query_chats "SELECT a.id, a.counter_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?;"
+    @sql_query_chats "SELECT a.id, a.counter_id, a.messages, a.updated_at, a.read, a.`type` FROM daily_chats AS a WHERE a.id = ?;"
     @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.inserted_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_id = ? AND a.counter_id = ?;"
 
     #=================================================================================================
@@ -193,8 +193,8 @@ defmodule Portal.UserProxy do
     end
 
     defp _parse_chats([h|t], result) do
-        [friend_id, id, read] = h
-        nresult = result ++ [%{id: id, friend_id: friend_id, chats: nil, date: nil, read: read}]
+        [counter_id, id, read, type] = h
+        nresult = result ++ [%{id: id, counter_id: counter_id, chats: nil, date: nil, read: read, type: type}]
         _parse_chats(t, nresult)
     end
 
@@ -280,7 +280,7 @@ defmodule Portal.UserProxy do
         if rows == [] do
             {:reply, {:ok, %{"query_chats_resp" => %{}}}, socket}
         else
-            [[id, user_b_id, messages, date_time, read]] = rows
+            [[id, counter_id, messages, date_time, read, type]] = rows
             raw = Poison.decode!(messages)
             if read == 0 do
                 chat = DailyChat |> Repo.get!(id)
@@ -294,7 +294,7 @@ defmodule Portal.UserProxy do
                 end
             end
 
-            json = %{id: id, friend_id: user_b_id, date: _format_date(date_time), chats: raw["chats"], read: 1}
+            json = %{id: id, counter_id: counter_id, date: _format_date(date_time), chats: raw["chats"], read: 1, type: type}
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
         end
     end

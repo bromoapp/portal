@@ -4,7 +4,7 @@
             <div class="panel-heading accordion-header bg-37474f-s">
                 Chats
                 <div class="accordion-header-btns">
-                    <a v-if="friends.length == 0" title="Search chat" id="src_chat_btn" href="javascript:" class="btn bg-37474f-d">
+                    <a v-if="counterparts.length == 0" title="Search chat" id="src_chat_btn" href="javascript:" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
                     <a v-else title="Search chat" id="src_chat_btn" href="javascript:" v-on:click="seekChat" class="btn bg-37474f-d">
@@ -20,10 +20,10 @@
             </div>
             <div id="items_list" class="accordion-body">
                 <ul>
-                    <li v-for="friend in friends" v-bind:key="friend">
-                        <div v-on:click="onChatClicked(friend)" class="accordion-btn bg-263238-d">
-                            <span v-bind:id="'fid_' + friend.id">{{ friend.name }}</span>
-                            <span v-if="friend.online" style="color: #ffb300" class="pull-right icon">
+                    <li v-for="counterpart in counterparts" v-bind:key="counterpart">
+                        <div v-on:click="onChatClicked(counterpart)" class="accordion-btn bg-263238-d">
+                            <span v-bind:id="'cpid_' + counterpart.id">{{ counterpart.name }}</span>
+                            <span v-if="counterpart.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-comment"></i>
                             </span>
                             <span v-else style="color: #000" class="pull-right icon">
@@ -31,7 +31,7 @@
                             </span>
                         </div>
                     </li>
-                    <li v-if="friends.length > 2">
+                    <li v-if="counterparts.length > 2">
                         <div class="accordion-btn bg-212121-s">&nbsp;</div>
                     </li>
                     <li v-else>
@@ -49,7 +49,7 @@ export default {
     data() {
         return {
             currCounterpart: null,
-            friends: [],
+            counterparts: [],
             visible: false,
             src_form_visible: false
         }
@@ -109,14 +109,14 @@ export default {
         _setItemToUnread(id, fid) {
             setTimeout(() => {
                 this.$events.$emit(this.ADD_UNREAD, { id: id, fid: fid })
-                let el = document.getElementById('fid_' + fid)
+                let el = document.getElementById('cpid_' + fid)
                 if (el) {
                     el.innerHTML = this._getFriendsName(fid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
                 }
             }, 200);
         },
         _updateChatsList(list) {
-            this.friends = list
+            this.counterparts = list
         },
         _closeChatsList() {
             setTimeout(() => {
@@ -142,8 +142,8 @@ export default {
         },
         _getFriendsName(id) {
             let friend = null
-            for (let n = 0; n < this.friends.length; n++) {
-                friend = this.friends[n]
+            for (let n = 0; n < this.counterparts.length; n++) {
+                friend = this.counterparts[n]
                 if (friend.id == id) {
                     break
                 }
@@ -159,7 +159,7 @@ export default {
                 this.seekChat()
             }
             this.currCounterpart = friend
-            let el = document.getElementById('fid_' + friend.id)
+            let el = document.getElementById('cpid_' + friend.id)
             if (el) {
                 el.innerHTML = this._getFriendsName(friend.id)
                 this.$events.$emit(this.DEL_UNREAD, friend.id)

@@ -121,7 +121,6 @@ export default {
             }
         },
         _onUpdateChatData(data) {
-            console.log(">>> UPD CHATS: ", data)
             let conv = this.tbl_chats.find({ 'id': data.id })
             if (conv[0]) {
                 conv[0].chats = data.chats

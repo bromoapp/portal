@@ -35,23 +35,20 @@ defmodule Portal.DailyChatTest do
         chats = %Chats{chats: [ch1, ch2, ch3, ch4]}
 
         text = Poison.encode!(chats)
-        dchat_map = %{read: true, messages: text}
-            |> Map.put(:user_a, user_a)
-            |> Map.put(:user_b, user_b)
+        dchat_map = %{read: true, messages: text, type: "p2p", counter_id: user_b.id}
+            |> Map.put(:user, user_a)
         
         dchat_cs = DailyChat.create_or_update_p2p_changeset(%DailyChat{}, dchat_map)
-            |> put_assoc(:user_a, user_a)
-            |> put_assoc(:user_b, user_b)
+            |> put_assoc(:user, user_a)
         assert dchat_cs.valid?
         dchat = Repo.insert!(dchat_cs)
 
         dchat = DailyChat
             |> Repo.get!(dchat.id)
-            |> Repo.preload(:user_a)
-            |> Repo.preload(:user_b)
+            |> Repo.preload(:user)
 
-        assert dchat.user_a.id == user_a.id
-        assert dchat.user_b.id == user_b.id
+        assert dchat.user.id == user_a.id
+        assert dchat.counter_id == user_b.id
     end
 
     test "2. Success in updating a daily chat when all input params are correct", %{user_1: user_a, user_2: user_b} do
@@ -62,13 +59,11 @@ defmodule Portal.DailyChatTest do
         chats = %Chats{chats: [ch1, ch2, ch3]}
 
         text1 = Poison.encode!(chats)
-        dchat_map = %{read: true, messages: text1}
-            |> Map.put(:user_a, user_a)
-            |> Map.put(:user_b, user_b)
+        dchat_map = %{read: true, messages: text1, type: "p2p", counter_id: user_b.id}
+            |> Map.put(:user, user_a)
         
         dchat_cs = DailyChat.create_or_update_p2p_changeset(%DailyChat{}, dchat_map)
-            |> put_assoc(:user_a, user_a)
-            |> put_assoc(:user_b, user_b)
+            |> put_assoc(:user, user_a)
         assert dchat_cs.valid?
         dchat = Repo.insert!(dchat_cs)
 
@@ -86,8 +81,7 @@ defmodule Portal.DailyChatTest do
         upd_chat_list = %Chats{chats: old_chats.chats ++ [ch4]}
         text2 = Poison.encode!(upd_chat_list)
         upd_dchat_map = %{read: false, messages: text2}
-            |> Map.put(:user_a, user_a)
-            |> Map.put(:user_b, user_b)
+            |> Map.put(:user, user_a)
 
         upd_dchat_cs = DailyChat.create_or_update_p2p_changeset(odchat, upd_dchat_map)
         assert upd_dchat_cs.valid?

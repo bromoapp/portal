@@ -3,7 +3,7 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
 
   def up do
     execute "
-      CREATE PROCEDURE `sp_ongoing_chats`(IN `uid` BIGINT)
+      CREATE PROCEDURE `sp_ongoing_p2p_chats`(IN `uid` BIGINT)
       BEGIN
         DECLARE _username VARCHAR(255);
         DECLARE _friend_id, __friend_id BIGINT;
@@ -19,7 +19,7 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
         
         BLOCK1: BEGIN
           DECLARE on_finished1 BIGINT;
-          DECLARE cur1 CURSOR FOR SELECT DISTINCT(a.user_b_id) AS 'friend_id' FROM daily_chats AS a WHERE a.user_a_id = uid AND a.user_b_id != uid;
+          DECLARE cur1 CURSOR FOR SELECT DISTINCT(a.counter_id) AS 'friend_id' FROM daily_chats AS a WHERE a.user_id = uid AND a.counter_id != uid AND a.`type` = 'P2P';
           DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished1 = 1;
           
           OPEN cur1;
@@ -31,7 +31,7 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
 
             BLOCK4: BEGIN
               DECLARE on_finished2 BIGINT;
-              DECLARE cur2 CURSOR FOR SELECT a.user_b_id AS 'friend_id', a.id, a.`read` FROM daily_chats AS a WHERE a.user_b_id = _friend_id AND a.user_a_id = uid;
+              DECLARE cur2 CURSOR FOR SELECT a.counter_id AS 'friend_id', a.id, a.`read` FROM daily_chats AS a WHERE a.counter_id = _friend_id AND a.user_id = uid AND a.`type` = 'P2P';
               DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished2 = 1;
               
               OPEN cur2;

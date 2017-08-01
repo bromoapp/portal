@@ -5,27 +5,25 @@ defmodule Portal.DailyChat do
     schema "daily_chats" do
         field :read, :boolean, default: false
         field :messages, :string
-        belongs_to :user_a, Portal.User
-        belongs_to :user_b, Portal.User
-        belongs_to :group, Portal.Group
+        field :type, :string
+        field :counter_id, :integer
+        belongs_to :user, Portal.User
 
         timestamps()
     end
 
     def create_or_update_p2p_changeset(struct, params) do
         struct
-        |> cast(params, [:read, :messages])
-        |> validate_required([:read, :messages])
-        |> foreign_key_constraint(:user_a)
-        |> foreign_key_constraint(:user_b)
+        |> cast(params, [:read, :messages, :counter_id, :type])
+        |> validate_required([:read, :messages, :counter_id, :type])
+        |> foreign_key_constraint(:user)
     end
 
     def create_or_update_group_changeset(struct, params) do
         struct
-        |> cast(params, [:read, :messages])
-        |> validate_required([:read, :messages])
-        |> foreign_key_constraint(:user_a)
-        |> foreign_key_constraint(:group)
+        |> cast(params, [:read, :messages, :counter_id, :type])
+        |> validate_required([:read, :messages, :counter_id, :type])
+        |> foreign_key_constraint(:user)
     end
 
 end

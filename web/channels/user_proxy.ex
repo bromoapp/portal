@@ -25,6 +25,10 @@ defmodule Portal.UserProxy do
     @rejected "REJECTED"
     @ignored "IGNORED"
 
+    # Chat types
+    @chat_p2p "P2P"
+    @chat_p2g "P2G"
+
     # Event topics
     @friend_new "friend_new"
     @friend_online "friend_online"
@@ -53,11 +57,11 @@ defmodule Portal.UserProxy do
 
     # SQLs
     @sql_is_invit_exists "CALL `sp_is_invit_exists`(?, ?);"
-    @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"
+    @sql_ongoing_chats "CALL `sp_ongoing_p2p_chats`(?);"
     @sql_friends_list "CALL `sp_friends_list`(?);"
     @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` = 'WAITING'"
-    @sql_query_chats "SELECT a.id, a.user_b_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?;"
-    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.inserted_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_a_id = ? AND a.user_b_id = ?;"
+    @sql_query_chats "SELECT a.id, a.counter_id, a.messages, a.updated_at, a.read FROM daily_chats AS a WHERE a.id = ?;"
+    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.inserted_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_id = ? AND a.counter_id = ?;"
 
     #=================================================================================================
     # Functions related to user connections and presences
@@ -314,18 +318,16 @@ defmodule Portal.UserProxy do
             # creates new chat for user
             chats = %Chats{chats: [chat]}
             text = Poison.encode!(chats)
-            user_a_chat_map = %{read: _parse_read_val(mode), messages: text}
-            |> Map.put(:user_a, user_a)
-            |> Map.put(:user_b, user_b)
+            user_a_chat_map = %{read: _parse_read_val(mode), messages: text, type: @chat_p2p, counter_id: user_b.id}
+            |> Map.put(:user, user_a)
             user_a_chat_cs = DailyChat.create_or_update_p2p_changeset(%DailyChat{}, user_a_chat_map)
-            |> Changeset.put_assoc(:user_a, user_a)
-            |> Changeset.put_assoc(:user_b, user_b)
+            |> Changeset.put_assoc(:user, user_a)
 
             case Repo.insert(user_a_chat_cs) do
                 {:ok, user_a_chat} ->
                     raw = Poison.decode!(user_a_chat.messages)
-                    json = %{id: user_a_chat.id, friend_id: user_b.id, date: _format_date(user_a_chat.inserted_at), 
-                        chats: raw["chats"], read: _parse_bool_val(user_a_chat.read)}
+                    json = %{id: user_a_chat.id, counter_id: user_b.id, date: _format_date(user_a_chat.inserted_at), 
+                        chats: raw["chats"], read: _parse_bool_val(user_a_chat.read), type: @chat_p2p}
                     {:p2p_msg_new, json}
                 {:error, changeset} ->
                     {:error, changeset}
@@ -338,16 +340,15 @@ defmodule Portal.UserProxy do
             upd_user_a_chat_list = %Chats{chats: old_user_a_chats.chats ++ [chat]}
             text = Poison.encode!(upd_user_a_chat_list)
             upd_user_a_chat_map = %{read: _parse_read_val(mode), messages: text}
-            |> Map.put(:user_a, user_a)
-            |> Map.put(:user_b, user_b)
+            |> Map.put(:user, user_a)
 
             upd_user_a_chat_cs = DailyChat.create_or_update_p2p_changeset(user_a_chat, upd_user_a_chat_map)
             case Repo.update(upd_user_a_chat_cs) do
                 {:ok, upd_user_a_chat} ->
                     %Chat{from: uname, message: message, time: time} = chat
                     nchat = %{"from" => uname, "message" => message, "time" => time}
-                    json = %{id: upd_user_a_chat.id, friend_id: user_b.id, date: _format_date(upd_user_a_chat.updated_at), 
-                        chats: [nchat], read: _parse_bool_val(upd_user_a_chat.read)}
+                    json = %{id: upd_user_a_chat.id, counter_id: user_b.id, date: _format_date(upd_user_a_chat.updated_at), 
+                        chats: [nchat], read: _parse_bool_val(upd_user_a_chat.read), type: @chat_p2p}
                     {:p2p_msg_in, json}
                 {:error, changeset} ->
                     {:error, changeset}
@@ -497,8 +498,9 @@ defmodule Portal.UserProxy do
     def handle_in(@add_group_out, %{"name" => name, "members" => friends}, socket) do
         admin = socket.assigns.user
         admins = "#" <> Integer.to_string(admin.id) <> "#"
+        members = "#" <> Integer.to_string(admin.id) <> "#"
 
-        group_map = %{name: name, admins: admins, members: nil}
+        group_map = %{name: name, admins: admins, members: members}
         group_cs = Group.create_or_update_changeset(%Group{}, group_map)
         case Repo.insert(group_cs) do
             {:ok, group} ->
@@ -543,8 +545,14 @@ defmodule Portal.UserProxy do
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @accepted})
                 case Repo.update(upd_invit_cs) do
                     {:ok, _} ->
-                        
-                        :ignore
+                        members = group.members <> ",#" <> Integer.to_string(user.id) <> "#"
+                        upd_group_cs = Group.create_or_update_changeset(group, %{members: members})
+                        case Repo.update(upd_group_cs) do
+                            {:ok, _} ->
+                                :ignore
+                            {:error, changeset} ->
+                                Logger.error(">>> ERROR #{inspect changeset}")
+                        end
                     {:error, changeset} ->
                         Logger.error(">>> ERROR #{inspect changeset}")
                 end

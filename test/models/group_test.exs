@@ -55,11 +55,36 @@ defmodule Portal.GroupTest do
         upd_cs = Group.create_or_update_changeset(ogroup, %{members: members})
         Repo.update(upd_cs)
 
+        # Load newly updated group
         ngroup = Repo.get(Group, ogroup.id)
         nsplit = String.split(ngroup.members, ",")
 
         #Assert members = 1
         assert length(nsplit) == 1
+    end
+
+    test "3. Add A to membership", %{from: user_a, to: list} do
+        # Creates a group with 2 members
+        group_cs = _create_group_cs(%{from: user_a, to: list})
+        assert group_cs.valid?
+        group = _persist_group(group_cs)
+        split = String.split(group.members, ",")
+
+        # Assert members = 2
+        assert length(split) == 2
+
+        # Add A to the group
+        ogroup = Repo.get(Group, group.id)
+        members = ogroup.members <> ",#" <> Integer.to_string(user_a.id) <> "#"
+        upd_cs = Group.create_or_update_changeset(ogroup, %{members: members})
+        Repo.update(upd_cs)
+
+        # Load newly updated group
+        ngroup = Repo.get(Group, group.id)
+        nsplit = String.split(ngroup.members, ",")
+
+        #Assert members = 3
+        assert length(nsplit) == 3
     end
 
     defp _create_group_cs(%{from: user_a, to: list}) do

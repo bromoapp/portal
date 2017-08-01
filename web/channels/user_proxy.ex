@@ -468,30 +468,8 @@ defmodule Portal.UserProxy do
                     {:error, changeset} ->
                         Logger.error(">>> ERROR #{inspect changeset}")
                 end
-            resp == @rejected ->
-                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @rejected})
-                case Repo.update(upd_invit_cs) do
-                    {:ok, _} ->
-                        :ignore
-                    {:error, changeset} ->
-                        Logger.error(">>> ERROR #{inspect changeset}")
-                end
-            resp == @ignored ->
-                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
-                case Repo.update(upd_invit_cs) do
-                    {:ok, _} ->
-                        :ignore
-                    {:error, changeset} ->
-                        Logger.error(">>> ERROR #{inspect changeset}")
-                end
             true ->
-                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
-                case Repo.update(upd_invit_cs) do
-                    {:ok, _} ->
-                        :ignore
-                    {:error, changeset} ->
-                        Logger.error(">>> ERROR #{inspect changeset}")
-                end
+                _reject_or_ignore_invit(invit, resp)
         end
         {:noreply, socket}
     end
@@ -565,34 +543,13 @@ defmodule Portal.UserProxy do
                 upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @accepted})
                 case Repo.update(upd_invit_cs) do
                     {:ok, _} ->
-                        :ignore
-                    {:error, changeset} ->
-                        Logger.error(">>> ERROR #{inspect changeset}")
-                end
-            resp == @rejected ->
-                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @rejected})
-                case Repo.update(upd_invit_cs) do
-                    {:ok, _} ->
-                        :ignore
-                    {:error, changeset} ->
-                        Logger.error(">>> ERROR #{inspect changeset}")
-                end
-            resp == @ignored ->
-                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
-                case Repo.update(upd_invit_cs) do
-                    {:ok, _} ->
+                        
                         :ignore
                     {:error, changeset} ->
                         Logger.error(">>> ERROR #{inspect changeset}")
                 end
             true ->
-                upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: @ignored})
-                case Repo.update(upd_invit_cs) do
-                    {:ok, _} ->
-                        :ignore
-                    {:error, changeset} ->
-                        Logger.error(">>> ERROR #{inspect changeset}")
-                end
+                _reject_or_ignore_invit(invit, resp)
         end
         {:noreply, socket}
     end
@@ -600,6 +557,17 @@ defmodule Portal.UserProxy do
     #=================================================================================================
     # Helper functions
     #=================================================================================================
+    defp _reject_or_ignore_invit(invit, resp) do
+        upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: resp})
+        case Repo.update(upd_invit_cs) do
+            {:ok, _} ->
+                :ignore
+            {:error, changeset} ->
+                Logger.error(">>> ERROR #{inspect changeset}")
+        end
+        :ignore
+    end
+    
     defp _is_friend_online?(uname) do
         ol_friend = OnlineUsersDb.select(uname)
         cond do

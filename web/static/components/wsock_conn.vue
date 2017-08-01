@@ -67,7 +67,7 @@ export default {
             this.proxyChannel.push(this.P2P_MSG_READ, { id: id })
         },
         _onDelUnopenedRec(id) {
-            this.proxyChannel.push(this.ADD_FRIEND_OPENED, { id: id })
+            this.proxyChannel.push(this.INVIT_OPENED, { id: id })
         },
         _onAddFriendIn(invit) {
             this.$events.$emit(this.ADD_FRIEND_IN, invit)

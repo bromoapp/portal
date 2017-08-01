@@ -43,12 +43,12 @@ defmodule Portal.UserProxy do
     @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
-    @add_friend_opened "add_friend_opened"
+    
+    @invit_opened "invit_opened"
 
     @add_group_in "add_group_in"
     @add_group_out "add_group_out"
     @add_group_resp "add_group_resp"
-    @add_group_opened "add_group_opened"
 
     # SQLs
     @sql_is_invit_exists "CALL `sp_is_invit_exists`(?, ?);"
@@ -470,18 +470,6 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    def handle_in(@add_friend_opened, %{"id" => id}, socket) do
-        invit = Invitation |> Repo.get!(id)
-        upd_invit_cs = Invitation.create_or_update_changeset(invit, %{opened: true})
-        case Repo.update(upd_invit_cs) do
-            {:ok, _} ->
-                :ignore
-            {:error, changeset} ->
-                Logger.error(">>> ERROR #{inspect changeset}")
-        end
-        {:noreply, socket}
-    end
-
     #=================================================================================================
     # Functions related to group
     #=================================================================================================
@@ -560,6 +548,18 @@ defmodule Portal.UserProxy do
     #=================================================================================================
     # Helper functions
     #=================================================================================================
+    def handle_in(@invit_opened, %{"id" => id}, socket) do
+        invit = Invitation |> Repo.get!(id)
+        upd_invit_cs = Invitation.create_or_update_changeset(invit, %{opened: true})
+        case Repo.update(upd_invit_cs) do
+            {:ok, _} ->
+                :ignore
+            {:error, changeset} ->
+                Logger.error(">>> ERROR #{inspect changeset}")
+        end
+        {:noreply, socket}
+    end
+
     defp _reject_or_ignore_invit(invit, resp) do
         upd_invit_cs = Invitation.create_or_update_changeset(invit, %{status: resp})
         case Repo.update(upd_invit_cs) do

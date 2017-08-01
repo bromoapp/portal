@@ -50,11 +50,6 @@ defmodule Portal.UserProxy do
     @add_group_resp "add_group_resp"
     @add_group_opened "add_group_opened"
 
-    @p2g_msg_in "p2g_msg_in"
-    @p2g_msg_out "p2g_msg_out"
-    @p2g_msg_new "p2g_msg_new"
-    @p2g_msg_read "p2g_msg_read"
-
     # SQLs
     @sql_is_invit_exists "CALL `sp_is_invit_exists`(?, ?);"
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"

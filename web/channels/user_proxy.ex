@@ -43,7 +43,7 @@ defmodule Portal.UserProxy do
     @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
-    
+
     @invit_opened "invit_opened"
 
     @add_group_in "add_group_in"
@@ -68,6 +68,7 @@ defmodule Portal.UserProxy do
         |> _get_friends_list()
         |> _get_ongoing_chats()
         |> _get_invitations_list()
+        |> _get_groups_list()
         {:ok, updates, socket}
     end
     
@@ -145,6 +146,10 @@ defmodule Portal.UserProxy do
     def handle_info({:friend_offline, friend}, socket) do
         push socket, @friend_offline, %{id: friend.id, username: friend.username, name: friend.name, online: false}
         {:noreply, socket}
+    end
+
+    defp _get_groups_list({user, struct}) do
+        {user, %Updates{struct | groups: []}}
     end
 
     defp _get_invitations_list({user, struct}) do

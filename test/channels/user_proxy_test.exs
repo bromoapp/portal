@@ -21,7 +21,7 @@ defmodule Portal.UserProxyTest do
     @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
-    @add_friend_opened "add_friend_opened"
+    @invit_opened "invit_opened"
 
     setup do
         # create users
@@ -148,7 +148,7 @@ defmodule Portal.UserProxyTest do
         assert add_friend_in.msg == "Let me be your friend"
 
         # User B notify the server that received inivitation has opened
-        push(socket_b, @add_friend_opened, %{"id" => add_friend_in.id})
+        push(socket_b, @invit_opened, %{"id" => add_friend_in.id})
 
         # User B accept friend request inivit
         push(socket_b, @add_friend_resp, %{"id" => add_friend_in.id, "resp" => @accepted})

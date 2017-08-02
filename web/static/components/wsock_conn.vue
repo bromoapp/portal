@@ -33,8 +33,6 @@ export default {
             .receive("ok", (updates) => { this._onInitialUpdates(updates) })
             .receive("error", () => { /*console.log("Failed to join proxy ch")*/ })
 
-        this.sharedChannels.push(this.roomChannel)
-
         // Logout event handling
         this.$events.$on(this.SIGN_OUT, () => { this._onSignOut() })
 

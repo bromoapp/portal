@@ -5,6 +5,7 @@ defmodule Portal.UserProxy do
     alias Mariaex.Result
     alias Portal.ProxyPresence
     alias Portal.Invitation
+    alias Portal.UserGroup
     alias Portal.DailyChat
     alias Portal.Relation
     alias Portal.Updates
@@ -55,9 +56,10 @@ defmodule Portal.UserProxy do
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"
     @sql_friends_list "CALL `sp_friends_list`(?);"
     @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` = 'WAITING'"
+    @sql_groups_list "SELECT a.unique, a.name, a.members, a.admins FROM groups AS a WHERE a.members LIKE (?)"
     @sql_query_chats "SELECT a.id, a.counter_id, a.messages, a.inserted_at, a.read, a.`type` FROM daily_chats AS a WHERE a.id = ?;"
     @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.inserted_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_id = ? AND a.counter_id = ?;"
-
+    
     #=================================================================================================
     # Functions related to user connections and presences
     #=================================================================================================
@@ -149,7 +151,38 @@ defmodule Portal.UserProxy do
     end
 
     defp _get_groups_list({user, struct}) do
-        {user, %Updates{struct | groups: []}}
+        user_id = "%#" <> Integer.to_string(user.id) <> "#%"
+        %Result{rows: rows} = SQL.query!(Repo, @sql_groups_list, [user_id])
+        if rows == [] do
+            {user, %Updates{struct | groups: []}}
+        else
+            {user, %Updates{struct | groups: _parse_groups(rows, [])}}
+        end
+    end
+
+    defp _parse_groups([], result) do
+        result
+    end
+
+    defp _parse_groups([h|t], result) do
+        [unique, name, members, admins] = h
+        group = %UserGroup{name: name, 
+            unique: unique, 
+            members: _parse_users(String.split(members, ",")), 
+            admins: _parse_users(String.split(admins, ","))
+        }
+        _parse_groups(t, result ++ [group])
+    end
+
+    defp _parse_users(list) do
+        Enum.map(list, fn(x) -> 
+            [_, id, _] = for <<n::binary-1 <- x>>, do: n
+            String.to_integer(id)
+        end) |>
+        Enum.map(fn(n) -> 
+            user = Repo.get!(User, n)
+            %{id: user.id, name: user.name, username: user.username}
+        end)
     end
 
     defp _get_invitations_list({user, struct}) do

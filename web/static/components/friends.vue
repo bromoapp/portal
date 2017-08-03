@@ -21,7 +21,7 @@
             <div id="items_list" class="accordion-body">
                 <ul>
                     <li v-for="counterpart in counterparts" v-bind:key="counterpart">
-                        <div v-on:click="onFriendClicked(counterpart)" class="accordion-btn bg-263238-d">
+                        <div v-on:click="onCounterpartClicked(counterpart)" class="accordion-btn bg-263238-d">
                             <span>{{ counterpart.name }}</span>
                             <span v-if="counterpart.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-user"></i>
@@ -63,7 +63,7 @@ export default {
         this.$events.$on(this.Event.OPEN_FRIENDS, () => { this._openFriendsList() })
         this.$events.$on(this.Event.CLOSE_FRIENDS, () => { this._closeFriendsList() })
         this.$events.$on(this.Event.UPDATE_FRIENDS_LIST, (list) => { this._updateFriendsList(list) })
-        this.$events.$on(this.Event.UPDATE_GROUPS_LIST, (list) => { this._updateFriendsList(list) })
+        this.$events.$on(this.Event.UPDATE_GROUPS_LIST, (list) => { this._updateGroupsList(list) })
     },
     methods: {
         _onWindowResizing() {
@@ -82,6 +82,13 @@ export default {
                 this.counterparts.push(friend)
             }
         },
+        _updateGroupsList(list) {
+            for (let n = 0; n < list.length; n++) {
+                let group = list[n]
+                group.type = 'G'
+                this.counterparts.push(group)
+            }
+        },
         _closeFriendsList() {
             setTimeout(() => {
                 this.visible = false
@@ -98,11 +105,12 @@ export default {
                 }, 200)
             }, 300)
         },
-        onFriendClicked(friend) {
+        onCounterpartClicked(counterpart) {
+            console.log(">>> TYPE: " + counterpart.type)
             if (this.src_form_visible) {
                 this.seekFriend()
             }
-            this.$events.$emit(this.Event.SWITCH_FRIEND_DETAIL, friend)
+            this.$events.$emit(this.Event.SWITCH_FRIEND_DETAIL, counterpart)
         },
         seekFriend() {
             document.getElementById("src_friend_btn").blur()

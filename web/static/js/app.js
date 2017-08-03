@@ -88,6 +88,7 @@ Vue.mixin({
                     get ADD_GROUP_OUT() { return "add_group_out" },
                     get ADD_GROUP_IN() { return "add_group_in" },
                     get ADD_GROUP_RESP() { return "add_group_resp" },
+                    get JOIN_GROUP() { return "join_group" },
 
                     // Component 2 component messages with args that triggers GUI component
                     get SHOW_UNREAD() { return "show_unread" },

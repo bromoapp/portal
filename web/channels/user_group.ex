@@ -2,7 +2,7 @@ defmodule Portal.UserGroup do
     use Portal.Web, :channel
     require Logger
 
-    def join("user_room:" <> username, _params, socket) do
+    def join("user_group:" <> unique, _params, socket) do
         send self(), "after_join"
         {:ok, socket}
     end

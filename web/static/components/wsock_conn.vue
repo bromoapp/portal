@@ -12,7 +12,7 @@ export default {
         return {
             proxyChannel: null,
             roomChannel: null,
-            sharedChannels: [],
+            groupChats: [],
             user: this.$parent.user,
             socket: this.$parent.wsocket
         }
@@ -42,6 +42,9 @@ export default {
         this.$events.$on(this.Event.ADD_FRIEND_OUT, (invit) => { this._onAddFriendOut(invit) })
         this.$events.$on(this.Event.ADD_GROUP_OUT, (group) => { this._addGroupOut(group) })
 
+        // Group chat related events handlers
+        this.$events.$on(this.Event.JOIN_GROUP, (group) => { this._joinGroupChat(group) })
+
         // Add friend events handlers
         this.$events.$on(this.Event.DEL_UNREAD_REC, (id) => { this._onDelUnreadRec(id) })
         this.$events.$on(this.Event.DEL_UNOPENED_REC, (id) => { this._onDelUnopenedRec(id) })
@@ -49,6 +52,13 @@ export default {
         this.$events.$on(this.Event.ADD_GROUP_RESP, (data) => { this._onAddGroupResp(data) })
     },
     methods: {
+        _joinGroupChat(group) {
+            let groupChat = this.socket.channel(groupChannelPrefix + group.unique)
+            groupChat.join()
+                .receive("ok", () => { console.log("Succeed to join user group channel, name: " + group.name) })
+                .receive("error", () => { console.log("Failed to join user group channel") })
+            this.groupChats.push({name: group.unique, channel: groupChat})
+        },
         _onAddGroupResp(data) {
             this.proxyChannel.push(this.Event.ADD_GROUP_RESP, { id: data.id, resp: data.resp })
         },
@@ -103,9 +113,9 @@ export default {
             if (this.proxyChannel) {
                 this.proxyChannel.leave()
             }
-            for (let x = 0; x < this.sharedChannels.length; x++) {
-                let ch = this.sharedChannels[x]
-                ch.leave()
+            for (let x = 0; x < this.groupChats.length; x++) {
+                let ch = this.groupChats[x]
+                ch.channel.leave()
             }
         },
         _onQueryChats(conv) {

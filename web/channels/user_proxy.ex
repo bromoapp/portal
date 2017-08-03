@@ -5,7 +5,7 @@ defmodule Portal.UserProxy do
     alias Mariaex.Result
     alias Portal.ProxyPresence
     alias Portal.Invitation
-    alias Portal.UserGroup
+    alias Portal.GroupChat
     alias Portal.DailyChat
     alias Portal.Relation
     alias Portal.Updates
@@ -31,7 +31,6 @@ defmodule Portal.UserProxy do
     @chat_p2g "P2G"
 
     # Event topics
-    @friend_new "friend_new"
     @friend_online "friend_online"
     @friend_offline "friend_offline"
     @query_chats "query_chats"
@@ -41,12 +40,14 @@ defmodule Portal.UserProxy do
     @p2p_msg_new "p2p_msg_new"
     @p2p_msg_read "p2p_msg_read"
     
+    @friend_new "friend_new"
     @add_friend_in "add_friend_in"
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
 
     @invit_opened "invit_opened"
 
+    @group_new "group_new"
     @add_group_in "add_group_in"
     @add_group_out "add_group_out"
     @add_group_resp "add_group_resp"
@@ -166,7 +167,7 @@ defmodule Portal.UserProxy do
 
     defp _parse_groups([h|t], result) do
         [unique, name, members, admins] = h
-        group = %UserGroup{name: name, 
+        group = %GroupChat{name: name, 
             unique: unique, 
             members: _parse_users(String.split(members, ",")), 
             admins: _parse_users(String.split(admins, ","))
@@ -513,6 +514,11 @@ defmodule Portal.UserProxy do
     #=================================================================================================
     def handle_info({:add_group_in, invit}, socket) do
         push socket, @add_group_in, invit
+        {:noreply, socket}
+    end
+
+    def handle_info({:group_new, json}, socket) do
+        push socket, @group_new, json
         {:noreply, socket}
     end
 

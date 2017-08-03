@@ -48,8 +48,8 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
-        this.$events.$on(this.SWITCH_FRIEND_DETAIL, (friend) => { this._switchFriendDetail(friend) })
+        this.$events.$on(this.Event.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.Event.SWITCH_FRIEND_DETAIL, (friend) => { this._switchFriendDetail(friend) })
     },
     methods: {
         _closePanel() {
@@ -75,7 +75,7 @@ export default {
             this.panel_visible = false
         },
         _open() {
-            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+            this.$events.$emit(this.Event.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
                 this._showDetails()
@@ -97,11 +97,11 @@ export default {
         },
         startChat() {
             document.getElementById("btn_start_chat").blur()
-            this.$events.$emit(this.START_CHAT, this.currFriend)
+            this.$events.$emit(this.Event.START_CHAT, this.currFriend)
         },
         sendMessage() {
             document.getElementById("btn_send_msg").blur()
-            this.$events.$emit(this.START_CHAT, this.currFriend)
+            this.$events.$emit(this.Event.START_CHAT, this.currFriend)
         },
         inivite2Room() {
             document.getElementById("btn_invite_2_room").blur()

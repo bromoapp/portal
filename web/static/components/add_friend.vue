@@ -37,8 +37,8 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
-        this.$events.$on(this.SWITCH_ADD_FRIEND, () => { this._switchAddFriend() })
+        this.$events.$on(this.Event.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.Event.SWITCH_ADD_FRIEND, () => { this._switchAddFriend() })
     },
     methods: {
         _closePanel() {
@@ -57,7 +57,7 @@ export default {
             this.panel_visible = false
         },
         _open() {
-            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+            this.$events.$emit(this.Event.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
                 let panel = document.getElementById("add_friend_panel_window")
@@ -82,7 +82,7 @@ export default {
             if (mailEL.value.length > 0) {
                 let invit = { email: mailEL.value, msg: msgEl.value }
                 if (this._isFormatCorrect(invit.email)) {
-                    this.$events.$emit(this.ADD_FRIEND_OUT, invit)
+                    this.$events.$emit(this.Event.ADD_FRIEND_OUT, invit)
                     this._close()
                     setTimeout(() => {
                         mailEL.value = ""
@@ -90,15 +90,15 @@ export default {
                     }, 500);
                 } else {
                     let obj = {
-                        msg: this.ERROR_WRONG_EMAIL_FORMAT,
+                        msg: this.Message.ERROR_WRONG_EMAIL_FORMAT,
                     }
-                    this.$events.$emit(this.POP_ERROR, obj)
+                    this.$events.$emit(this.Event.POP_ERROR, obj)
                 }
             } else {
                 let obj = {
-                    msg: this.ERROR_EMAIL_EMPTY,
+                    msg: this.Message.ERROR_EMAIL_EMPTY,
                 }
-                this.$events.$emit(this.POP_ERROR, obj)
+                this.$events.$emit(this.Event.POP_ERROR, obj)
             }
         },
     }

@@ -51,11 +51,11 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
-        this.$events.$on(this.OPEN_INVITATIONS, () => { this._openInvitationsList() })
-        this.$events.$on(this.SHOW_UNOPENED, (list) => { this._showUnopened(list) })
-        this.$events.$on(this.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })
-        this.$events.$on(this.UPDATE_INVITATIONS_LIST, (list) => { this._updateInvitationsList(list) })
+        this.$events.$on(this.Event.WINDOW_RESIZING, () => { this._onWindowResizing() })
+        this.$events.$on(this.Event.OPEN_INVITATIONS, () => { this._openInvitationsList() })
+        this.$events.$on(this.Event.SHOW_UNOPENED, (list) => { this._showUnopened(list) })
+        this.$events.$on(this.Event.CLOSE_INVITATIONS, () => { this._closeInvitationsList() })
+        this.$events.$on(this.Event.UPDATE_INVITATIONS_LIST, (list) => { this._updateInvitationsList(list) })
     },
     methods: {
         _onWindowResizing() {
@@ -76,13 +76,13 @@ export default {
                         }
                     }
                 } else {
-                    this.$events.$emit(this.HIGHLIGHT_INVITS_BTN)
+                    this.$events.$emit(this.Event.HIGHLIGHT_INVITS_BTN)
                 }
             }, 300);
         },
         _setItemToUnopened(id) {
             setTimeout(() => {
-                this.$events.$emit(this.ADD_UNOPENED, id)
+                this.$events.$emit(this.Event.ADD_UNOPENED, id)
                 let el = document.getElementById('inv_' + id)
                 if (el) {
                     let oldval = el.innerHTML
@@ -97,7 +97,7 @@ export default {
             setTimeout(() => {
                 this.visible = false
                 this.src_form_visible = false
-                this.$events.$emit(this.GET_UNOPENED)
+                this.$events.$emit(this.Event.GET_UNOPENED)
             }, 300)
         },
         _openInvitationsList() {
@@ -106,7 +106,7 @@ export default {
                 setTimeout(() => {
                     let body = document.getElementById("items_list")
                     body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
-                    this.$events.$emit(this.GET_UNOPENED)
+                    this.$events.$emit(this.Event.GET_UNOPENED)
                 }, 200)
             }, 300)
         },
@@ -117,9 +117,9 @@ export default {
             let el = document.getElementById('inv_' + invit.id)
             if (el) {
                 el.innerHTML = invit.from_name
-                this.$events.$emit(this.DEL_UNOPENED, invit.id)
+                this.$events.$emit(this.Event.DEL_UNOPENED, invit.id)
             }
-            this.$events.$emit(this.SWITCH_INVIT_DETAIL, invit)
+            this.$events.$emit(this.Event.SWITCH_INVIT_DETAIL, invit)
         },
         seekInvitation() {
             if (this.src_form_visible) {

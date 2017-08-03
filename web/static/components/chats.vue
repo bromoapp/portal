@@ -55,13 +55,13 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
-        this.$events.$on(this.CHAT_DATA_UPDATED, (data) => this._onChatDataUpdated(data))
-        this.$events.$on(this.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
-        this.$events.$on(this.CLOSE_CHATS, () => { this._closeChatsList() })
-        this.$events.$on(this.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
-        this.$events.$on(this.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
-        this.$events.$on(this.SHOW_UNREAD, (list) => { this._showUnread(list) })
+        this.$events.$on(this.Event.WINDOW_RESIZING, () => { this._onWindowResizing() })
+        this.$events.$on(this.Event.CHAT_DATA_UPDATED, (data) => this._onChatDataUpdated(data))
+        this.$events.$on(this.Event.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
+        this.$events.$on(this.Event.CLOSE_CHATS, () => { this._closeChatsList() })
+        this.$events.$on(this.Event.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
+        this.$events.$on(this.Event.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
+        this.$events.$on(this.Event.SHOW_UNREAD, (list) => { this._showUnread(list) })
     },
     methods: {
         _onWindowResizing() {
@@ -82,7 +82,7 @@ export default {
                         }
                     }
                 } else {
-                    this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
+                    this.$events.$emit(this.Event.HIGHLIGHT_CHATS_BTN)
                 }
             }, 300);
         },
@@ -90,8 +90,8 @@ export default {
             if (this.visible) {
                 if (this.currCounterpart != null) {
                     if (this.currCounterpart.id == chat.counter_id) {
-                        this.$events.$emit(this.UPDATE_CHAT_DIALOG, chat)
-                        this.$events.$emit(this.DEL_UNREAD_REC, chat.id)
+                        this.$events.$emit(this.Event.UPDATE_CHAT_DIALOG, chat)
+                        this.$events.$emit(this.Event.DEL_UNREAD_REC, chat.id)
                     } else {
                         this._setItemToUnread(chat.id, chat.counter_id)
                     }
@@ -99,7 +99,7 @@ export default {
                     this._setItemToUnread(chat.id, chat.counter_id)
                 }
             } else {
-                this.$events.$emit(this.HIGHLIGHT_CHATS_BTN)
+                this.$events.$emit(this.Event.HIGHLIGHT_CHATS_BTN)
                 this._setItemToUnread(chat.id, chat.counter_id)
             }
         },
@@ -108,7 +108,7 @@ export default {
         },
         _setItemToUnread(id, fid) {
             setTimeout(() => {
-                this.$events.$emit(this.ADD_UNREAD, { id: id, fid: fid })
+                this.$events.$emit(this.Event.ADD_UNREAD, { id: id, fid: fid })
                 let el = document.getElementById('cpid_' + fid)
                 if (el) {
                     el.innerHTML = this._getFriendsName(fid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
@@ -122,7 +122,7 @@ export default {
             setTimeout(() => {
                 this.visible = false
                 this.src_form_visible = false
-                this.$events.$emit(this.GET_UNREAD)
+                this.$events.$emit(this.Event.GET_UNREAD)
             }, 300)
         },
         _openChatsList(friend) {
@@ -131,11 +131,11 @@ export default {
                 setTimeout(() => {
                     let body = document.getElementById("items_list")
                     body.style.maxHeight = (window.innerHeight - this.TOP_MARGIN) + "px"
-                    this.$events.$emit(this.GET_UNREAD)
+                    this.$events.$emit(this.Event.GET_UNREAD)
 
                     if (friend && friend.target == null) {
                         this.currCounterpart = friend
-                        this.$events.$emit(this.SWITCH_CHAT, this.currCounterpart)
+                        this.$events.$emit(this.Event.SWITCH_CHAT, this.currCounterpart)
                     }
                 }, 200)
             }, 300)
@@ -162,9 +162,9 @@ export default {
             let el = document.getElementById('cpid_' + friend.id)
             if (el) {
                 el.innerHTML = this._getFriendsName(friend.id)
-                this.$events.$emit(this.DEL_UNREAD, friend.id)
+                this.$events.$emit(this.Event.DEL_UNREAD, friend.id)
             }
-            this.$events.$emit(this.SWITCH_CHAT, friend)
+            this.$events.$emit(this.Event.SWITCH_CHAT, friend)
         },
         seekChat() {
             document.getElementById("src_chat_btn").blur()

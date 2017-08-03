@@ -59,10 +59,11 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
-        this.$events.$on(this.OPEN_FRIENDS, () => { this._openFriendsList() })
-        this.$events.$on(this.CLOSE_FRIENDS, () => { this._closeFriendsList() })
-        this.$events.$on(this.UPDATE_FRIENDS_LIST, (list) => { this._updateFriendsList(list) })
+        this.$events.$on(this.Event.WINDOW_RESIZING, () => { this._onWindowResizing() })
+        this.$events.$on(this.Event.OPEN_FRIENDS, () => { this._openFriendsList() })
+        this.$events.$on(this.Event.CLOSE_FRIENDS, () => { this._closeFriendsList() })
+        this.$events.$on(this.Event.UPDATE_FRIENDS_LIST, (list) => { this._updateFriendsList(list) })
+        this.$events.$on(this.Event.UPDATE_GROUPS_LIST, (list) => { this._updateFriendsList(list) })
     },
     methods: {
         _onWindowResizing() {
@@ -75,7 +76,11 @@ export default {
             }, 200)
         },
         _updateFriendsList(list) {
-            this.counterparts = list
+            for (let n = 0; n < list.length; n++) {
+                let friend = list[n]
+                friend.type = 'F'
+                this.counterparts.push(friend)
+            }
         },
         _closeFriendsList() {
             setTimeout(() => {
@@ -97,7 +102,7 @@ export default {
             if (this.src_form_visible) {
                 this.seekFriend()
             }
-            this.$events.$emit(this.SWITCH_FRIEND_DETAIL, friend)
+            this.$events.$emit(this.Event.SWITCH_FRIEND_DETAIL, friend)
         },
         seekFriend() {
             document.getElementById("src_friend_btn").blur()

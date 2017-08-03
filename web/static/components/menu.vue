@@ -37,8 +37,8 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
-        this.$events.$on(this.SWITCH_MENU, () => { this._switchMenu() })
+        this.$events.$on(this.Event.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.Event.SWITCH_MENU, () => { this._switchMenu() })
     },
     methods: {
         _closePanel() {
@@ -57,7 +57,7 @@ export default {
             this.panel_visible = false
         },
         _open() {
-            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+            this.$events.$emit(this.Event.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
                 let panel = document.getElementById("menu_panel_window")
@@ -75,13 +75,13 @@ export default {
             this.panel_visible = false
             let obj = {
                 msg: "Do you really want to exit?",
-                onYes: this.SIGN_OUT
+                onYes: this.Event.SIGN_OUT
             }
-            this.$events.$emit(this.POP_QUESTION, obj)
+            this.$events.$emit(this.Event.POP_QUESTION, obj)
         },
         minimize() {
             this.panel_visible = false
-            this.$events.$emit(this.MINIMIZE)
+            this.$events.$emit(this.Event.MINIMIZE)
         },
         settings() {
             this.panel_visible = false
@@ -91,11 +91,11 @@ export default {
         },
         newFriend() { 
             this.panel_visible = false
-            this.$events.$emit(this.SWITCH_ADD_FRIEND)
+            this.$events.$emit(this.Event.SWITCH_ADD_FRIEND)
         },
         newGroup() { 
             this.panel_visible = false
-            this.$events.$emit(this.SWITCH_ADD_GROUP)
+            this.$events.$emit(this.Event.SWITCH_ADD_GROUP)
         }
     }
 }

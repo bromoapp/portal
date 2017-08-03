@@ -48,9 +48,9 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
-        this.$events.$on(this.SWITCH_ADD_GROUP, () => { this._switchAddGroup() })
-        this.$events.$on(this.SHOW_FRIENDS_LIST, (list) => { this._showFriendsList(list) })
+        this.$events.$on(this.Event.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.Event.SWITCH_ADD_GROUP, () => { this._switchAddGroup() })
+        this.$events.$on(this.Event.SHOW_FRIENDS_LIST, (list) => { this._showFriendsList(list) })
     },
     methods: {
         _showFriendsList(list) {
@@ -72,7 +72,7 @@ export default {
             this.panel_visible = false
         },
         _open() {
-            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+            this.$events.$emit(this.Event.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
                 let panel = document.getElementById("add_group_panel_window")
@@ -86,7 +86,7 @@ export default {
                 list.style.maxHeight = this.listHeight
                 setTimeout(() => {
                     cover.style.width = "0px"
-                    this.$events.$emit(this.GET_FRIENDS_LIST)
+                    this.$events.$emit(this.Event.GET_FRIENDS_LIST)
                 }, 300);
             }, 300)
         },
@@ -103,20 +103,20 @@ export default {
             let name = document.getElementById("invite_args").value
             let error = null
             if (name.length == 0) {
-                error = { msg: this.ERROR_GROUP_NAME_EMPTY }
+                error = { msg: this.Message.ERROR_GROUP_NAME_EMPTY }
             } else {
                 if (this.members.length == 0) {
-                    error = { msg: this.ERROR_GROUP_MEMBERS_EMPTY }
+                    error = { msg: this.Message.ERROR_GROUP_MEMBERS_EMPTY }
                 }
             }
             if (error) {
-                this.$events.$emit(this.POP_ERROR, error)
+                this.$events.$emit(this.Event.POP_ERROR, error)
             } else {
                 let group = {
                     name: name,
                     members: this.members
                 }
-                this.$events.$emit(this.ADD_GROUP_OUT, group)
+                this.$events.$emit(this.Event.ADD_GROUP_OUT, group)
                 this._close()
             }
         }

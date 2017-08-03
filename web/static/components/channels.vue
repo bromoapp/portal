@@ -66,10 +66,10 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.WINDOW_RESIZING, () => { this._onWindowResizing() })
-        this.$events.$on(this.OPEN_CHANNELS, () => { this._openChannelsList() })
-        this.$events.$on(this.CLOSE_CHANNELS, () => { this._closeChannelsList() })
-        this.$events.$on(this.UPDATE_CHANNELS_LIST, (list) => { this._updateChannelsList(list) })
+        this.$events.$on(this.Event.WINDOW_RESIZING, () => { this._onWindowResizing() })
+        this.$events.$on(this.Event.OPEN_CHANNELS, () => { this._openChannelsList() })
+        this.$events.$on(this.Event.CLOSE_CHANNELS, () => { this._closeChannelsList() })
+        this.$events.$on(this.Event.UPDATE_CHANNELS_LIST, (list) => { this._updateChannelsList(list) })
     },
     methods: {
         _onWindowResizing() {

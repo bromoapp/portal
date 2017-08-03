@@ -58,8 +58,8 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
-        this.$events.$on(this.SWITCH_INVIT_DETAIL, (invit) => { this._switchInvitDetail(invit) })
+        this.$events.$on(this.Event.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.Event.SWITCH_INVIT_DETAIL, (invit) => { this._switchInvitDetail(invit) })
     },
     methods: {
         _closePanel() {
@@ -106,17 +106,17 @@ export default {
         },
         acceptInvit() {
             if (this.currInvit.type == 'FRIENDSHIP') {
-                this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
+                this.$events.$emit(this.Event.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
             } else {
-                this.$events.$emit(this.ADD_GROUP_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
+                this.$events.$emit(this.Event.ADD_GROUP_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_ACCEPT })
             }
             this._close()
         },
         rejectInvit() {
             if (this.currInvit.type == 'FRIENDSHIP') {
-                this.$events.$emit(this.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
+                this.$events.$emit(this.Event.ADD_FRIEND_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
             } else {
-                this.$events.$emit(this.ADD_GROUP_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
+                this.$events.$emit(this.Event.ADD_GROUP_RESP, { id: this.currInvit.id, resp: this.Constant.INVIT_REJECT })
             }
             this._close()
         }

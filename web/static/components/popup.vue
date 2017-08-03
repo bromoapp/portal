@@ -55,9 +55,9 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.POP_QUESTION, (obj) => { this._popUpQuestion(obj) })
-        this.$events.$on(this.POP_INFO, (obj) => { this._popUpInfo(obj) })
-        this.$events.$on(this.POP_ERROR, (obj) => { this._popUpError(obj) })
+        this.$events.$on(this.Event.POP_QUESTION, (obj) => { this._popUpQuestion(obj) })
+        this.$events.$on(this.Event.POP_INFO, (obj) => { this._popUpInfo(obj) })
+        this.$events.$on(this.Event.POP_ERROR, (obj) => { this._popUpError(obj) })
     },
     methods: {
         _popUpError(obj) {

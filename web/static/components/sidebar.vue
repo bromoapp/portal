@@ -68,10 +68,10 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.START_CHAT, (friend) => { this.openChats(friend) })
-        this.$events.$on(this.HIGHLIGHT_CHATS_BTN, () => this._switchChatsBtn(true))
-        this.$events.$on(this.HIGHLIGHT_INVITS_BTN, () => this._switchInvitsBtn(true))
-        this.$events.$on(this.MINIMIZE, () => this._close())
+        this.$events.$on(this.Event.START_CHAT, (friend) => { this.openChats(friend) })
+        this.$events.$on(this.Event.HIGHLIGHT_CHATS_BTN, () => this._switchChatsBtn(true))
+        this.$events.$on(this.Event.HIGHLIGHT_INVITS_BTN, () => this._switchInvitsBtn(true))
+        this.$events.$on(this.Event.MINIMIZE, () => this._close())
     },
     methods: {
         _switchInvitsBtn(mode) {
@@ -95,7 +95,7 @@ export default {
             }
         },
         _close() {
-            this.$events.$emit(this.PULL_WINDOW)
+            this.$events.$emit(this.Event.PULL_WINDOW)
             document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
                 document.getElementById("switch").classList.add("fa", "fa-chevron-right")
@@ -108,7 +108,7 @@ export default {
             this.closed = true
         },
         _open() {
-            this.$events.$emit(this.PUSH_WINDOW)
+            this.$events.$emit(this.Event.PUSH_WINDOW)
             document.getElementById("sidebar").style.width = this.maxWidth + "px"
             document.getElementById("sidebar_cover").style.width = this.maxWidth + "px"
             setTimeout(() => {
@@ -123,41 +123,41 @@ export default {
         _closeSubPanel() {
             if (this.closeCmd) {
                 this.$events.$emit(this.closeCmd)
-                this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+                this.$events.$emit(this.Event.CLOSE_FLOAT_PANEL)
             }
         },
         openChannels() {
             btnChannels.blur()
-            if (this.closeCmd != this.CLOSE_CHANNELS) {
+            if (this.closeCmd != this.Event.CLOSE_CHANNELS) {
                 this._closeSubPanel()
-                this.$events.$emit(this.OPEN_CHANNELS)
-                this.closeCmd = this.CLOSE_CHANNELS
+                this.$events.$emit(this.Event.OPEN_CHANNELS)
+                this.closeCmd = this.Event.CLOSE_CHANNELS
             }
         },
         openFriends() {
             btnFriends.blur()
-            if (this.closeCmd != this.CLOSE_FRIENDS) {
+            if (this.closeCmd != this.Event.CLOSE_FRIENDS) {
                 this._closeSubPanel()
-                this.$events.$emit(this.OPEN_FRIENDS)
-                this.closeCmd = this.CLOSE_FRIENDS
+                this.$events.$emit(this.Event.OPEN_FRIENDS)
+                this.closeCmd = this.Event.CLOSE_FRIENDS
             }
         },
         openChats(friend) {
             btnChats.blur()
-            if (this.closeCmd != this.CLOSE_CHATS) {
+            if (this.closeCmd != this.Event.CLOSE_CHATS) {
                 this._switchChatsBtn(false)
                 this._closeSubPanel()
-                this.$events.$emit(this.OPEN_CHATS, friend)
-                this.closeCmd = this.CLOSE_CHATS
+                this.$events.$emit(this.Event.OPEN_CHATS, friend)
+                this.closeCmd = this.Event.CLOSE_CHATS
             }
         },
         openInvitations() {
             btnInvitations.blur()
-            if (this.closeCmd != this.CLOSE_INVITATIONS) {
+            if (this.closeCmd != this.Event.CLOSE_INVITATIONS) {
                 this._switchInvitsBtn(false)
                 this._closeSubPanel()
-                this.$events.$emit(this.OPEN_INVITATIONS)
-                this.closeCmd = this.CLOSE_INVITATIONS
+                this.$events.$emit(this.Event.OPEN_INVITATIONS)
+                this.closeCmd = this.Event.CLOSE_INVITATIONS
             }
         },
         changeMode() {
@@ -170,7 +170,7 @@ export default {
         openMenu() {
             document.getElementById("switch").blur()
             if (!this.closed) {
-                this.$events.$emit(this.SWITCH_MENU)
+                this.$events.$emit(this.Event.SWITCH_MENU)
             } else {
                 this._open()
             }
@@ -186,7 +186,7 @@ export default {
             this._open()
             setTimeout(() => {
                 // Open default panel
-                this.openChats()
+                this.openFriends()
             }, 200)
         }, 100)
     }

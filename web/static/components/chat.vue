@@ -45,9 +45,9 @@ export default {
         }
     },
     created() {
-        this.$events.$on(this.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
-        this.$events.$on(this.SWITCH_CHAT, (friend) => { this._switchChat(friend) })
-        this.$events.$on(this.UPDATE_CHAT_DIALOG, (chat) => { this._updateChatDialog(chat) })
+        this.$events.$on(this.Event.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.Event.SWITCH_CHAT, (friend) => { this._switchChat(friend) })
+        this.$events.$on(this.Event.UPDATE_CHAT_DIALOG, (chat) => { this._updateChatDialog(chat) })
     },
     methods: {
         _updateChatDialog(chat) {
@@ -86,7 +86,7 @@ export default {
                     this.currCounterpart = friend
                     document.getElementById("messages").innerHTML = ""
                     document.getElementById("chat_to").innerHTML = "To: " + this.currCounterpart.name
-                    this.$events.$emit(this.GET_CHATS, this.currCounterpart)
+                    this.$events.$emit(this.Event.GET_CHATS, this.currCounterpart)
                 }
             } else {
                 this.currCounterpart = friend
@@ -99,11 +99,11 @@ export default {
             }
         },
         _close() {
-            this.$events.$emit(this.CHAT_DIALOG_CLOSED)
+            this.$events.$emit(this.Event.CHAT_DIALOG_CLOSED)
             this.panel_visible = false
         },
         _open() {
-            this.$events.$emit(this.CLOSE_FLOAT_PANEL)
+            this.$events.$emit(this.Event.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {
                 document.getElementById("chat_to").innerHTML = "To: " + this.currCounterpart.name
@@ -117,7 +117,7 @@ export default {
                     cover.style.width = "0px"
                 }, 300);
 
-                this.$events.$emit(this.GET_CHATS, this.currCounterpart)
+                this.$events.$emit(this.Event.GET_CHATS, this.currCounterpart)
             }, 300)
         },
         sendMessage(event) {
@@ -125,7 +125,7 @@ export default {
             let msg_form = document.getElementById("message")
             let msg = msg_form.value
             if (msg.trim().length > 0) {
-                this.$events.$emit(this.P2P_MSG_OUT, this.currCounterpart, msg)
+                this.$events.$emit(this.Event.P2P_MSG_OUT, this.currCounterpart, msg)
             }
             msg_form.value = ""
         },

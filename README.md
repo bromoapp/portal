@@ -12,7 +12,7 @@ This is a web chat app, similar to whatsapp web, and it's still under heavy (but
   * Create a group and invite members to it,
   * Accept or reject group's membership request.
 
-**Features still under development:**
+**Features that are still under development:**
 
   * Group chat,
   * File sharing through Google Drive API,

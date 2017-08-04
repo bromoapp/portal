@@ -49,8 +49,8 @@ export default {
         _onInitialUpdates(data) {
             for (let n = 0; n < data.groups.length; n++) {
                 let group = data.groups[n]
-                this.$events.$emit(this.Event.JOIN_GROUP, group)
                 this.tbl_groups.insert(group)
+                this.$events.$emit(this.Event.JOIN_GROUP, group)
             }
             this._updateGroupsList()
 

@@ -8,8 +8,8 @@ Current avail features:
   * Add friend using friend's email address,
   * Accept or reject friendship request,
   * Person to person chat,
-  * Persistance chat,
-  * Create and invite members to a group,
+  * Persistence chat,
+  * Create a group and invite members to it,
   * Accept or reject group's membership request.
 
 Features still under development:

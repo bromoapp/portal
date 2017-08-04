@@ -2,7 +2,7 @@
 
 This is a web chat app, similar to whatsapp web, and it's still under heavy (but slow) development.
 
-Current avail features:
+**Current avail features:**
 
   * Register using Google account, to enable file sharing through Google Drive API,
   * Add friend using friend's email address,
@@ -12,7 +12,7 @@ Current avail features:
   * Create a group and invite members to it,
   * Accept or reject group's membership request.
 
-Features still under development:
+**Features still under development:**
 
   * Group chat,
   * File sharing through Google Drive API,

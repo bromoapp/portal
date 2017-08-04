@@ -29,6 +29,9 @@ export default {
         this.proxyChannel.on(this.Event.P2P_MSG_IN, (data) => { this._onP2pMsgIn(data) })
         this.proxyChannel.on(this.Event.ADD_FRIEND_IN, (data) => { this._onAddFriendIn(data) })
         this.proxyChannel.on(this.Event.ADD_GROUP_IN, (data) => { this._onAddGroupIn(data) })
+        this.proxyChannel.on(this.Event.GROUP_NEW, (data) => { this._onGroupNew(data) })
+        this.proxyChannel.on(this.Event.GROUP_UPDATE, (data) => { this._onGroupUpdate(data) })
+
         this.proxyChannel.join()
             .receive("ok", (updates) => { this._onInitialUpdates(updates) })
             .receive("error", () => { /*console.log("Failed to join proxy ch")*/ })
@@ -54,9 +57,6 @@ export default {
     methods: {
         _joinGroupChat(group) {
             let groupChat = this.socket.channel(groupChannelPrefix + group.unique)
-            groupChat.on(this.Event.GROUP_NEW, (data) => { this._onGroupNew(data) })
-            groupChat.on(this.Event.GROUP_UPDATE, (data) => { this._onGroupUpdate(data) })
-
             groupChat.join()
                 .receive("ok", () => {
                     this.groupChats.push({ name: group.unique, channel: groupChat })
@@ -64,9 +64,11 @@ export default {
                 .receive("error", () => { console.log("Failed to join user group channel") })
         },
         _onGroupNew(group) {
+            console.log(">>> NEW GROUP: ", group)
             this.$events.$emit(this.Event.GROUP_NEW, group)
         },
         _onGroupUpdate(group) {
+            console.log(">>> GROUP UPDATE: ", group)
             this.$events.$emit(this.Event.GROUP_UPDATE, group)
         },
         _onAddGroupResp(data) {

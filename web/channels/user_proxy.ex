@@ -565,6 +565,15 @@ defmodule Portal.UserProxy do
                             Logger.error(">>> ERROR #{inspect changeset}")
                     end
                 end)
+
+                # Send new group to group creator
+                group_new = %GroupChat{
+                    name: group.name, 
+                    unique: group.unique, 
+                    members: _parse_users(String.split(group.members, ",")), 
+                    admins: _parse_users(String.split(group.admins, ","))
+                }
+                push socket, @group_new, group_new
             {:error, changeset} ->
                 Logger.error(">>> ERROR #{inspect changeset}")
         end
@@ -586,12 +595,12 @@ defmodule Portal.UserProxy do
                         members = group.members <> ",#" <> Integer.to_string(user.id) <> "#"
                         upd_group_cs = Group.create_or_update_changeset(group, %{members: members})
                         case Repo.update(upd_group_cs) do
-                            {:ok, _} ->
+                            {:ok, upd_group} ->
                                 group_upd = %GroupChat{
-                                    name: group.name, 
-                                    unique: group.unique, 
-                                    members: _parse_users(String.split(group.members, ",")), 
-                                    admins: _parse_users(String.split(group.admins, ","))
+                                    name: upd_group.name, 
+                                    unique: upd_group.unique, 
+                                    members: _parse_users(String.split(upd_group.members, ",")), 
+                                    admins: _parse_users(String.split(upd_group.admins, ","))
                                 }
                                 # Send new group data back to acceptor
                                 push socket, @group_new, group_upd

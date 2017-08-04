@@ -202,7 +202,7 @@ export default {
             this._open()
             setTimeout(() => {
                 // Open default panel
-                this.openFriends()
+                this.openChats()
             }, 200)
         }, 100)
     }

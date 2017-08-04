@@ -62,6 +62,8 @@ Vue.mixin({
                     get QUERY_CHATS() { return "query_chats" },
                     get P2P_MSG_READ() { return "p2p_msg_read" },
                     get INVIT_OPENED() { return "invit_opened" },
+                    get GROUP_NEW() { return "group_new" },
+                    get GROUP_UPDATE() { return "group_update" },
 
                     // Component 2 component messages with args
                     get UPDATE_FRIENDS_LIST() { return "update_friends_list" },

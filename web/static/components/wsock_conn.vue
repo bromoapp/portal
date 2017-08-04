@@ -1,5 +1,6 @@
 <template>
-    <div></div>
+    <div>
+    </div>
 </template>
 
 <script>
@@ -53,10 +54,20 @@ export default {
     methods: {
         _joinGroupChat(group) {
             let groupChat = this.socket.channel(groupChannelPrefix + group.unique)
+            groupChat.on(this.Event.GROUP_NEW, (data) => { this._onGroupNew(data) })
+            groupChat.on(this.Event.GROUP_UPDATE, (data) => { this._onGroupUpdate(data) })
+
             groupChat.join()
-                .receive("ok", () => { console.log("Succeed to join user group channel, name: " + group.name) })
+                .receive("ok", () => {
+                    this.groupChats.push({ name: group.unique, channel: groupChat })
+                })
                 .receive("error", () => { console.log("Failed to join user group channel") })
-            this.groupChats.push({name: group.unique, channel: groupChat})
+        },
+        _onGroupNew(group) {
+            this.$events.$emit(this.Event.GROUP_NEW, group)
+        },
+        _onGroupUpdate(group) {
+            this.$events.$emit(this.Event.GROUP_UPDATE, group)
         },
         _onAddGroupResp(data) {
             this.proxyChannel.push(this.Event.ADD_GROUP_RESP, { id: data.id, resp: data.resp })

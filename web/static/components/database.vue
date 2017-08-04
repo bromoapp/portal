@@ -39,6 +39,8 @@ export default {
         this.$events.$on(this.Event.ADD_FRIEND_IN, (data) => { this._onAddFriendIn(data) })
         this.$events.$on(this.Event.ADD_GROUP_IN, (data) => { this._onAddGroupIn(data) })
         this.$events.$on(this.Event.ADD_FRIEND_RESP, (data) => { this._onAddFriendResp(data) })
+        this.$events.$on(this.Event.GROUP_NEW, (data) => { this._onGroupNew(data) })
+        this.$events.$on(this.Event.GROUP_UPDATE, (data) => { this._onGroupUpdate(data) })
 
         this.$events.$on(this.Event.ADD_UNOPENED, (data) => { this._onAddUnopened(data) })
         this.$events.$on(this.Event.GET_UNOPENED, () => { this._onGetUnopened() })
@@ -46,43 +48,17 @@ export default {
         this.$events.$on(this.Event.GET_FRIENDS_LIST, () => { this._onGetFriendsList() })
     },
     methods: {
-        _onInitialUpdates(data) {
-            for (let n = 0; n < data.groups.length; n++) {
-                let group = data.groups[n]
-                this.tbl_groups.insert(group)
-                this.$events.$emit(this.Event.JOIN_GROUP, group)
-            }
+        _onGroupNew(group) {
+            this.tbl_groups.insert(group)
+            this.$events.$emit(this.Event.JOIN_GROUP, group)
             this._updateGroupsList()
-
-            for (let n = 0; n < data.friends.length; n++) {
-                let friend = data.friends[n]
-                this.tbl_friends.insert(friend)
+        },
+        _onGroupUpdate(group) {
+            let groups = this.tbl_groups.find({ 'unique': group.unique })
+            if (groups.length > 0) {
+                groups[0].members = group.members
+                this._updateGroupsList()
             }
-            this._updateFriendsList()
-
-            for (let n = 0; n < data.chats.length; n++) {
-                let chat = data.chats[n]
-                if (chat.read == 0) {
-                    this.tbl_unread.insert({ id: chat.id, fid: chat.counter_id })
-                }
-                this.tbl_chats.insert(chat)
-            }
-            this._updateChatsList()
-
-            for (let n = 0; n < data.invits.length; n++) {
-                let invit = data.invits[n]
-                if (invit.opened == 0) {
-                    this.tbl_unopened.insert({ id: invit.id })
-                }
-                this.tbl_invits.insert(invit)
-            }
-            this._updateInvitsList()
-
-            // Force to shows unread or unopened data
-            setTimeout(() => {
-                this._onGetUnread()
-                this._onGetUnopened()
-            }, 500);
         },
         _updateGroupsList() {
             let groups = this.tbl_groups.where((o) => {
@@ -103,9 +79,11 @@ export default {
             let chats = []
             for (let n = 0; n < raw.length; n++) {
                 let fid = raw[n].counter_id
-                let friend = this.tbl_friends.find({ 'id': fid })
-                if (!chats.includes(friend[0])) {
-                    chats.push(friend[0])
+                let friends = this.tbl_friends.find({ 'id': fid })
+                if (friends.length > 0) {
+                    if (!chats.includes(friends[0])) {
+                        chats.push(friends[0])
+                    }
                 }
             }
             this.$events.$emit(this.Event.UPDATE_CHATS_LIST, chats)
@@ -172,16 +150,15 @@ export default {
             }
         },
         _onP2pMsgNew(data) {
-            console.log(">>> NEW P2P", data)
             this.tbl_chats.insert(data)
-            let conv = this.tbl_chats.find({ 'id': data.id })
+            let convs = this.tbl_chats.find({ 'id': data.id })
             this._updateChatsList()
-            this._onChatDataUpdated(conv[0])
+            this._onChatDataUpdated(convs[0])
         },
         _onP2pMsgIn(data) {
             let table = this.tbl_chats.find({})
             let convs = this.tbl_chats.find({ 'id': data.id })
-            if (convs != null) {
+            if (convs.length > 0) {
                 let conv = convs[0]
                 if (conv.chats) {
                     conv.chats.push(data.chats[0])
@@ -193,13 +170,15 @@ export default {
             }
         },
         _onUpdateChatData(data) {
-            let conv = this.tbl_chats.find({ 'id': data.id })
-            if (conv[0]) {
-                conv[0].chats = data.chats
-                conv[0].read = data.read
-                conv[0].date = data.date
-                conv[0].type = data.type
-                this._onChatDataUpdated(conv[0])
+            let convs = this.tbl_chats.find({ 'id': data.id })
+            if (convs.length > 0) {
+                if (convs[0]) {
+                    convs[0].chats = data.chats
+                    convs[0].read = data.read
+                    convs[0].date = data.date
+                    convs[0].type = data.type
+                    this._onChatDataUpdated(convs[0])
+                }
             }
         },
         _onGetChats(data) {
@@ -219,22 +198,64 @@ export default {
                 }
             }
         },
-        _onFriendOffline(data) {
-            let friend = this.tbl_friends.find({ 'id': data.id })
-            friend[0].online = false
-            this._updateFriendsList()
-        },
         _onFriendNew(data) {
             this.tbl_friends.insert(data)
             this._updateFriendsList()
         },
+        _onFriendOffline(data) {
+            let friends = this.tbl_friends.find({ 'id': data.id })
+            if (friends.length > 0) {
+                friends[0].online = false
+                this._updateFriendsList()
+            }
+        },
         _onFriendOnline(data) {
-            let friend = this.tbl_friends.find({ 'id': data.id })
-            friend[0].online = true
-            this._updateFriendsList()
+            let friends = this.tbl_friends.find({ 'id': data.id })
+            if (friends.length > 0) {
+                friends[0].online = true
+                this._updateFriendsList()
+            }
         },
         _onChatDataUpdated(data) {
             this.$events.$emit(this.Event.CHAT_DATA_UPDATED, data)
+        },
+        _onInitialUpdates(data) {
+            for (let n = 0; n < data.groups.length; n++) {
+                let group = data.groups[n]
+                this.tbl_groups.insert(group)
+                this.$events.$emit(this.Event.JOIN_GROUP, group)
+            }
+            this._updateGroupsList()
+
+            for (let n = 0; n < data.friends.length; n++) {
+                let friend = data.friends[n]
+                this.tbl_friends.insert(friend)
+            }
+            this._updateFriendsList()
+
+            for (let n = 0; n < data.chats.length; n++) {
+                let chat = data.chats[n]
+                if (chat.read == 0) {
+                    this.tbl_unread.insert({ id: chat.id, fid: chat.counter_id })
+                }
+                this.tbl_chats.insert(chat)
+            }
+            this._updateChatsList()
+
+            for (let n = 0; n < data.invits.length; n++) {
+                let invit = data.invits[n]
+                if (invit.opened == 0) {
+                    this.tbl_unopened.insert({ id: invit.id })
+                }
+                this.tbl_invits.insert(invit)
+            }
+            this._updateInvitsList()
+
+            // Force to shows unread or unopened data
+            setTimeout(() => {
+                this._onGetUnread()
+                this._onGetUnopened()
+            }, 500);
         }
     }
 }

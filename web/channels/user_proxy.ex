@@ -48,6 +48,7 @@ defmodule Portal.UserProxy do
     @invit_opened "invit_opened"
 
     @group_new "group_new"
+    @group_update "group_update"
     @add_group_in "add_group_in"
     @add_group_out "add_group_out"
     @add_group_resp "add_group_resp"
@@ -167,7 +168,8 @@ defmodule Portal.UserProxy do
 
     defp _parse_groups([h|t], result) do
         [unique, name, members, admins] = h
-        group = %GroupChat{name: name, 
+        group = %GroupChat{
+            name: name, 
             unique: unique, 
             members: _parse_users(String.split(members, ",")), 
             admins: _parse_users(String.split(admins, ","))
@@ -438,6 +440,7 @@ defmodule Portal.UserProxy do
                             online? = _is_friend_online?(receiver.username)
                             cond do
                                 online? == true ->
+                                    # Send friend request to online invitee
                                     ol_friend = OnlineUsersDb.select(receiver.username)
                                     json = %{id: invit.id, from_id: invit.from_id, from_name: sender.name, 
                                         type: invit.invit_type, status: invit.status, msg: message}
@@ -483,12 +486,19 @@ defmodule Portal.UserProxy do
                                 Logger.error(">>> ERROR #{inspect changeset}")
                         end
 
-                        json1 = %{id: user_a.id, username: user_a.username, name: user_a.name, online: _is_friend_online?(user_a.username)}
+                        json1 = %{
+                            id: user_a.id, 
+                            username: user_a.username, 
+                            name: user_a.name, 
+                            online: _is_friend_online?(user_a.username)
+                        }
+                        # Send new friend data back to acceptor
                         push socket, @friend_new, json1
 
                         online? = _is_friend_online?(user_a.username)
                         cond do
                             online? == true ->
+                                # Inform inviter of a new friend
                                 ol_friend = OnlineUsersDb.select(user_a.username)
                                 json2 = %{id: user_b.id, username: user_b.username, name: user_b.name, online: _is_friend_online?(user_b.username)}
                                 send ol_friend.pid, {:friend_new, json2}
@@ -517,8 +527,8 @@ defmodule Portal.UserProxy do
         {:noreply, socket}
     end
 
-    def handle_info({:group_new, json}, socket) do
-        push socket, @group_new, json
+    def handle_info({:group_update, group}, socket) do
+        push socket, @group_update, group
         {:noreply, socket}
     end
 
@@ -543,6 +553,7 @@ defmodule Portal.UserProxy do
                             online? = _is_friend_online?(receiver.username)
                             cond do
                                 online? == true ->
+                                    # Send membership invitation to online invitee
                                     ol_friend = OnlineUsersDb.select(receiver.username)
                                     json = %{id: invit.id, from_id: invit.from_id, from_name: group.name, 
                                         type: invit.invit_type, status: invit.status, msg: nil}
@@ -576,7 +587,26 @@ defmodule Portal.UserProxy do
                         upd_group_cs = Group.create_or_update_changeset(group, %{members: members})
                         case Repo.update(upd_group_cs) do
                             {:ok, _} ->
-                                :ignore
+                                group_upd = %GroupChat{
+                                    name: group.name, 
+                                    unique: group.unique, 
+                                    members: _parse_users(String.split(group.members, ",")), 
+                                    admins: _parse_users(String.split(group.admins, ","))
+                                }
+                                # Send new group data back to acceptor
+                                push socket, @group_new, group_upd
+
+                                # Inform other group members whose online regarding changing in group membership
+                                Enum.each(group_upd.members, fn(member) -> 
+                                    online? = _is_friend_online?(member.username)
+                                    cond do
+                                        online? == true ->
+                                            ol_friend = OnlineUsersDb.select(member.username)
+                                            send ol_friend.pid, {:group_update, group_upd}
+                                        true ->
+                                            :ignore
+                                    end
+                                end)
                             {:error, changeset} ->
                                 Logger.error(">>> ERROR #{inspect changeset}")
                         end

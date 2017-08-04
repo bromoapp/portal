@@ -2,17 +2,17 @@
     <div v-if="visible">
         <div class="panel accordion">
             <div class="panel-heading accordion-header bg-37474f-s">
-                Friends
+                Groups
                 <div class="accordion-header-btns">
-                    <a v-if="counterparts.length == 0" title="Search friend" id="src_friend_btn" href="javascript:" class="btn bg-37474f-d">
+                    <a v-if="counterparts.length == 0" title="Search friend" id="src_group_btn" href="javascript:" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
-                    <a v-else title="Search friend" id="src_friend_btn" href="javascript:" v-on:click="seekFriend" class="btn bg-37474f-d">
+                    <a v-else title="Search friend" id="src_group_btn" href="javascript:" v-on:click="seekGroup" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
                     </a>
                 </div>
             </div>
-            <div v-if="src_form_visible" id="seek_friend" class="bg-212121-s slide-in">
+            <div v-if="src_form_visible" id="seek_group" class="bg-212121-s slide-in">
                 <div style="margin: 0px 17px 0px 19px; padding: 10px 15px 10px 0px">
                     <span style="color: white">Search friend:</span>
                     <input id="search_args" class="form-control" type="text" placeholder="Name">
@@ -54,9 +54,9 @@ export default {
     },
     created() {
         this.$events.$on(this.Event.WINDOW_RESIZING, () => { this._onWindowResizing() })
-        this.$events.$on(this.Event.OPEN_FRIENDS, () => { this._openFriendsList() })
-        this.$events.$on(this.Event.CLOSE_FRIENDS, () => { this._closeFriendsList() })
-        this.$events.$on(this.Event.UPDATE_FRIENDS_LIST, (list) => { this._updateFriendsList(list) })
+        this.$events.$on(this.Event.OPEN_GROUPS, () => { this._openGroupsList() })
+        this.$events.$on(this.Event.CLOSE_GROUPS, () => { this._closeGroupsList() })
+        this.$events.$on(this.Event.UPDATE_GROUPS_LIST, (list) => { this._updateGroupsList(list) })
     },
     methods: {
         _onWindowResizing() {
@@ -68,7 +68,7 @@ export default {
                 body.style.display = "block"
             }, 200)
         },
-        _updateFriendsList(list) {
+        _updateGroupsList(list) {
             this.counterparts = list
         },
         _removeDuplicates(list, prop) {
@@ -76,14 +76,14 @@ export default {
                 return arr.map(mapObj = mapObj)
             })
         },
-        _closeFriendsList() {
+        _closeGroupsList() {
             setTimeout(() => {
                 this.visible = false
                 this.src_form_visible = false
                 this.add_form_visible = false
             }, 300)
         },
-        _openFriendsList() {
+        _openGroupsList() {
             setTimeout(() => {
                 this.visible = true
                 setTimeout(() => {
@@ -94,14 +94,14 @@ export default {
         },
         onCounterpartClicked(counterpart) {
             if (this.src_form_visible) {
-                this.seekFriend()
+                this.seekGroup()
             }
-            this.$events.$emit(this.Event.SWITCH_FRIEND_DETAIL, counterpart)
+            this.$events.$emit(this.Event.SWITCH_GROUP_DETAIL, counterpart)
         },
-        seekFriend() {
-            document.getElementById("src_friend_btn").blur()
+        seekGroup() {
+            document.getElementById("src_group_btn").blur()
             if (this.src_form_visible) {
-                let div = document.getElementById("seek_friend")
+                let div = document.getElementById("seek_group")
                 div.style.maxHeight = "0px"
                 setTimeout(() => {
                     this.src_form_visible = false
@@ -110,7 +110,7 @@ export default {
                 setTimeout(() => {
                     this.src_form_visible = true
                     setTimeout(() => {
-                        let div = document.getElementById("seek_friend")
+                        let div = document.getElementById("seek_group")
                         div.style.maxHeight = "100px"
 
                         let inputEl = document.getElementById("search_args")

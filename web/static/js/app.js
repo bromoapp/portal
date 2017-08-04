@@ -114,6 +114,8 @@ Vue.mixin({
                     get CLOSE_CHANNELS() { return "close_channels" },
                     get OPEN_FRIENDS() { return "open_friends" },
                     get CLOSE_FRIENDS() { return "close_friends" },
+                    get OPEN_GROUPS() { return "open_groups" },
+                    get CLOSE_GROUPS() { return "close_groups" },
                     get OPEN_CHATS() { return "open_chats" },
                     get CLOSE_CHATS() { return "close_chats" },
                     get OPEN_INVITATIONS() { return "open_invitations" },

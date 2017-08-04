@@ -9,7 +9,12 @@
                     </button>
                 </div>-->
                 <div class="inline">
-                    <button class="btn bg-37474f-d" title="Groups &amp; Friends" id="btn_friends" v-on:click="openFriends">
+                    <button class="btn bg-37474f-d" title="Friends" id="btn_friends" v-on:click="openFriends">
+                        <i class="fa fa-user"></i>
+                    </button>
+                </div>
+                <div class="inline">
+                    <button class="btn bg-37474f-d" title="Groups" id="btn_groups" v-on:click="openGroups">
                         <i class="fa fa-users"></i>
                     </button>
                 </div>
@@ -30,48 +35,50 @@
         <div id="video_cam" class="video-cam">
             <webcam></webcam>
         </div>
+        <invitations></invitations>
         <channels></channels>
         <friends></friends>
+        <groups></groups>
         <chats></chats>
-        <invitations></invitations>
         <div id="sidebar_cover" class="sidebar-cover bg-212121-s"></div>
     </div>
 </template>
 
 <script>
+import Chats from "./chats.vue"
 import Logout from "./logout.vue"
 import Webcam from "./webcam.vue"
-import Channels from "./channels.vue"
+import Groups from "./groups.vue"
 import Friends from "./friends.vue"
-import Chats from "./chats.vue"
+import Channels from "./channels.vue"
 import Invitations from "./invitations.vue"
 
 let btnSignout, btnChannels, btnFriends
-let btnChats, btnInvitations
+let btnChats, btnInvitations, btnGroups
 
 export default {
     components: {
+        Chats,
         Logout,
         Webcam,
-        Channels,
+        Groups,
         Friends,
-        Chats,
-        Invitations
+        Channels,
+        Invitations,
     },
     data() {
         return {
             maxWidth: this.$parent.maxWidth,
             minWidth: this.$parent.minWidth,
-            wsocket: this.$parent.wsocket,
             closeCmd: null,
             closed: false,
         }
     },
     created() {
+        this.$events.$on(this.Event.MINIMIZE, () => this._close())
         this.$events.$on(this.Event.START_CHAT, (friend) => { this.openChats(friend) })
         this.$events.$on(this.Event.HIGHLIGHT_CHATS_BTN, () => this._switchChatsBtn(true))
         this.$events.$on(this.Event.HIGHLIGHT_INVITS_BTN, () => this._switchInvitsBtn(true))
-        this.$events.$on(this.Event.MINIMIZE, () => this._close())
     },
     methods: {
         _switchInvitsBtn(mode) {
@@ -134,6 +141,14 @@ export default {
                 this.closeCmd = this.Event.CLOSE_CHANNELS
             }
         },
+        openGroups() {
+            btnGroups.blur()
+            if (this.closeCmd != this.Event.CLOSE_GROUPS) {
+                this._closeSubPanel()
+                this.$events.$emit(this.Event.OPEN_GROUPS)
+                this.closeCmd = this.Event.CLOSE_GROUPS
+            }
+        },
         openFriends() {
             btnFriends.blur()
             if (this.closeCmd != this.Event.CLOSE_FRIENDS) {
@@ -177,9 +192,10 @@ export default {
         }
     },
     mounted() {
-        btnChannels = document.getElementById("btn_channels")
-        btnFriends = document.getElementById("btn_friends")
         btnChats = document.getElementById("btn_chats")
+        btnGroups = document.getElementById("btn_groups")
+        btnFriends = document.getElementById("btn_friends")
+        btnChannels = document.getElementById("btn_channels")
         btnInvitations = document.getElementById("btn_inivitations")
 
         setTimeout(() => {

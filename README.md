@@ -18,3 +18,7 @@ This is a web chat app, similar to whatsapp web, and it's still under heavy (but
   * File sharing through Google Drive API,
   * Managing group (e.g. invite new member, remove member and etc),
   * Video conference through WebRTC (like Hangout)
+
+**NOTE**
+I won't be able to support any body who is using this source code, as this is just an experimental
+project that is still under heavy but slow development, due to the fact that I'm still under company's payroll.

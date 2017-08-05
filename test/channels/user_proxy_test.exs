@@ -9,6 +9,8 @@ defmodule Portal.UserProxyTest do
 
     # Constant
     @accepted "ACCEPTED"
+    @friendship "FRIENDSHIP"
+    @membership "MEMBERSHIP"
 
     # Event topics
     @friend_new "friend_new"
@@ -108,7 +110,7 @@ defmodule Portal.UserProxyTest do
         # User A receives reply msg from B
         assert_push(@p2p_msg_in, p2p_msg_in, 1000)
         %{chats: [%{"from" => sender_b, "message" => msg_b, "time" => _}], date: _, counter_id: _, id: b_p2p_msg_id, read: _, type: _} = p2p_msg_in
-        Logger.warn("FROM B: #{inspect p2p_msg_in}") 
+        Logger.warn("") 
         
         # User A notify the server that received p2p msg from B has read
         push(socket_b, @p2p_msg_read, %{"id" => b_p2p_msg_id})
@@ -149,14 +151,14 @@ defmodule Portal.UserProxyTest do
         push(socket_a, @add_friend_out, %{"email" => user_b.username, "msg" => "Let me be your friend"})
 
         # User B received A's invitation
-        assert_push(@add_friend_in, add_friend_in, 1000)
-        assert add_friend_in.msg == "Let me be your friend"
+        assert_push(@add_friend_in, friend_invit, 1000)
+        assert friend_invit.type == @friendship
 
         # User B notify the server that received inivitation has opened
-        push(socket_b, @invit_opened, %{"id" => add_friend_in.id})
+        push(socket_b, @invit_opened, %{"id" => friend_invit.id})
 
         # User B accept friend request inivit
-        push(socket_b, @add_friend_resp, %{"id" => add_friend_in.id, "resp" => @accepted})
+        push(socket_b, @add_friend_resp, %{"id" => friend_invit.id, "resp" => @accepted})
         
         assert_push(@friend_new, friend_new, 1000)
         %{id: _, name: a_name, online: _, username: a_username} = friend_new
@@ -174,15 +176,29 @@ defmodule Portal.UserProxyTest do
         # User A creates a group with B as member
         group_name = "my_group"
         group_members = [Integer.to_string(user_b.id)]
-        new_group_map = %{"name" => group_name, "members" => group_members}
-
         push(socket_a, @add_group_out, %{"name" => group_name, "members" => group_members})
 
         # User A receives a new group data
         assert_push(@group_new, a_new_group, 1000)
+        assert a_new_group.name == group_name
 
+        # User B receives a new group invitation
+        assert_push(@add_group_in, group_invit, 1000)
+        assert group_invit.type == @membership
 
-        assert true ==  true
+        # User B notify the server that received inivitation has opened
+        push(socket_b, @invit_opened, %{"id" => group_invit.id})
+
+        # User B accept group membership request inivit
+        push(socket_b, @add_group_resp, %{"id" => group_invit.id, "resp" => @accepted})
+
+        # User B receives a new group data
+        assert_push(@group_new, b_new_group, 1000)
+        assert b_new_group.name == group_name
+
+        # User A receives a group update data with members == 2
+        assert_push(@group_update, a_upd_group, 1000)
+        assert length(a_upd_group.members) == 2
     end
 
 end

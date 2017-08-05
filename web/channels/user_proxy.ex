@@ -177,9 +177,9 @@ defmodule Portal.UserProxy do
         _parse_groups(t, result ++ [group])
     end
 
-    defp _parse_users(list) do
+    def _parse_users(list) do
         Enum.map(list, fn(x) -> 
-            [_, id, _] = for <<n::binary-1 <- x>>, do: n
+            id = Regex.replace(~r/#/, x, "")
             String.to_integer(id)
         end) |>
         Enum.map(fn(n) -> 

@@ -22,6 +22,11 @@ defmodule Portal.UserProxyTest do
     @add_friend_out "add_friend_out"
     @add_friend_resp "add_friend_resp"
     @invit_opened "invit_opened"
+    @group_new "group_new"
+    @group_update "group_update"
+    @add_group_in "add_group_in"
+    @add_group_out "add_group_out"
+    @add_group_resp "add_group_resp"
 
     setup do
         # create users
@@ -133,7 +138,7 @@ defmodule Portal.UserProxyTest do
         assert length(b_result.chats) == 2
     end
 
-    test "5. User A will send invitation to B, and B reveives it", %{socket_a: socket_a, user_a: user_a, 
+    test "5. User A will send friendship invitation to B, and B reveives it", %{socket_a: socket_a, user_a: user_a, 
         socket_b: socket_b, user_b: user_b} do
         
         # Both users are join the channel
@@ -157,6 +162,27 @@ defmodule Portal.UserProxyTest do
         %{id: _, name: a_name, online: _, username: a_username} = friend_new
         assert a_name = @user_a.name
         assert a_username = @user_a.username
+    end
+
+    test "6. User A creates a group that includes B as its member", %{socket_a: socket_a, user_a: user_a, 
+        socket_b: socket_b, user_b: user_b} do
+        
+        # Both users are join the channel
+        {:ok, _reply, socket_a} = subscribe_and_join(socket_a, "user_proxy:" <> user_a.username, %{})
+        {:ok, _reply, socket_b} = subscribe_and_join(socket_b, "user_proxy:" <> user_b.username, %{})
+        
+        # User A creates a group with B as member
+        group_name = "my_group"
+        group_members = [Integer.to_string(user_b.id)]
+        new_group_map = %{"name" => group_name, "members" => group_members}
+
+        push(socket_a, @add_group_out, %{"name" => group_name, "members" => group_members})
+
+        # User A receives a new group data
+        assert_push(@group_new, a_new_group, 1000)
+
+
+        assert true ==  true
     end
 
 end

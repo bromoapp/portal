@@ -56,12 +56,12 @@ export default {
     },
     methods: {
         _joinGroupChat(group) {
-            let groupChat = this.socket.channel(groupChannelPrefix + group.unique)
+            let groupChannel = this.socket.channel(groupChannelPrefix + group.unique)
+            let groupChat = this.Factory.NEW_GROUP_CHAT
+            groupChat.init(group, groupChannel)
             groupChat.join()
-                .receive("ok", () => {
-                    this.groupChats.push({ name: group.unique, channel: groupChat })
-                })
-                .receive("error", () => { console.log("Failed to join user group channel") })
+
+            this.groupChats.push(groupChat)
         },
         _onGroupNew(group) {
             console.log(">>> NEW GROUP: ", group)
@@ -127,7 +127,7 @@ export default {
             }
             for (let x = 0; x < this.groupChats.length; x++) {
                 let ch = this.groupChats[x]
-                ch.channel.leave()
+                ch.leave()
             }
         },
         _onQueryChats(conv) {

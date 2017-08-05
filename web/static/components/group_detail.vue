@@ -36,6 +36,7 @@ export default {
             }
         },
         _switchGroupDetail(group) {
+            console.log(">>> GROUP", group)
             if (this.panel_visible) {
                 if (this.currGroup.unique == group.unique) {
                     this._close()

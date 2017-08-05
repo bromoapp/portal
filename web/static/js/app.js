@@ -16,18 +16,24 @@
 //
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
-
 import "phoenix_html"
 import socket from "./socket"
 import lobby from "./lobby"
+import { GroupChat } from "./classes"
+
 import Vue from 'vue'
 import VueEvents from 'vue-events'
 
 Vue.use(VueEvents)
-
 Vue.mixin({
     data: function () {
         return {
+            // Classes
+            get Factory() {
+                return {
+                    get NEW_GROUP_CHAT() { return new GroupChat() }
+                }
+            },
             // Constants
             get Constant() {
                 return {

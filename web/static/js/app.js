@@ -100,6 +100,7 @@ Vue.mixin({
                     get POP_INFO() { return "pop_info" },
                     get POP_ERROR() { return "pop_error" },
                     get SWITCH_FRIEND_DETAIL() { return "switch_friend_detail" },
+                    get SWITCH_GROUP_DETAIL() { return "switch_group_detail" },
                     get SWITCH_INVIT_DETAIL() { return "switch_invit_detail" },
                     get SWITCH_CHAT() { return "switch_chat" },
                     get SWITCH_ADD_GROUP() { return "switch_add_group" },

@@ -23,11 +23,8 @@
                     <li v-for="counterpart in counterparts" v-bind:key="counterpart">
                         <div v-on:click="onCounterpartClicked(counterpart)" class="accordion-btn bg-263238-d">
                             <span>{{ counterpart.name }}</span>
-                            <span v-if="counterpart.online" style="color: #ffb300" class="pull-right icon">
-                                <i class="fa fa-user"></i>
-                            </span>
-                            <span v-else style="color: #000" class="pull-right icon">
-                                <i class="fa fa-user"></i>
+                            <span style="color: #37474f" class="pull-right icon">
+                                <i class="fa fa-users"></i>
                             </span>
                         </div>
                     </li>

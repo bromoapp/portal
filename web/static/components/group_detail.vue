@@ -7,6 +7,18 @@
                 </a>
             </span>
             <div class="float-panel-form">
+                <span style="color: white; font-weight: bold">Group's name:</span>
+                <input id="group_name" class="form-control" type="text" placeholder="Group" style="margin-top: 3px; margin-bottom: 10px" v-bind:value="currGroup.name">
+                <span style="margin: 10px 0px; color: white; font-weight: bold">Members:</span>
+                <div id="names_list" style="margin-top: 3px; margin-bottom: 10px" class="accordion-body">
+                    <ul style="margin: 0; padding: 0; list-style: none;">
+                        <li v-for="f in members" v-bind:key="f">
+                            <div class="accordion-btn bg-37474f-d">
+                                <span>{{ f.name }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div id="group_detail_panel_cover" class="float-panel-cover bg-455A64-s"></div>
@@ -36,15 +48,16 @@ export default {
             }
         },
         _switchGroupDetail(group) {
-            console.log(">>> GROUP", group)
             if (this.panel_visible) {
                 if (this.currGroup.unique == group.unique) {
                     this._close()
                 } else {
                     this.currGroup = group
+                    this.members = group.members
                 }
             } else {
                 this.currGroup = group
+                this.members = group.members
                 this._open()
             }
         },
@@ -57,16 +70,15 @@ export default {
             setTimeout(() => {
                 let panel = document.getElementById("group_detail_panel_window")
                 let cover = document.getElementById("group_detail_panel_cover")
-                //let list = document.getElementById("names_list")
+                let list = document.getElementById("names_list")
                 panel.style.width = this.maxWidth
                 cover.style.width = this.maxWidth
                 panel.style.height = this.height
                 cover.style.height = this.height
-                //list.style.height = this.listHeight
-                //list.style.maxHeight = this.listHeight
+                list.style.height = this.listHeight
+                list.style.maxHeight = this.listHeight
                 setTimeout(() => {
                     cover.style.width = "0px"
-                    //this.$events.$emit(this.Event.GET_FRIENDS_LIST)
                 }, 300);
             }, 300)
         },

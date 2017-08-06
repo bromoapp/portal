@@ -24,7 +24,6 @@
                 <div style="text-align: center">
                     <div v-if="currFriend && currFriend.online">
                         <button id="btn_start_chat" class="btn bg-263238-d" v-on:click="startChat">Start Chat</button>
-                        <button id="btn_invite_2_room" class="btn bg-263238-d" v-on:click="inivite2Room">Invite to Room</button>
                     </div>
                     <div v-else>
                         <button id="btn_send_msg" class="btn bg-263238-d" v-on:click="sendMessage">Send Message</button>
@@ -102,9 +101,6 @@ export default {
         sendMessage() {
             document.getElementById("btn_send_msg").blur()
             this.$events.$emit(this.Event.START_CHAT, this.currFriend)
-        },
-        inivite2Room() {
-            document.getElementById("btn_invite_2_room").blur()
         }
     }
 }

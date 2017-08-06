@@ -19,6 +19,9 @@
                         </li>
                     </ul>
                 </div>
+                <div style="text-align: center">
+                    <button id="btn_start_chat" class="btn bg-263238-d" v-on:click="startChat">Start Chat</button>
+                </div>
             </div>
         </div>
         <div id="group_detail_panel_cover" class="float-panel-cover bg-455A64-s"></div>
@@ -82,6 +85,9 @@ export default {
                 }, 300);
             }, 300)
         },
+        startChat(ev) {
+            ev.target.blur()
+        }
     }
 }
 </script>

@@ -4,6 +4,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import VueEvents from 'vue-events'
+
+Vue.use(VueEvents)
+
 const proxyChannelPrefix = "user_proxy:"
 const groupChannelPrefix = "user_group:"
 
@@ -55,11 +60,34 @@ export default {
         this.$events.$on(this.Event.ADD_GROUP_RESP, (data) => { this._onAddGroupResp(data) })
     },
     methods: {
-        _joinGroupChat(group) {
-            let groupChannel = this.socket.channel(groupChannelPrefix + group.unique)
-            let groupChat = this.Factory.NEW_GROUP_CHAT
-            groupChat.init(group, groupChannel)
-            groupChat.join()
+        _joinGroupChat(object) {
+            let groupChannel = this.socket.channel(groupChannelPrefix + object.unique)
+            let groupChat = new Vue({
+                data: {
+                    group: object,
+                    channel: groupChannel
+                },
+                methods: {
+                    init() {
+                        this.channel.on(this.Event.P2G_MSG_NEW, (data) => { this._onP2gMessageNew(data) })
+                        this.channel.on(this.Event.P2G_MSG_IN, (data) => { this._onP2gMessageIn(data) })
+
+                        this.channel.join()
+                            .receive("ok", () => { console.log("Succeed to join user group channel") })
+                            .receive("error", () => { console.log("Failed to join user group channel") })
+                    },
+                    sendP2gMessageOut(data) {
+                        
+                    },
+                    _onP2gMessageNew(data) {
+
+                    },
+                    _onP2gMessageIn(data) {
+
+                    }
+                }
+            })
+            groupChat.init()
 
             this.groupChats.push(groupChat)
         },

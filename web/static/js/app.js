@@ -19,8 +19,6 @@
 import "phoenix_html"
 import socket from "./socket"
 import lobby from "./lobby"
-import { GroupChat } from "./classes"
-
 import Vue from 'vue'
 import VueEvents from 'vue-events'
 
@@ -28,12 +26,6 @@ Vue.use(VueEvents)
 Vue.mixin({
     data: function () {
         return {
-            // Classes
-            get Factory() {
-                return {
-                    get NEW_GROUP_CHAT() { return new GroupChat() }
-                }
-            },
             // Constants
             get Constant() {
                 return {
@@ -70,6 +62,8 @@ Vue.mixin({
                     get INVIT_OPENED() { return "invit_opened" },
                     get GROUP_NEW() { return "group_new" },
                     get GROUP_UPDATE() { return "group_update" },
+                    get P2G_MSG_NEW() { return "p2p_msg_new" },
+                    get P2G_MSG_IN() { return "p2g_msg_in" },
 
                     // Component 2 component messages with args
                     get UPDATE_FRIENDS_LIST() { return "update_friends_list" },
@@ -81,6 +75,7 @@ Vue.mixin({
                     get UPDATE_CHAT_DATA() { return "update_chat_data" },
                     get UPDATE_CHAT_DIALOG() { return "update_chat_dialog" },
                     get P2P_MSG_OUT() { return "p2p_msg_out" },
+                    get P2G_MSG_OUT() { return "p2g_msg_out" },
                     get GET_CHATS() { return "get_chats" },
                     get GET_UNREAD() { return "get_unread" },
                     get ADD_UNREAD() { return "add_unread" },

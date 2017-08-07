@@ -62,8 +62,9 @@ Vue.mixin({
                     get INVIT_OPENED() { return "invit_opened" },
                     get GROUP_NEW() { return "group_new" },
                     get GROUP_UPDATE() { return "group_update" },
-                    get P2G_MSG_NEW() { return "p2p_msg_new" },
+                    get P2G_MSG_NEW() { return "p2g_msg_new" },
                     get P2G_MSG_IN() { return "p2g_msg_in" },
+                    get ONLINE_MEMBERS() { return "online_members" },
 
                     // Component 2 component messages with args
                     get UPDATE_FRIENDS_LIST() { return "update_friends_list" },

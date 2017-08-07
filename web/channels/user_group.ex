@@ -8,20 +8,20 @@ defmodule Portal.UserGroup do
     @p2g_msg_in "p2g_msg_in"
 
     def join("user_group:" <> unique, _params, socket) do
+        user = socket.assigns.user
+        Logger.info(">>> JOINED TO #{inspect unique} USER: #{inspect user.name}")
         send self(), :after_join
         {:ok, socket}
     end
 
     def terminate(_reason, socket) do
         user = socket.assigns.user
-        Logger.info(">>> USER LEFT GROUP: #{inspect socket.assigns.user.username}")
         GroupPresence.untrack(socket, user.username)
         {:noreply, socket}
     end
 
     def handle_info(:after_join, socket) do
         user = socket.assigns.user
-        Logger.info(">>> USER JOIN GROUP: #{inspect socket.assigns.user.username}")
 
         GroupPresence.track(socket, user.username, %{name: user.name, username: user.username})
         push socket, @online_members, GroupPresence.list(socket)

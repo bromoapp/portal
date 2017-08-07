@@ -149,7 +149,7 @@ lobby.init(socket, document.getElementById("lobby_div"))
 new Vue({
     created() {
         window.onresize = () => {
-            this.$events.$emit(this.WINDOW_RESIZING)
+            this.$events.$emit(this.Event.WINDOW_RESIZING)
         }
     }
 })

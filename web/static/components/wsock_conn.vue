@@ -6,7 +6,7 @@
 <script>
 import Vue from 'vue'
 import VueEvents from 'vue-events'
-import {Socket, Presence} from "phoenix"
+import { Presence } from "phoenix"
 
 Vue.use(VueEvents)
 

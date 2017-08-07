@@ -6,6 +6,7 @@
 <script>
 import Vue from 'vue'
 import VueEvents from 'vue-events'
+import {Socket, Presence} from "phoenix"
 
 Vue.use(VueEvents)
 
@@ -65,20 +66,28 @@ export default {
             let groupChat = new Vue({
                 data: {
                     group: object,
-                    channel: groupChannel
+                    channel: groupChannel,
+                    presences: {}
                 },
                 methods: {
                     init() {
                         this.channel.on(this.Event.ONLINE_MEMBERS, (data) => { this._onOnlineMembers(data) })
                         this.channel.on(this.Event.P2G_MSG_NEW, (data) => { this._onP2gMessageNew(data) })
                         this.channel.on(this.Event.P2G_MSG_IN, (data) => { this._onP2gMessageIn(data) })
+                        this.channel.on("presence_state", state => {
+                            this.presences = Presence.syncState(this.presences, state)
+                        })
+
+                        this.channel.on("presence_diff", diff => {
+                            this.presences = Presence.syncDiff(this.presences, diff)
+                        })
 
                         this.channel.join()
                             .receive("ok", () => { console.log("Succeed to join user group channel") })
                             .receive("error", () => { console.log("Failed to join user group channel") })
                     },
                     sendP2gMessageOut(data) {
-                        
+
                     },
                     _onOnlineMembers(data) {
                         console.log("ONLINE: ", data)

@@ -13,7 +13,9 @@ defmodule Portal.UserGroup do
     end
 
     def terminate(_reason, socket) do
+        user = socket.assigns.user
         Logger.info(">>> USER LEFT GROUP: #{inspect socket.assigns.user.username}")
+        GroupPresence.untrack(socket, user.username)
         {:noreply, socket}
     end
 

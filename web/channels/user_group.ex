@@ -4,7 +4,6 @@ defmodule Portal.UserGroup do
     alias Portal.Updates
     require Logger
 
-    @online_members "online_members"
     @p2g_msg_out "p2g_msg_out"
     @p2g_msg_new "p2g_msg_new"
     @p2g_msg_in "p2g_msg_in"
@@ -30,7 +29,6 @@ defmodule Portal.UserGroup do
     def handle_info(:after_join, socket) do
         user = socket.assigns.user
         GroupPresence.track(socket, user.username, %{name: user.name, username: user.username})
-        push socket, @online_members, GroupPresence.list(socket)
         {:noreply, socket}
     end
 

@@ -64,7 +64,6 @@ Vue.mixin({
                     get GROUP_UPDATE() { return "group_update" },
                     get P2G_MSG_NEW() { return "p2g_msg_new" },
                     get P2G_MSG_IN() { return "p2g_msg_in" },
-                    get ONLINE_MEMBERS() { return "online_members" },
                     get PRESENCE_STATE() { return "presence_state" },
                     get PRESENCE_DIFF() { return "presence_diff" },
 

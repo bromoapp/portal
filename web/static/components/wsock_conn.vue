@@ -70,7 +70,6 @@ export default {
                 },
                 methods: {
                     init() {
-                        this.channel.on(this.Event.ONLINE_MEMBERS, (data) => { this._onOnlineMembers(this.group, data) })
                         this.channel.on(this.Event.P2G_MSG_NEW, (data) => { this._onP2gMessageNew(this.group, data) })
                         this.channel.on(this.Event.P2G_MSG_IN, (data) => { this._onP2gMessageIn(this.group, data) })
                         this.channel.on(this.Event.PRESENCE_STATE, state => {
@@ -92,9 +91,6 @@ export default {
                     },
                     _onGroupInitialUpdates(updates) {
                         console.log(">>> GROUP INITIAL UPDATES", updates)
-                    },
-                    _onOnlineMembers(group, data) {
-                        console.log("ONLINE: ", data)
                     },
                     _onP2gMessageNew(group, data) {
 

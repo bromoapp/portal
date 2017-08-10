@@ -10,7 +10,8 @@ defmodule Portal.UserGroup do
     @p2g_msg_in "p2g_msg_in"
 
     # SQLs
-    @sql_members_list "CALL `sp_members_list`(?);"
+    @sql_members_list "CALL `sp_members_list`(?, ?)"
+    @sql_ongoing_gchats "CALL `sp_ongoing_gchats`(?,?);"
 
     #=================================================================================================
     # Functions related to members connections and presences

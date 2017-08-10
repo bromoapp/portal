@@ -80,15 +80,18 @@ export default {
 
                         this.channel.on(this.Event.PRESENCE_DIFF, diff => {
                             this.presences = Presence.syncDiff(this.presences, diff)
-                             console.log(">>> PRESENCES", this.presences)
+                            console.log(">>> PRESENCES", this.presences)
                         })
 
                         this.channel.join()
-                            .receive("ok", () => { console.log("Succeed to join user group channel") })
+                            .receive("ok", (updates) => { this._onGroupInitialUpdates(updates) })
                             .receive("error", () => { console.log("Failed to join user group channel") })
                     },
                     sendP2gMessageOut(group, data) {
 
+                    },
+                    _onGroupInitialUpdates(updates) {
+                        console.log(">>> GROUP INITIAL UPDATES", updates)
                     },
                     _onOnlineMembers(group, data) {
                         console.log("ONLINE: ", data)

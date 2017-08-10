@@ -21,7 +21,7 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
         
         BLOCK1: BEGIN
           DECLARE on_finished1 BIGINT;
-          DECLARE cur1 CURSOR FOR SELECT DISTINCT(a.counter_id) AS 'counter_id' FROM daily_chats AS a WHERE a.user_id = uid AND a.counter_id != uid;
+          DECLARE cur1 CURSOR FOR SELECT DISTINCT(a.counter_id) AS 'counter_id' FROM daily_chats AS a WHERE a.user_id = uid AND a.counter_id != uid AND a.`type` = 'P2P';
           DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished1 = 1;
           
           OPEN cur1;
@@ -31,9 +31,9 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
               LEAVE loop1;
             END IF;
 
-            BLOCK4: BEGIN
+            BLOCK2: BEGIN
               DECLARE on_finished2 BIGINT;
-              DECLARE cur2 CURSOR FOR SELECT a.counter_id AS 'counter_id', a.id, a.`read`, a.`type` FROM daily_chats AS a WHERE a.counter_id = _counter_id AND a.user_id = uid;
+              DECLARE cur2 CURSOR FOR SELECT a.counter_id AS 'counter_id', a.id, a.`read`, a.`type` FROM daily_chats AS a WHERE a.counter_id = _counter_id AND a.user_id = uid AND a.`type` = 'P2P';
               DECLARE CONTINUE HANDLER FOR NOT FOUND SET on_finished2 = 1;
               
               OPEN cur2;
@@ -46,7 +46,7 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
                 INSERT INTO temp_last_chats(counter_id, rec_id, `read`, `type`) VALUES (__counter_id, _rec_id, _read, _type);
               END LOOP loop2;
               CLOSE cur2;
-            END BLOCK4;
+            END BLOCK2;
             
           END LOOP loop1;
           CLOSE cur1;
@@ -57,7 +57,4 @@ defmodule Portal.Repo.Migrations.SpOngoingChats do
     "
   end
 
-  def down do
-    execute "DROP PROCEDURE IF EXISTS `sp_ongoing_chats`;"
-  end
 end

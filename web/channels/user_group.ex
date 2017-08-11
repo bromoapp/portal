@@ -1,7 +1,11 @@
 defmodule Portal.UserGroup do
     use Portal.Web, :channel
+    alias Ecto.Adapters.SQL
+    alias Mariaex.Result
     alias Portal.GroupPresence
     alias Portal.Updates
+    alias Portal.Group
+    alias Portal.User
     require Logger
 
     # Event topics
@@ -10,8 +14,7 @@ defmodule Portal.UserGroup do
     @p2g_msg_in "p2g_msg_in"
 
     # SQLs
-    @sql_members_list "CALL `sp_members_list`(?, ?)"
-    @sql_ongoing_gchats "CALL `sp_ongoing_gchats`(?,?);"
+    @sql_ongoing_gchats "CALL `sp_ongoing_gchats`(?);"
 
     #=================================================================================================
     # Functions related to members connections and presences
@@ -40,16 +43,34 @@ defmodule Portal.UserGroup do
     defp _get_members_list({socket, struct}) do
         unique = _parse_unique(socket.topic)
         user = socket.assigns.user
-        %Result{rows: rows} = SQL.query!(Repo, @sql_members_list, [unique, user.id])
-        if rows == [] do
-            {user, %Updates{struct | members: []}}
+        group = Repo.get_by(Group, unique: unique)
+        if (group != nil) do
+            members = _parse_users(String.split(group.members, ","))
+            |> Enum.map(fn(x) -> %{name: x.name, username: x.username} end)
+            {socket, %Updates{struct | members: members}}
         else
-            {user, %Updates{struct | members: []}}
+            {socket, %Updates{struct | members: []}}
         end
     end
 
     defp _get_ongoing_chats({socket, struct}) do
-        {user, %Updates{struct | chats: []}}
+        user = socket.assigns.user
+        %Result{rows: rows} = SQL.query!(Repo, @sql_ongoing_gchats, [user.id])
+        if rows == [] do
+            {socket, %Updates{struct | chats: []}}
+        else
+            {socket, %Updates{struct | chats: _parse_gchats(rows, [])}}
+        end
+    end
+
+    defp _parse_gchats([], result) do
+        result
+    end
+
+    defp _parse_gchats([h|t], result) do
+        [counter_id, id, read, type] = h
+        nresult = result ++ [%{id: id, counter_id: counter_id, chats: nil, date: nil, read: read, type: type}]
+        _parse_gchats(t, nresult)
     end
 
     #=================================================================================================
@@ -58,5 +79,16 @@ defmodule Portal.UserGroup do
     defp _parse_unique(topic) do
         [_h, unique] = String.split(topic, ":")
         unique
+    end
+
+    defp _parse_users(list) do
+        Enum.map(list, fn(x) -> 
+            id = Regex.replace(~r/#/, x, "")
+            String.to_integer(id)
+        end) |>
+        Enum.map(fn(n) -> 
+            user = Repo.get!(User, n)
+            %{id: user.id, name: user.name, username: user.username}
+        end)
     end
 end

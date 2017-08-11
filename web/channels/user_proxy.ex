@@ -177,17 +177,6 @@ defmodule Portal.UserProxy do
         _parse_groups(t, result ++ [group])
     end
 
-    def _parse_users(list) do
-        Enum.map(list, fn(x) -> 
-            id = Regex.replace(~r/#/, x, "")
-            String.to_integer(id)
-        end) |>
-        Enum.map(fn(n) -> 
-            user = Repo.get!(User, n)
-            %{id: user.id, name: user.name, username: user.username}
-        end)
-    end
-
     defp _get_invitations_list({user, struct}) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_invitations_list, [user.id])
         if rows == [] do
@@ -641,6 +630,17 @@ defmodule Portal.UserProxy do
                 Logger.error(">>> ERROR #{inspect changeset}")
         end
         {:noreply, socket}
+    end
+
+    defp _parse_users(list) do
+        Enum.map(list, fn(x) -> 
+            id = Regex.replace(~r/#/, x, "")
+            String.to_integer(id)
+        end) |>
+        Enum.map(fn(n) -> 
+            user = Repo.get!(User, n)
+            %{id: user.id, name: user.name, username: user.username}
+        end)
     end
 
     defp _reject_or_ignore_invit(invit, resp) do

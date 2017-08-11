@@ -58,7 +58,7 @@ defmodule Portal.UserProxy do
     @sql_ongoing_chats "CALL `sp_ongoing_chats`(?);"
     @sql_friends_list "CALL `sp_friends_list`(?);"
     @sql_invitations_list "SELECT * FROM invitations AS a WHERE a.to_id = ? AND a.`status` = 'WAITING'"
-    @sql_groups_list "SELECT a.unique, a.name, a.members, a.admins FROM groups AS a WHERE a.members LIKE (?)"
+    @sql_groups_list "SELECT a.id, a.unique, a.name, a.members, a.admins FROM groups AS a WHERE a.members LIKE (?)"
     @sql_query_chats "SELECT a.id, a.counter_id, a.messages, a.inserted_at, a.read, a.`type` FROM daily_chats AS a WHERE a.id = ?;"
     @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.inserted_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_id = ? AND a.counter_id = ?;"
     
@@ -167,8 +167,9 @@ defmodule Portal.UserProxy do
     end
 
     defp _parse_groups([h|t], result) do
-        [unique, name, members, admins] = h
+        [id, unique, name, members, admins] = h
         group = %GroupChat{
+            id: id,
             name: name, 
             unique: unique, 
             members: nil, 

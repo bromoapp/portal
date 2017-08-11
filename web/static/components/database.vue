@@ -49,8 +49,24 @@ export default {
         this.$events.$on(this.Event.GET_FRIENDS_LIST, () => { this._onGetFriendsList() })
     },
     methods: {
-        _onGroupInitialUpdates(updates) {
-            console.log(">>> GROUP INITIAL UPDATES", updates)
+        _onGroupInitialUpdates(data) {
+            let updates = data.updates
+            let groups = this.tbl_groups.find({ 'unique': data.unique })
+            if (groups.length > 0) {
+                groups[0].members = updates.members
+                groups[0].admins = updates.admins
+            }
+            this._updateGroupsList()
+
+            let chats = updates.chats
+            for (let n = 0; n < chats.length; n++) {
+                let chat = chats[n]
+                if (chat.read == 0) {
+                    this.tbl_unread.insert({ id: chat.id, fid: chat.counter_id, type: chat.type })
+                }
+                this.tbl_chats.insert(chat)
+            }
+            this._updateChatsList()
         },
         _onGroupNew(group) {
             this.tbl_groups.insert(group)
@@ -82,11 +98,21 @@ export default {
             })
             let chats = []
             for (let n = 0; n < raw.length; n++) {
-                let fid = raw[n].counter_id
-                let friends = this.tbl_friends.find({ 'id': fid })
-                if (friends.length > 0) {
-                    if (!chats.includes(friends[0])) {
-                        chats.push(friends[0])
+                if (raw[n].type == "P2G") {
+                    let cid = raw[n].counter_id
+                    let groups = this.tbl_groups.find({ 'id': cid })
+                    if (groups.length > 0) {
+                        if (!chats.includes(groups[0])) {
+                            chats.push(groups[0])
+                        }
+                    }
+                } else {
+                    let fid = raw[n].counter_id
+                    let friends = this.tbl_friends.find({ 'id': fid })
+                    if (friends.length > 0) {
+                        if (!chats.includes(friends[0])) {
+                            chats.push(friends[0])
+                        }
                     }
                 }
             }
@@ -240,7 +266,7 @@ export default {
             for (let n = 0; n < data.chats.length; n++) {
                 let chat = data.chats[n]
                 if (chat.read == 0) {
-                    this.tbl_unread.insert({ id: chat.id, fid: chat.counter_id })
+                    this.tbl_unread.insert({ id: chat.id, fid: chat.counter_id, type: chat.type })
                 }
                 this.tbl_chats.insert(chat)
             }

@@ -1,3 +1,3 @@
 defmodule Portal.GroupChat do
-    defstruct name: nil, unique: nil, admins: [], members: []
+    defstruct id: nil, name: nil, unique: nil, admins: [], members: []
 end

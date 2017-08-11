@@ -3,7 +3,7 @@ defmodule Portal.UserGroup do
     alias Ecto.Adapters.SQL
     alias Mariaex.Result
     alias Portal.GroupPresence
-    alias Portal.Updates
+    alias Portal.GroupUpdates
     alias Portal.Group
     alias Portal.User
     require Logger
@@ -22,7 +22,8 @@ defmodule Portal.UserGroup do
     def join("user_group:" <> unique, _params, socket) do
         send self(), :after_join
 
-        {_socket, updates} = {socket, %Updates{}}
+        {_socket, updates} = {socket, %GroupUpdates{}}
+        |> _get_admins_list()
         |> _get_members_list()
         |> _get_ongoing_chats()
         {:ok, updates, socket}
@@ -40,6 +41,18 @@ defmodule Portal.UserGroup do
         {:noreply, socket}
     end
 
+    defp _get_admins_list({socket, struct}) do
+        unique = _parse_unique(socket.topic)
+        group = Repo.get_by(Group, unique: unique)
+        if (group != nil) do
+            admins = _parse_users(String.split(group.admins, ","))
+            |> Enum.map(fn(x) -> %{name: x.name, username: x.username} end)
+            {socket, %GroupUpdates{struct | admins: admins}}
+        else
+            {socket, %GroupUpdates{struct | admins: []}}
+        end
+    end
+
     defp _get_members_list({socket, struct}) do
         unique = _parse_unique(socket.topic)
         user = socket.assigns.user
@@ -47,9 +60,9 @@ defmodule Portal.UserGroup do
         if (group != nil) do
             members = _parse_users(String.split(group.members, ","))
             |> Enum.map(fn(x) -> %{name: x.name, username: x.username} end)
-            {socket, %Updates{struct | members: members}}
+            {socket, %GroupUpdates{struct | members: members}}
         else
-            {socket, %Updates{struct | members: []}}
+            {socket, %GroupUpdates{struct | members: []}}
         end
     end
 
@@ -57,9 +70,9 @@ defmodule Portal.UserGroup do
         user = socket.assigns.user
         %Result{rows: rows} = SQL.query!(Repo, @sql_ongoing_gchats, [user.id])
         if rows == [] do
-            {socket, %Updates{struct | chats: []}}
+            {socket, %GroupUpdates{struct | chats: []}}
         else
-            {socket, %Updates{struct | chats: _parse_gchats(rows, [])}}
+            {socket, %GroupUpdates{struct | chats: _parse_gchats(rows, [])}}
         end
     end
 

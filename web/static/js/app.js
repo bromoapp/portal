@@ -52,6 +52,7 @@ Vue.mixin({
             get Event() {
                 return {
                     get INITIAL_UPDATES() { return "initial_updates" },
+                    get GROUP_INITIAL_UPDATES() { return "group_initial_updates" },
                     get FRIEND_NEW() { return "friend_new" },
                     get FRIEND_ONLINE() { return "friend_online" },
                     get FRIEND_OFFLINE() { return "friend_offline" },

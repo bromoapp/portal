@@ -26,6 +26,7 @@ export default {
 
         // Insert or update database events handlers
         this.$events.$on(this.Event.INITIAL_UPDATES, (data) => { this._onInitialUpdates(data) })
+        this.$events.$on(this.Event.GROUP_INITIAL_UPDATES, (data) => { this._onGroupInitialUpdates(data) })
         this.$events.$on(this.Event.FRIEND_NEW, (data) => { this._onFriendNew(data) })
         this.$events.$on(this.Event.FRIEND_ONLINE, (data) => { this._onFriendOnline(data) })
         this.$events.$on(this.Event.FRIEND_OFFLINE, (data) => { this._onFriendOffline(data) })
@@ -48,6 +49,9 @@ export default {
         this.$events.$on(this.Event.GET_FRIENDS_LIST, () => { this._onGetFriendsList() })
     },
     methods: {
+        _onGroupInitialUpdates(updates) {
+            console.log(">>> GROUP INITIAL UPDATES", updates)
+        },
         _onGroupNew(group) {
             this.tbl_groups.insert(group)
             this.$events.$emit(this.Event.JOIN_GROUP, group)

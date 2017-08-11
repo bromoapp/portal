@@ -90,7 +90,7 @@ export default {
 
                     },
                     _onGroupInitialUpdates(updates) {
-                        console.log(">>> GROUP INITIAL UPDATES", updates)
+                        this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, updates)
                     },
                     _onP2gMessageNew(group, data) {
 
@@ -145,6 +145,7 @@ export default {
                 })
         },
         _onInitialUpdates(updates) {
+            console.log(">>> INITIAL UPDATES", updates)
             this.$events.$emit(this.Event.INITIAL_UPDATES, updates)
         },
         _onFriendNew(friend) {

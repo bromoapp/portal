@@ -171,8 +171,8 @@ defmodule Portal.UserProxy do
         group = %GroupChat{
             name: name, 
             unique: unique, 
-            members: _parse_users(String.split(members, ",")), 
-            admins: _parse_users(String.split(admins, ","))
+            members: nil, 
+            admins: nil
         }
         _parse_groups(t, result ++ [group])
     end
@@ -639,7 +639,7 @@ defmodule Portal.UserProxy do
         end) |>
         Enum.map(fn(n) -> 
             user = Repo.get!(User, n)
-            %{id: user.id, name: user.name, username: user.username}
+            %{name: user.name, username: user.username}
         end)
     end
 

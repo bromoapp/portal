@@ -83,14 +83,14 @@ export default {
                         })
 
                         this.channel.join()
-                            .receive("ok", (updates) => { this._onGroupInitialUpdates(updates) })
+                            .receive("ok", (updates) => { this._onGroupInitialUpdates(this.group.unique, updates) })
                             .receive("error", () => { console.log("Failed to join user group channel") })
                     },
                     sendP2gMessageOut(group, data) {
 
                     },
-                    _onGroupInitialUpdates(updates) {
-                        this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, updates)
+                    _onGroupInitialUpdates(unique, updates) {
+                        this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, {unique: unique, updates: updates})
                     },
                     _onP2gMessageNew(group, data) {
 

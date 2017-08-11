@@ -1,3 +1,3 @@
 defmodule Portal.GroupUpdates do
-    defstruct members: nil, chats: nil, admins: nil
+    defstruct unique: nil, members: nil, chats: nil, admins: nil
 end

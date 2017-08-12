@@ -36,12 +36,60 @@
 export default {
     data() {
         return {
-            currGroup: null,
+            currCounterpart: null,
             height: "450px",
             maxWidth: "400px",
             panel_visible: false
         }
     },
+    created() {
+        this.$events.$on(this.Event.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
+        this.$events.$on(this.Event.SWITCH_GCHAT, (group) => { this._switchGChat(group) })
+    },
+    methods: {
+        _switchGChat(group) {
+            if (this.panel_visible) {
+                if (this.currCounterpart == group) {
+                    this._close()
+                } else {
+                    this.currCounterpart = group
+                }
+            } else {
+                this.currCounterpart = group
+                this._open()
+            }
+        },
+        _closePanel() {
+            if (this.panel_visible) {
+                this._close()
+            }
+        },
+        _close() {
+            this.panel_visible = false
+        },
+        _open() {
+            this.$events.$emit(this.Event.CLOSE_FLOAT_PANEL)
+            this.panel_visible = true
+            setTimeout(() => {
+                document.getElementById("chat_to").innerHTML = "Group: " + this.currCounterpart.name
+                let panel = document.getElementById("gchat_dialog_panel_window")
+                let cover = document.getElementById("gchat_dialog_panel_cover")
+                panel.style.width = this.maxWidth
+                cover.style.width = this.maxWidth
+                panel.style.height = this.height
+                cover.style.height = this.height
+                setTimeout(() => {
+                    cover.style.width = "0px"
+                }, 300);
+            }, 300)
+        },
+        onSmiley(event) {
+            event.target.blur()
+        },
+        onAttachment(event) {
+            event.target.blur()
+        }
+    }
 }
 </script>
 

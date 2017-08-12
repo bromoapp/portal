@@ -9,7 +9,7 @@
                     </a>
                     <a v-else title="Search chat" id="src_chat_btn" href="javascript:" v-on:click="seekChat" class="btn bg-37474f-d">
                         <i id="header_btn" class="fa fa-search"></i>
-                    </a>                   
+                    </a>
                 </div>
             </div>
             <div v-if="src_form_visible" id="seek_chat" class="bg-212121-s slide-in">
@@ -176,7 +176,10 @@ export default {
             this.$events.$emit(this.Event.SWITCH_CHAT, friend)
         },
         onGChatClicked(group) {
-            alert()
+            if (this.src_form_visible) {
+                this.seekChat()
+            }
+            this.$events.$emit(this.Event.SWITCH_GCHAT, group)
         },
         seekChat() {
             document.getElementById("src_chat_btn").blur()

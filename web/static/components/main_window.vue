@@ -2,6 +2,7 @@
     <div id="main_window" class="main-window" style="background-color: #E0E0E0" v-on:click="closeAll">
         <friend-detail></friend-detail>
         <group-detail></group-detail>
+        <group-chat></group-chat>
         <invitation></invitation>
         <add-friend></add-friend>
         <add-group></add-group>
@@ -15,6 +16,7 @@ import FriendDetail from "./friend_detail.vue"
 import GroupDetail from "./group_detail.vue"
 import Invitation from "./invitation.vue"
 import AddFriend from "./add_friend.vue"
+import GroupChat from "./group_chat.vue"
 import AddGroup from "./add_group.vue"
 import MainMenu from "./menu.vue"
 import Chat from "./chat.vue"
@@ -25,6 +27,7 @@ export default {
         GroupDetail,
         Invitation,
         AddFriend,
+        GroupChat,
         AddGroup,
         MainMenu,
         Chat

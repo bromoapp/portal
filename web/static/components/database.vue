@@ -102,7 +102,9 @@ export default {
                     let cid = raw[n].counter_id
                     let groups = this.tbl_groups.find({ 'id': cid })
                     if (groups.length > 0) {
-                        if (!chats.includes(groups[0])) {
+                        let group = groups[0]
+                        console.log(">>> GROUP", group)
+                        if (!chats.includes(group)) {
                             chats.push(groups[0])
                         }
                     }
@@ -110,7 +112,9 @@ export default {
                     let fid = raw[n].counter_id
                     let friends = this.tbl_friends.find({ 'id': fid })
                     if (friends.length > 0) {
-                        if (!chats.includes(friends[0])) {
+                        let friend = friends[0]
+                        console.log(">>> FRIEND", friend)
+                        if (!chats.includes(friend)) {
                             chats.push(friends[0])
                         }
                     }

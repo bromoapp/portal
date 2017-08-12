@@ -21,7 +21,16 @@
             <div id="items_list" class="accordion-body">
                 <ul>
                     <li v-for="counterpart in counterparts" v-bind:key="counterpart">
-                        <div v-on:click="onChatClicked(counterpart)" class="accordion-btn bg-263238-d">
+                        <div v-if="counterpart.unique == null" v-on:click="onChatClicked(counterpart)" class="accordion-btn bg-263238-d">
+                            <span v-bind:id="'cpid_' + counterpart.id">{{ counterpart.name }}</span>
+                            <span v-if="counterpart.online" style="color: #ffb300" class="pull-right icon">
+                                <i class="fa fa-comment"></i>
+                            </span>
+                            <span v-else style="color: #37474f" class="pull-right icon">
+                                <i class="fa fa-comment"></i>
+                            </span>
+                        </div>
+                        <div v-else v-on:click="onGChatClicked(counterpart)" class="accordion-btn bg-263238-d">
                             <span v-bind:id="'cpid_' + counterpart.id">{{ counterpart.name }}</span>
                             <span v-if="counterpart.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-comment"></i>
@@ -165,6 +174,9 @@ export default {
                 this.$events.$emit(this.Event.DEL_UNREAD, friend.id)
             }
             this.$events.$emit(this.Event.SWITCH_CHAT, friend)
+        },
+        onGChatClicked(group) {
+            alert()
         },
         seekChat() {
             document.getElementById("src_chat_btn").blur()

@@ -1,21 +1,35 @@
 <template>
     <div v-if="panel_visible">
         <div id="gchat_dialog_panel_window" class="float-panel bg-455A64-s">
-            <div class="chat-dialog">
-                <div style="text-align: right">
-                    <span>
-                        <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
-                            <i class="fa fa-close"></i>
-                        </a>
-                    </span>
+            <div style="text-align: right; margin: 5px 10px 0px;">
+                <span>
+                    <a href="javascript:" class="cl-ffffff-d" v-on:click="_close">
+                        <i class="fa fa-close"></i>
+                    </a>
+                </span>
+            </div>
+            <div class="chat-wrapper">
+                <div class="chat-area">
+                    <div>
+                        <label id="chat_to"></label>
+                    </div>
+                    <div>
+                        <div id="messages" class="chat-conversation"></div>
+                    </div>
                 </div>
-                <div>
-                    <label id="chat_to"></label>
+                <div class="chat-friends" style="margin-left: -25px;">
+                    <span style="margin: 0px 0px; color: white; font-weight: bold">Online members:</span>
+                    <div id="names_list" style="margin-top: 3px;" class="accordion-body">
+                        <ul style="margin: 0; padding: 0; list-style: none; overflow-y: scroll;">
+                            <li v-for="f in currCounterpart.members" v-bind:key="f">
+                                <div class="accordion-btn bg-37474f-d">
+                                    <div style="overflow: hidden; width: 110px; text-overflow: ellipsis">{{ f.name }}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div>
-                    <div id="messages" class="chat-conversation"></div>
-                </div>
-                <div class="inline">
+                <div class="chat-toolbar inline">
                     <a title="Smiley" href="javascript:" class="btn btn-sm bg-263238-d" v-on:click="onSmiley">
                         <i class="fa fa-smile-o"></i>
                     </a>
@@ -23,7 +37,7 @@
                         <i class="fa fa-paperclip"></i>
                     </a>
                 </div>
-                <div class="form-inline">
+                <div class="chat-input form-inline">
                     <textarea id="message" class="chat-message form-control"></textarea>
                     <button class="btn bg-f50057-d" v-on:click="sendMessage">Send</button>
                 </div>
@@ -38,8 +52,9 @@ export default {
         return {
             currCounterpart: null,
             height: "450px",
-            maxWidth: "400px",
-            panel_visible: false
+            maxWidth: "580px",
+            panel_visible: false,
+            listHeight: "392px"
         }
     },
     created() {
@@ -74,10 +89,13 @@ export default {
                 document.getElementById("chat_to").innerHTML = "Group: " + this.currCounterpart.name
                 let panel = document.getElementById("gchat_dialog_panel_window")
                 let cover = document.getElementById("gchat_dialog_panel_cover")
+                let list = document.getElementById("names_list")
                 panel.style.width = this.maxWidth
                 cover.style.width = this.maxWidth
                 panel.style.height = this.height
                 cover.style.height = this.height
+                list.style.height = this.listHeight
+                list.style.maxHeight = this.listHeight
                 setTimeout(() => {
                     cover.style.width = "0px"
                 }, 300);

@@ -79,24 +79,30 @@ export default {
 }
 
 /************************** Chat dialog styles **************************/
-.chat-dialog {
-    margin: 6px 10px 10px 10px;
+.chat-wrapper {
+    padding: 0px 10px 10px 10px;
+    display: grid;
 }
 
-/************************** Friend detail panel styles **************************/
-.invit-detail {
-    margin-top: 25px;
-    padding: 10px;
+.chat-area {
+    padding: 0;
+    grid-column: 1 / 2;
+    grid-row: 1;
 }
 
-.friendship-invit-details {
-    padding: 5px;
-    height: 118px;
+.chat-friends {
+    grid-column: 2 / 2;
+    grid-row: 1 / span 3;
 }
 
-.membership-invit-details {
-    padding: 5px;
-    height: 60px;
+.chat-toolbar {
+    grid-column: 1 / 2;
+    grid-row: 2;
+}
+
+.chat-input {
+    grid-column: 1 / 2;
+    grid-row: 3;
 }
 
 .chat-conversation {
@@ -155,7 +161,7 @@ export default {
     max-height: 50px;
 }
 
-.chat-dialog button {
+.chat-input button {
     min-width: 60px;
     max-width: 60px;
     min-height: 50px;
@@ -164,6 +170,22 @@ export default {
 
 .chat-new-msg {
     color: #ffb300;
+}
+
+/************************** Friend detail panel styles **************************/
+.invit-detail {
+    margin-top: 25px;
+    padding: 10px;
+}
+
+.friendship-invit-details {
+    padding: 5px;
+    height: 118px;
+}
+
+.membership-invit-details {
+    padding: 5px;
+    height: 60px;
 }
 
 /************************** Sidebar styles **************************/

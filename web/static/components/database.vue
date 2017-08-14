@@ -113,7 +113,6 @@ export default {
                     let friends = this.tbl_friends.find({ 'id': fid })
                     if (friends.length > 0) {
                         let friend = friends[0]
-                        console.log(">>> FRIEND", friend)
                         if (!chats.includes(friend)) {
                             chats.push(friends[0])
                         }

@@ -100,7 +100,7 @@ export default {
                 if (this.currCounterpart != null) {
                     if (this.currCounterpart.id == chat.counter_id) {
                         this.$events.$emit(this.Event.UPDATE_CHAT_DIALOG, chat)
-                        this.$events.$emit(this.Event.DEL_UNREAD_REC, chat.id)
+                        this.$events.$emit(this.Event.DEL_UNREAD, chat.id)
                     } else {
                         this._setItemToUnread(chat.id, chat.counter_id)
                     }

@@ -99,6 +99,8 @@ export default {
                 setTimeout(() => {
                     cover.style.width = "0px"
                 }, 300);
+
+                this.$events.$emit(this.Event.GET_GCHATS, this.currCounterpart)
             }, 300)
         },
         onSmiley(event) {

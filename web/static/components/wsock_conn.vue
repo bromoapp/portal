@@ -1,5 +1,6 @@
 <template>
-    <div></div>
+    <div>
+    </div>
 </template>
 
 <script>
@@ -52,6 +53,7 @@ export default {
 
         // Group chat related events handlers
         this.$events.$on(this.Event.JOIN_GROUP, (group) => { this._joinGroupChat(group) })
+        this.$events.$on(this.Event.QUERY_GCHATS, (conv) => { this._onQueryGChats(conv) })
 
         // Add friend events handlers
         this.$events.$on(this.Event.DEL_UNREAD_REC, (id) => { this._onDelUnreadRec(id) })
@@ -64,6 +66,7 @@ export default {
             let groupChannel = this.socket.channel(groupChannelPrefix + object.unique)
             let groupChat = new Vue({
                 data: {
+                    id: object.id,
                     group: object,
                     channel: groupChannel,
                     presences: {}
@@ -86,11 +89,16 @@ export default {
                             .receive("ok", (updates) => { this._onGroupInitialUpdates(this.group.unique, updates) })
                             .receive("error", () => { console.log("Failed to join user group channel") })
                     },
+                    queryChats(id) {
+                        this.channel.push(this.Event.QUERY_CHATS, { id: id }).receive("ok", (resp) => {
+                            console.log(">>> RESP: ", resp.query_chats_resp)
+                        })
+                    },
                     sendP2gMessageOut(group, data) {
 
                     },
                     _onGroupInitialUpdates(unique, updates) {
-                        this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, {unique: unique, updates: updates})
+                        this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, { unique: unique, updates: updates })
                     },
                     _onP2gMessageNew(group, data) {
 
@@ -103,6 +111,18 @@ export default {
             groupChat.init()
 
             this.groupChats.push(groupChat)
+        },
+        _onQueryGChats(conv) {
+            let groupObj = null
+            for (let n = 0; n < this.groupChats.length; n++) {
+                if (this.groupChats[n].id == conv.counter_id) {
+                    groupObj = this.groupChats[n]
+                    break
+                }
+            }
+            if (groupObj != null) {
+                groupObj.queryChats(conv.id)
+            }
         },
         _onGroupNew(group) {
             console.log(">>> NEW GROUP: ", group)

@@ -31,6 +31,7 @@ export default {
         this.$events.$on(this.Event.FRIEND_ONLINE, (data) => { this._onFriendOnline(data) })
         this.$events.$on(this.Event.FRIEND_OFFLINE, (data) => { this._onFriendOffline(data) })
         this.$events.$on(this.Event.GET_CHATS, (data) => { this._onGetChats(data) })
+        this.$events.$on(this.Event.GET_GCHATS, (data) => { this._onGetGChats(data) })
         this.$events.$on(this.Event.UPDATE_CHAT_DATA, (data) => { this._onUpdateChatData(data) })
         this.$events.$on(this.Event.P2P_MSG_NEW, (data) => { this._onP2pMsgNew(data) })
         this.$events.$on(this.Event.P2P_MSG_IN, (data) => { this._onP2pMsgIn(data) })
@@ -49,6 +50,23 @@ export default {
         this.$events.$on(this.Event.GET_FRIENDS_LIST, () => { this._onGetFriendsList() })
     },
     methods: {
+        _onGetGChats(data) {
+            let requery = false
+            let convs = this.tbl_chats.find({ 'counter_id': data.id, 'type': 'P2G' })
+            for (let n = 0; n < convs.length; n++) {
+                let conv = convs[n]
+                if (conv.chats == null || conv.date == null) {
+                    requery = true
+                    this.$events.$emit(this.Event.QUERY_GCHATS, conv)
+                } else {
+                    if (requery) {
+                        this.$events.$emit(this.Event.QUERY_GCHATS, conv)
+                    } else {
+                        this._onChatDataUpdated(conv)
+                    }
+                }
+            }
+        },
         _onGroupInitialUpdates(data) {
             let updates = data.updates
             let groups = this.tbl_groups.find({ 'unique': data.unique })
@@ -216,7 +234,7 @@ export default {
         },
         _onGetChats(data) {
             let requery = false
-            let convs = this.tbl_chats.find({ 'counter_id': data.id })
+            let convs = this.tbl_chats.find({ 'counter_id': data.id, 'type': 'P2P' })
             for (let n = 0; n < convs.length; n++) {
                 let conv = convs[n]
                 if (conv.chats == null || conv.date == null) {

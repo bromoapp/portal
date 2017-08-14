@@ -12,6 +12,7 @@ defmodule Portal.UserGroup do
     @p2g_msg_out "p2g_msg_out"
     @p2g_msg_new "p2g_msg_new"
     @p2g_msg_in "p2g_msg_in"
+    @query_chats "query_chats"
 
     # SQLs
     @sql_ongoing_gchats "CALL `sp_ongoing_gchats`(?);"
@@ -86,6 +87,15 @@ defmodule Portal.UserGroup do
         _parse_gchats(t, nresult)
     end
 
+    #=================================================================================================
+    # Functions related to p2p chats
+    #=================================================================================================
+    def handle_in(@query_chats, %{"id" => id}, socket) do
+        Logger.info(">>> RECEIVED GROUP QUERY CHATS WITH CHAT ID = #{inspect id}")
+        json = %{id: nil, counter_id: nil, date: nil, chats: nil, read: 1, type: nil}
+        {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
+    end
+    
     #=================================================================================================
     # Helper functions
     #=================================================================================================

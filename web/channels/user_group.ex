@@ -1,9 +1,11 @@
 defmodule Portal.UserGroup do
     use Portal.Web, :channel
+    alias Ecto.Changeset
     alias Ecto.Adapters.SQL
     alias Mariaex.Result
     alias Portal.GroupPresence
     alias Portal.GroupUpdates
+    alias Portal.DailyChat
     alias Portal.Group
     alias Portal.User
     require Logger
@@ -16,6 +18,7 @@ defmodule Portal.UserGroup do
 
     # SQLs
     @sql_ongoing_gchats "CALL `sp_ongoing_gchats`(?);"
+    @sql_query_gchats "SELECT a.id, a.counter_id, a.messages, a.inserted_at, a.read, a.`type` FROM daily_chats AS a WHERE a.id = ?;"
 
     #=================================================================================================
     # Functions related to members connections and presences
@@ -91,9 +94,27 @@ defmodule Portal.UserGroup do
     # Functions related to p2p chats
     #=================================================================================================
     def handle_in(@query_chats, %{"id" => id}, socket) do
-        Logger.info(">>> RECEIVED GROUP QUERY CHATS WITH CHAT ID = #{inspect id}")
-        json = %{id: nil, counter_id: nil, date: nil, chats: nil, read: 1, type: nil}
-        {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
+        %Result{rows: rows} = SQL.query!(Repo, @sql_query_gchats, [id])
+        if rows == [] do
+            {:reply, {:ok, %{"query_chats_resp" => %{}}}, socket}
+        else
+            [[id, counter_id, messages, date_time, read, type]] = rows
+            raw = Poison.decode!(messages)
+            if read == 0 do
+                chat = DailyChat |> Repo.get!(id)
+                upd_chat_map = %{read: true}
+                upd_chat_cs = DailyChat.create_or_update_p2p_changeset(chat, upd_chat_map)
+                case Repo.update(upd_chat_cs) do
+                    {:ok, _} ->
+                        :ignore
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                end
+            end
+
+            json = %{id: id, counter_id: counter_id, date: _format_date(date_time), chats: raw["chats"], read: 1, type: type}
+            {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
+        end
     end
     
     #=================================================================================================
@@ -113,5 +134,21 @@ defmodule Portal.UserGroup do
             user = Repo.get!(User, n)
             %{id: user.id, name: user.name, username: user.username}
         end)
+    end
+
+    defp _format_time do
+        {{year, month, date}, {hh, mm, ss}} = :calendar.universal_time
+        Integer.to_string(year) <> "/" <> Integer.to_string(month) <> "/" <> Integer.to_string(date)
+        <> " " <> Integer.to_string(hh) <> ":" <> Integer.to_string(mm) <> ":" <> Integer.to_string(ss)
+    end
+
+    defp _format_date(date) when is_tuple(date) do
+        {{yyyy, mm, dd}, _} = date
+        Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
+    end
+
+    defp _format_date(universal_time) do
+        {{yyyy, mm, dd}, _} = NaiveDateTime.to_erl(universal_time)
+        Integer.to_string(yyyy) <> "-" <> Integer.to_string(mm) <> "-" <> Integer.to_string(dd)
     end
 end

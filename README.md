@@ -9,7 +9,7 @@ This is a web chat app, similar to whatsapp web, and it's still under heavy (but
   * Accept or reject friendship request,
   * Person to person chat,
   * Persistence chat,
-  * Create a group and invite members to it,
+  * Create a group and its initial members,
   * Accept or reject group's membership request.
 
 **Features that are still under development:**

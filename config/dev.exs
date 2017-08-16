@@ -35,8 +35,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :portal, Portal.Repo,
   adapter: Ecto.Adapters.MySQL,
-  username: "myapp",
-  password: "something",
+  username: "root",
+  password: "admin",
   database: "portal_dev",
   hostname: "localhost",
   pool_size: 10

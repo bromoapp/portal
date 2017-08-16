@@ -34,7 +34,7 @@ Vue.mixin({
                     get INVIT_IGNORE() { return "IGNORED" },
                     get TYPE_FRIEND() { return "F" },
                     get TYPE_GROUP() { return "G" },
-                    get TOP_MARGIN() { return 310 },
+                    get TOP_MARGIN() { return 310 }
                 }
             },
 
@@ -149,8 +149,6 @@ Vue.mixin({
     }
 })
 
-lobby.init(socket, document.getElementById("lobby_div"))
-
 new Vue({
     created() {
         window.onresize = () => {
@@ -158,3 +156,5 @@ new Vue({
         }
     }
 })
+
+lobby.init(socket, document.getElementById("lobby_div"))

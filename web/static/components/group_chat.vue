@@ -39,7 +39,7 @@
                 </div>
                 <div class="chat-input form-inline">
                     <textarea id="message" class="chat-message form-control"></textarea>
-                    <button class="btn bg-f50057-d" v-on:click="sendMessage">Send</button>
+                    <button class="btn bg-f50057-d">Send</button>
                 </div>
             </div>
         </div>
@@ -50,6 +50,7 @@
 export default {
     data() {
         return {
+            username: null,
             currCounterpart: null,
             height: "450px",
             maxWidth: "580px",
@@ -64,7 +65,6 @@ export default {
     },
     methods: {
         _updateChatDialog(chat) {
-            console.log("GROUP CHAT", chat)
             if (this.panel_visible) {
                 if (this.currCounterpart.id == chat.counter_id) {
                     let oldConvDiv = document.getElementById("cid_" + chat.id)
@@ -79,10 +79,10 @@ export default {
                     conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
                     for (let n = 0; n < chats.length; n++) {
                         let obj = chats[n]
-                        if (obj.from == this.currCounterpart.username) {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\"><div class=\"chat-bubble\" style=\"text-align: left\">" + obj.message + "</div></div>"
-                        } else {
+                        if (obj.from == this.username) {
                             conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\"><div class=\"chat-bubble-me\" style=\"text-align: left\">" + obj.message + "</div></div>"
+                        } else {
+                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\"><div class=\"chat-bubble\" style=\"text-align: left\">" + obj.message + "</div></div>"
                         }
                     }
                     conv = conv + "</div>"
@@ -113,6 +113,7 @@ export default {
             this.panel_visible = false
         },
         _open() {
+            this.username = document.getElementById("lobby_div").getAttribute("data-username")
             this.$events.$emit(this.Event.CLOSE_FLOAT_PANEL)
             this.panel_visible = true
             setTimeout(() => {

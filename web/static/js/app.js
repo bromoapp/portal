@@ -78,6 +78,7 @@ Vue.mixin({
                     get CHAT_DATA_UPDATED() { return "chat_data_updated" },
                     get UPDATE_CHAT_DATA() { return "update_chat_data" },
                     get UPDATE_CHAT_DIALOG() { return "update_chat_dialog" },
+                    get UPDATE_GCHAT_DIALOG() { return "update_gchat_dialog" },
                     get UPDATE_GCHAT_DATA() { return "update_gchat_data" },
                     get P2P_MSG_OUT() { return "p2p_msg_out" },
                     get P2G_MSG_OUT() { return "p2g_msg_out" },

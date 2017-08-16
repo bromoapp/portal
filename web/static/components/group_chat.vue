@@ -60,8 +60,12 @@ export default {
     created() {
         this.$events.$on(this.Event.CLOSE_FLOAT_PANEL, () => { this._closePanel() })
         this.$events.$on(this.Event.SWITCH_GCHAT, (group) => { this._switchGChat(group) })
+        this.$events.$on(this.Event.UPDATE_GCHAT_DIALOG, (chat) => { this._updateChatDialog(chat) })
     },
     methods: {
+        _updateChatDialog(chat) {
+            console.log("GROUP CHAT", chat)
+        },
         _switchGChat(group) {
             if (this.panel_visible) {
                 if (this.currCounterpart == group) {

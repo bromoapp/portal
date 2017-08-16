@@ -77,7 +77,11 @@ export default {
             if (this.visible) {
                 if (this.currCounterpart != null) {
                     if (this.currCounterpart.id == chat.counter_id) {
-                        this.$events.$emit(this.Event.UPDATE_CHAT_DIALOG, chat)
+                        if (chat.type == 'P2P') {
+                            this.$events.$emit(this.Event.UPDATE_CHAT_DIALOG, chat)
+                        } else {
+                            this.$events.$emit(this.Event.UPDATE_GCHAT_DIALOG, chat)
+                        }
                         this.$events.$emit(this.Event.DEL_UNREAD, chat.id)
                     } else {
                         this._setItemToUnread(chat.id, chat.counter_id)

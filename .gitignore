@@ -5,6 +5,7 @@
 /*.ez
 /.env
 /config/env.local.exs
+/config/dev.exs
 
 # Generated on crash by the VM
 erl_crash.dump

@@ -63,7 +63,7 @@ export default {
                     if (requery) {
                         this.$events.$emit(this.Event.QUERY_GCHATS, conv)
                     } else {
-                        this._onGChatDataUpdated(conv)
+                        this._onChatDataUpdated(conv)
                     }
                 }
             }
@@ -81,7 +81,7 @@ export default {
             for (let n = 0; n < chats.length; n++) {
                 let chat = chats[n]
                 if (chat.read == 0) {
-                    this.tbl_unread.insert({ id: chat.id, fid: chat.counter_id, type: chat.type })
+                    this.tbl_unread.insert({ id: chat.id, cid: chat.counter_id, type: chat.type })
                 }
                 this.tbl_chats.insert(chat)
             }
@@ -128,8 +128,8 @@ export default {
                         }
                     }
                 } else {
-                    let fid = raw[n].counter_id
-                    let friends = this.tbl_friends.find({ 'id': fid })
+                    let cid = raw[n].counter_id
+                    let friends = this.tbl_friends.find({ 'id': cid })
                     if (friends.length > 0) {
                         let friend = friends[0]
                         if (!chats.includes(friend)) {
@@ -191,13 +191,14 @@ export default {
         _onGetUnread() {
             let list = this.tbl_unread.find({})
             if (list.length > 0) {
+                console.log(list)
                 this.$events.$emit(this.Event.SHOW_UNREAD, list)
             }
         },
-        _onDelUnread(fid) {
-            let unreads = this.tbl_unread.find({ "fid": fid })
+        _onDelUnread(cid) {
+            let unreads = this.tbl_unread.find({ "cid": cid })
             if (unreads.length > 0) {
-                this.tbl_unread.findAndRemove({ "fid": fid })
+                this.tbl_unread.findAndRemove({ "cid": cid })
                 this.$events.$emit(this.Event.DEL_UNREAD_REC, unreads[0].id)
             }
         },
@@ -229,7 +230,7 @@ export default {
                     convs[0].read = data.read
                     convs[0].date = data.date
                     convs[0].type = data.type
-                    this._onGChatDataUpdated(convs[0])
+                    this._onChatDataUpdated(convs[0])
                 }
             }
         },
@@ -280,9 +281,6 @@ export default {
                 this._updateFriendsList()
             }
         },
-        _onGChatDataUpdated(data) {
-            this.$events.$emit(this.Event.GCHAT_DATA_UPDATED, data)
-        },
         _onChatDataUpdated(data) {
             this.$events.$emit(this.Event.CHAT_DATA_UPDATED, data)
         },
@@ -303,7 +301,7 @@ export default {
             for (let n = 0; n < data.chats.length; n++) {
                 let chat = data.chats[n]
                 if (chat.read == 0) {
-                    this.tbl_unread.insert({ id: chat.id, fid: chat.counter_id, type: chat.type })
+                    this.tbl_unread.insert({ id: chat.id, cid: chat.counter_id, type: chat.type })
                 }
                 this.tbl_chats.insert(chat)
             }

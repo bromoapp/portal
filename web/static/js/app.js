@@ -75,7 +75,6 @@ Vue.mixin({
                     get UPDATE_CHATS_LIST() { return "update_chats_list" },
                     get UPDATE_CHANNELS_LIST() { return "update_channels_list" },
                     get UPDATE_INVITATIONS_LIST() { return "update_invitations_list" },
-                    get GCHAT_DATA_UPDATED() { return "gchat_data_updated" },
                     get CHAT_DATA_UPDATED() { return "chat_data_updated" },
                     get UPDATE_CHAT_DATA() { return "update_chat_data" },
                     get UPDATE_CHAT_DIALOG() { return "update_chat_dialog" },

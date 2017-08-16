@@ -91,7 +91,7 @@ export default {
                     },
                     queryChats(id) {
                         this.channel.push(this.Event.QUERY_CHATS, { id: id }).receive("ok", (resp) => {
-                            console.log(">>> RESP: ", resp.query_chats_resp)
+                            this.$events.$emit(this.Event.UPDATE_GCHAT_DATA, resp.query_chats_resp)
                         })
                     },
                     sendP2gMessageOut(group, data) {
@@ -165,7 +165,6 @@ export default {
                 })
         },
         _onInitialUpdates(updates) {
-            console.log(">>> INITIAL UPDATES", updates)
             this.$events.$emit(this.Event.INITIAL_UPDATES, updates)
         },
         _onFriendNew(friend) {

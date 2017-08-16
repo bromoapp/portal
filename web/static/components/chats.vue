@@ -66,6 +66,7 @@ export default {
     created() {
         this.$events.$on(this.Event.WINDOW_RESIZING, () => { this._onWindowResizing() })
         this.$events.$on(this.Event.CHAT_DATA_UPDATED, (data) => this._onChatDataUpdated(data))
+        this.$events.$on(this.Event.GCHAT_DATA_UPDATED, (data) => this._onGChatDataUpdated(data))
         this.$events.$on(this.Event.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
         this.$events.$on(this.Event.CLOSE_CHATS, () => { this._closeChatsList() })
         this.$events.$on(this.Event.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
@@ -73,6 +74,31 @@ export default {
         this.$events.$on(this.Event.SHOW_UNREAD, (list) => { this._showUnread(list) })
     },
     methods: {
+        _onGChatDataUpdated(data) {
+            if (this.visible) {
+                
+            } else {
+                this.$events.$emit(this.Event.HIGHLIGHT_CHATS_BTN)
+                this._setItemToUnread(chat.id, chat.counter_id)
+            }
+        },
+        _onChatDataUpdated(chat) {
+            if (this.visible) {
+                if (this.currCounterpart != null) {
+                    if (this.currCounterpart.id == chat.counter_id) {
+                        this.$events.$emit(this.Event.UPDATE_CHAT_DIALOG, chat)
+                        this.$events.$emit(this.Event.DEL_UNREAD, chat.id)
+                    } else {
+                        this._setItemToUnread(chat.id, chat.counter_id)
+                    }
+                } else {
+                    this._setItemToUnread(chat.id, chat.counter_id)
+                }
+            } else {
+                this.$events.$emit(this.Event.HIGHLIGHT_CHATS_BTN)
+                this._setItemToUnread(chat.id, chat.counter_id)
+            }
+        },
         _onWindowResizing() {
             let body = document.getElementById("items_list")
             body.style.display = "none"
@@ -94,23 +120,6 @@ export default {
                     this.$events.$emit(this.Event.HIGHLIGHT_CHATS_BTN)
                 }
             }, 300);
-        },
-        _onChatDataUpdated(chat) {
-            if (this.visible) {
-                if (this.currCounterpart != null) {
-                    if (this.currCounterpart.id == chat.counter_id) {
-                        this.$events.$emit(this.Event.UPDATE_CHAT_DIALOG, chat)
-                        this.$events.$emit(this.Event.DEL_UNREAD, chat.id)
-                    } else {
-                        this._setItemToUnread(chat.id, chat.counter_id)
-                    }
-                } else {
-                    this._setItemToUnread(chat.id, chat.counter_id)
-                }
-            } else {
-                this.$events.$emit(this.Event.HIGHLIGHT_CHATS_BTN)
-                this._setItemToUnread(chat.id, chat.counter_id)
-            }
         },
         _onChatDialogClosed() {
             this.currCounterpart = null

@@ -33,6 +33,7 @@ export default {
         this.$events.$on(this.Event.GET_CHATS, (data) => { this._onGetChats(data) })
         this.$events.$on(this.Event.GET_GCHATS, (data) => { this._onGetGChats(data) })
         this.$events.$on(this.Event.UPDATE_CHAT_DATA, (data) => { this._onUpdateChatData(data) })
+        this.$events.$on(this.Event.UPDATE_GCHAT_DATA, (data) => { this._onUpdateGChatData(data) })
         this.$events.$on(this.Event.P2P_MSG_NEW, (data) => { this._onP2pMsgNew(data) })
         this.$events.$on(this.Event.P2P_MSG_IN, (data) => { this._onP2pMsgIn(data) })
         this.$events.$on(this.Event.ADD_UNREAD, (data) => { this._onAddUnread(data) })
@@ -62,7 +63,7 @@ export default {
                     if (requery) {
                         this.$events.$emit(this.Event.QUERY_GCHATS, conv)
                     } else {
-                        this._onChatDataUpdated(conv)
+                        this._onGChatDataUpdated(conv)
                     }
                 }
             }
@@ -220,8 +221,20 @@ export default {
                 }
             }
         },
+        _onUpdateGChatData(data) {
+            let convs = this.tbl_chats.find({ 'id': data.id, 'type': 'P2G' })
+            if (convs.length > 0) {
+                if (convs[0]) {
+                    convs[0].chats = data.chats
+                    convs[0].read = data.read
+                    convs[0].date = data.date
+                    convs[0].type = data.type
+                    this._onGChatDataUpdated(convs[0])
+                }
+            }
+        },
         _onUpdateChatData(data) {
-            let convs = this.tbl_chats.find({ 'id': data.id })
+            let convs = this.tbl_chats.find({ 'id': data.id, 'type': 'P2P' })
             if (convs.length > 0) {
                 if (convs[0]) {
                     convs[0].chats = data.chats
@@ -266,6 +279,9 @@ export default {
                 friends[0].online = true
                 this._updateFriendsList()
             }
+        },
+        _onGChatDataUpdated(data) {
+            this.$events.$emit(this.Event.GCHAT_DATA_UPDATED, data)
         },
         _onChatDataUpdated(data) {
             this.$events.$emit(this.Event.CHAT_DATA_UPDATED, data)

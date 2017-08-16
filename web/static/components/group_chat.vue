@@ -65,6 +65,7 @@ export default {
     },
     methods: {
         _updateChatDialog(chat) {
+            console.log(">>> DATA", chat)
             if (this.panel_visible) {
                 if (this.currCounterpart.id == chat.counter_id) {
                     let oldConvDiv = document.getElementById("cid_" + chat.id)
@@ -98,6 +99,9 @@ export default {
                     this._close()
                 } else {
                     this.currCounterpart = group
+                    document.getElementById("messages").innerHTML = ""
+                    document.getElementById("chat_to").innerHTML = "Group: " + this.currCounterpart.name
+                    this.$events.$emit(this.Event.GET_GCHATS, this.currCounterpart)
                 }
             } else {
                 this.currCounterpart = group
@@ -110,6 +114,7 @@ export default {
             }
         },
         _close() {
+            this.$events.$emit(this.Event.CHAT_DIALOG_CLOSED)
             this.panel_visible = false
         },
         _open() {

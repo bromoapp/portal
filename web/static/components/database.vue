@@ -282,6 +282,7 @@ export default {
             }
         },
         _onChatDataUpdated(data) {
+            console.log(">>> UPDATING CHAT DATA", data)
             this.$events.$emit(this.Event.CHAT_DATA_UPDATED, data)
         },
         _onInitialUpdates(data) {

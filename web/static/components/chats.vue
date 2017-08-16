@@ -60,7 +60,8 @@ export default {
             currCounterpart: null,
             counterparts: [],
             visible: false,
-            src_form_visible: false
+            src_form_visible: false,
+            cleanCurrCounterPart: true
         }
     },
     created() {
@@ -117,14 +118,16 @@ export default {
             }, 300);
         },
         _onChatDialogClosed() {
-            this.currCounterpart = null
+            if (this.cleanCurrCounterPart) {
+                this.currCounterpart = null
+            }
         },
         _setItemToUnread(id, cid) {
             setTimeout(() => {
                 this.$events.$emit(this.Event.ADD_UNREAD, { id: id, cid: cid })
                 let el = document.getElementById('cpid_' + cid)
                 if (el) {
-                    el.innerHTML = this._getFriendsName(cid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                    el.innerHTML = this._getFriendName(cid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
                 }
             }, 200);
         },
@@ -153,11 +156,11 @@ export default {
                 }, 200)
             }, 300)
         },
-        _getFriendsName(id) {
+        _getFriendName(id) {
             let friend = null
             for (let n = 0; n < this.counterparts.length; n++) {
                 friend = this.counterparts[n]
-                if (friend.id == id) {
+                if (friend.id == id && friend.members == null) {
                     break
                 }
             }
@@ -167,14 +170,29 @@ export default {
                 return ""
             }
         },
+        _getGroupName(id) {
+            let group = null
+            for (let n = 0; n < this.counterparts.length; n++) {
+                group = this.counterparts[n]
+                if (group.id == id && group.members != null) {
+                    break
+                }
+            }
+            if (group) {
+                return group.name
+            } else {
+                return ""
+            }
+        },
         onChatClicked(friend) {
             if (this.src_form_visible) {
                 this.seekChat()
             }
             this.currCounterpart = friend
+            this.cleanCurrCounterPart = false
             let el = document.getElementById('cpid_' + friend.id)
             if (el) {
-                el.innerHTML = this._getFriendsName(friend.id)
+                el.innerHTML = this._getFriendName(friend.id)
                 this.$events.$emit(this.Event.DEL_UNREAD, friend.id)
             }
             this.$events.$emit(this.Event.SWITCH_CHAT, friend)
@@ -184,9 +202,10 @@ export default {
                 this.seekChat()
             }
             this.currCounterpart = group
+            this.cleanCurrCounterPart = false
             let el = document.getElementById('cpid_' + group.id)
             if (el) {
-                el.innerHTML = this._getFriendsName(group.id)
+                el.innerHTML = this._getGroupName(group.id)
                 this.$events.$emit(this.Event.DEL_UNREAD, group.id)
             }
             this.$events.$emit(this.Event.SWITCH_GCHAT, group)

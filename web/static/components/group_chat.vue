@@ -65,6 +65,32 @@ export default {
     methods: {
         _updateChatDialog(chat) {
             console.log("GROUP CHAT", chat)
+            if (this.panel_visible) {
+                if (this.currCounterpart.id == chat.counter_id) {
+                    let oldConvDiv = document.getElementById("cid_" + chat.id)
+                    if (oldConvDiv) {
+                        var parent = oldConvDiv.parentNode
+                        parent.removeChild(oldConvDiv)
+                    }
+                    let chats = chat.chats
+                    let conv_div = document.getElementById("messages")
+                    let old_conv = conv_div.innerHTML
+                    let conv = "<div id=\"cid_" + chat.id + "\">"
+                    conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
+                    for (let n = 0; n < chats.length; n++) {
+                        let obj = chats[n]
+                        if (obj.from == this.currCounterpart.username) {
+                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\"><div class=\"chat-bubble\" style=\"text-align: left\">" + obj.message + "</div></div>"
+                        } else {
+                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\"><div class=\"chat-bubble-me\" style=\"text-align: left\">" + obj.message + "</div></div>"
+                        }
+                    }
+                    conv = conv + "</div>"
+                    let new_conv = old_conv + conv
+                    conv_div.innerHTML = new_conv
+                    conv_div.scrollTop = conv_div.scrollHeight;
+                }
+            }
         },
         _switchGChat(group) {
             if (this.panel_visible) {

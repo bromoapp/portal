@@ -122,7 +122,6 @@ export default {
                     let groups = this.tbl_groups.find({ 'id': cid })
                     if (groups.length > 0) {
                         let group = groups[0]
-                        console.log(">>> GROUP", group)
                         if (!chats.includes(group)) {
                             chats.push(groups[0])
                         }
@@ -191,7 +190,6 @@ export default {
         _onGetUnread() {
             let list = this.tbl_unread.find({})
             if (list.length > 0) {
-                console.log(list)
                 this.$events.$emit(this.Event.SHOW_UNREAD, list)
             }
         },
@@ -282,7 +280,6 @@ export default {
             }
         },
         _onChatDataUpdated(data) {
-            console.log(">>> UPDATING CHAT DATA", data)
             this.$events.$emit(this.Event.CHAT_DATA_UPDATED, data)
         },
         _onInitialUpdates(data) {

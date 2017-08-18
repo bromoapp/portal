@@ -31,7 +31,7 @@
                             </span>
                         </div>
                         <div v-else v-on:click="onGChatClicked(counterpart)" class="accordion-btn bg-263238-d">
-                            <span v-bind:id="'cpid_' + counterpart.id">{{ counterpart.name }}</span>
+                            <span v-bind:id="'gcpid_' + counterpart.id">{{ counterpart.name }}</span>
                             <span v-if="counterpart.online" style="color: #ffb300" class="pull-right icon">
                                 <i class="fa fa-comment"></i>
                             </span>
@@ -131,7 +131,7 @@ export default {
             } else {
                 setTimeout(() => {
                     this.$events.$emit(this.Event.ADD_UNREAD, { id: id, cid: cid })
-                    let el = document.getElementById('cpid_' + cid)
+                    let el = document.getElementById('gcpid_' + cid)
                     if (el) {
                         el.innerHTML = this._getGroupName(cid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
                     }
@@ -208,7 +208,7 @@ export default {
                 this.seekChat()
             }
             this.currCounterpart = group
-            let el = document.getElementById('cpid_' + group.id)
+            let el = document.getElementById('gcpid_' + group.id)
             if (el) {
                 el.innerHTML = this._getGroupName(group.id)
                 this.$events.$emit(this.Event.DEL_UNREAD, group.id)

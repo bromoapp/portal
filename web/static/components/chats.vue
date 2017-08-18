@@ -84,14 +84,14 @@ export default {
                         }
                         this.$events.$emit(this.Event.DEL_UNREAD, chat.id)
                     } else {
-                        this._setItemToUnread(chat.id, chat.counter_id)
+                        this._setItemToUnread(chat.id, chat.counter_id, chat.type)
                     }
                 } else {
-                    this._setItemToUnread(chat.id, chat.counter_id)
+                    this._setItemToUnread(chat.id, chat.counter_id, chat.type)
                 }
             } else {
                 this.$events.$emit(this.Event.HIGHLIGHT_CHATS_BTN)
-                this._setItemToUnread(chat.id, chat.counter_id)
+                this._setItemToUnread(chat.id, chat.counter_id, chat.type)
             }
         },
         _onWindowResizing() {
@@ -108,7 +108,7 @@ export default {
                 if (this.visible) {
                     if (list.length > 0) {
                         for (let n = 0; n < list.length; n++) {
-                            this._setItemToUnread(list[n].id, list[n].cid)
+                            this._setItemToUnread(list[n].id, list[n].cid, list[n].type)
                         }
                     }
                 } else {
@@ -119,14 +119,24 @@ export default {
         _onChatDialogClosed() {
             this.currCounterpart = null
         },
-        _setItemToUnread(id, cid) {
-            setTimeout(() => {
-                this.$events.$emit(this.Event.ADD_UNREAD, { id: id, cid: cid })
-                let el = document.getElementById('cpid_' + cid)
-                if (el) {
-                    el.innerHTML = this._getFriendName(cid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
-                }
-            }, 200);
+        _setItemToUnread(id, cid, type) {
+            if (type == "P2P") {
+                setTimeout(() => {
+                    this.$events.$emit(this.Event.ADD_UNREAD, { id: id, cid: cid })
+                    let el = document.getElementById('cpid_' + cid)
+                    if (el) {
+                        el.innerHTML = this._getFriendName(cid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                    }
+                }, 200);
+            } else {
+                setTimeout(() => {
+                    this.$events.$emit(this.Event.ADD_UNREAD, { id: id, cid: cid })
+                    let el = document.getElementById('cpid_' + cid)
+                    if (el) {
+                        el.innerHTML = this._getGroupName(cid) + " <i class=\"chat-new-msg fa fa-exclamation\"></i>"
+                    }
+                }, 200);
+            }
         },
         _updateChatsList(list) {
             this.counterparts = list

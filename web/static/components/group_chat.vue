@@ -65,7 +65,6 @@ export default {
     },
     methods: {
         _updateChatDialog(chat) {
-            console.log(">>> DATA", chat)
             if (this.panel_visible) {
                 if (this.currCounterpart.id == chat.counter_id) {
                     let oldConvDiv = document.getElementById("cid_" + chat.id)
@@ -80,10 +79,19 @@ export default {
                     conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
                     for (let n = 0; n < chats.length; n++) {
                         let obj = chats[n]
+                        console.log(">>> OBJ", obj)
                         if (obj.from == this.username) {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\"><div class=\"chat-bubble-me\" style=\"text-align: left\">" + obj.message + "</div></div>"
+                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\">" +
+                                "<div class=\"chat-bubble-me\" style=\"text-align: left\">" +
+                                "<div style=\"font-size: 11px; font-weight: bold\">" + this.getMemberName(this.username) + "</div>" +
+                                "<div>" + obj.message + "</div></div>" +
+                                "</div>"
                         } else {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\"><div class=\"chat-bubble\" style=\"text-align: left\">" + obj.message + "</div></div>"
+                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\">" +
+                                "<div class=\"chat-bubble\" style=\"text-align: left\">" + 
+                                "<div style=\"font-size: 11px; font-weight: bold\">" + this.getMemberName(obj.from) + "</div>" +
+                                "<div>" + obj.message + "</div></div>" +
+                                "</div>"
                         }
                     }
                     conv = conv + "</div>"
@@ -138,6 +146,16 @@ export default {
 
                 this.$events.$emit(this.Event.GET_GCHATS, this.currCounterpart)
             }, 300)
+        },
+        getMemberName(username) {
+            let name = username
+            for (let n = 0; n < this.currCounterpart.members.length; n++) {
+                if (this.currCounterpart.members[n].username == username) {
+                    name = this.currCounterpart.members[n].name
+                    break
+                }
+            }
+            return name
         },
         onSmiley(event) {
             event.target.blur()

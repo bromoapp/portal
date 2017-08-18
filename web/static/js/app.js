@@ -117,6 +117,7 @@ Vue.mixin({
 
                     // Component 2 component messages w/o args that triggers GUI component
                     get CHAT_DIALOG_CLOSED() { return "chat_dialog_closed" },
+                    get GCHAT_DIALOG_CLOSED() { return "gchat_dialog_closed" },
                     get SIGN_OUT() { return "sign_out" },
                     get LOGIN_SUBMIT() { return "login_submit" },
                     get LOGIN_CANCEL() { return "login_cancel" },

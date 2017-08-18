@@ -121,7 +121,7 @@ export default {
             }
         },
         _close() {
-            this.$events.$emit(this.Event.CHAT_DIALOG_CLOSED)
+            this.$events.$emit(this.Event.GCHAT_DIALOG_CLOSED)
             this.panel_visible = false
         },
         _open() {

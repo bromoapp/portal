@@ -57,7 +57,8 @@
 export default {
     data() {
         return {
-            currCounterpart: null,
+            currGroup: null,
+            currFriend: null,
             counterparts: [],
             visible: false,
             src_form_visible: false,
@@ -69,19 +70,23 @@ export default {
         this.$events.$on(this.Event.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
         this.$events.$on(this.Event.CLOSE_CHATS, () => { this._closeChatsList() })
         this.$events.$on(this.Event.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
+        this.$events.$on(this.Event.GCHAT_DIALOG_CLOSED, () => { this._onGChatDialogClosed() })
         this.$events.$on(this.Event.UPDATE_CHATS_LIST, (list) => { this._updateChatsList(list) })
         this.$events.$on(this.Event.SHOW_UNREAD, (list) => { this._showUnread(list) })
     },
     methods: {
         _onChatDataUpdated(chat) {
             if (this.visible) {
-                if (this.currCounterpart != null) {
-                    if (this.currCounterpart.id == chat.counter_id) {
-                        if (chat.type == 'P2P') {
-                            this.$events.$emit(this.Event.UPDATE_CHAT_DIALOG, chat)
-                        } else {
-                            this.$events.$emit(this.Event.UPDATE_GCHAT_DIALOG, chat)
-                        }
+                if (this.currFriend != null) {
+                    if (this.currFriend.id == chat.counter_id) {
+                        this.$events.$emit(this.Event.UPDATE_CHAT_DIALOG, chat)
+                        this.$events.$emit(this.Event.DEL_UNREAD, chat.id)
+                    } else {
+                        this._setItemToUnread(chat.id, chat.counter_id, chat.type)
+                    }
+                } else if (this.currGroup != null) {
+                    if (this.currGroup.id == chat.counter_id) {
+                        this.$events.$emit(this.Event.UPDATE_GCHAT_DIALOG, chat)
                         this.$events.$emit(this.Event.DEL_UNREAD, chat.id)
                     } else {
                         this._setItemToUnread(chat.id, chat.counter_id, chat.type)
@@ -117,9 +122,13 @@ export default {
             }, 300);
         },
         _onChatDialogClosed() {
-            this.currCounterpart = null
+            this.currFriend = null
+        },
+        _onGChatDialogClosed() {
+            this.currGroup = null
         },
         _setItemToUnread(id, cid, type) {
+            console.log(">>> UNREAD " + type)
             if (type == "P2P") {
                 setTimeout(() => {
                     this.$events.$emit(this.Event.ADD_UNREAD, { id: id, cid: cid })
@@ -157,8 +166,13 @@ export default {
                     this.$events.$emit(this.Event.GET_UNREAD)
 
                     if (counter && counter.target == null) {
-                        this.currCounterpart = counter
-                        this.$events.$emit(this.Event.SWITCH_CHAT, this.currCounterpart)
+                        if (counter.members) {
+                            this.currGroup = counter
+                            this.$events.$emit(this.Event.SWITCH_GCHAT, this.currGroup)
+                        } else {
+                            this.currFriend = counter
+                            this.$events.$emit(this.Event.SWITCH_CHAT, this.currFriend)
+                        }
                     }
                 }, 200)
             }, 300)
@@ -195,7 +209,7 @@ export default {
             if (this.src_form_visible) {
                 this.seekChat()
             }
-            this.currCounterpart = friend
+            this.currFriend = friend
             let el = document.getElementById('cpid_' + friend.id)
             if (el) {
                 el.innerHTML = this._getFriendName(friend.id)
@@ -207,7 +221,7 @@ export default {
             if (this.src_form_visible) {
                 this.seekChat()
             }
-            this.currCounterpart = group
+            this.currGroup = group
             let el = document.getElementById('gcpid_' + group.id)
             if (el) {
                 el.innerHTML = this._getGroupName(group.id)

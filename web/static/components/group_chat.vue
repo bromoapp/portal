@@ -14,7 +14,7 @@
                         <label id="chat_to"></label>
                     </div>
                     <div>
-                        <div id="messages" class="chat-conversation"></div>
+                        <ul id="messages" class="chat-conversation"></ul>
                     </div>
                 </div>
                 <div class="chat-friends" style="margin-left: -25px;">
@@ -79,19 +79,18 @@ export default {
                     conv = conv + "<div class=\"chat-separator\"><span>" + chat.date + "</span></div>"
                     for (let n = 0; n < chats.length; n++) {
                         let obj = chats[n]
-                        console.log(">>> OBJ", obj)
                         if (obj.from == this.username) {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\">" +
+                            conv = conv + "<li><div style=\"margin: 15px 0px 15px 0px; text-align: right\">" +
                                 "<div class=\"chat-bubble-me\" style=\"text-align: left\">" +
                                 "<div style=\"font-size: 11px; font-weight: bold\">" + this.getMemberName(this.username) + "</div>" +
                                 "<div>" + obj.message + "</div></div>" +
-                                "</div>"
+                                "</div></li>"
                         } else {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\">" +
+                            conv = conv + "<li><div style=\"margin: 15px 0px 15px 0px;\">" +
                                 "<div class=\"chat-bubble\" style=\"text-align: left\">" + 
                                 "<div style=\"font-size: 11px; font-weight: bold\">" + this.getMemberName(obj.from) + "</div>" +
                                 "<div>" + obj.message + "</div></div>" +
-                                "</div>"
+                                "</div></li>"
                         }
                     }
                     conv = conv + "</div>"

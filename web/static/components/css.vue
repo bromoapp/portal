@@ -106,6 +106,8 @@ export default {
 }
 
 .chat-conversation {
+    list-style: none;
+    margin-top: 0px;
     background: #d8d6d6;
     width: 380px;
     height: 300px;

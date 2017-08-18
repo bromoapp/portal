@@ -61,7 +61,6 @@ export default {
             counterparts: [],
             visible: false,
             src_form_visible: false,
-            cleanCurrCounterPart: true
         }
     },
     created() {
@@ -118,9 +117,7 @@ export default {
             }, 300);
         },
         _onChatDialogClosed() {
-            if (this.cleanCurrCounterPart) {
-                this.currCounterpart = null
-            }
+            this.currCounterpart = null
         },
         _setItemToUnread(id, cid) {
             setTimeout(() => {
@@ -189,7 +186,6 @@ export default {
                 this.seekChat()
             }
             this.currCounterpart = friend
-            this.cleanCurrCounterPart = false
             let el = document.getElementById('cpid_' + friend.id)
             if (el) {
                 el.innerHTML = this._getFriendName(friend.id)
@@ -202,7 +198,6 @@ export default {
                 this.seekChat()
             }
             this.currCounterpart = group
-            this.cleanCurrCounterPart = false
             let el = document.getElementById('cpid_' + group.id)
             if (el) {
                 el.innerHTML = this._getGroupName(group.id)

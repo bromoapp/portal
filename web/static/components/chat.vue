@@ -14,7 +14,7 @@
                         <label id="chat_to"></label>
                     </div>
                     <div>
-                        <div id="messages" class="chat-conversation"></div>
+                        <ul id="messages" class="chat-conversation"></ul>
                     </div>
                 </div>
                 <div class="box chat-toolbar inline">
@@ -68,9 +68,13 @@ export default {
                     for (let n = 0; n < chats.length; n++) {
                         let obj = chats[n]
                         if (obj.from == this.currCounterpart.username) {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px;\"><div class=\"chat-bubble\" style=\"text-align: left\">" + obj.message + "</div></div>"
+                            conv = conv + "<li><div style=\"margin: 15px 0px 15px 0px;\">" +
+                                "<div class=\"chat-bubble\" style=\"text-align: left\">" + obj.message + "</div>" +
+                                "</div></li>"
                         } else {
-                            conv = conv + "<div style=\"margin: 15px 0px 15px 0px; text-align: right\"><div class=\"chat-bubble-me\" style=\"text-align: left\">" + obj.message + "</div></div>"
+                            conv = conv + "<li><div style=\"margin: 15px 0px 15px 0px; text-align: right\">" +
+                                "<div class=\"chat-bubble-me\" style=\"text-align: left\">" + obj.message + "</div>" +
+                                "</div></li>"
                         }
                     }
                     conv = conv + "</div>"

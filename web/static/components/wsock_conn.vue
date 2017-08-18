@@ -97,6 +97,9 @@ export default {
                     sendP2gMessageOut(group, data) {
 
                     },
+                    leave() {
+                        this.channel.leave()
+                    },
                     _onGroupInitialUpdates(unique, updates) {
                         this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, { unique: unique, updates: updates })
                     },

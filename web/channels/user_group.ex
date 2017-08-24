@@ -8,8 +8,11 @@ defmodule Portal.UserGroup do
     alias Portal.DailyChat
     alias Portal.Group
     alias Portal.User
+    alias Portal.Chat    
     require Logger
 
+    @group_not_found "Group not found!"
+    
     # Event topics
     @p2g_msg_out "p2g_msg_out"
     @p2g_msg_new "p2g_msg_new"
@@ -91,8 +94,20 @@ defmodule Portal.UserGroup do
     end
 
     #=================================================================================================
-    # Functions related to p2p chats
+    # Functions related to p2g chats
     #=================================================================================================
+    def handle_in(@p2g_msg_out, %{"msg" => message}, socket) do
+        sender = socket.assigns.user
+        unique = _parse_unique(socket.topic)
+        group = Repo.get_by(Group, unique: unique)
+        if (group != nil) do
+            chat = %Chat{from: sender.username, message: message, time: _format_time()}
+            {:noreply, socket}
+        else
+            {:reply, {:error, %{"msg" => @group_not_found}}, socket}            
+        end
+    end
+    
     def handle_in(@query_chats, %{"id" => id}, socket) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_query_gchats, [id])
         if rows == [] do

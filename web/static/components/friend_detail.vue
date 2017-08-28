@@ -13,8 +13,9 @@
                     </div>
                 </div>
                 <div class="friend-details">
-                    <div>
-                        <label id="friend_name"></label>
+                    <div><span style="font-weight: bold" id="friend_name"></span></div>
+                    <div style="font-size: 10px; margin-bottom: 5px;">
+                        <span id="friend_uname"></span>
                     </div>
                     <div style="font-size: 10px; ">45 mins ago</div>
                     <div class="friend-status">
@@ -41,7 +42,7 @@ export default {
     data() {
         return {
             currFriend: null,
-            height: "350px",
+            height: "360px",
             maxWidth: "250px",
             panel_visible: false
         }
@@ -92,6 +93,7 @@ export default {
         },
         _showDetails() {
             document.getElementById("friend_name").innerHTML = this.currFriend.name
+            document.getElementById("friend_uname").innerHTML = this.currFriend.username
             document.getElementById("friend_status").innerHTML = "Hi, this is my status and the only status that deserve tobe appreciate by anyone here :P"
         },
         startChat() {

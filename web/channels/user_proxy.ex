@@ -28,7 +28,6 @@ defmodule Portal.UserProxy do
 
     # Chat types
     @chat_p2p "P2P"
-    @chat_p2g "P2G"
 
     # Event topics
     @friend_online "friend_online"

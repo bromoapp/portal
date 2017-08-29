@@ -13,6 +13,8 @@ defmodule Portal.UserGroup do
 
     @group_not_found "Group not found!"
     
+    @chat_p2g "P2G"
+    
     # Event topics
     @p2g_msg_out "p2g_msg_out"
     @p2g_msg_new "p2g_msg_new"
@@ -53,7 +55,7 @@ defmodule Portal.UserGroup do
         unique = _parse_unique(socket.topic)
         group = Repo.get_by(Group, unique: unique)
         if (group != nil) do
-            admins = _parse_users(String.split(group.admins, ","))
+            admins = _get_group_members(String.split(group.admins, ","))
             |> Enum.map(fn(x) -> %{name: x.name, username: x.username} end)
             {socket, %GroupUpdates{struct | admins: admins}}
         else
@@ -66,7 +68,7 @@ defmodule Portal.UserGroup do
         user = socket.assigns.user
         group = Repo.get_by(Group, unique: unique)
         if (group != nil) do
-            members = _parse_users(String.split(group.members, ","))
+            members = _get_group_members(String.split(group.members, ","))
             |> Enum.map(fn(x) -> %{name: x.name, username: x.username} end)
             {socket, %GroupUpdates{struct | members: members}}
         else
@@ -103,20 +105,46 @@ defmodule Portal.UserGroup do
         group = Repo.get_by(Group, unique: unique)
         if (group != nil) do
             chat = %Chat{from: sender.username, message: message, time: _format_time()}
-            _parse_users(String.split(group.members, ","))
-            |> Enum.each(fn(x) -> _create_update_group_chat(x, group, message) end)
+
+            _get_group_members(String.split(group.members, ","))
+            |> Enum.map(fn(x) -> _create_update_group_chat(x, group, chat) end)
             {:noreply, socket}
         else
             {:reply, {:error, %{"msg" => @group_not_found}}, socket}            
         end
     end
 
-    defp _create_update_group_chat(user, group, message) do
+    defp _create_update_group_chat(user, group, chat) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [_format_date(:calendar.universal_time), user.id, group.id])
         if rows == [] do
             Logger.info(">>> NEW GROUP CHAT FOR USER: #{inspect user.username}")
+            # creates new chat for user
+            chats = %Chats{chats: [chat]}
+            text = Poison.encode!(chats)
+            user_chat_map = %{read: false, messages: text, type: @chat_p2g, counter_id: group.id}
+            |> Map.put(:user, user)
+            user_chat_cs = DailyChat.create_or_update_p2p_changeset(%DailyChat{}, user_chat_map)
+            |> Changeset.put_assoc(:user, user)
+
+            case Repo.insert(user_chat_cs) do
+                {:ok, user_chat} ->
+                    raw = Poison.decode!(user_chat.messages)
+                    json = %{id: user_chat.id, counter_id: group.id, date: _format_date(user_chat.inserted_at), 
+                        chats: raw["chats"], read: _parse_bool_val(user_chat.read), type: @chat_p2g}
+                    {:p2g_msg_new, json}
+                {:error, changeset} ->
+                    {:error, changeset}
+            end
         else
             Logger.info(">>> UPDATE GROUP CHAT FOR USER: #{inspect user.username}")
+            # updates existing chat
+            [[id]] = rows
+            user_chat = DailyChat |> Repo.get!(id)
+            old_user_chats = Poison.decode!(user_chat.messages, as: %Chats{})
+            upd_user_chat_list = %Chats{chats: old_user_chats.chats ++ [chat]}
+            text = Poison.encode!(upd_user_chat_list)
+            upd_user_chat_map = %{read: false, messages: text}
+            |> Map.put(:user, user)
         end
     end
     
@@ -152,7 +180,7 @@ defmodule Portal.UserGroup do
         unique
     end
 
-    defp _parse_users(list) do
+    defp _get_group_members(list) do
         Enum.map(list, fn(x) -> 
             id = Regex.replace(~r/#/, x, "")
             String.to_integer(id)

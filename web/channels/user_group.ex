@@ -22,7 +22,8 @@ defmodule Portal.UserGroup do
     # SQLs
     @sql_ongoing_gchats "CALL `sp_ongoing_gchats`(?);"
     @sql_query_gchats "SELECT a.id, a.counter_id, a.messages, a.inserted_at, a.read, a.`type` FROM daily_chats AS a WHERE a.id = ?;"
-
+    @sql_get_chat "SELECT a.id FROM daily_chats AS a WHERE DATE(a.inserted_at) = STR_TO_DATE(?, '%Y-%m-%d') AND a.user_id = ? AND a.counter_id = ? AND a.`type` = 'P2G';"
+    
     #=================================================================================================
     # Functions related to members connections and presences
     #=================================================================================================
@@ -102,10 +103,20 @@ defmodule Portal.UserGroup do
         group = Repo.get_by(Group, unique: unique)
         if (group != nil) do
             chat = %Chat{from: sender.username, message: message, time: _format_time()}
-            Logger.info(">>> CHAT: #{inspect chat}")
+            _parse_users(String.split(group.members, ","))
+            |> Enum.each(fn(x) -> _create_update_group_chat(x, group, message) end)
             {:noreply, socket}
         else
             {:reply, {:error, %{"msg" => @group_not_found}}, socket}            
+        end
+    end
+
+    defp _create_update_group_chat(user, group, message) do
+        %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [_format_date(:calendar.universal_time), user.id, group.id])
+        if rows == [] do
+            Logger.info(">>> NEW GROUP CHAT FOR USER: #{inspect user.username}")
+        else
+            Logger.info(">>> UPDATE GROUP CHAT FOR USER: #{inspect user.username}")
         end
     end
     

@@ -7,9 +7,9 @@ defmodule Portal.UserGroup do
     alias Portal.GroupUpdates
     alias Portal.DailyChat
     alias Portal.Group
-    alias Portal.Chats    
+    alias Portal.Chats
     alias Portal.User
-    alias Portal.Chat    
+    alias Portal.Chat
     require Logger
 
     @group_not_found "Group not found!"

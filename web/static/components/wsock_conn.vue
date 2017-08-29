@@ -54,6 +54,7 @@ export default {
         // Group chat related events handlers
         this.$events.$on(this.Event.JOIN_GROUP, (group) => { this._joinGroupChat(group) })
         this.$events.$on(this.Event.QUERY_GCHATS, (conv) => { this._onQueryGChats(conv) })
+        this.$events.$on(this.Event.P2G_MSG_OUT, (group, message) => { this._onP2gMsgOut(group, message) })
 
         // Add friend events handlers
         this.$events.$on(this.Event.DEL_UNREAD_REC, (id) => { this._onDelUnreadRec(id) })
@@ -94,8 +95,13 @@ export default {
                             this.$events.$emit(this.Event.UPDATE_GCHAT_DATA, resp.query_chats_resp)
                         })
                     },
-                    sendP2gMessageOut(group, data) {
-
+                    sendP2gMessageOut(message) {
+                        this.channel.push(this.Event.P2G_MSG_OUT, { msg: message }).receive("error", (data) => {
+                            let obj = {
+                                msg: data.msg
+                            }
+                            this.$events.$emit(this.Event.POP_ERROR, obj)
+                        })
                     },
                     leave() {
                         this.channel.leave()
@@ -114,6 +120,18 @@ export default {
             groupChat.init()
 
             this.groupChats.push(groupChat)
+        },
+        _onP2gMsgOut(group, message) {
+            let groupObj = null
+            for (let n = 0; n < this.groupChats.length; n++) {
+                if (this.groupChats[n].id == group.id) {
+                    groupObj = this.groupChats[n]
+                    break
+                }
+            }
+            if (groupObj != null) {
+                groupObj.sendP2gMessageOut(message)
+            }
         },
         _onQueryGChats(conv) {
             let groupObj = null

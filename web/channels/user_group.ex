@@ -102,6 +102,7 @@ defmodule Portal.UserGroup do
         group = Repo.get_by(Group, unique: unique)
         if (group != nil) do
             chat = %Chat{from: sender.username, message: message, time: _format_time()}
+            Logger.info(">>> CHAT: #{inspect chat}")
             {:noreply, socket}
         else
             {:reply, {:error, %{"msg" => @group_not_found}}, socket}            

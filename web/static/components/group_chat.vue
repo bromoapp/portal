@@ -39,7 +39,7 @@
                 </div>
                 <div class="chat-input form-inline">
                     <textarea id="message" class="chat-message form-control"></textarea>
-                    <button class="btn bg-f50057-d">Send</button>
+                    <button class="btn bg-f50057-d" v-on:click="sendMessage">Send</button>
                 </div>
             </div>
         </div>
@@ -155,6 +155,15 @@ export default {
                 }
             }
             return name
+        },
+        sendMessage(event) {
+            event.target.blur()
+            let msg_form = document.getElementById("message")
+            let msg = msg_form.value
+            if (msg.trim().length > 0) {
+                this.$events.$emit(this.Event.P2G_MSG_OUT, this.currCounterpart, msg)
+            }
+            msg_form.value = ""
         },
         onSmiley(event) {
             event.target.blur()

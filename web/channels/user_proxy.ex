@@ -377,7 +377,7 @@ defmodule Portal.UserProxy do
                     {:p2p_msg_in, json}
                 {:error, changeset} ->
                     {:error, changeset}
-            end           
+            end
         end
     end
     

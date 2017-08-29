@@ -7,6 +7,7 @@ defmodule Portal.UserGroup do
     alias Portal.GroupUpdates
     alias Portal.DailyChat
     alias Portal.Group
+    alias Portal.Chats    
     alias Portal.User
     alias Portal.Chat    
     require Logger
@@ -123,14 +124,16 @@ defmodule Portal.UserGroup do
             text = Poison.encode!(chats)
             user_chat_map = %{read: false, messages: text, type: @chat_p2g, counter_id: group.id}
             |> Map.put(:user, user)
-            user_chat_cs = DailyChat.create_or_update_p2p_changeset(%DailyChat{}, user_chat_map)
+            user_chat_cs = DailyChat.create_or_update_p2g_changeset(%DailyChat{}, user_chat_map)
             |> Changeset.put_assoc(:user, user)
+
+            Logger.info(">>> NEW P2G CHANGESET VALID? #{inspect user_chat_cs}")
 
             case Repo.insert(user_chat_cs) do
                 {:ok, user_chat} ->
                     raw = Poison.decode!(user_chat.messages)
                     json = %{id: user_chat.id, counter_id: group.id, date: _format_date(user_chat.inserted_at), 
-                        chats: raw["chats"], read: _parse_bool_val(user_chat.read), type: @chat_p2g}
+                        chats: raw["chats"], read: false, type: @chat_p2g}
                     {:p2g_msg_new, json}
                 {:error, changeset} ->
                     {:error, changeset}
@@ -145,6 +148,21 @@ defmodule Portal.UserGroup do
             text = Poison.encode!(upd_user_chat_list)
             upd_user_chat_map = %{read: false, messages: text}
             |> Map.put(:user, user)
+
+            upd_user_chat_cs = DailyChat.create_or_update_p2g_changeset(user_chat, upd_user_chat_map)
+
+            Logger.info(">>> UPD P2G CHANGESET VALID? #{inspect upd_user_chat_cs}")
+
+            case Repo.update(upd_user_chat_cs) do
+                {:ok, upd_user_chat} ->
+                    %Chat{from: uname, message: message, time: time} = chat
+                    nchat = %{"from" => uname, "message" => message, "time" => time}
+                    json = %{id: upd_user_chat.id, counter_id: group.id, date: _format_date(upd_user_chat.updated_at), 
+                        chats: [nchat], read: false, type: @chat_p2g}
+                    {:p2p_msg_in, json}
+                {:error, changeset} ->
+                    {:error, changeset}
+            end
         end
     end
     

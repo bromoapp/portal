@@ -19,7 +19,7 @@ defmodule Portal.DailyChat do
         |> foreign_key_constraint(:user)
     end
 
-    def create_or_update_group_changeset(struct, params) do
+    def create_or_update_p2g_changeset(struct, params) do
         struct
         |> cast(params, [:read, :messages, :counter_id, :type])
         |> validate_required([:read, :messages, :counter_id, :type])

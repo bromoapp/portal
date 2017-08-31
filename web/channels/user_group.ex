@@ -127,7 +127,7 @@ defmodule Portal.UserGroup do
             user_chat_cs = DailyChat.create_or_update_p2g_changeset(%DailyChat{}, user_chat_map)
             |> Changeset.put_assoc(:user, user)
 
-            Logger.info(">>> NEW P2G CHANGESET VALID? #{inspect user_chat_cs}")
+            Logger.info(">>> NEW P2G CHANGESET = #{inspect user_chat_cs}")
 
             case Repo.insert(user_chat_cs) do
                 {:ok, user_chat} ->
@@ -151,7 +151,7 @@ defmodule Portal.UserGroup do
 
             upd_user_chat_cs = DailyChat.create_or_update_p2g_changeset(user_chat, upd_user_chat_map)
 
-            Logger.info(">>> UPD P2G CHANGESET VALID? #{inspect upd_user_chat_cs}")
+            Logger.info(">>> UPD P2G CHANGESET = #{inspect upd_user_chat_cs}")
 
             case Repo.update(upd_user_chat_cs) do
                 {:ok, upd_user_chat} ->

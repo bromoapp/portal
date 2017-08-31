@@ -87,6 +87,7 @@ export default {
         },
         startChat(ev) {
             ev.target.blur()
+            this.$events.$emit(this.Event.START_GCHAT, this.currGroup)
         }
     }
 }

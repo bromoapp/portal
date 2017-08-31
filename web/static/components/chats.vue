@@ -68,6 +68,7 @@ export default {
         this.$events.$on(this.Event.WINDOW_RESIZING, () => { this._onWindowResizing() })
         this.$events.$on(this.Event.CHAT_DATA_UPDATED, (data) => this._onChatDataUpdated(data))
         this.$events.$on(this.Event.OPEN_CHATS, (friend) => { this._openChatsList(friend) })
+        this.$events.$on(this.Event.OPEN_GCHATS, (group) => { this._openChatsList(group) })
         this.$events.$on(this.Event.CLOSE_CHATS, () => { this._closeChatsList() })
         this.$events.$on(this.Event.CHAT_DIALOG_CLOSED, () => { this._onChatDialogClosed() })
         this.$events.$on(this.Event.GCHAT_DIALOG_CLOSED, () => { this._onGChatDialogClosed() })

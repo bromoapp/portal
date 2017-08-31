@@ -162,8 +162,8 @@ defmodule Portal.UserProxyTest do
         
         assert_push(@friend_new, friend_new, 1000)
         %{id: _, name: a_name, online: _, username: a_username} = friend_new
-        assert a_name = @user_a.name
-        assert a_username = @user_a.username
+        assert a_name == @user_a.name
+        assert a_username == @user_a.username
     end
 
     test "6. User A creates a group that includes B as its member", %{socket_a: socket_a, user_a: user_a, 

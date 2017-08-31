@@ -77,6 +77,7 @@ export default {
     created() {
         this.$events.$on(this.Event.MINIMIZE, () => this._close())
         this.$events.$on(this.Event.START_CHAT, (friend) => { this.openChats(friend) })
+        this.$events.$on(this.Event.START_GCHAT, (group) => { this.openGChats(group) })
         this.$events.$on(this.Event.HIGHLIGHT_CHATS_BTN, () => this._switchChatsBtn(true))
         this.$events.$on(this.Event.HIGHLIGHT_INVITS_BTN, () => this._switchInvitsBtn(true))
     },
@@ -163,6 +164,15 @@ export default {
                 this._switchChatsBtn(false)
                 this._closeSubPanel()
                 this.$events.$emit(this.Event.OPEN_CHATS, friend)
+                this.closeCmd = this.Event.CLOSE_CHATS
+            }
+        },
+        openGChats(group) {
+            btnChats.blur()
+            if (this.closeCmd != this.Event.CLOSE_CHATS) {
+                this._switchChatsBtn(false)
+                this._closeSubPanel()
+                this.$events.$emit(this.Event.OPEN_GCHATS, group)
                 this.closeCmd = this.Event.CLOSE_CHATS
             }
         },

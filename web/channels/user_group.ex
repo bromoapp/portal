@@ -106,9 +106,21 @@ defmodule Portal.UserGroup do
         group = Repo.get_by(Group, unique: unique)
         if (group != nil) do
             chat = %Chat{from: sender.username, message: message, time: _format_time()}
-
             _get_group_members(String.split(group.members, ","))
-            |> Enum.map(fn(x) -> _create_update_group_chat(x, group, chat) end)
+            |> Enum.map(fn(a) -> _create_update_group_chat(a, group, chat) end)
+            |> Enum.each(fn(b) -> 
+                case b do
+                    {:error, changeset} ->
+                        Logger.error(">>> ERROR #{inspect changeset}")
+                    {mode, json} ->
+                        cond do
+                            mode == :p2g_msg_new ->
+                                :ok
+                            true ->
+                                :ok 
+                        end
+                end
+            end)
             {:noreply, socket}
         else
             {:reply, {:error, %{"msg" => @group_not_found}}, socket}            
@@ -118,7 +130,6 @@ defmodule Portal.UserGroup do
     defp _create_update_group_chat(user, group, chat) do
         %Result{rows: rows} = SQL.query!(Repo, @sql_get_chat, [_format_date(:calendar.universal_time), user.id, group.id])
         if rows == [] do
-            Logger.info(">>> NEW GROUP CHAT FOR USER: #{inspect user.username}")
             # creates new chat for user
             chats = %Chats{chats: [chat]}
             text = Poison.encode!(chats)
@@ -126,8 +137,6 @@ defmodule Portal.UserGroup do
             |> Map.put(:user, user)
             user_gchat_cs = DailyChat.create_or_update_p2g_changeset(%DailyChat{}, user_gchat_map)
             |> Changeset.put_assoc(:user, user)
-
-            Logger.info(">>> NEW P2G CHANGESET = #{inspect user_gchat_cs}")
 
             case Repo.insert(user_gchat_cs) do
                 {:ok, user_gchat} ->
@@ -139,7 +148,6 @@ defmodule Portal.UserGroup do
                     {:error, changeset}
             end
         else
-            Logger.info(">>> UPDATE GROUP CHAT FOR USER: #{inspect user.username}")
             # updates existing chat
             [[id]] = rows
             user_gchat = DailyChat |> Repo.get!(id)
@@ -150,8 +158,6 @@ defmodule Portal.UserGroup do
             |> Map.put(:user, user)
 
             upd_user_gchat_cs = DailyChat.create_or_update_p2g_changeset(user_gchat, upd_user_gchat_map)
-
-            Logger.info(">>> UPD P2G CHANGESET = #{inspect upd_user_gchat_cs}")
 
             case Repo.update(upd_user_gchat_cs) do
                 {:ok, upd_user_gchat} ->

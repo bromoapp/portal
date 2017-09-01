@@ -122,17 +122,17 @@ defmodule Portal.UserGroup do
             # creates new chat for user
             chats = %Chats{chats: [chat]}
             text = Poison.encode!(chats)
-            user_chat_map = %{read: false, messages: text, type: @chat_p2g, counter_id: group.id}
+            user_gchat_map = %{read: false, messages: text, type: @chat_p2g, counter_id: group.id}
             |> Map.put(:user, user)
-            user_chat_cs = DailyChat.create_or_update_p2g_changeset(%DailyChat{}, user_chat_map)
+            user_gchat_cs = DailyChat.create_or_update_p2g_changeset(%DailyChat{}, user_gchat_map)
             |> Changeset.put_assoc(:user, user)
 
-            Logger.info(">>> NEW P2G CHANGESET = #{inspect user_chat_cs}")
+            Logger.info(">>> NEW P2G CHANGESET = #{inspect user_gchat_cs}")
 
-            case Repo.insert(user_chat_cs) do
-                {:ok, user_chat} ->
-                    raw = Poison.decode!(user_chat.messages)
-                    json = %{id: user_chat.id, counter_id: group.id, date: _format_date(user_chat.inserted_at), 
+            case Repo.insert(user_gchat_cs) do
+                {:ok, user_gchat} ->
+                    raw = Poison.decode!(user_gchat.messages)
+                    json = %{id: user_gchat.id, counter_id: group.id, date: _format_date(user_gchat.inserted_at), 
                         chats: raw["chats"], read: false, type: @chat_p2g}
                     {:p2g_msg_new, json}
                 {:error, changeset} ->
@@ -142,24 +142,24 @@ defmodule Portal.UserGroup do
             Logger.info(">>> UPDATE GROUP CHAT FOR USER: #{inspect user.username}")
             # updates existing chat
             [[id]] = rows
-            user_chat = DailyChat |> Repo.get!(id)
-            old_user_chats = Poison.decode!(user_chat.messages, as: %Chats{})
-            upd_user_chat_list = %Chats{chats: old_user_chats.chats ++ [chat]}
-            text = Poison.encode!(upd_user_chat_list)
-            upd_user_chat_map = %{read: false, messages: text}
+            user_gchat = DailyChat |> Repo.get!(id)
+            old_user_gchats = Poison.decode!(user_gchat.messages, as: %Chats{})
+            upd_user_gchat_list = %Chats{chats: old_user_gchats.chats ++ [chat]}
+            text = Poison.encode!(upd_user_gchat_list)
+            upd_user_gchat_map = %{read: false, messages: text}
             |> Map.put(:user, user)
 
-            upd_user_chat_cs = DailyChat.create_or_update_p2g_changeset(user_chat, upd_user_chat_map)
+            upd_user_gchat_cs = DailyChat.create_or_update_p2g_changeset(user_gchat, upd_user_gchat_map)
 
-            Logger.info(">>> UPD P2G CHANGESET = #{inspect upd_user_chat_cs}")
+            Logger.info(">>> UPD P2G CHANGESET = #{inspect upd_user_gchat_cs}")
 
-            case Repo.update(upd_user_chat_cs) do
-                {:ok, upd_user_chat} ->
+            case Repo.update(upd_user_gchat_cs) do
+                {:ok, upd_user_gchat} ->
                     %Chat{from: uname, message: message, time: time} = chat
                     nchat = %{"from" => uname, "message" => message, "time" => time}
-                    json = %{id: upd_user_chat.id, counter_id: group.id, date: _format_date(upd_user_chat.updated_at), 
+                    json = %{id: upd_user_gchat.id, counter_id: group.id, date: _format_date(upd_user_gchat.updated_at), 
                         chats: [nchat], read: false, type: @chat_p2g}
-                    {:p2p_msg_in, json}
+                    {:p2g_msg_in, json}
                 {:error, changeset} ->
                     {:error, changeset}
             end
@@ -204,8 +204,7 @@ defmodule Portal.UserGroup do
             String.to_integer(id)
         end) |>
         Enum.map(fn(n) -> 
-            user = Repo.get!(User, n)
-            %{id: user.id, name: user.name, username: user.username}
+            Repo.get!(User, n)
         end)
     end
 

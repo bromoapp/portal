@@ -17,6 +17,7 @@ defmodule Portal.UserGroup do
     @chat_p2g "P2G"
     
     # Event topics
+    @broadcast_msg "broadcast_msg"
     @p2g_msg_out "p2g_msg_out"
     @p2g_msg_new "p2g_msg_new"
     @p2g_msg_in "p2g_msg_in"
@@ -101,18 +102,29 @@ defmodule Portal.UserGroup do
     # Functions related to p2g chats
     #=================================================================================================
     def handle_in(@p2g_msg_out, %{"msg" => message}, socket) do
-        sender = socket.assigns.user
+        broadcast!(socket, @broadcast_msg, %{sender: socket.assigns.user.username, msg: message})
+        {:noreply, socket}
+    end
+
+    intercept [@broadcast_msg]
+    def handle_out(@broadcast_msg, data, socket) do
+        user = socket.assigns.user
         unique = _parse_unique(socket.topic)
+        
         group = Repo.get_by(Group, unique: unique)
         if (group != nil) do
-            chat = %Chat{from: sender.username, message: message, time: _format_time()}
-            chats = _get_group_members(String.split(group.members, ","))
-            |> Enum.map(fn(a) -> _create_update_group_chat(a, group, chat) end)
-            
-            {:noreply, socket}
-        else
-            {:reply, {:error, %{"msg" => @group_not_found}}, socket}            
+            %{sender: username, msg: message} = data
+            chat = %Chat{from: username, message: message, time: _format_time()}
+            case _create_update_group_chat(user, group, chat) do
+                {:p2g_msg_new, json} ->
+                    :ok
+                {:p2g_msg_in, json} ->
+                    :ok
+                {:error, changeset} ->
+                    Logger.error(">>> ERROR #{inspect changeset}")
+            end
         end
+        {:noreply, socket}
     end
 
     defp _create_update_group_chat(user, group, chat) do

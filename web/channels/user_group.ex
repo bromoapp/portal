@@ -106,21 +106,9 @@ defmodule Portal.UserGroup do
         group = Repo.get_by(Group, unique: unique)
         if (group != nil) do
             chat = %Chat{from: sender.username, message: message, time: _format_time()}
-            _get_group_members(String.split(group.members, ","))
+            chats = _get_group_members(String.split(group.members, ","))
             |> Enum.map(fn(a) -> _create_update_group_chat(a, group, chat) end)
-            |> Enum.each(fn(b) -> 
-                case b do
-                    {:error, changeset} ->
-                        Logger.error(">>> ERROR #{inspect changeset}")
-                    {mode, json} ->
-                        cond do
-                            mode == :p2g_msg_new ->
-                                :ok
-                            true ->
-                                :ok 
-                        end
-                end
-            end)
+            
             {:noreply, socket}
         else
             {:reply, {:error, %{"msg" => @group_not_found}}, socket}            
@@ -191,7 +179,7 @@ defmodule Portal.UserGroup do
                 end
             end
 
-            json = %{id: id, counter_id: counter_id, date: _format_date(date_time), chats: raw["chats"], read: 1, type: type}
+            json = %{id: id, counter_id: counter_id, date: _format_date(date_time), chats: raw["chats"], read: 0, type: type}
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
         end
     end

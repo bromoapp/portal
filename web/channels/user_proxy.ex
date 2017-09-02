@@ -319,7 +319,7 @@ defmodule Portal.UserProxy do
                 end
             end
 
-            json = %{id: id, counter_id: counter_id, date: _format_date(date_time), chats: raw["chats"], read: 1, type: type}
+            json = %{id: id, counter_id: counter_id, date: _format_date(date_time), chats: raw["chats"], read: 0, type: type}
             {:reply, {:ok, %{"query_chats_resp" => json}}, socket}
         end
     end

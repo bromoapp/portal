@@ -74,8 +74,8 @@ export default {
                 },
                 methods: {
                     init() {
-                        this.channel.on(this.Event.P2G_MSG_NEW, (data) => { this._onP2gMessageNew(this.group, data) })
-                        this.channel.on(this.Event.P2G_MSG_IN, (data) => { this._onP2gMessageIn(this.group, data) })
+                        this.channel.on(this.Event.P2G_MSG_NEW, (data) => { this._onP2gMessageNew(data) })
+                        this.channel.on(this.Event.P2G_MSG_IN, (data) => { this._onP2gMessageIn(data) })
                         this.channel.on(this.Event.PRESENCE_STATE, state => {
                             this.presences = Presence.syncState(this.presences, state)
                             console.log(">>> PRESENCES", this.presences)
@@ -109,11 +109,11 @@ export default {
                     _onGroupInitialUpdates(unique, updates) {
                         this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, { unique: unique, updates: updates })
                     },
-                    _onP2gMessageNew(group, data) {
-
+                    _onP2gMessageNew(data) {
+                        console.log(">>> P2G MSG NEW: ", data)
                     },
-                    _onP2gMessageIn(group, data) {
-
+                    _onP2gMessageIn(data) {
+                        console.log(">>> P2G MSG IN: ", data)
                     }
                 }
             })

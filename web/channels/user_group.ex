@@ -130,9 +130,9 @@ defmodule Portal.UserGroup do
             chat = %Chat{from: username, message: message, time: _format_time()}
             case _create_update_group_chat(user, group, chat) do
                 {:p2g_msg_new, json} ->
-                    :ok
+                    push socket, @p2g_msg_new, json
                 {:p2g_msg_in, json} ->
-                    :ok
+                    push socket, @p2g_msg_in, json
                 {:error, changeset} ->
                     Logger.error(">>> ERROR #{inspect changeset}")
             end

@@ -3,6 +3,8 @@ defmodule Portal.UserGroup do
     alias Ecto.Changeset
     alias Ecto.Adapters.SQL
     alias Mariaex.Result
+    alias Portal.OnlineUser
+    alias Portal.OnlineUsersDb
     alias Portal.GroupPresence
     alias Portal.GroupUpdates
     alias Portal.DailyChat
@@ -102,7 +104,18 @@ defmodule Portal.UserGroup do
     # Functions related to p2g chats
     #=================================================================================================
     def handle_in(@p2g_msg_out, %{"msg" => message}, socket) do
-        broadcast!(socket, @broadcast_msg, %{sender: socket.assigns.user.username, msg: message})
+        user = socket.assigns.user
+
+        # Broadcast chat to online members
+        broadcast!(socket, @broadcast_msg, %{sender: user.username, msg: message})
+
+        # Send chat to offline members
+        chat = %Chat{from: user.username, message: message, time: _format_time()}
+        unique = _parse_unique(socket.topic)
+        group = Repo.get_by(Group, unique: unique)
+        _get_group_members(String.split(group.members, ","))
+        |> Enum.filter(fn(a) -> _is_member_online?(a.username) == false end)
+        |> Enum.each(fn(b) -> _create_update_group_chat(b, group, chat) end)
         {:noreply, socket}
     end
 
@@ -199,6 +212,16 @@ defmodule Portal.UserGroup do
     #=================================================================================================
     # Helper functions
     #=================================================================================================
+    defp _is_member_online?(uname) do
+        ol_member = OnlineUsersDb.select(uname)
+        cond do
+            ol_member != nil ->
+                true
+            true ->
+                false
+        end
+    end
+
     defp _parse_unique(topic) do
         [_h, unique] = String.split(topic, ":")
         unique

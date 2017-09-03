@@ -3,6 +3,8 @@ defmodule Portal.UserProxy do
     alias Ecto.Changeset
     alias Ecto.Adapters.SQL
     alias Mariaex.Result
+    alias Portal.OnlineUser
+    alias Portal.OnlineUsersDb
     alias Portal.ProxyPresence
     alias Portal.Invitation
     alias Portal.GroupChat

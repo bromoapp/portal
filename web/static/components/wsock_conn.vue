@@ -110,10 +110,10 @@ export default {
                         this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, { unique: unique, updates: updates })
                     },
                     _onP2gMessageNew(message) {
-                        console.log(">>> P2G MSG NEW: ", message)
+                        this.$events.$emit(this.Event.P2G_MSG_NEW, message)
                     },
                     _onP2gMessageIn(message) {
-                        console.log(">>> P2G MSG IN: ", message)
+                        this.$events.$emit(this.Event.P2G_MSG_IN, message)
                     }
                 }
             })

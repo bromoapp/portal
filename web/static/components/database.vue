@@ -36,6 +36,8 @@ export default {
         this.$events.$on(this.Event.UPDATE_GCHAT_DATA, (data) => { this._onUpdateGChatData(data) })
         this.$events.$on(this.Event.P2P_MSG_NEW, (data) => { this._onP2pMsgNew(data) })
         this.$events.$on(this.Event.P2P_MSG_IN, (data) => { this._onP2pMsgIn(data) })
+        this.$events.$on(this.Event.P2G_MSG_NEW, (data) => { this._onP2gMsgNew(data) })
+        this.$events.$on(this.Event.P2G_MSG_IN, (data) => { this._onP2gMsgIn(data) })
         this.$events.$on(this.Event.ADD_UNREAD, (data) => { this._onAddUnread(data) })
         this.$events.$on(this.Event.GET_UNREAD, () => { this._onGetUnread() })
         this.$events.$on(this.Event.DEL_UNREAD, (data) => { this._onDelUnread(data) })
@@ -51,6 +53,26 @@ export default {
         this.$events.$on(this.Event.GET_FRIENDS_LIST, () => { this._onGetFriendsList() })
     },
     methods: {
+        _onP2gMsgNew(data) {
+            this.tbl_chats.insert(data)
+            let convs = this.tbl_chats.find({ 'id': data.id, 'type': 'P2G' })
+            this._updateChatsList()
+            this._onChatDataUpdated(convs[0])
+        },
+        _onP2gMsgIn(data) {
+            let table = this.tbl_chats.find({})
+            let convs = this.tbl_chats.find({ 'id': data.id, 'type': 'P2G' })
+            if (convs.length > 0) {
+                let conv = convs[0]
+                if (conv.chats) {
+                    conv.chats.push(data.chats[0])
+                    this._onChatDataUpdated(conv)
+                } else {
+                    conv.chats = [data.chats[0]]
+                    this._onChatDataUpdated(conv)
+                }
+            }
+        },
         _onGetGChats(data) {
             let requery = false
             let convs = this.tbl_chats.find({ 'counter_id': data.id, 'type': 'P2G' })
@@ -202,13 +224,13 @@ export default {
         },
         _onP2pMsgNew(data) {
             this.tbl_chats.insert(data)
-            let convs = this.tbl_chats.find({ 'id': data.id })
+            let convs = this.tbl_chats.find({ 'id': data.id, 'type': 'P2P' })
             this._updateChatsList()
             this._onChatDataUpdated(convs[0])
         },
         _onP2pMsgIn(data) {
             let table = this.tbl_chats.find({})
-            let convs = this.tbl_chats.find({ 'id': data.id })
+            let convs = this.tbl_chats.find({ 'id': data.id, 'type': 'P2P' })
             if (convs.length > 0) {
                 let conv = convs[0]
                 if (conv.chats) {

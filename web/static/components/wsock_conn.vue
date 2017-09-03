@@ -109,11 +109,11 @@ export default {
                     _onGroupInitialUpdates(unique, updates) {
                         this.$events.$emit(this.Event.GROUP_INITIAL_UPDATES, { unique: unique, updates: updates })
                     },
-                    _onP2gMessageNew(data) {
-                        console.log(">>> P2G MSG NEW: ", data)
+                    _onP2gMessageNew(message) {
+                        console.log(">>> P2G MSG NEW: ", message)
                     },
-                    _onP2gMessageIn(data) {
-                        console.log(">>> P2G MSG IN: ", data)
+                    _onP2gMessageIn(message) {
+                        console.log(">>> P2G MSG IN: ", message)
                     }
                 }
             })

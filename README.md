@@ -11,10 +11,10 @@ This is a web chat app, similar to whatsapp web, and it's still under heavy (but
   * Persistence chat,
   * Create a group and its initial members,
   * Accept or reject group's membership request.
+  * Group chat.
 
 **Features that are still under development:**
 
-  * Group chat,
   * File sharing through Google Drive API,
   * Managing group (e.g. invite new member, remove member and etc),
   * Video conference through WebRTC (like Hangout)

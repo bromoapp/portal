@@ -26,5 +26,9 @@ defmodule Portal.TestHelpers do
             |> put_assoc(:user_b, user_b)
         Repo.insert!(rel_cs)
     end
+
+    def insert_new_group() do
+        
+    end
     
 end

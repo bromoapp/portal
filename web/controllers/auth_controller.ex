@@ -61,8 +61,8 @@ defmodule Portal.AuthController do
     end
 
     defp _get_auth_url("google") do
-        provider = Application.get_env(:portal, :google)
-        GoogleOauth2.auth_url provider
+        config = Application.get_env(:portal, :google)
+        GoogleOauth2.auth_url config
     end
 
     defp _acquire_token("google", code) do

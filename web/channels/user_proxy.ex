@@ -1,16 +1,16 @@
 defmodule Portal.UserProxy do
     use Portal.Web, :channel
-    alias Ecto.Changeset
-    alias Ecto.Adapters.SQL
-    alias Mariaex.Result
-    alias Portal.OnlineUser
     alias Portal.OnlineUsersDb
     alias Portal.ProxyPresence
     alias Portal.Invitation
+    alias Portal.OnlineUser
+    alias Ecto.Adapters.SQL
     alias Portal.GroupChat
     alias Portal.DailyChat
     alias Portal.Relation
     alias Portal.Updates
+    alias Mariaex.Result
+    alias Ecto.Changeset
     alias Portal.Group
     alias Portal.Chats
     alias Portal.User

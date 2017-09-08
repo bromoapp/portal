@@ -1,17 +1,17 @@
 defmodule Portal.UserGroup do
     use Portal.Web, :channel
-    alias Ecto.Changeset
-    alias Ecto.Adapters.SQL
-    alias Mariaex.Result
-    alias Portal.OnlineUser
-    alias Portal.OnlineUsersDb
-    alias Portal.GroupPresence
-    alias Portal.GroupUpdates
-    alias Portal.DailyChat
-    alias Portal.Group
-    alias Portal.Chats
     alias Portal.User
     alias Portal.Chat
+    alias Portal.Group
+    alias Portal.Chats
+    alias Mariaex.Result
+    alias Ecto.Changeset
+    alias Portal.DailyChat
+    alias Portal.OnlineUser
+    alias Ecto.Adapters.SQL
+    alias Portal.GroupUpdates
+    alias Portal.OnlineUsersDb
+    alias Portal.GroupPresence
     require Logger
 
     @group_not_found "Group not found!"
